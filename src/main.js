@@ -19,6 +19,8 @@ import accountManagement from './views/account/accountManagement.vue'
 import userCenter from './views/user/userCenter.vue'
 import userInfo from './views/user/useInfo.vue'
 import deviceInfo from './views/device/deviceInfo.vue'
+import PushSetting from './views/push/push_setting.vue'
+import PushRecord from './views/push/push_record.vue'
 // import accountInfo from './views/account/accountInfo.vue'
 // import accountManagement from './views/account/accountManagement.vue'
 // import middle from './views/account/mid\dle.vue'
@@ -78,7 +80,10 @@ if (user) {
             'accountManagement':accountManagement,
              'userCenter': userCenter,
              'userInfo':userInfo,
-             'deviceInfo':deviceInfo
+             'deviceInfo':deviceInfo,
+            'PushSetting': PushSetting,
+            'PushRecord': PushRecord
+            // 'userinformation': userinformation,
             // 'storagepower': storagepower,
             // 'deviceinformation': deviceinformation,
             // 'monitor': monitor,
@@ -116,8 +121,31 @@ if (user) {
                     meta : {                     
                         requireAuth:true    
                      }
-                },
-
+                }]
+            }, {
+            path: "/",
+            component: 'Home',
+            name: "推送设置",
+            icon: 'el-icon-menu',
+            children: [
+            
+                    {
+                        path: "/PushSetting",
+                        name: "推送设置",
+                        component: 'PushSetting',
+                        icon: 'el-icon-menu',
+                        meta : {                     
+                            requireAuth:true    
+                        }
+                    },  {
+                        path: "/PushRecord",
+                        name: "推送记录",
+                        component: 'PushRecord',
+                        icon: 'el-icon-menu',
+                        meta : {                     
+                            requireAuth:true    
+                        }
+                    },
                 ]
           },
           {
@@ -176,6 +204,7 @@ if (user) {
 
                 ]
           }
+            
         ]
         var routes = common.trans(newRoutes, keymap)
         var router = new VueRouter({
