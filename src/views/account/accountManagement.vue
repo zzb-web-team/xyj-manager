@@ -7,7 +7,7 @@
                 <div @click="getShow()" class="div_show" style="color:#606266">筛选</div>
             </el-row>
             <el-row type="flex" class="row_activess" v-show="showState">
-                <el-form-item label="性别">
+                <el-form-item label="性别" style="display: flex;">
                     <el-select v-model="value" placeholder="请选择" @change="onChange2">
                         <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
@@ -35,24 +35,28 @@
         </el-row>
     </div>
     <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
-            <el-row type="flex"  >
-                 <el-col :span="6" style="display: flex;justify-content: justify-content: flex-start;">
-                     <el-button type="primary" size="small">启用</el-button>
-                     <el-button type="primary" size="small">禁用</el-button>
-                     <el-button type="primary" size="small">删除</el-button>
-                 </el-col>
-            </el-row>
-            <el-row type="flex" >
-                <el-col :span="6">
-                    <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
-                </el-col>
-            </el-row>
-        
+        <el-row type="flex">
+            <el-col :span="6" style="display: flex;justify-content: justify-content: flex-start;">
+                <el-button type="primary" size="small">启用</el-button>
+                <el-button type="primary" size="small">禁用</el-button>
+                <el-button type="primary" size="small">删除</el-button>
+            </el-col>
+        </el-row>
+        <el-row type="flex">
+            <el-col :span="6">
+                <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
+            </el-col>
+        </el-row>
+
     </div>
     <el-dialog :visible.sync="dialogVisible" width="17%" :before-close="handleClose">
         <div class="addaccout">
             <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" class="demo-ruleForm ">
                 <h3 class="title">新建用户</h3>
+                <el-form-item label="用户名:">
+                    <el-radio v-model="ruleForm2.radio" label="1">备选项</el-radio>
+                    <el-radio v-model="ruleForm2.radio" label="2">备选项</el-radio>
+                </el-form-item>
                 <el-form-item prop="username">
                     <el-form-item label="用户名:">
                         <el-input v-model="ruleForm2.username" placeholder="用户名"></el-input>
@@ -73,26 +77,30 @@
                         <el-input v-model="ruleForm2.password2" placeholder="请再次密码" type="password"></el-input>
                     </el-form-item>
                 </el-form-item>
-                 <el-form-item prop="nickname">
+                <el-form-item prop="nickname">
                     <el-form-item label="真实姓名:">
                         <el-input v-model="ruleForm2.nickname" placeholder="真实姓名"></el-input>
                     </el-form-item>
                 </el-form-item>
-                 <el-form-item prop="nickname">
+                <el-form-item prop="nickname">
                     <el-form-item label="联系方式:">
                         <el-input v-model="ruleForm2.nickname" placeholder="联系方式"></el-input>
                     </el-form-item>
                 </el-form-item>
-                <el-form-item  style="width:100%;display: flex;justify-content:center;">
+                <el-form-item style="width:100%;display: flex;justify-content:center;">
                     <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="logining">立即提交</el-button>
                 </el-form-item>
             </el-form>
         </div>
     </el-dialog>
-     <el-dialog :visible.sync="dialogVisible2" width="17%" :before-close="handleClose">
+    <el-dialog :visible.sync="dialogVisible2" width="17%" :before-close="handleClose">
         <div class="addaccout">
             <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" class="demo-ruleForm ">
                 <h3 class="title">用户详情</h3>
+                       <el-form-item label="用户名:">
+                    <el-radio v-model="ruleForm2.radio" label="1">备选项</el-radio>
+                    <el-radio v-model="ruleForm2.radio" label="2">备选项</el-radio>
+                </el-form-item>
                 <el-form-item prop="username">
                     <el-form-item label="用户名:">
                         <el-input v-model="ruleForm2.username" placeholder="用户名"></el-input>
@@ -103,17 +111,17 @@
                         <el-input v-model="ruleForm2.nickname" placeholder="用户昵称"></el-input>
                     </el-form-item>
                 </el-form-item>
-                 <el-form-item prop="nickname">
+                <el-form-item prop="nickname">
                     <el-form-item label="真实姓名:">
                         <el-input v-model="ruleForm2.nickname" placeholder="真实姓名"></el-input>
                     </el-form-item>
                 </el-form-item>
-                 <el-form-item prop="nickname">
+                <el-form-item prop="nickname">
                     <el-form-item label="联系方式:">
                         <el-input v-model="ruleForm2.nickname" placeholder="联系方式"></el-input>
                     </el-form-item>
                 </el-form-item>
-                <el-form-item  style="width:100%;display: flex;justify-content:center;">
+                <el-form-item style="width:100%;display: flex;justify-content:center;">
                     <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="logining">修改</el-button>
                 </el-form-item>
             </el-form>
@@ -155,42 +163,39 @@ export default {
                     label: '未知'
                 },
             ],
-                  ruleForm2: {
+            ruleForm2: {
                 username: '',
                 nickname: '',
                 password: "",
                 password2: "",
                 value: "",
+                 radio:"1",
 
             },
-             rules2: {
+            rules2: {
+               
                 username: [{
-                        required: true,
-                        message: '请输入用户名',
-                        trigger: 'blur'
-                    },
-                ],
+                    required: true,
+                    message: '请输入用户名',
+                    trigger: 'blur'
+                }, ],
                 nickname: [{
-                        required: true,
-                        message: '请输入用户昵称',
-                        trigger: 'blur'
-                    },
-                ],
+                    required: true,
+                    message: '请输入用户昵称',
+                    trigger: 'blur'
+                }, ],
                 password: [{
-                        required: true,
-                        message: '请输入密码',
-                        trigger: 'blur'
-                    },
-                ],
+                    required: true,
+                    message: '请输入密码',
+                    trigger: 'blur'
+                }, ],
                 password2: [{
-                        required: true,
-                        message: '请输入密码',
-                        trigger: 'blur'
-                    },
-                ],
+                    required: true,
+                    message: '请输入密码',
+                    trigger: 'blur'
+                }, ],
             },
-            rowHeader: [
-                {
+            rowHeader: [{
                     prop: "user_id",
                     label: "状态"
                 },
@@ -265,14 +270,14 @@ export default {
             this.showState = !this.showState
         },
         handleButton(val, rows) {
-            if(val=="edit"){
-                this.dialogVisible2=true
+            if (val == "edit") {
+                this.dialogVisible2 = true
             }
             console.log(val)
             console.log(rows)
         },
-        addAccout(){
-            this.dialogVisible=true
+        addAccout() {
+            this.dialogVisible = true
 
         },
         handleSubmit2(ev) {
@@ -288,30 +293,30 @@ export default {
                         password2: this.ruleForm2.password2,
                         role_id: this.ruleForm2.value,
                     };
-                //     userinsert(loginParams).then(data => {
-                //         this.logining = false;
-                //         this.dialogVisible = false
-                //         let {
-                //             msg,
-                //             status,
-                //             user
-                //         } = data;
-                //         if (status !== 0) {
-                //             this.$message({
-                //                 message: msg,
-                //                 type: 'error'
-                //             });
-                //         } else {
-                //             this.$message({
-                //                 message: '添加成功',
-                //                 type: 'success'
-                //             });
-                //             this.queryUserList()
-                //         }
-                //     });
-                // } else {
-                //     console.log('error submit!!');
-                //     return false;
+                    //     userinsert(loginParams).then(data => {
+                    //         this.logining = false;
+                    //         this.dialogVisible = false
+                    //         let {
+                    //             msg,
+                    //             status,
+                    //             user
+                    //         } = data;
+                    //         if (status !== 0) {
+                    //             this.$message({
+                    //                 message: msg,
+                    //                 type: 'error'
+                    //             });
+                    //         } else {
+                    //             this.$message({
+                    //                 message: '添加成功',
+                    //                 type: 'success'
+                    //             });
+                    //             this.queryUserList()
+                    //         }
+                    //     });
+                    // } else {
+                    //     console.log('error submit!!');
+                    //     return false;
                 }
             });
         },
@@ -407,13 +412,25 @@ export default {
         }
     }
 }
-.addaccout{
+
+.addaccout {
+    .title{
+    width: 100%;
+        text-align: center;
+    }
+    .el-dialog__body{
+        padding: 0px;
+    }
+    .el-form-item{
+        display: flex
+    }
     .el-form--label-left .el-form-item__label {
-    text-align: right;
-    width: 81px;
-}
-.el-form-item__error{
-    margin-left: 80px;
-}
+        text-align: right;
+        width: 81px;
+    }
+
+    .el-form-item__error {
+        margin-left: 80px;
+    }
 }
 </style>

@@ -16,6 +16,9 @@ import router from './routes'
 
 import NotFound from './views/404.vue'
 import accountManagement from './views/account/accountManagement.vue'
+import userCenter from './views/user/userCenter.vue'
+import userInfo from './views/user/useInfo.vue'
+import deviceInfo from './views/device/deviceInfo.vue'
 // import accountInfo from './views/account/accountInfo.vue'
 // import accountManagement from './views/account/accountManagement.vue'
 // import middle from './views/account/mid\dle.vue'
@@ -73,7 +76,9 @@ if (user) {
         var keymap = {
             'Home': Home,
             'accountManagement':accountManagement,
-            // 'userinformation': userinformation,
+             'userCenter': userCenter,
+             'userInfo':userInfo,
+             'deviceInfo':deviceInfo
             // 'storagepower': storagepower,
             // 'deviceinformation': deviceinformation,
             // 'monitor': monitor,
@@ -96,7 +101,8 @@ if (user) {
 
         }
         //var newRoutes = res.msg
-          var newRoutes=  [ {
+          var newRoutes=  [
+            {
             path: "/",
             component: 'Home',
             name: "后台管理",
@@ -113,7 +119,64 @@ if (user) {
                 },
 
                 ]
-          }]
+          },
+          {
+            path: "/a",
+            component: 'Home',
+            name: "用户管理",
+            icon: 'el-icon-menu',
+            children: [
+                {
+                    path: "/userCenter",
+                    name: "注册用户",
+                    component: 'userCenter',
+                    icon: 'el-icon-menu',
+                    meta : {                     
+                        requireAuth:true    
+                     }
+                },
+                {
+                    path: "/userInfo",
+                    name: "用户个人详情",
+                    component: 'userInfo',
+                    icon: 'el-icon-menu',
+                    meta : {                     
+                        requireAuth:true    
+                     }
+                },
+                
+
+                ]
+          },
+          {
+            path: "/c",
+            component: 'Home',
+            name: "设备管理",
+            icon: 'el-icon-menu',
+            children: [
+                {
+                    path: "/deviceInfo",
+                    name: "设备信息",
+                    component: 'deviceInfo',
+                    icon: 'el-icon-menu',
+                    meta : {                     
+                        requireAuth:true    
+                     }
+                },
+                {
+                    path: "/userInfo",
+                    name: "用户个人详情",
+                    component: 'userInfo',
+                    icon: 'el-icon-menu',
+                    meta : {                     
+                        requireAuth:true    
+                     }
+                },
+                
+
+                ]
+          }
+        ]
         var routes = common.trans(newRoutes, keymap)
         var router = new VueRouter({
             routes: routes
