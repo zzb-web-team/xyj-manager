@@ -19,11 +19,17 @@ import accountManagement from './views/account/accountManagement.vue'
 import userCenter from './views/user/userCenter.vue'
 import userInfo from './views/user/useInfo.vue'
 import deviceInfo from './views/device/deviceInfo.vue'
+import middle from './views/device/middle.vue'
+import devicePower from './views/device/devicePower.vue'
+import deviceActivation from './views/device/deviceActivation.vue'
+import pointsDetails from './views/point/pointsDetails.vue'
+import income from './views/point/income.vue'
+
+
 import PushSetting from './views/push/push_setting.vue'
 import PushRecord from './views/push/push_record.vue'
 // import accountInfo from './views/account/accountInfo.vue'
 // import accountManagement from './views/account/accountManagement.vue'
-// import middle from './views/account/mid\dle.vue'
 
 import Home from './views/Home.vue'
 
@@ -82,7 +88,13 @@ if (user) {
              'userInfo':userInfo,
              'deviceInfo':deviceInfo,
             'PushSetting': PushSetting,
-            'PushRecord': PushRecord
+            'PushRecord': PushRecord,
+            'middle':middle,
+            'devicePower':devicePower,
+            'deviceActivation':deviceActivation,
+            'income':income,
+            'pointsDetails':pointsDetails
+
             // 'userinformation': userinformation,
             // 'storagepower': storagepower,
             // 'deviceinformation': deviceinformation,
@@ -192,16 +204,53 @@ if (user) {
                      }
                 },
                 {
-                    path: "/userInfo",
-                    name: "用户个人详情",
-                    component: 'userInfo',
+                    path: "/devicePower",
+                    name: "设备算力",
+                    component: 'devicePower',
+                    icon: 'el-icon-menu',
+                    meta : {                     
+                        requireAuth:true    
+                     }
+            
+                },
+                {
+                    path: "/deviceActivation",
+                    name: "设备激活",
+                    component: 'deviceActivation',
+                    icon: 'el-icon-menu',
+                    meta : {                     
+                        requireAuth:true    
+                     }
+            
+                },
+                                
+                ]
+          },
+          {
+            path: "/d",
+            component: 'Home',
+            name: "积分管理",
+            icon: 'el-icon-menu',
+            children: [
+                {
+                    path: "/pointsDetails",
+                    name: "积分明细",
+                    component: 'pointsDetails',
                     icon: 'el-icon-menu',
                     meta : {                     
                         requireAuth:true    
                      }
                 },
-                
-
+                {
+                    path: "/income",
+                    name: "收益明细",
+                    component: 'income',
+                    icon: 'el-icon-menu',
+                    meta : {                     
+                        requireAuth:true    
+                     }
+            
+                },                                
                 ]
           }
             

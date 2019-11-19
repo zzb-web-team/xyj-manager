@@ -4,14 +4,14 @@
         <el-row>
             <el-col :span="5">
                 <div class="user-item">
-                    <div class="item-count">1000</div>
-                    <div class="item-text">已绑定设备</div>
+                    <div class="item-count">100000 gfp</div>
+                    <div class="item-text">今日总发放积分</div>
                 </div>
             </el-col>
             <el-col :span="5" style="margin-left:30px;">
                 <div class="user-item">
-                    <div class="item-count">1000</div>
-                    <div class="item-text">在线设备</div>
+                    <div class="item-count">5000 人</div>
+                    <div class="item-text">总发放用户</div>
                 </div>
             </el-col>
 
@@ -25,37 +25,24 @@
             </el-row>
             <div v-show="showState">
                 <el-row type="flex" class="row_activess">
-                    <el-form-item label="设备状态" style="display: flex;">
-                        <el-select v-model="value1" placeholder="请选择" @change="onChange2">
-                            <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="绑定" style="display: flex;">
-                        <el-select v-model="value" placeholder="请选择" @change="onChange2">
-                            <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="注册时间" style="display: flex;">
+                    <el-form-item label="时间" style="display: flex;">
                         <el-date-picker v-model="valueTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                         </el-date-picker>
                     </el-form-item>
+              
                     <el-form-item>
                         <el-button type="primary" style="margin-left:68px;">确定</el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary">重置</el-button>
                     </el-form-item>
-               
                 </el-row>
-              
             </div>
 
         </el-form>
     </div>
     <div class="devide_table">
-      <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
+        <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
             <el-col style="display: flex;justify-content: flex-end;" >
                 <el-button type="primary" @click="addAccout">导出</el-button>
             </el-col>
@@ -91,7 +78,7 @@ export default {
         return {
             dialogVisible: false,
             dialogVisible2: false,
-            searchText: "设备SN、设备型号、设备名称",
+            searchText: "用户ID、用户昵称",
             operatingStatus: true,
             clomnSelection: false,
             reserveselection: true,
@@ -105,13 +92,16 @@ export default {
                 },
                 {
                     value: '1',
-                    label: '在线'
+                    label: '正常'
                 },
                 {
                     value: '2',
-                    label: '离线'
+                    label: '冻结'
                 },
-               
+                {
+                    value: '3',
+                    label: '未知'
+                },
             ],
             options2: [{
                     value: '0',
@@ -119,56 +109,48 @@ export default {
                 },
                 {
                     value: '1',
-                    label: '是'
+                    label: '男'
                 },
                 {
                     value: '2',
-                    label: '否'
+                    label: '女'
                 },
-              
+                {
+                    value: '3',
+                    label: '未知'
+                },
             ],
      
     
             rowHeader: [{
                     prop: "user_id",
-                    label: "设备SN"
+                    label: "用户ID"
                 },
                 {
                     prop: "user_name",
-                    label: "设备型号"
+                    label: "用户昵称"
                 },
                 {
                     prop: "user_tel",
-                    label: "设备名称"
+                    label: "收益金额"
                 },
                 {
                     prop: "sex",
-                    label: "MAC地址"
+                    label: "当日IP值"
                 },
                 {
                     prop: "status",
-                    label: "设备IP"
+                    label: "当日存储值"
                 },
                  {
                     prop: "status",
-                    label: "设备状态"
+                    label: "当日算力"
                 },
                  {
                     prop: "status",
-                    label: "是否绑定"
+                    label: "时间"
                 },
-                 {
-                    prop: "status",
-                    label: "节点ID"
-                },
-                   {
-                    prop: "status",
-                    label: "绑定用户ID"
-                },
-              
-             
-              
-
+               
               
 
             ],
@@ -184,17 +166,12 @@ export default {
             tableOption: {
                 label: "操作",
                 options: [{
-                        label: "关机",
+                        label: "详情",
                         type: "primary",
                         methods: "freeze"
                     },
                     {
-                        label: "重启",
-                        type: "danger",
-                        methods: "edit"
-                    },
-                       {
-                        label: "解绑",
+                        label: "冻结",
                         type: "danger",
                         methods: "edit"
                     },
@@ -370,7 +347,7 @@ export default {
 
     .el-form--label-left .el-form-item__label {
         text-align: right;
-        width: 90px;
+        width: 81px;
     }
 
     .el-form-item__error {

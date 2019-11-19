@@ -59,9 +59,9 @@
         </el-form>
     </div>
     <div class="devide_table">
-        <el-row type="flex" class="row_active">
-            <el-col :span="6">
-                <el-button type="primary" @click="addAccout">新建</el-button>
+        <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
+            <el-col style="display: flex;justify-content: flex-end;" >
+                <el-button type="primary" @click="addAccout">导出</el-button>
             </el-col>
         </el-row>
         <el-row type="flex" class="row_active">

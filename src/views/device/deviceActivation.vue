@@ -5,13 +5,25 @@
             <el-col :span="5">
                 <div class="user-item">
                     <div class="item-count">1000</div>
-                    <div class="item-text">已绑定设备</div>
+                    <div class="item-text">总设备</div>
                 </div>
             </el-col>
             <el-col :span="5" style="margin-left:30px;">
                 <div class="user-item">
                     <div class="item-count">1000</div>
-                    <div class="item-text">在线设备</div>
+                    <div class="item-text">已激活设备</div>
+                </div>
+            </el-col>
+            <el-col :span="5" style="margin-left:30px;">
+                <div class="user-item">
+                    <div class="item-count">1000</div>
+                    <div class="item-text">今日新建</div>
+                </div>
+            </el-col>
+            <el-col :span="5" style="margin-left:30px;">
+                <div class="user-item">
+                    <div class="item-count">1000</div>
+                    <div class="item-text">今日激活</div>
                 </div>
             </el-col>
 
@@ -25,40 +37,40 @@
             </el-row>
             <div v-show="showState">
                 <el-row type="flex" class="row_activess">
-                    <el-form-item label="设备状态" style="display: flex;">
+                    <el-form-item label="设备激活：" style="display: flex;">
                         <el-select v-model="value1" placeholder="请选择" @change="onChange2">
                             <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="绑定" style="display: flex;">
-                        <el-select v-model="value" placeholder="请选择" @change="onChange2">
-                            <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="注册时间" style="display: flex;">
+
+                    <el-form-item label="新建时间：" style="display: flex;">
                         <el-date-picker v-model="valueTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                         </el-date-picker>
                     </el-form-item>
+                    <el-form-item label="激活时间：" style="display: flex;">
+                        <el-date-picker v-model="valueTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                        </el-date-picker>
+                    </el-form-item>
+
                     <el-form-item>
-                        <el-button type="primary" style="margin-left:68px;">确定</el-button>
+                        <el-button type="primary" style="margin-left:82px;">确定</el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary">重置</el-button>
                     </el-form-item>
-               
                 </el-row>
-              
             </div>
 
         </el-form>
     </div>
     <div class="devide_table">
-      <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
-            <el-col style="display: flex;justify-content: flex-end;" >
-                <el-button type="primary" @click="addAccout">导出</el-button>
+        <el-row type="flex" class="row_active">
+            <el-col :span="6">
+                <el-button type="primary" @click="addAccout">新建设备</el-button>
+                <el-button type="primary" @click="addAccout1">批量导入设备</el-button>
             </el-col>
+            
         </el-row>
         <el-row type="flex" class="row_active">
             <el-col :span="24">
@@ -68,7 +80,7 @@
     </div>
     <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
         <el-row type="flex">
-          
+
         </el-row>
         <el-row type="flex">
             <el-col :span="6">
@@ -77,7 +89,64 @@
         </el-row>
 
     </div>
-  
+    <el-dialog :visible.sync="dialogVisible" width="20%" :before-close="handleClose">
+        <div class="addaccout">
+            <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" class="demo-ruleForm ">
+                <h3 class="title">新建设备</h3>
+                <el-form-item prop="username">
+                    <el-form-item label="设备SN:">
+                        <el-input v-model="ruleForm2.username" placeholder="请输入设备SN"></el-input>
+                    </el-form-item>
+                </el-form-item>
+                 <el-form-item label="设备型号：" style="display: flex;">
+                        <el-select v-model="value2" placeholder="请选择" @change="onChange2" style="width:200px;">
+                            <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="ROM：" style="display: flex;">
+                        <el-select v-model="value2" placeholder="请选择" @change="onChange2" style="width:200px;">
+                            <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                <el-form-item prop="nickname">
+                    <el-form-item label="MAC地址:">
+                        <el-input v-model="ruleForm2.nickname" placeholder="请输入MAC地址"></el-input>
+                    </el-form-item>
+                </el-form-item>
+                  <el-form-item prop="nickname">
+                    <el-form-item label="CPU-ID:">
+                        <el-input v-model="ruleForm2.nickname" placeholder="请输入CPU-ID"></el-input>
+                    </el-form-item>
+                </el-form-item>
+                  <el-form-item prop="nickname">
+                    <el-form-item label="总容量:">
+                        <el-input v-model="ruleForm2.nickname" placeholder="请输入总容量"></el-input>
+                    </el-form-item>
+                </el-form-item>
+                <el-form-item style="width:100%;display: flex;justify-content:center;">
+                    <el-button type="primary"  @click.native.prevent="handleSubmit2" :loading="logining">确定</el-button>
+                    <el-button type="primary"  @click.native.prevent="handleSubmit3">取消</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+    </el-dialog>
+     <el-dialog :visible.sync="dialogVisible2" width="50%" :before-close="handleClose">
+        <div class="import">
+            <div class="import-t">
+                <el-button type="primary">上传Excel文件</el-button>
+            </div>
+            <div class="import-m">
+                <textarea></textarea>
+            </div>
+            <div class="import-m">
+                <el-button type="primary">导入</el-button>
+            </div>
+
+            
+        </div>
+    </el-dialog>
 
 </section>
 </template>
@@ -89,9 +158,9 @@ import pageNation from "../../components/pageNation";
 export default {
     data() {
         return {
-            dialogVisible: false,
+            dialogVisible: true,
             dialogVisible2: false,
-            searchText: "设备SN、设备型号、设备名称",
+            searchText: "设备SN、设备型号、CPU-ID",
             operatingStatus: true,
             clomnSelection: false,
             reserveselection: true,
@@ -105,13 +174,13 @@ export default {
                 },
                 {
                     value: '1',
-                    label: '在线'
+                    label: '未激活'
                 },
                 {
                     value: '2',
-                    label: '离线'
+                    label: '已激活'
                 },
-               
+
             ],
             options2: [{
                     value: '0',
@@ -119,16 +188,14 @@ export default {
                 },
                 {
                     value: '1',
-                    label: '是'
+                    label: '设备1'
                 },
                 {
                     value: '2',
-                    label: '否'
+                    label: '设备2'
                 },
-              
             ],
-     
-    
+
             rowHeader: [{
                     prop: "user_id",
                     label: "设备SN"
@@ -139,37 +206,25 @@ export default {
                 },
                 {
                     prop: "user_tel",
-                    label: "设备名称"
-                },
-                {
-                    prop: "sex",
                     label: "MAC地址"
                 },
                 {
-                    prop: "status",
-                    label: "设备IP"
+                    prop: "sex",
+                    label: "CPU-ID"
                 },
-                 {
+                {
                     prop: "status",
-                    label: "设备状态"
+                    label: "总容量"
                 },
-                 {
+                {
                     prop: "status",
-                    label: "是否绑定"
+                    label: "新建时间"
                 },
-                 {
+                {
                     prop: "status",
-                    label: "节点ID"
+                    label: "激活时间"
                 },
-                   {
-                    prop: "status",
-                    label: "绑定用户ID"
-                },
-              
-             
-              
-
-              
+               
 
             ],
             tableData: [{
@@ -194,7 +249,12 @@ export default {
                         methods: "edit"
                     },
                        {
-                        label: "解绑",
+                        label: "修改",
+                        type: "danger",
+                        methods: "edit"
+                    },
+                       {
+                        label: "删除",
                         type: "danger",
                         methods: "edit"
                     },
@@ -206,6 +266,38 @@ export default {
                 rows: 100
             },
             showState: true,
+              ruleForm2: {
+                username: '',
+                nickname: '',
+                password: "",
+                password2: "",
+                value: "",
+                 radio:"1",
+
+            },
+            rules2: {
+               
+                username: [{
+                    required: true,
+                    message: '请输入用户名',
+                    trigger: 'blur'
+                }, ],
+                nickname: [{
+                    required: true,
+                    message: '请输入用户昵称',
+                    trigger: 'blur'
+                }, ],
+                password: [{
+                    required: true,
+                    message: '请输入密码',
+                    trigger: 'blur'
+                }, ],
+                password2: [{
+                    required: true,
+                    message: '请输入密码',
+                    trigger: 'blur'
+                }, ],
+            },
 
         };
     },
@@ -222,10 +314,9 @@ export default {
         handleButton(val, rows) {
             if (val == "edit") {
                 this.dialogVisible2 = true
-            }
-            else if(val=="freeze"){
+            } else if (val == "freeze") {
                 this.$router.push({
-                    path:"/userInfo"
+                    path: "/userInfo"
                 })
             }
             console.log(val)
@@ -235,7 +326,18 @@ export default {
             this.dialogVisible = true
 
         },
-   
+        addAccout1(){
+                        this.dialogVisible2 = true
+
+        },
+        handleSubmit2(){
+          this.dialogVisible = false  
+        },
+          handleSubmit3(){
+          this.dialogVisible = false  
+        },
+
+
     },
     components: {
         pageNation: pageNation,
@@ -246,6 +348,18 @@ export default {
 </script>
 
 <style lang="less">
+.import{
+    .import-m{
+      
+        margin-top:20px;
+        textarea{
+              width:100%;
+        height:200px;
+
+        }
+
+    }
+}
 .user-title {
     margin-top: 30px;
 
@@ -266,12 +380,14 @@ export default {
 }
 
 .myself-container {
-    .el-table th>.cell{
-    text-align: center;
-    }
-    .el-table .cell{
+    .el-table th>.cell {
         text-align: center;
     }
+
+    .el-table .cell {
+        text-align: center;
+    }
+
     width: 100%;
     min-width: 1600px;
 

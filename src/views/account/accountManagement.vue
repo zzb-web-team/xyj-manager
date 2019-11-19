@@ -127,6 +127,28 @@
             </el-form>
         </div>
     </el-dialog>
+     <el-dialog :visible.sync="dialogVisible3" width="20%" :before-close="handleClose">
+        <div class="addaccout">
+            <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" class="demo-ruleForm ">
+                <h3 class="title">密码重置</h3>
+                  
+                <el-form-item prop="username">
+                    <el-form-item label="用户名:">
+                        <el-input v-model="ruleForm3.username" placeholder="新密码"></el-input>
+                    </el-form-item>
+                </el-form-item>
+                <el-form-item prop="nickname">
+                    <el-form-item label="确认密码:">
+                        <el-input v-model="ruleForm3.nickname" placeholder="确认密码"></el-input>
+                    </el-form-item>
+                </el-form-item>
+         
+                <el-form-item style="width:100%;display: flex;justify-content:center;">
+                    <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit4" :loading="logining">确认</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+    </el-dialog>
 
 </section>
 </template>
@@ -140,6 +162,7 @@ export default {
         return {
             dialogVisible: false,
             dialogVisible2: false,
+            dialogVisible3: false,
             searchText: "账户名，ID",
             operatingStatus: true,
             clomnSelection: true,
@@ -172,7 +195,39 @@ export default {
                  radio:"1",
 
             },
+               ruleForm3: {
+                username: '',
+                nickname: '',
+                password: "",
+                password2: "",
+                value: "",
+                 radio:"1",
+
+            },
             rules2: {
+               
+                username: [{
+                    required: true,
+                    message: '请输入用户名',
+                    trigger: 'blur'
+                }, ],
+                nickname: [{
+                    required: true,
+                    message: '请输入用户昵称',
+                    trigger: 'blur'
+                }, ],
+                password: [{
+                    required: true,
+                    message: '请输入密码',
+                    trigger: 'blur'
+                }, ],
+                password2: [{
+                    required: true,
+                    message: '请输入密码',
+                    trigger: 'blur'
+                }, ],
+            },
+              rules3: {
                
                 username: [{
                     required: true,
@@ -238,6 +293,11 @@ export default {
                         type: "danger",
                         methods: "edit"
                     },
+                       {
+                        label: "密码重置",
+                        type: "danger",
+                        methods: "password"
+                    },
                     {
                         label: "禁用",
                         type: "danger",
@@ -264,7 +324,7 @@ export default {
     },
     methods: {
         searchInfo() {
-            alert("搜做")
+            alert("搜索")
         },
         getShow() {
             this.showState = !this.showState
@@ -273,6 +333,9 @@ export default {
             if (val == "edit") {
                 this.dialogVisible2 = true
             }
+        else if(val=="password"){
+            this.dialogVisible3=true
+        }
             console.log(val)
             console.log(rows)
         },
@@ -426,7 +489,7 @@ export default {
     }
     .el-form--label-left .el-form-item__label {
         text-align: right;
-        width: 81px;
+        width: 90px;
     }
 
     .el-form-item__error {

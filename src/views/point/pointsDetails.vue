@@ -1,22 +1,5 @@
 <template>
 <section class="myself-container">
-    <div class="user-title">
-        <el-row>
-            <el-col :span="5">
-                <div class="user-item">
-                    <div class="item-count">1000</div>
-                    <div class="item-text">已绑定设备</div>
-                </div>
-            </el-col>
-            <el-col :span="5" style="margin-left:30px;">
-                <div class="user-item">
-                    <div class="item-count">1000</div>
-                    <div class="item-text">在线设备</div>
-                </div>
-            </el-col>
-
-        </el-row>
-    </div>
     <div class="device_form">
         <el-form ref="form" :model="form">
             <el-row type="flex">
@@ -31,12 +14,7 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="绑定" style="display: flex;">
-                        <el-select v-model="value" placeholder="请选择" @change="onChange2">
-                            <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
+             
                     <el-form-item label="注册时间" style="display: flex;">
                         <el-date-picker v-model="valueTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                         </el-date-picker>
@@ -91,7 +69,7 @@ export default {
         return {
             dialogVisible: false,
             dialogVisible2: false,
-            searchText: "设备SN、设备型号、设备名称",
+            searchText: "用户ID、用户昵称",
             operatingStatus: true,
             clomnSelection: false,
             reserveselection: true,
@@ -105,11 +83,11 @@ export default {
                 },
                 {
                     value: '1',
-                    label: '在线'
+                    label: '收益'
                 },
                 {
                     value: '2',
-                    label: '离线'
+                    label: '兑换'
                 },
                
             ],
@@ -131,45 +109,28 @@ export default {
     
             rowHeader: [{
                     prop: "user_id",
-                    label: "设备SN"
+                    label: "用户ID"
                 },
                 {
                     prop: "user_name",
-                    label: "设备型号"
+                    label: "用户昵称"
                 },
                 {
                     prop: "user_tel",
-                    label: "设备名称"
+                    label: "收支类型"
                 },
                 {
                     prop: "sex",
-                    label: "MAC地址"
+                    label: "金额"
                 },
                 {
                     prop: "status",
-                    label: "设备IP"
+                    label: "账户余额"
                 },
                  {
                     prop: "status",
-                    label: "设备状态"
+                    label: "时间"
                 },
-                 {
-                    prop: "status",
-                    label: "是否绑定"
-                },
-                 {
-                    prop: "status",
-                    label: "节点ID"
-                },
-                   {
-                    prop: "status",
-                    label: "绑定用户ID"
-                },
-              
-             
-              
-
-              
 
             ],
             tableData: [{

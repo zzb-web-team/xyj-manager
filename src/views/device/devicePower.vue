@@ -1,63 +1,29 @@
 <template>
 <section class="myself-container">
-    <div class="user-title">
-        <el-row>
-            <el-col :span="5">
-                <div class="user-item">
-                    <div class="item-count">1000</div>
-                    <div class="item-text">已绑定设备</div>
-                </div>
-            </el-col>
-            <el-col :span="5" style="margin-left:30px;">
-                <div class="user-item">
-                    <div class="item-count">1000</div>
-                    <div class="item-text">在线设备</div>
-                </div>
-            </el-col>
-
-        </el-row>
-    </div>
     <div class="device_form">
         <el-form ref="form" :model="form">
             <el-row type="flex">
                 <mySearch :searchText="searchText" @searchInfo="searchInfo"></mySearch>
                 <div @click="getShow()" class="div_show" style="color:#606266">筛选</div>
             </el-row>
-            <div v-show="showState">
-                <el-row type="flex" class="row_activess">
-                    <el-form-item label="设备状态" style="display: flex;">
-                        <el-select v-model="value1" placeholder="请选择" @change="onChange2">
-                            <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="绑定" style="display: flex;">
-                        <el-select v-model="value" placeholder="请选择" @change="onChange2">
-                            <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="注册时间" style="display: flex;">
+            <el-row type="flex" class="row_activess" v-show="showState">
+               <el-form-item label="日期" style="display: flex;">
                         <el-date-picker v-model="valueTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                         </el-date-picker>
                     </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" style="margin-left:68px;">确定</el-button>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary">重置</el-button>
-                    </el-form-item>
-               
-                </el-row>
-              
-            </div>
-
+                <el-form-item>
+                    <el-button type="primary">确定</el-button>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary">重置</el-button>
+                </el-form-item>
+            </el-row>
         </el-form>
     </div>
     <div class="devide_table">
-      <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
-            <el-col style="display: flex;justify-content: flex-end;" >
-                <el-button type="primary" @click="addAccout">导出</el-button>
+        <el-row type="flex" class="row_active">
+            <el-col :span="6">
+                <el-button type="primary" @click="addAccout">调整算力系数</el-button>
             </el-col>
         </el-row>
         <el-row type="flex" class="row_active">
@@ -68,7 +34,7 @@
     </div>
     <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
         <el-row type="flex">
-          
+         
         </el-row>
         <el-row type="flex">
             <el-col :span="6">
@@ -77,8 +43,27 @@
         </el-row>
 
     </div>
-  
-
+    <el-dialog :visible.sync="dialogVisible" width="20%" :before-close="handleClose">
+        <div class="addaccout">
+            <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" class="demo-ruleForm ">
+                <h3 class="title">调整算力系数</h3>
+                <el-form-item prop="username">
+                    <el-form-item label="IP 系数:">
+                        <el-input v-model="ruleForm2.username" placeholder="请输入IP 系数"></el-input>
+                    </el-form-item>
+                </el-form-item>
+                <el-form-item prop="nickname">
+                    <el-form-item label="存储系数:">
+                        <el-input v-model="ruleForm2.nickname" placeholder="请输入存储系数"></el-input>
+                    </el-form-item>
+                </el-form-item>
+                <el-form-item style="width:100%;display: flex;justify-content:center;">
+                    <el-button type="primary"  @click.native.prevent="handleSubmit2" :loading="logining">确定</el-button>
+                    <el-button type="primary"  @click.native.prevent="handleSubmit3">取消</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+    </el-dialog>
 </section>
 </template>
 
@@ -91,85 +76,95 @@ export default {
         return {
             dialogVisible: false,
             dialogVisible2: false,
-            searchText: "设备SN、设备型号、设备名称",
-            operatingStatus: true,
-            clomnSelection: false,
+            searchText: "设备SN、用户ID",
+            operatingStatus: false,
+            clomnSelection: true,
             reserveselection: true,
             value1: "",
             value2: "",
-            valueTime: "",
-            valueTime1: "",
-            options1: [{
-                    value: '0',
-                    label: '全部'
-                },
-                {
-                    value: '1',
-                    label: '在线'
-                },
-                {
-                    value: '2',
-                    label: '离线'
-                },
-               
-            ],
+            valueTime:"",
             options2: [{
                     value: '0',
                     label: '全部'
                 },
                 {
                     value: '1',
-                    label: '是'
+                    label: '男'
                 },
                 {
                     value: '2',
-                    label: '否'
+                    label: '女'
                 },
-              
+                {
+                    value: '3',
+                    label: '未知'
+                },
             ],
-     
-    
+            ruleForm2: {
+                username: '',
+                nickname: '',
+                password: "",
+                password2: "",
+                value: "",
+                 radio:"1",
+
+            },
+            rules2: {
+               
+                username: [{
+                    required: true,
+                    message: '请输入用户名',
+                    trigger: 'blur'
+                }, ],
+                nickname: [{
+                    required: true,
+                    message: '请输入用户昵称',
+                    trigger: 'blur'
+                }, ],
+                password: [{
+                    required: true,
+                    message: '请输入密码',
+                    trigger: 'blur'
+                }, ],
+                password2: [{
+                    required: true,
+                    message: '请输入密码',
+                    trigger: 'blur'
+                }, ],
+            },
             rowHeader: [{
                     prop: "user_id",
                     label: "设备SN"
                 },
                 {
                     prop: "user_name",
-                    label: "设备型号"
+                    label: "绑定用户ID"
                 },
                 {
                     prop: "user_tel",
-                    label: "设备名称"
+                    label: "当日剩余空间/总空间"
                 },
                 {
                     prop: "sex",
-                    label: "MAC地址"
+                    label: "当日上行宽带"
                 },
                 {
                     prop: "status",
-                    label: "设备IP"
+                    label: "当日IP值"
                 },
-                 {
+                  {
                     prop: "status",
-                    label: "设备状态"
+                    label: "当日存储值"
                 },
-                 {
+                  {
                     prop: "status",
-                    label: "是否绑定"
+                    label: "当日算力"
                 },
-                 {
+                  {
                     prop: "status",
-                    label: "节点ID"
+                    label: "日期"
                 },
-                   {
-                    prop: "status",
-                    label: "绑定用户ID"
-                },
-              
-             
-              
-
-              
+                
 
             ],
             tableData: [{
@@ -184,20 +179,25 @@ export default {
             tableOption: {
                 label: "操作",
                 options: [{
-                        label: "关机",
+                        label: "详情",
                         type: "primary",
                         methods: "freeze"
                     },
                     {
-                        label: "重启",
+                        label: "修改",
                         type: "danger",
                         methods: "edit"
                     },
-                       {
-                        label: "解绑",
+                    {
+                        label: "禁用",
                         type: "danger",
-                        methods: "edit"
+                        methods: "thaw"
                     },
+                    {
+                        label: "删除",
+                        type: "danger",
+                        methods: "thaw"
+                    }
                 ]
             },
             pager: {
@@ -223,11 +223,6 @@ export default {
             if (val == "edit") {
                 this.dialogVisible2 = true
             }
-            else if(val=="freeze"){
-                this.$router.push({
-                    path:"/userInfo"
-                })
-            }
             console.log(val)
             console.log(rows)
         },
@@ -235,7 +230,49 @@ export default {
             this.dialogVisible = true
 
         },
-   
+              handleSubmit3(ev) {
+    this.dialogVisible =false
+              },
+        handleSubmit2(ev) {
+            //return false
+            var _this = this;
+            this.$refs.ruleForm2.validate((valid) => {
+                if (valid) {
+                    this.logining = true;
+                    var loginParams = {
+                        username: this.ruleForm2.username,
+                        nickname: this.ruleForm2.nickname,
+                        password: this.ruleForm2.password,
+                        password2: this.ruleForm2.password2,
+                        role_id: this.ruleForm2.value,
+                    };
+                    //     userinsert(loginParams).then(data => {
+                    //         this.logining = false;
+                    //         this.dialogVisible = false
+                    //         let {
+                    //             msg,
+                    //             status,
+                    //             user
+                    //         } = data;
+                    //         if (status !== 0) {
+                    //             this.$message({
+                    //                 message: msg,
+                    //                 type: 'error'
+                    //             });
+                    //         } else {
+                    //             this.$message({
+                    //                 message: '添加成功',
+                    //                 type: 'success'
+                    //             });
+                    //             this.queryUserList()
+                    //         }
+                    //     });
+                    // } else {
+                    //     console.log('error submit!!');
+                    //     return false;
+                }
+            });
+        },
     },
     components: {
         pageNation: pageNation,
@@ -246,32 +283,7 @@ export default {
 </script>
 
 <style lang="less">
-.user-title {
-    margin-top: 30px;
-
-    .user-item {
-        background: #f2f2f2;
-        padding: 25px;
-        border-radius: 5px;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-
-        .item-count,
-        .item-text {
-            display: flex;
-            justify-content: center;
-        }
-    }
-}
-
 .myself-container {
-    .el-table th>.cell{
-    text-align: center;
-    }
-    .el-table .cell{
-        text-align: center;
-    }
     width: 100%;
     min-width: 1600px;
 
@@ -355,19 +367,16 @@ export default {
 }
 
 .addaccout {
-    .title {
-        width: 100%;
+    .title{
+    width: 100%;
         text-align: center;
     }
-
-    .el-dialog__body {
+    .el-dialog__body{
         padding: 0px;
     }
-
-    .el-form-item {
+    .el-form-item{
         display: flex
     }
-
     .el-form--label-left .el-form-item__label {
         text-align: right;
         width: 90px;
