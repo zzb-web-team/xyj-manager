@@ -28,6 +28,10 @@ import income from './views/point/income.vue'
 
 import PushSetting from './views/push/push_setting.vue'
 import PushRecord from './views/push/push_record.vue'
+import DeviceAnalysis from './views/analysis/deviceAnalysis.vue'
+import RegionAnalysis from './views/analysis/regionAnalysis.vue'
+import UserAnalysis from './views/analysis/userAnalysis.vue'
+import VersionAnalysis from './views/analysis/versionAnalysis.vue'
 // import accountInfo from './views/account/accountInfo.vue'
 // import accountManagement from './views/account/accountManagement.vue'
 
@@ -63,7 +67,7 @@ Vue.use(VCharts)
 import echarts from 'echarts'
 
 Vue.prototype.$echarts = echarts
-Vue.use(echarts)
+// Vue.use(echarts)
 
 import "babel-polyfill";
 
@@ -83,18 +87,21 @@ if (user) {
         var newRoutes
         var keymap = {
             'Home': Home,
-            'accountManagement':accountManagement,
-             'userCenter': userCenter,
-             'userInfo':userInfo,
-             'deviceInfo':deviceInfo,
+            'accountManagement': accountManagement,
+            'userCenter': userCenter,
+            'userInfo': userInfo,
+            'deviceInfo': deviceInfo,
             'PushSetting': PushSetting,
             'PushRecord': PushRecord,
             'middle':middle,
             'devicePower':devicePower,
             'deviceActivation':deviceActivation,
             'income':income,
-            'pointsDetails':pointsDetails
-
+            'pointsDetails':pointsDetails,
+            'DeviceAnalysis': DeviceAnalysis,
+            'RegionAnalysis': RegionAnalysis,
+            'UserAnalysis': UserAnalysis,
+            'VersionAnalysis': VersionAnalysis
             // 'userinformation': userinformation,
             // 'storagepower': storagepower,
             // 'deviceinformation': deviceinformation,
@@ -118,73 +125,69 @@ if (user) {
 
         }
         //var newRoutes = res.msg
-          var newRoutes=  [
-            {
-            path: "/",
-            component: 'Home',
-            name: "后台管理",
-            icon: 'el-icon-menu',
-            children: [
-                {
+        var newRoutes = [{
+                path: "/",
+                component: 'Home',
+                name: "后台管理",
+                icon: 'el-icon-menu',
+                children: [{
                     path: "/accountManagement",
                     name: "后台账户管理",
                     component: 'accountManagement',
                     icon: 'el-icon-menu',
-                    meta : {                     
-                        requireAuth:true    
-                     }
+                    meta: {
+                        requireAuth: true
+                    }
                 }]
             }, {
-            path: "/",
-            component: 'Home',
-            name: "推送设置",
-            icon: 'el-icon-menu',
-            children: [
-            
+                path: "/b",
+                component: 'Home',
+                name: "推送设置",
+                icon: 'el-icon-menu',
+                children: [
+
                     {
                         path: "/PushSetting",
                         name: "推送设置",
                         component: 'PushSetting',
                         icon: 'el-icon-menu',
-                        meta : {                     
-                            requireAuth:true    
+                        meta: {
+                            requireAuth: true
                         }
-                    },  {
+                    }, {
                         path: "/PushRecord",
                         name: "推送记录",
                         component: 'PushRecord',
                         icon: 'el-icon-menu',
-                        meta : {                     
-                            requireAuth:true    
+                        meta: {
+                            requireAuth: true
                         }
                     },
                 ]
-          },
-          {
-            path: "/a",
-            component: 'Home',
-            name: "用户管理",
-            icon: 'el-icon-menu',
-            children: [
-                {
-                    path: "/userCenter",
-                    name: "注册用户",
-                    component: 'userCenter',
-                    icon: 'el-icon-menu',
-                    meta : {                     
-                        requireAuth:true    
-                     }
-                },
-                {
-                    path: "/userInfo",
-                    name: "用户个人详情",
-                    component: 'userInfo',
-                    icon: 'el-icon-menu',
-                    meta : {                     
-                        requireAuth:true    
-                     }
-                },
-                
+            },
+            {
+                path: "/a",
+                component: 'Home',
+                name: "用户管理",
+                icon: 'el-icon-menu',
+                children: [{
+                        path: "/userCenter",
+                        name: "注册用户",
+                        component: 'userCenter',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/userInfo",
+                        name: "用户个人详情",
+                        component: 'userInfo',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
 
                 ]
           },
@@ -251,9 +254,86 @@ if (user) {
                      }
             
                 },                                
+
                 ]
-          }
-            
+            },
+            {
+                path: "/c",
+                component: 'Home',
+                name: "设备管理",
+                icon: 'el-icon-menu',
+                children: [{
+                        path: "/deviceInfo",
+                        name: "设备信息",
+                        component: 'deviceInfo',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/userInfo",
+                        name: "用户个人详情",
+                        component: 'userInfo',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    }
+                ]
+            },
+            {
+                path: "/d",
+                component: 'Home',
+                name: "数据分析",
+                icon: 'el-icon-menu',
+                children: [
+                    // {
+                        // path: "/UserAnalysis",
+                        // name: "APP用户分析",
+                        // icon: 'el-icon-menu',
+                        // children: [
+                        {
+                            path: "/UserAnalysis",
+                            name: "APP用户分析",
+                            component: 'UserAnalysis',
+                            icon: 'el-icon-menu',
+                            meta: {
+                                requireAuth: true
+                            }
+                        },
+                        {
+                            path: "/RegionAnalysis",
+                            name: "地域分析",
+                            component: 'RegionAnalysis',
+                            icon: 'el-icon-menu',
+                            meta: {
+                                requireAuth: true
+                            }
+                        },
+                        {
+                            path: "/VersionAnalysis",
+                            name: "版本分析",
+                            component: 'VersionAnalysis',
+                            icon: 'el-icon-menu',
+                            meta: {
+                                requireAuth: true
+                            }
+                        },
+                    // ]
+                    // },
+                    {
+                        path: "/DeviceAnalysis",
+                        name: "设备在线分析",
+                        component: 'DeviceAnalysis',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    }
+                ]
+            }
+
         ]
         var routes = common.trans(newRoutes, keymap)
         var router = new VueRouter({
