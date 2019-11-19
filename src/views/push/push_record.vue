@@ -51,13 +51,6 @@
           </el-row>
       </div>
       <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
-        <el-row type="flex"  >
-            <el-col :span="6" style="display: flex;justify-content: justify-content: flex-start;">
-                <el-button type="primary" size="small">启用</el-button>
-                <el-button type="primary" size="small">禁用</el-button>
-                <el-button type="primary" size="small">删除</el-button>
-            </el-col>
-        </el-row>
         <el-row type="flex" >
             <el-col :span="6">
                 <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
@@ -106,7 +99,7 @@
                     
                     :rowHeader="rowHeader" 
                     :tableOption="tableOption" 
-                    @handleButton="handleButton" 
+                    @handleButton="handleButton1" 
                     :operatingStatus="operatingStatus" 
                     @toOperating="toOperating" 
                     
@@ -115,13 +108,6 @@
           </el-row>
       </div>
       <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
-        <el-row type="flex"  >
-            <el-col :span="6" style="display: flex;justify-content: justify-content: flex-start;">
-                <el-button type="primary" size="small">启用</el-button>
-                <el-button type="primary" size="small">禁用</el-button>
-                <el-button type="primary" size="small">删除</el-button>
-            </el-col>
-        </el-row>
         <el-row type="flex" >
             <el-col :span="6">
                 <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
@@ -130,6 +116,52 @@
       </div>
     </el-tab-pane>
   </el-tabs>
+  <el-dialog :visible.sync="dialogVisible" width="40%" :before-close="handleClose">
+    <p>通知详情</p>
+    <p>
+        <span>标题</span>
+        <span>重大通知</span>
+    </p>
+    <p>
+        <span>内容</span>
+        <span>通知通知，重大通知</span>
+    </p>
+    <p>
+        <span>发送设备</span>
+        <span>所有设备</span>
+    </p>
+    <p>
+        <span>发送对象</span>
+        <span>指定账号(16623122475，12323122475)</span>
+    </p>
+    <p>到达详情</p>
+    <p>
+        <span>发送数</span>
+        <span>6146条</span>
+    </p>
+    <p>
+        <span>到达数</span>
+        <span>5039条</span>
+    </p>
+    <p>
+        <span>打开数</span>
+        <span>907条</span>
+    </p>
+    <p>
+        <span>删除数</span>
+        <span>705条</span>
+    </p>
+    <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+    </span>
+  </el-dialog>
+  <el-dialog :visible.sync="dialogVisible2" width="40%" :before-close="handleClose">
+    <p>关于平台调整的公告</p>
+    <p>2019-05-23 14:15:45</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget odio.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget odio.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar tempor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus sapien nunc eget odio.</p>
+  </el-dialog>
 </section>
 </template>
 
@@ -207,17 +239,7 @@ export default {
                         methods: "freeze"
                     },
                     {
-                        label: "修改",
-                        type: "danger",
-                        methods: "edit"
-                    },
-                    {
-                        label: "禁用",
-                        type: "danger",
-                        methods: "thaw"
-                    },
-                    {
-                        label: "删除",
+                        label: "撤回",
                         type: "danger",
                         methods: "thaw"
                     }
@@ -236,6 +258,9 @@ export default {
 
     },
     methods: {
+        freeze() {
+            this.dialogVisible = true;
+        },
         searchInfo() {
             alert("搜做")
         },
@@ -243,7 +268,14 @@ export default {
             this.showState = !this.showState
         },
         handleButton(val, rows) {
-            if(val=="edit"){
+            if(val=="freeze"){
+                this.dialogVisible=true
+            }
+            console.log(val)
+            console.log(rows)
+        },
+        handleButton1(val, rows) {
+            if(val=="freeze"){
                 this.dialogVisible2=true
             }
             console.log(val)
