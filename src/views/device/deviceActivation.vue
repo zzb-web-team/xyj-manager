@@ -158,7 +158,7 @@ import pageNation from "../../components/pageNation";
 export default {
     data() {
         return {
-            dialogVisible: true,
+            dialogVisible: false,
             dialogVisible2: false,
             searchText: "设备SN、设备型号、CPU-ID",
             operatingStatus: true,
