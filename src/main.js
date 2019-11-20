@@ -110,11 +110,11 @@ if (user) {
             'VersionAnalysis': VersionAnalysis,
             'addAppliction':addAppliction,
             'releaseAppliction':releaseAppliction,
-
             'AppVersion': AppVersion,
             'AppManage': AppManage,
             'SysVersion': AppVersion,
             'SysManage': SysManage
+            
             // 'userinformation': userinformation,
             // 'storagepower': storagepower,
             // 'deviceinformation': deviceinformation,
