@@ -32,6 +32,10 @@ import DeviceAnalysis from './views/analysis/deviceAnalysis.vue'
 import RegionAnalysis from './views/analysis/regionAnalysis.vue'
 import UserAnalysis from './views/analysis/userAnalysis.vue'
 import VersionAnalysis from './views/analysis/versionAnalysis.vue'
+import AppVersion from './views/version/appVersion.vue'
+import AppManage from './views/version/appManage.vue'
+import SysVersion from './views/version/sysVersion.vue'
+import SysManage from './views/version/sysManage.vue'
 // import accountInfo from './views/account/accountInfo.vue'
 // import accountManagement from './views/account/accountManagement.vue'
 
@@ -101,7 +105,11 @@ if (user) {
             'DeviceAnalysis': DeviceAnalysis,
             'RegionAnalysis': RegionAnalysis,
             'UserAnalysis': UserAnalysis,
-            'VersionAnalysis': VersionAnalysis
+            'VersionAnalysis': VersionAnalysis,
+            'AppVersion': AppVersion,
+            'AppManage': AppManage,
+            'SysVersion': AppVersion,
+            'SysManage': SysManage
             // 'userinformation': userinformation,
             // 'storagepower': storagepower,
             // 'deviceinformation': deviceinformation,
@@ -283,7 +291,7 @@ if (user) {
                 ]
             },
             {
-                path: "/d",
+                path: "/e",
                 component: 'Home',
                 name: "数据分析",
                 icon: 'el-icon-menu',
@@ -326,6 +334,49 @@ if (user) {
                         path: "/DeviceAnalysis",
                         name: "设备在线分析",
                         component: 'DeviceAnalysis',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    }
+                ]
+            },
+            {
+                path: "/f",
+                component: 'Home',
+                name: "版本管理",
+                icon: 'el-icon-menu',
+                children: [{
+                        path: "/AppVersion",
+                        name: "版本发布管理",
+                        component: 'AppVersion',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/AppManage",
+                        name: "应用包管理",
+                        component: 'AppManage',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/SysVersion",
+                        name: "设备系统管理",
+                        component: 'SysVersion',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/SysManage",
+                        name: "系统包管理",
+                        component: 'SysManage',
                         icon: 'el-icon-menu',
                         meta: {
                             requireAuth: true
