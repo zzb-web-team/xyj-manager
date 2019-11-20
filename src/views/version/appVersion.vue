@@ -103,7 +103,7 @@
         </el-col>
       </el-row>
     </div>
-    <el-dialog :visible.sync="dialogVisible2" width="40%" :before-close="handleClose">
+    <el-dialog :visible.sync="dialogVisible" width="40%" :before-close="handleClose">
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item label="发布类型">
           <el-select v-model="form.type" placeholder="请选择发布类型">
@@ -154,7 +154,7 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-dialog :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+    <el-dialog :visible.sync="dialogVisible2" width="50%" :before-close="handleClose">
       <el-form ref="form" :model="form" label-width="80px">
         <p><b>版本详情</b></p>
         <el-form-item label="发布类型:">
@@ -237,6 +237,7 @@ export default {
       timing: '',
       dialogVisible: false,
       dialogVisible2: false,
+      operatingStatus: true,
       rowHeader: [
         {
           prop: "version",
@@ -295,15 +296,9 @@ export default {
       this.showState = !this.showState;
     },
     handleButton(val, rows) {
-      if (val == "edit") {
+      if (val == "withdraw") {
         this.dialogVisible2 = true;
-      } else if (val == "freeze") {
-        this.$router.push({
-          path: "/userInfo"
-        });
-      }
-      console.log(val);
-      console.log(rows);
+      } 
     },
     add() {
       this.dialogVisible = true;

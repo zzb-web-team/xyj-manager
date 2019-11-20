@@ -143,10 +143,12 @@ export default {
       this.showState = !this.showState;
     },
     upload() {
-
+      
     },
     publish() {
-
+      this.$router.push({
+        path:"/AppVersion"
+      })
     },
     handleButton(val, rows) {
       if (val == "edit") {
