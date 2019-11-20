@@ -24,6 +24,8 @@ import devicePower from './views/device/devicePower.vue'
 import deviceActivation from './views/device/deviceActivation.vue'
 import pointsDetails from './views/point/pointsDetails.vue'
 import income from './views/point/income.vue'
+import addAppliction from './views/application/addAppliction.vue'
+import releaseAppliction from './views/application/releaseAppliction.vue'
 
 
 import PushSetting from './views/push/push_setting.vue'
@@ -101,7 +103,10 @@ if (user) {
             'DeviceAnalysis': DeviceAnalysis,
             'RegionAnalysis': RegionAnalysis,
             'UserAnalysis': UserAnalysis,
-            'VersionAnalysis': VersionAnalysis
+            'VersionAnalysis': VersionAnalysis,
+            'addAppliction':addAppliction,
+            'releaseAppliction':releaseAppliction
+
             // 'userinformation': userinformation,
             // 'storagepower': storagepower,
             // 'deviceinformation': deviceinformation,
@@ -229,6 +234,34 @@ if (user) {
                                 
                 ]
           },
+          {
+            path: "/f",
+            component: 'Home',
+            name: "盒子应用管理",
+            icon: 'el-icon-menu',
+            children: [
+                {
+                    path: "/releaseAppliction",
+                    name: "应用发布管理",
+                    component: 'releaseAppliction',
+                    icon: 'el-icon-menu',
+                    meta : {                     
+                        requireAuth:true    
+                     }
+                },
+                {
+                    path: "/addAppliction",
+                    name: "应用新增管理",
+                    component: 'addAppliction',
+                    icon: 'el-icon-menu',
+                    meta : {                     
+                        requireAuth:true    
+                     }
+            
+                },                                
+
+                ]
+            },
           {
             path: "/d",
             component: 'Home',
