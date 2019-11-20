@@ -38,6 +38,7 @@ import AppVersion from './views/version/appVersion.vue'
 import AppManage from './views/version/appManage.vue'
 import SysVersion from './views/version/sysVersion.vue'
 import SysManage from './views/version/sysManage.vue'
+import Log from './views/log/log.vue'
 // import accountInfo from './views/account/accountInfo.vue'
 // import accountManagement from './views/account/accountManagement.vue'
 
@@ -113,8 +114,11 @@ if (user) {
             'AppVersion': AppVersion,
             'AppManage': AppManage,
             'SysVersion': AppVersion,
-            'SysManage': SysManage
+            'SysManage': SysManage,
             
+            'SysVersion': SysVersion,
+            'SysManage': SysManage,
+            "Log": Log
             // 'userinformation': userinformation,
             // 'storagepower': storagepower,
             // 'deviceinformation': deviceinformation,
@@ -410,6 +414,22 @@ if (user) {
                         path: "/SysManage",
                         name: "系统包管理",
                         component: 'SysManage',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    }
+                ]
+            },
+            {
+                path: "/g",
+                component: 'Home',
+                name: "操作管理",
+                icon: 'el-icon-menu',
+                children: [{
+                        path: "/Log",
+                        name: "操作日志",
+                        component: 'Log',
                         icon: 'el-icon-menu',
                         meta: {
                             requireAuth: true

@@ -1,12 +1,53 @@
 <template>
   <section class="myself-container">
+    <div class="device_form">
+      <el-form ref="form" :model="form">
+        <el-row type="flex">
+          <mySearch :searchText="searchText" @searchInfo="searchInfo"></mySearch>
+          <div @click="getShow()" class="div_show" style="color:#606266">筛选</div>
+        </el-row>
+        <div v-show="showState">
+          <el-row type="flex" class="row_activess">
+            <el-form-item label="状态" style="display: flex;">
+              <el-select v-model="value1" placeholder="请选择" @change="onChange2">
+                <el-option
+                  v-for="item in options1"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="操作类型" style="display: flex;">
+              <el-select v-model="value" placeholder="请选择" @change="onChange2">
+                <el-option
+                  v-for="item in options2"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="操作时间" style="display: flex;">
+              <el-date-picker
+                v-model="valueTime"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              ></el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" style="margin-left:68px;">确定</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary">重置</el-button>
+            </el-form-item>
+          </el-row>
+        </div>
+      </el-form>
+    </div>
     <div class="devide_table">
-      <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-start;">
-        <el-col style="display: flex;justify-content: flex-start;">
-          <el-button type="primary" @click="upload">上传应用包</el-button>
-          <el-button type="primary" @click="publish">版本发布</el-button>
-        </el-col>
-      </el-row>
       <el-row type="flex" class="row_active">
         <el-col :span="24">
           <tableBarActive2
@@ -18,7 +59,7 @@
             :rowHeader="rowHeader"
             :tableOption="tableOption"
             @handleButton="handleButton"
-            :operatingStatus="operatingStatus"
+            
             @toOperating="toOperating"
             @handleSelectionChange="handleSelectionChange"
             @selectCheckBox="selectCheckBox"
@@ -51,7 +92,7 @@ export default {
     return {
       dialogVisible: false,
       dialogVisible2: false,
-      searchText: "设备SN、设备型号、设备名称",
+      searchText: "操作人",
       operatingStatus: true,
       clomnSelection: false,
       reserveselection: true,
@@ -59,47 +100,80 @@ export default {
       value2: "",
       valueTime: "",
       valueTime1: "",
+      options1: [
+        {
+          value: "0",
+          label: "成功"
+        },
+        {
+          value: "1",
+          label: "失败"
+        }
+      ],
+      options2: [
+        {
+          value: "0",
+          label: "新增"
+        },
+        {
+          value: "1",
+          label: "修改"
+        },
+        {
+          value: "2",
+          label: "删除"
+        },
+        {
+          value: "3",
+          label: "启用"
+        },
+        {
+          value: "4",
+          label: "禁用"
+        },
+        {
+          value: "5",
+          label: "发布"
+        },
+        {
+          value: "6",
+          label: "撤回"
+        },
+        {
+          value: "7",
+          label: "导入"
+        },
+        {
+          value: "8",
+          label: "导出"
+        }
+      ],
+
       rowHeader: [
         {
           prop: "user_id",
-          label: "应用包名"
+          label: "状态"
         },
         {
           prop: "user_name",
-          label: "包类型"
+          label: "操作类型"
         },
         {
           prop: "user_tel",
-          label: "md5"
+          label: "操作人"
         },
         {
           prop: "sex",
-          label: "hashid"
+          label: "原始值"
         },
         {
           prop: "status",
-          label: "是否上传到IPFS节点"
+          label: "修改值"
         },
         {
           prop: "status",
-          label: "版本号"
+          label: "操作时间"
         },
-        {
-          prop: "status",
-          label: "文件描述"
-        },
-        {
-          prop: "status",
-          label: "发布方式"
-        },
-        {
-          prop: "status",
-          label: "上传日期户"
-        },
-        {
-          prop: "status",
-          label: "最近修改日期"
-        }
       ],
       tableData: [
         {
@@ -112,19 +186,7 @@ export default {
         }
       ],
       tableOption: {
-        label: "操作",
-        options: [
-          {
-            label: "修改",
-            type: "danger",
-            methods: "edit"
-          },
-          {
-            label: "删除",
-            type: "danger",
-            methods: "delete"
-          }
-        ]
+
       },
       pager: {
         count: 0,
@@ -141,14 +203,6 @@ export default {
     },
     getShow() {
       this.showState = !this.showState;
-    },
-    upload() {
-
-    },
-    publish() {
-      this.$router.push({
-        path:"/SysVersion"
-      })
     },
     handleButton(val, rows) {
       if (val == "edit") {
