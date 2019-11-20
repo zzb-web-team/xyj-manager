@@ -302,31 +302,7 @@ if (user) {
 
                 ]
             },
-            {
-                path: "/c",
-                component: 'Home',
-                name: "设备管理",
-                icon: 'el-icon-menu',
-                children: [{
-                        path: "/deviceInfo",
-                        name: "设备信息",
-                        component: 'deviceInfo',
-                        icon: 'el-icon-menu',
-                        meta: {
-                            requireAuth: true
-                        }
-                    },
-                    {
-                        path: "/userInfo",
-                        name: "用户个人详情",
-                        component: 'userInfo',
-                        icon: 'el-icon-menu',
-                        meta: {
-                            requireAuth: true
-                        }
-                    }
-                ]
-            },
+      
             {
                 path: "/e",
                 component: 'Home',
