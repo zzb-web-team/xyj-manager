@@ -336,6 +336,9 @@ export default {
         else if(val=="password"){
             this.dialogVisible3=true
         }
+          else if(val=="freeze"){
+            this.dialogVisible2=true
+        }
             console.log(val)
             console.log(rows)
         },
