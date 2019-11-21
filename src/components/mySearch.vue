@@ -1,7 +1,7 @@
 <template>
 <div class="search-con">
     <i class="el-icon-search" @click="searchInfo" style="color:#606266"></i>
-    <el-input class="search-input" v-model="searchText" placeholder="账号，用户名"></el-input>
+    <el-input class="search-input" v-model="searchText" :placeholder="placeholder"></el-input>
 </div>
 </template>
 
@@ -11,6 +11,12 @@ export default {
         searchText:{
             type:String,
             default:()=>{}
+        },
+        placeholder:{
+            type:String,
+            default:()=>{
+
+            }
         }
     },
     methods:{

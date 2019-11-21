@@ -1,19 +1,24 @@
 <template>
-<div class="Login">
-    <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
-        <h3 class="title">系统登录</h3>
-        <el-form-item prop="account">
-            <el-input type="text" v-model="ruleForm2.account" auto-complete="off" placeholder="账号"></el-input>
-        </el-form-item>
-        <el-form-item prop="checkPass">
-            <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="密码"></el-input>
-        </el-form-item>
-        <!-- <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox> -->
-        <el-form-item style="width:100%;">
-            <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" :loading="logining">登录</el-button>
-            <!--<el-button @click.native.prevent="handleReset2">重置</el-button>-->
-        </el-form-item>
-    </el-form>
+<div>
+    <div class="Login-bg">
+        <div class="login-con">
+            <div class="login-con-l">
+                <div class="item-h1">西柚机后台管理系统</div>
+                <div class="item-h2">welcome欢迎登陆</div>
+                <div class="item-user" style="margin-top:130px;">
+                    <div class="item-user-l"></div>
+                    <input placeholder="请输入用户名" v-model="ruleForm2.account">
+                </div>
+                <div class="item-user item-password" style="margin-top:30px;">
+                    <div class="item-user-l"></div>
+                    <input placeholder="请输入密码" v-model="ruleForm2.checkPass" type="password">
+                </div>
+                <div class="login-button" @click="handleSubmit2">
+                    立即登录
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </template>
 
@@ -61,15 +66,24 @@ export default {
         },
         handleSubmit2(ev) {
             var _this = this;
-            this.$refs.ruleForm2.validate((valid) => {
-                if (valid) {
-                    //_this.$router.replace('/table');
-                    this.logining = true;
-                    //NProgress.start();
                     var loginParams = {
                         username: this.ruleForm2.account,
                         password: this.ruleForm2.checkPass
                     };
+                    if(this.ruleForm2.account==""){
+                          this.$message({
+                                message: "请输入用户名",
+                                type: 'error'
+                            });
+                        return false
+                    }
+                    if(this.ruleForm2.checkPass==""){
+                          this.$message({
+                                message: "请输入密码",
+                                type: 'error'
+                            });
+                               return false
+                    }
                     //  this.$router.push({
                     //             path: '/adduser'
                     //         });
@@ -91,22 +105,19 @@ export default {
                                 type: 'error'
                             });
                         } else {
-                            let userInfo=data.msg
+                            let userInfo = data.msg
                             this.$store.commit('setUserInfo', userInfo) //sessionStorage.setItem('user', JSON.stringify(msg));
                             // this.$router.push({
                             //     path: '/userinformation'
                             // });
-                            window.location.href="./"
+                            window.location.href = "./"
                             //console.log(JSON.stringify(msg))
                             this.set('userInfo', JSON.stringify(msg), 1000)
 
                         }
                     })
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
+              
+           
         },
         set: function (name, value, days) {
 
@@ -117,46 +128,101 @@ export default {
             window.document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
 
         },
-     
+
     }
 }
 </script>
 
 <style lang="scss">
-.Login {
-    .el-form {
-        .el-form-item {
-            .el-form-item__content {
+.Login-bg {
+    width: 1820px;
+    height: 1080px;
+    background: url('../assets/bg.png') no-repeat left;
+    background-size: 1080px 1080px;
+    margin: 0 auto;
 
-                width: 100%;
+    .login-con {
+        width: 800px;
+        height: 1080px;
+        float: right;
+
+        .login-con-l {
+            width: 600px;
+            margin: 0 auto;
+            height: auto;
+            display: flex;
+            flex-flow: column;
+
+            .login-button {
+                width: 603px;
+                height: 79px;
+                margin-top: 130px;
+                background: rgba(51, 125, 247, 1);
+                border: 1px solid rgba(26, 114, 254, 1);
+                box-shadow: 0px 8px 21px 0px rgba(51, 125, 247, 0.5);
+                border-radius: 39px;
+                font-size: 30px;
+                font-weight: bold;
+                color: #ffffff;
+                text-align: center;
+                line-height: 79px;
+                cursor: pointer;
+            }
+
+            .item-h1 {
+                font-size: 56px;
+                color: #333333;
+                margin-top: 120px;
+            }
+
+            .item-h2 {
+                font-size: 30px;
+                color: #A9A9A9;
+                margin-top: 30px;
+            }
+
+            .item-user {
+                width: 600;
+                border-bottom: #EEEEEE solid 2px;
+                height: 70px;
+
+                &.item-password {
+                    .item-user-l {
+                        width: 80px;
+                        height: 70px;
+                        float: left;
+                        background: url('../assets/password.png') no-repeat center;
+                        background-size: 44px 44px;
+                        text-align: center
+                    }
+                }
+
+                // display: flex;
+                // justify-content: flex-start;
+                .item-user-l {
+                    width: 80px;
+                    height: 70px;
+                    float: left;
+                    background: url('../assets/user.png') no-repeat center;
+                    background-size: 44px 44px;
+                    text-align: center
+                }
+
+                input {
+                    width: 500;
+                    background: none;
+                    border: none;
+                    font-size: 20px;
+                    line-height: 70px;
+                    color: #A9A9A9;
+                    float: left;
+                    outline: none
+                }
             }
         }
-
-    }
-
-}
-
-.login-container {
-    /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    background-clip: padding-box;
-    margin: 180px auto;
-    width: 350px;
-    padding: 35px 35px 15px 35px;
-    background: #fff;
-    border: 1px solid #eaeaea;
-    box-shadow: 0 0 25px #cac6c6;
-
-    .title {
-        margin: 0px auto 40px auto;
-        text-align: center;
-        color: #505458;
-    }
-
-    .remember {
-        margin: 0px 0px 35px 0px;
     }
 }
+
+
+
 </style>

@@ -2,13 +2,13 @@ import axios from 'axios';
 
 let base = '';
 
-let ownbase ='http://xyj.grapefruitcloud.com' //外网接口
-let ownbase1 ='http://xyj.grapefruitcloud.com' //内网接口
-let ownbase2 ='http://xyj.grapefruitcloud.com' //内网接口
+// let ownbase ='http://xyj.grapefruitcloud.com' //外网接口
+// let ownbase1 ='http://xyj.grapefruitcloud.com' //内网接口
+// let ownbase2 ='http://xyj.grapefruitcloud.com' //内网接口
 
-// let ownbase = 'http://39.100.131.247' //外网接口
-// let ownbase1 = 'http://39.100.131.247' //内网接口
-// let ownbase2 = 'http://39.100.131.247' //内网接口
+let ownbase = 'http://39.100.131.247' //外网接口
+let ownbase1 = 'http://39.100.131.247' //内网接口
+let ownbase2 = 'http://39.100.131.247' //内网接口
 
 
 // let ownbase = 'http://10.0.0.72' //外网接口
@@ -23,8 +23,12 @@ export default {
 
 }
 
+//2019/11/21
+//登录
+export const requestLoginOwn = params => { return axios.post(`${ownbase}/admin/system/login`, params).then(res => res.data); };
 
-
+//获取添加用户列表
+export const userlist = params => { return axios.post(`${ownbase}/admin/system/userlist`, params).then(res => res.data); };
 
 export const requestLogin = params => { return axios.post(`${base}/login`, params).then(res => res.data); };
 
@@ -43,15 +47,13 @@ export const addUser = params => { return axios.get(`${base}/user/add`, { params
 
 //新增
 
-//登录
-export const requestLoginOwn = params => { return axios.post(`${ownbase}/admin/system/login`, params).then(res => res.data); };
+
 //添加用户
 export const userinsert = params => { return axios.post(`${ownbase}/admin/system/userinsert`, params).then(res => res.data); };
 //更新用户
 export const userupdate = params => { return axios.post(`${ownbase}/admin/system/userupdate`, params).then(res => res.data); };
 
-//获取添加用户列表
-export const userlist = params => { return axios.post(`${ownbase}/admin/system/userlist`, params).then(res => res.data); };
+
 //删除用户列表
 export const userdelete = params => { return axios.post(`${ownbase}/admin/system/userdelete`, params).then(res => res.data); };
 //路由列表获取
