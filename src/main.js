@@ -2,7 +2,9 @@ import App from './App'
 
 import store from './store/index'
 import Vuex from 'vuex'
+
 Vue.use(Vuex);
+
 
 import VCharts from 'v-charts'
 import common from "./common/js/util.js";

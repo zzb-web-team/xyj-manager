@@ -3,18 +3,8 @@ import axios from 'axios';
 let base = '';
 
 // let ownbase ='http://xyj.grapefruitcloud.com' //外网接口
-// let ownbase1 ='http://xyj.grapefruitcloud.com' //内网接口
-// let ownbase2 ='http://xyj.grapefruitcloud.com' //内网接口
 
 let ownbase = 'http://39.100.131.247' //外网接口
-let ownbase1 = 'http://39.100.131.247' //内网接口
-let ownbase2 = 'http://39.100.131.247' //内网接口
-
-
-// let ownbase = 'http://10.0.0.72' //外网接口
-// let ownbase1 = 'http://10.0.0.72' //内网接口
-// let ownbase2 = 'http://10.0.0.72' //内网接口
-
 
 export default {
     customData: function() {
@@ -217,10 +207,15 @@ export const applist = params => { return axios.post(`${ownbase}/app/applist`, p
 //应用发布管理查询列表
 export const appdevicelist = params => { return axios.post(`${ownbase}/app/devicelist`, params).then(res => res.data); };
 
+
+//2019-11-21
 //西柚机设备信息
-export const devicelist = params => { return axios.post(`${ownbase}/device/devicelist`, params).then(res => res.data); };
-//西柚机设备信息title
-export const device_cnt_overview = params => { return axios.post(`${ownbase}/device_manage/device_cnt_overview`, params).then(res => res.data); };
+export const devicelist = params => { return axios.post(`${ownbase}/miner_ctrl/query_devinfo_by_conditions_grapefruit`, params).then(res => res.data); };
+
+//西柚机设备激活信息title
+export const device_cnt_overview = params => { return axios.post(`${ownbase}/miner_ctrl/device_cnt_overview`, params).then(res => res.data); };
+//西柚机设备激活信息table
+export const device_cnt_basicinfo = params => { return axios.post(`${ownbase}/miner_ctrl/edit_device_basicinfo`, params).then(res => res.data); };
 
 //西柚机存储明细
 export const ptfs_query_node_info_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_info_list`, params).then(res => res.data); };

@@ -395,9 +395,44 @@ export default {
                 }
             }
             return tree
-        }
+        },
         
-   
-
-
+    judgeString(str){
+        const reg1 = /^\d{8}$/;
+        const reg2 = /^[\u4E00-\u9FA5A-Za-z0-9]{4,20}$/;
+        const reg3 = /^(SMM)[0-9]{9}$/;
+        const reg4 = /^(ET)[1-9]{1}(.)[0-9]{2}$/
+        const reg5 = /^[\u4E00-\u9FA5A-Za-z0-9]{4,20}$/;
+        const reg6 = /^[A-Z0-9-]{9}$/;
+        const reg7 = /^\d+$/
+        if(reg1.test(str)){
+            return {
+                user_id: str
+            }
+        }else if(reg2.test(str)&&reg7.test(str)){
+            return {
+                user_nickname: str
+            }
+        }else if(reg3.test(str)){
+            return {
+                dev_sn: str
+            }
+        }else if(reg4.test(str)){
+            return {
+                dev_type: str
+            }
+        }else if(reg5.test(str)&&reg7.test(str)){
+            return {
+                dev_name: str
+            }
+        }else if(reg6.test(str)){
+            return {
+                cpu_id: str
+            }
+        }else{
+            return {}
+        }
+    }
 };
+
+
