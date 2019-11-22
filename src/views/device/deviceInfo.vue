@@ -4,13 +4,13 @@
       <el-row>
         <el-col :span="5">
           <div class="user-item">
-            <div class="item-count">1000</div>
+            <div class="item-count">{{bound_dev_cnt}}</div>
             <div class="item-text">已绑定设备</div>
           </div>
         </el-col>
         <el-col :span="5" style="margin-left:30px;">
           <div class="user-item">
-            <div class="item-count">1000</div>
+            <div class="item-count">{{online_dev_cnt}}</div>
             <div class="item-text">在线设备</div>
           </div>
         </el-col>
@@ -19,25 +19,51 @@
     <div class="device_form">
       <el-form ref="form" :model="form">
         <el-row type="flex">
-          <mySearch :searchText="searchText" @searchInfo="searchInfo"></mySearch>
+          <div class="search-con">
+            <i class="el-icon-search" style="color:#606266"></i>
+            <el-input class="search-input" v-model="searchText" placeholder="设备SN、设备型号、设备名称"></el-input>
+          </div>
           <div @click="getShow()" class="div_show" style="color:#606266">筛选</div>
         </el-row>
         <div v-show="showState">
           <el-row type="flex" class="row_activess">
-            <el-form-item label="设备状态" style="display: flex;">
-              <el-select v-model="value1" placeholder="请选择" @change="onChange2">
+            <el-form-item label="设备类型" style="display: flex;width:180px;">
+              <el-select v-model="dev_type" placeholder="请选择">
                 <el-option
-                  v-for="item in options1"
+                  v-for="item in dev_types"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="绑定" style="display: flex;">
-              <el-select v-model="value" placeholder="请选择" @change="onChange2">
+            <el-form-item label="ROM：" style="display: flex; width:180px;">
+              <el-select
+                v-model="rom_version"
+                placeholder="请选择"
+              >
                 <el-option
-                  v-for="item in options2"
+                  v-for="item in roms"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="设备状态" style="display: flex;width:180px;">
+              <el-select v-model="online_state" placeholder="请选择">
+                <el-option
+                  v-for="item in onlineStates"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="绑定" style="display: flex;width:180px;">
+              <el-select v-model="bind_flag" placeholder="请选择" @change="onChange2">
+                <el-option
+                  v-for="item in bindFlags"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
@@ -45,16 +71,8 @@
               </el-select>
             </el-form-item>
             <el-form-item label="注册时间" style="display: flex;">
-              <el-date-picker
-                v-model="valueTime"
-                type="datetime"
-                placeholder="选择开始日期时间">
-              </el-date-picker>-
-              <el-date-picker
-                v-model="valueTime1"
-                type="datetime"
-                placeholder="选择结束日期时间">
-              </el-date-picker>
+              <el-date-picker v-model="bind_start_ts" style="width:150px;" type="datetime" placeholder="选择开始日期时间"></el-date-picker> -
+              <el-date-picker v-model="bind_end_ts" style="width:150px;" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" style="margin-left:68px;" @click="search">确定</el-button>
@@ -74,21 +92,86 @@
       </el-row>
       <el-row type="flex" class="row_active">
         <el-col :span="24">
-          <tableBarActive2
-            id="rebateSetTable"
-            ref="table1"
-            tooltip-effect="dark"
-            :tableData="tableData"
-            :clomnSelection="clomnSelection"
-            :rowHeader="rowHeader"
-            :tableOption="tableOption"
-            @handleButton="handleButton"
-            :operatingStatus="operatingStatus"
-            @toOperating="toOperating"
-            @handleSelectionChange="handleSelectionChange"
-            @selectCheckBox="selectCheckBox"
-            @selectAll="selectAll"
-          ></tableBarActive2>
+          <el-table
+            :data="tableData"
+            border
+            style="width: 100%">
+            <el-table-column
+              fixed
+              prop = "dev_sn"
+              label = "设备SN"
+              width="150">
+            </el-table-column>
+            <el-table-column
+              :formatter="formatDevType"
+              prop="dev_type"
+              label="设备类型"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="rom_version"
+              label="ROM"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="dev_mac"
+              label="MAC地址"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="cpu_id"
+              label="CPU-ID"
+              width="300">
+            </el-table-column>
+            <el-table-column
+              prop="total_cap"
+              label="总容量"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="dev_ip"
+              label="设备IP"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="online_state"
+              :formatter="formatState"
+              label="设备状态"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="bind_flag"
+              :formatter="formatBind"
+              label="是否绑定"
+              width="120">
+            </el-table-column>
+            <el-table-column
+              prop="bind_timestamp"
+              label="绑定时间"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="ipfs_id"
+              label="节点ID"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              prop="bind_user_id"
+              label="绑定用户ID"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              fixed="right"
+              label="操作"
+              width="200">
+              <template slot-scope="scope">
+                <el-button @click="shut(scope.row)" type="text" size="small">关机</el-button>
+                <el-button type="text" @click="restart(scope.row)" size="small">重启</el-button>
+                <el-button v-show="scope.row.bind_flag===1" @click="untied(scope.row)" type="text" size="small">强制解绑</el-button>
+                <el-button v-show="scope.row.bind_flag===0" type="text" @click="tie(scope.row)" size="small">绑定</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-col>
       </el-row>
     </div>
@@ -111,104 +194,146 @@
 import tableBarActive2 from "../../components/tableBarActive2";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
-import { devicelist } from '../../api/api'
+import {
+  devicelist,
+  device_cnt_overview,
+  change_device_bind_state
+} from "../../api/api";
 export default {
   data() {
     return {
       dialogVisible: false,
       dialogVisible2: false,
-      searchText: "设备SN、设备型号、设备名称",
+      searchText: "",
+      bound_dev_cnt: "",
+      online_dev_cnt: "",
       operatingStatus: true,
       clomnSelection: false,
       reserveselection: true,
-      value1: "",
-      value: "",
-      valueTime: "",
-      valueTime1: "",
-      options1: [
+      rom_version: "",
+      dev_type: "",
+      online_state: "",
+      bind_flag: "",
+      bind_start_ts: "",
+      bind_end_ts: "",
+      dev_types: [
         {
           value: "-1",
           label: "全部"
+        },
+        {
+          value: "RK3328",
+          label: "RK3328"
+        },
+        {
+          value: "AMS805",
+          label: "AMS805"
+        }
+      ],
+      onlineStates: [
+        {
+          value: "-1",
+          label: "全部"
+        },
+        {
+          value: "0",
+          label: "离线"
         },
         {
           value: "1",
           label: "在线"
         },
         {
-          value: "2",
-          label: "离线"
+          value: "3",
+          label: "非法设备"
         }
       ],
-      options2: [
+      bindFlags: [
         {
           value: "-1",
           label: "全部"
         },
         {
-          value: "1",
+          value: "0",
           label: "是"
         },
         {
-          value: "2",
+          value: "1",
           label: "否"
         }
       ],
-      rowHeader: [
+      roms: [
         {
-          prop: "dev_sn",
-          label: "设备SN"
+          value: "1.2.21",
+          label: "1.2.21"
         },
         {
-          prop: "dev_type",
-          label: "设备型号"
+          value: "1.2.20",
+          label: "1.2.20"
         },
         {
-          prop: "dev_name",
-          label: "设备名称"
+          value: "1.2.19",
+          label: "1.2.19"
         },
         {
-          prop: "dev_mac",
-          label: "MAC地址"
+          value: "1.2.18",
+          label: "1.2.18"
         },
         {
-          prop: "dev_ip",
-          label: "设备IP"
+          value: "1.2.17",
+          label: "1.2.17"
         },
         {
-          prop: "online_state",
-          label: "设备状态"
+          value: "1.2.16",
+          label: "1.2.16"
         },
         {
-          prop: "bind_flag",
-          label: "是否绑定"
+          value: "1.2.11",
+          label: "1.2.11"
         },
         {
-          prop: "ipfs_id",
-          label: "节点ID"
+          value: "1.2.10",
+          label: "1.2.10"
         },
         {
-          prop: "bind_user_id",
-          label: "绑定用户ID"
+          value: "1.1.9",
+          label: "1.1.9"
+        },
+        {
+          value: "1.0.56",
+          label: "1.0.56"
+        },
+        {
+          value: "1.0.5",
+          label: "1.0.5"
+        },
+        {
+          value: "1.0.3",
+          label: "1.0.3"
+        },
+        {
+          value: "1.0.1",
+          label: "1.0.1"
         }
       ],
-      tableData: '',
+      tableData: [],
       tableOption: {
         label: "操作",
         options: [
           {
             label: "关机",
             type: "primary",
-            methods: "freeze"
+            methods: "shutdown"
           },
           {
             label: "重启",
             type: "danger",
-            methods: "edit"
+            methods: "restart"
           },
           {
             label: "解绑",
             type: "danger",
-            methods: "edit"
+            methods: "untied"
           }
         ]
       },
@@ -221,52 +346,100 @@ export default {
     };
   },
   mounted() {
-    let param = {
-        page_no: 1,
-        page_size: 10,
-        dev_type: -1,
-        online_state: -1,
-        bind_start_ts: -1,
-        bind_end_ts: -1
-    }
-    this.getInfo(param);
+    this.getOverview();
+    this.getInfo();
   },
   methods: {
-    getInfo(param) {
-        devicelist(param)
-        .then((res)=>{
-          this.tableData = res.data.dev_list
+    formatDevType(row){
+      if(row.dev_type === 1){
+        return 'RK3328'
+      }else{
+        return 'AMS805'
+      }
+    },
+    formatState(row){
+      if(row.online_state === 0){
+        return '离线'
+      }else if(row.online_state === 1){
+        return '在线'
+      }
+    },
+    formatBind(row){
+      if(row.bind_flag === 0){
+        return '否'
+      }else if(row.bind_flag === 1){
+        return '是'
+      }
+    },
+    getInfo() {
+      let data = {
+        page_no: 1,
+        page_size: 10,
+        dev_type: this.dev_type === '' ? -1 : this.dev_type === 'RK3328' ? 1 : 2,
+        online_state: this.online_state === '' ? -1 : this.online_state,
+        rom_version: this.rom_version === '' ? '' : this.rom_version,
+        bind_flag: this.bind_flag === '' ? -1 : this.bind_flag,
+        bind_start_ts: this.bind_start_ts === ""
+            ? -1
+            : new Date(this.bind_start_ts).getTime(),
+        bind_end_ts:  this.bind_end_ts === ""
+            ? -1
+            : new Date(this.bind_end_ts).getTime(),
+      }
+      let param = Object.assign(this.common.judgeString(this.searchText), data);
+      devicelist(param)
+        .then(res => {
+          if (res.status === 0) {
+            this.tableData = res.data.dev_list;
+          }
         })
-        .catch((error)=>{
+        .catch(error => {
           console.log(error);
         });
     },
-    searchInfo() {
-      alert("搜做");
+    getOverview() {
+      device_cnt_overview()
+        .then(res => {
+          if (res.status === 0) {
+            this.bound_dev_cnt = res.data.bound_dev_cnt;
+            this.online_dev_cnt = res.data.online_dev_cnt;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    untied(id, sn) {
+      let obj = {
+        bind_user_id: id,
+        dev_sn: sn,
+        bind_type: 1
+      };
+      change_device_bind_state(obj)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     getShow() {
       this.showState = !this.showState;
     },
-    handleButton(val, rows) {
-      if (val == "edit") {
-        this.dialogVisible2 = true;
-      } else if (val == "freeze") {
-        this.$router.push({
-          path: "/userInfo"
-        });
-      }
+    shut(rows){
+
+    },
+    restart(rows){
+
+    },
+    untied(rows){
+      this.untied(rows.bind_user_id, rows.dev_sn);
+    },
+    tie(rows){
+
     },
     search() {
-      let data = {
-        page_no: 1,
-        page_size: 10,
-        dev_type: this.value1 === '' ? -1 : Number(this.value1),
-        online_state: this.value === '' ? -1 : Number(this.value),
-        bind_start_ts: this.valueTime === '' ? -1 : new Date(this.valueTime).getTime(),
-        bind_end_ts: this.valueTime1 === '' ? -1 : new Date(this.valueTime1).getTime()
-      }
-      let param = Object.assign(this.common.judgeString(this.searchText), data)
-      this.getInfo(param)
+      this.getInfo();
     },
     addAccout() {
       this.dialogVisible = true;
@@ -409,6 +582,22 @@ export default {
 
   .el-form-item__error {
     margin-left: 80px;
+  }
+  .search-con {
+    width: 250px;
+    height: 40px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-bottom: 1px solid #999999;
+    i {
+    }
+    .search-input {
+      .el-input__inner {
+        border: none;
+        background: none;
+      }
+    }
   }
 }
 </style>

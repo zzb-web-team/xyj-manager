@@ -211,13 +211,17 @@ export const appdevicelist = params => { return axios.post(`${ownbase}/app/devic
 //2019-11-21
 //西柚机设备信息
 export const devicelist = params => { return axios.post(`${ownbase}/miner_ctrl/query_devinfo_by_conditions_grapefruit`, params).then(res => res.data); };
-
-//西柚机设备激活信息title
+//西柚机设备    title查询
 export const device_cnt_overview = params => { return axios.post(`${ownbase}/miner_ctrl/device_cnt_overview`, params).then(res => res.data); };
-//西柚机设备激活信息table
-export const device_cnt_basicinfo = params => { return axios.post(`${ownbase}/miner_ctrl/edit_device_basicinfo`, params).then(res => res.data); };
+//西柚机设备激活   table查询
+export const query_devinfo_by_conditions = params => { return axios.post(`${ownbase}/miner_ctrl/query_devinfo_by_conditions`, params).then(res => res.data); };
+//西柚机设备激活   解绑
+export const change_device_bind_state = params => { return axios.post(`${ownbase}/miner_ctrl/change_device_bind_state`, params).then(res => res.data); };
+//西柚机设备激活   新建设备
+export const import_node_basicinfo = params => { return axios.post(`${ownbase}/miner_ctrl/import_node_basicinfo`, params).then(res => res.data); };
 
 //西柚机存储明细
+
 export const ptfs_query_node_info_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_info_list`, params).then(res => res.data); };
 
 
