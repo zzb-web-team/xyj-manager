@@ -34,6 +34,14 @@ export const editUser = params => { return axios.get(`${base}/user/edit`, { para
 
 export const addUser = params => { return axios.get(`${base}/user/add`, { params: params }); };
 
+//批量启用，禁用，删除，
+export const userctrl = params => { return axios.post(`${ownbase}/admin/system/userctrl`, params).then(res => res.data); };
+
+//用户
+//查询用户详情
+export const ptfs_query_user_list = params => { return axios.post(`${ownbase}/account/ptfs_query_user_list `, params).then(res => res.data); };
+export const ptfs_query_list_user_store_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_list_user_store_list `, params).then(res => res.data); };
+
 
 //新增
 
@@ -265,8 +273,7 @@ export const query_device_details = params => { return axios.post(`${ownbase}/bg
 //西柚机用户信息
 //查询用户统计信息
 export const ptfs_query_total_users = params => { return axios.post(`${ownbase}/account/ptfs_query_total_users `, params).then(res => res.data); };
-//查询用户详情
-export const ptfs_query_user_list = params => { return axios.post(`${ownbase}/account/ptfs_query_user_list `, params).then(res => res.data); };
+
 //冻结/解冻用户
 export const ptfs_forbid_users = params => { return axios.post(`${ownbase}/account/ptfs_forbid_users `, params).then(res => res.data); };
 

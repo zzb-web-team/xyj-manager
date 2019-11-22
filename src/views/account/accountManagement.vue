@@ -34,16 +34,16 @@
         </el-row>
         <el-row type="flex" class="row_active">
             <el-col :span="24">
-                <tableBarActive1 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toChange="toChange" @changePassword="changePassword" @toDelete="toDelete"></tableBarActive1>
+                <tableBarActive1 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toChange="toChange" @changePassword="changePassword" @toDelete="toDelete"></tableBarActive1>
             </el-col>
         </el-row>
     </div>
     <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
         <el-row type="flex">
             <el-col :span="6" style="display: flex;justify-content: justify-content: flex-start;">
-                <el-button type="primary" size="small">启用</el-button>
-                <el-button type="primary" size="small">禁用</el-button>
-                <el-button type="primary" size="small">删除</el-button>
+                <el-button type="primary" size="small" @click="allOn">启用</el-button>
+                <el-button type="primary" size="small" @click="allOff">禁用</el-button>
+                <el-button type="primary" size="small" @click="allDelete">删除</el-button>
             </el-col>
         </el-row>
         <el-row type="flex">
@@ -156,7 +156,8 @@ import {
     userlist,
     userinsert,
     userupdate,
-    userdelete
+    userdelete,
+    userctrl
 } from '../../api/api';
 import common from "../../common/js/util.js"
 export default {
@@ -370,6 +371,7 @@ export default {
                 rows: 100
             },
             showState: false,
+            allId: []
 
         };
     },
@@ -378,6 +380,116 @@ export default {
 
     },
     methods: {
+        handleSelectionChange(val) {
+            this.multipleSelection = val;
+            console.log(val)
+            this.allId = []
+            for (var i = 0; i < val.length; i++) {
+                this.allId.push(val[i].id)
+            }
+            console.log(this.allId)
+        },
+        //批量启用
+        allDisable() {
+            if (this.allId.length <= 0) {
+                this.$message({
+                    message: "请至少勾选一项",
+                    type: "error"
+                })
+                return false
+            }
+            let param = new Object()
+            param.ids = this.allId.join(",")
+            param.type = 0
+            userctrl(param).then(res => {
+                if(res.status==0){
+                    this.$message({
+                    message: "操作成功",
+                    type: "success"
+                }) 
+                  this.queryUserList()
+                }
+            }).catch(error => {
+
+            })
+
+        },
+        //批量启用
+        allOn() {
+            if (this.allId.length <= 0) {
+                this.$message({
+                    message: "请至少勾选一项",
+                    type: "error"
+                })
+                return false
+            }
+            let param = new Object()
+            param.ids = this.allId.join(",")
+            param.type = 0
+            userctrl(param).then(res => {
+                if(res.status==0){
+                    this.$message({
+                    message: "操作成功",
+                    type: "success"
+                }) 
+                  this.queryUserList()
+                }
+            }).catch(error => {
+
+            })
+
+        },
+         //批量禁用
+        allOff() {
+            if (this.allId.length <= 0) {
+                this.$message({
+                    message: "请至少勾选一项",
+                    type: "error"
+                })
+                return false
+            }
+            let param = new Object()
+            param.ids = this.allId.join(",")
+            param.type = 1
+            userctrl(param).then(res => {
+                if(res.status==0){
+                    this.$message({
+                    message: "操作成功",
+                    type: "success"
+                }) 
+                  this.queryUserList()
+                }
+            }).catch(error => {
+
+            })
+
+        },
+        //批量删除
+        allDelete() {
+            if (this.allId.length <= 0) {
+                this.$message({
+                    message: "请至少勾选一项",
+                    type: "error"
+                })
+                return false
+            }
+            let param = new Object()
+            param.ids = this.allId.join(",")
+            param.type = 2
+            userctrl(param).then(res => {
+                if(res.status==0){
+                    this.$message({
+                    message: "操作成功",
+                    type: "success"
+                }) 
+                  this.queryUserList()
+                }
+            }).catch(error => {
+
+            })
+
+        },
+        
 
         queryUserList() {
             let param = new Object()
