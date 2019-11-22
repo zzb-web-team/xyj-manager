@@ -430,7 +430,9 @@ export default {
                 cpu_id: str
             }
         }else{
-            return {}
+            return {
+
+            }
         }
     }
 };
