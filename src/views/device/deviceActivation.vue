@@ -501,7 +501,6 @@ export default {
           if (res.status === 0) {
             this.tableData = res.data.dev_list;
             this.pager.count = res.data.total_num;
-            this.pager.page = res.data.cur_page;
             this.pager.rows = res.data.total_page;
           }
         })
@@ -572,6 +571,7 @@ export default {
         });
     },
     search() {
+      this.pager.page = 1;
       this.getInfo();
     },
     activation(row) {
@@ -641,7 +641,7 @@ export default {
         : (this.ruleForm1.is_activated = "已激活");
     },
     del(rows) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+      this.$confirm("确定删除?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
@@ -679,8 +679,9 @@ export default {
     addDev() {
       this.dialogVisible1 = true;
     },
-    handleCurrentChange(){
-      this.search()
+    handleCurrentChange(val){
+      this.pager.page = val.val;
+      this.getInfo();
     },
     handleSubmit2() {},
     handleSubmit3() {},

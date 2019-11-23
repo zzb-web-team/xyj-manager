@@ -385,7 +385,7 @@ export default {
     },
     getInfo() {
       let data = {
-        page_no: this.pager.page,
+        page_no: this.pager.page - 1,
         page_size: 10,
         dev_type: this.dev_type === '' ? -1 : this.dev_type === 'RK3328' ? 1 : 2,
         online_state: this.online_state === '' ? -1 : Number(this.online_state),
@@ -404,7 +404,6 @@ export default {
           if (res.status === 0) {
             this.tableData = res.data.dev_list;
             this.pager.count = res.data.total_num;
-            this.pager.page = res.data.cur_page;
             this.pager.rows = res.data.total_page;
           }
         })
@@ -424,7 +423,7 @@ export default {
           console.log(error);
         });
     },
-    untied(id, sn) {
+    comfirmUntied(id, sn) {
       let obj = {
         bind_user_id: id,
         dev_sn: sn,
@@ -448,19 +447,35 @@ export default {
 
     },
     untied(rows){
-      this.untied(rows.bind_user_id, rows.dev_sn);
+      this.$confirm("确定删除?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.comfirmUntied(rows.bind_user_id, rows.dev_sn);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     tie(rows){
 
     },
     search() {
+      this.pager.page = 1;
       this.getInfo();
     },
     addAccout() {
       this.dialogVisible = true;
     },
-    handleCurrentChange(){
-      this.search()
+    handleCurrentChange(val){
+      console.log(val)
+      this.pager.page = val.val
+      this.getInfo()
     }
   },
   components: {
