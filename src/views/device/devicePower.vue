@@ -178,15 +178,22 @@ export default {
         return this.common.getTimes(row.time_stamp);
     },
     getEarnParam(val) {
-      let data = {
+      let param = {
         param_type: val,
+        store_radio: this.ruleForm2.store_radio === '' ? '' : Number(this.ruleForm2.store_radio),
+        ip_radio: this.ruleForm2.ip_radio === '' ? '' : Number(this.ruleForm2.ip_radio),
       };
-      let param = Object.assign(data, this.ruleForm2)
       set_earn_param(param)
         .then(res => {
           if (res.status === 0) {
-              this.ruleForm2.store_radio = res.data;
-              this.ruleForm2.ip_radio = res.data;
+              if(val === 0) {
+                  this.$message({
+                    type: "success",
+                    message: res.err_msg
+                });
+              }
+              this.ruleForm2.store_radio = res.data.store_radio/10000000;
+              this.ruleForm2.ip_radio = res.data.ip_radio/10000000;
           }
         })
         .catch(error => {
