@@ -41,6 +41,8 @@ export const userctrl = params => { return axios.post(`${ownbase}/admin/system/u
 //查询用户详情
 export const ptfs_query_user_list = params => { return axios.post(`${ownbase}/account/ptfs_query_user_list `, params).then(res => res.data); };
 export const ptfs_query_list_user_store_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_list_user_store_list `, params).then(res => res.data); };
+export const ptfs_query_node_info_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_info_list `, params).then(res => res.data); };
+export const ptfs_query_user_total_profit_everyday = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_user_total_profit_everyday `, params).then(res => res.data); };
 
 
 //新增
@@ -236,7 +238,6 @@ export const edit_device_basicinfo = params => { return axios.post(`${ownbase}/m
 
 //西柚机存储明细
 
-export const ptfs_query_node_info_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_info_list`, params).then(res => res.data); };
 
 
 

@@ -4,7 +4,7 @@
         <el-row>
             <el-col :span="5">
                 <div class="user-item">
-                    <div class="item-count">1000POC</div>
+                    <div class="item-count">{{sum_profit}}</div>
                     <div class="item-text" style="margin-top:7px;">总分积分</div>
                     <div class="item-text" style="margin-top:7px;">
                         <el-button type="primary" size="mini" @click="getQueryInfo">查看明细</el-button>
@@ -13,28 +13,28 @@
             </el-col>
             <el-col :span="5" style="margin-left:30px;">
                 <div class="user-item">
-                    <div class="item-count">1000POC</div>
+                    <div class="item-count">{{sum_profit}}</div>
                     <div class="item-text" style="margin-top:7px;">累计收益</div>
                     <div class="item-text" style="margin-top:7px;">
-                        <el-button type="primary" size="mini" @click="getQueryInfo">查看明细</el-button>
+                        <el-button type="primary" size="mini" @click="getQueryInfo1">查看明细</el-button>
                     </div>
                 </div>
             </el-col>
             <el-col :span="5" style="margin-left:30px;">
                 <div class="user-item">
-                    <div class="item-count">3台</div>
+                    <div class="item-count">{{dev_num}}</div>
                     <div class="item-text" style="margin-top:7px;">设备总数</div>
                     <div class="item-text" style="margin-top:7px;">
-                        <el-button type="primary" size="mini" @click="getQueryInfo">查看明细</el-button>
+                        <el-button type="primary" size="mini" @click="getQueryInfo2">查看明细</el-button>
                     </div>
                 </div>
             </el-col>
             <el-col :span="5" style="margin-left:30px;">
                 <div class="user-item">
-                    <div class="item-count">2.36232</div>
-                    <div class="item-text" style="margin-top:7px;">平均算例</div>
+                    <div class="item-count">{{average_store}}</div>
+                    <div class="item-text" style="margin-top:7px;">平均算力</div>
                     <div class="item-text" style="margin-top:7px;">
-                        <el-button type="primary" size="mini" @click="getQueryInfo">查看明细</el-button>
+                        <el-button type="primary" size="mini" @click="getQueryInfo3">查看明细</el-button>
                     </div>
                 </div>
             </el-col>
@@ -52,34 +52,62 @@
         <div class="user-con">
             <div class="item" style="margin-top:10px;">
                 <div class="item-l">用户ID:</div>
-                <div class="item-r">ayi001</div>
+                <div class="item-r">{{user_id}}</div>
             </div>
             <div class="item">
                 <div class="item-l">用户昵称:</div>
-                <div class="item-r">我是大南瓜</div>
+                <div class="item-r">{{user_name}}</div>
             </div>
             <div class="item">
                 <div class="item-l">手 机 号:</div>
-                <div class="item-r">15951813234</div>
+                <div class="item-r">{{user_tel}}</div>
             </div>
             <div class="item">
                 <div class="item-l">注册时间:</div>
-                <div class="item-r">20190215 12:12:21</div>
+                <div class="item-r">暂无</div>
             </div>
         </div>
     </div>
-        <el-dialog :visible.sync="dialogVisible2" width="50%" :before-close="handleClose">
+    <el-dialog :visible.sync="dialogVisible2" width="50%" :before-close="handleClose">
         <div class="userdetails">
             <el-row style="height:40px;line-height:40px;font-weight: bold;">
                 <el-col :span="24">
-                用户积分明细
+                    用户积分明细
                 </el-col>
             </el-row>
-              <el-row type="flex" class="row_active">
-            <el-col :span="24">
-                <tableBarActive2 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
-            </el-col>
-        </el-row>
+            <el-row type="flex" class="row_active">
+                <el-col :span="24">
+                    <tableBarActive2 id="rebateSetTable1" ref="table1" tooltip-effect="dark" :tableData="tableData1" :clomnSelection="clomnSelection" :rowHeader="rowHeader1" :tableOption="tableOption" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
+                </el-col>
+            </el-row>
+        </div>
+    </el-dialog>
+    <el-dialog :visible.sync="dialogVisible3" width="50%" :before-close="handleClose">
+        <div class="userdetails">
+            <el-row style="height:40px;line-height:40px;font-weight: bold;">
+                <el-col :span="24">
+                    用户收益明细
+                </el-col>
+            </el-row>
+            <el-row type="flex" class="row_active">
+                <el-col :span="24">
+                    <tableBarActive2 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
+                </el-col>
+            </el-row>
+        </div>
+    </el-dialog>
+     <el-dialog :visible.sync="dialogVisible4" width="50%" :before-close="handleClose">
+        <div class="userdetails">
+            <el-row style="height:40px;line-height:40px;font-weight: bold;">
+                <el-col :span="24">
+                    用户收益明细
+                </el-col>
+            </el-row>
+            <el-row type="flex" class="row_active">
+                <el-col :span="24">
+                    <tableBarActive2 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData2" :clomnSelection="clomnSelection" :rowHeader="rowHeader2" :tableOption="tableOption" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
+                </el-col>
+            </el-row>
         </div>
     </el-dialog>
 
@@ -90,11 +118,21 @@
 import tableBarActive2 from "../../components/tableBarActive2";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
+import {
+    ptfs_query_list_user_store_list,
+    ptfs_query_node_info_list,
+    ptfs_query_user_total_profit_everyday,
+    query_devinfo_by_conditions
+    
+} from '../../api/api';
+import common from "../../common/js/util.js"
 export default {
     data() {
         return {
             dialogVisible: false,
             dialogVisible2: false,
+            dialogVisible3: false,
+            dialogVisible4:false,
             searchText: "用户ID、用户名、手机号",
             operatingStatus: false,
             clomnSelection: false,
@@ -103,6 +141,12 @@ export default {
             value2: "",
             valueTime: "",
             valueTime1: "",
+            dev_num: "",
+            sum_profit: "",
+            average_store: "",
+            user_id: "",
+            user_name: "",
+            user_tel: "",
             options1: [{
                     value: '0',
                     label: '全部'
@@ -139,48 +183,77 @@ export default {
             ],
 
             rowHeader: [{
-                    prop: "user_id",
-                    label: "用户ID"
+                    prop: "profit",
+                    label: "收益金额"
                 },
                 {
-                    prop: "user_name",
-                    label: "用户昵称"
+                    prop: "store",
+                    label: "当日算力"
                 },
                 {
-                    prop: "user_tel",
-                    label: "手机号"
+                    prop: "ip_value",
+                    label: "当日IP值"
                 },
                 {
-                    prop: "sex",
-                    label: "性别"
+                    prop: "store_value",
+                    label: "当日存储值"
                 },
+
                 {
-                    prop: "status",
-                    label: "平均算力"
-                },
-                {
-                    prop: "status",
-                    label: "设备总数"
-                },
-                {
-                    prop: "status",
-                    label: "注册时间"
-                },
-                {
-                    prop: "status",
-                    label: "首次绑定时间"
+                    prop: "time_stamp",
+                    label: "时间"
                 },
 
             ],
-            tableData: [{
-                user_id: "测试数据1",
-                user_name: "测试数据1",
-                user_tel: "测试数据1",
-                user_id: "测试数据1",
-                sex: "测试数据1",
-                status: "测试数据1",
+                rowHeader1: [{
+                    prop: "profit_type",
+                    label: "收支类型"
+                },
+                {
+                    prop: "cur_profit",
+                    label: "金额"
+                },
+                {
+                    prop: "total_profit",
+                    label: "账户余额"
+                },
+                {
+                    prop: "time_stamp",
+                    label: "时间"
+                },
 
-            }],
+
+            ],
+            rowHeader2: [{
+                    prop: "dev_sn",
+                    label: "设备SN"
+                },
+                {
+                    prop: "dev_type",
+                    label: "设备型号"
+                },
+                {
+                    prop: "total_profit",
+                    label: "设备名称"
+                },
+                {
+                    prop: "dev_mac",
+                    label: "MAC地址"
+                },
+                 {
+                    prop: "time_stamp",
+                    label: "设备IP"
+                },
+                 {
+                    prop: "time_stamp",
+                    label: "设备状态"
+                },
+
+
+            ],
+            tableData: [],
+            tableData1: [],
+            tableData2: [],
             tableOption: {
                 label: "操作",
                 options: [{
@@ -201,15 +274,157 @@ export default {
                 rows: 100
             },
             showState: true,
+            user_id: [],
+            is_activated:"",
+            import_start_ts:"",
+            import_end_ts:"",
+            activate_start_ts:"",
+            activate_end_ts:"",
+
 
         };
     },
     mounted: function () {
+        this.queryInfo()
 
     },
     methods: {
-        getQueryInfo(){
-            this.dialogVisible2=true
+        queryInfo() {
+            let params = new Object()
+            let user_id = []
+            user_id[0] = parseInt(this.$route.query.user_id)
+            params.user_id = user_id
+            ptfs_query_list_user_store_list(params).then(res => {
+                if (res.status == 0) {
+                    if (res.data.store_list) {
+                        this.dev_num = res.data.store_list[0].dev_num
+                        this.sum_profit = (res.data.store_list[0].sum_profit) / 1000000
+                        this.average_store = (res.data.store_list[0].average_store) / 1000000
+                        this.user_id = res.data.store_list[0].user_id
+                        this.user_name = res.data.store_list[0].user_name = "" ? res.data.store_list[0].user_name : "暂无"
+                        this.user_tel = res.data.store_list[0].user_tel = "" ? res.data.store_list[0].user_tel : "暂无"
+
+                    } else {
+                        this.dev_num = 0
+                        this.sum_profit = 0
+                        this.average_store = 0
+                    }
+
+                } else {
+                    this.$message({
+                        message: `${res.err_msg}`,
+                        type: "error"
+                    })
+                }
+
+            }).catch(error => {})
+        },
+        getQueryInfo() {
+       
+               let param = new Object()
+            param.query_type = 1,
+                param.user_id = parseInt(this.$route.query.user_id),
+                param.profit_type = 0,
+                param.cur_page = 0,
+                param.start_time = 0,
+                param.nick_name="",
+                param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000
+                         
+
+            ptfs_query_user_total_profit_everyday(param).then(res => {
+                console.log(res)
+                     this.dialogVisible2 = true
+                if (res.data.total_profit_list) {
+                    this.tableData1 = []
+                    let nowarr = res.data.total_profit_list
+                    for (var i = 0; i < nowarr.length; i++) {
+                        nowarr[i].cur_profit = nowarr[i].cur_profit / 1000000
+                        nowarr[i].total_profit = nowarr[i].total_profit / 1000000
+                        if(nowarr[i].profit_type ==1){
+                            nowarr[i].profit_type ="收益"
+
+                        } else{
+                              nowarr[i].profit_type ="兑换"
+                        }
+                   
+                        nowarr[i].time_stamp = this.common.getTimes(nowarr[i].time_stamp * 1000)
+
+                    }
+                    this.tableData1= nowarr
+                }
+
+            }).catch(error => {
+
+            })
+
+        },
+        getQueryInfo1() {
+            let param = new Object()
+            param.query_type = 1,
+                param.user_id = parseInt(this.$route.query.user_id),
+                param.dev_sn = "",
+                param.cur_page = 0,
+                param.start_time = 0,
+                param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000
+            ptfs_query_node_info_list(param).then(res => {
+                this.dialogVisible3 = true
+                if (res.data.profit_detail_list) {
+                    this.tableData = []
+                    let nowarr = res.data.profit_detail_list
+                    for (var i = 0; i < nowarr.length; i++) {
+                        nowarr[i].profit = nowarr[i].profit / 1000000
+                        nowarr[i].profit = nowarr[i].profit / 1000000
+                        nowarr[i].store = nowarr[i].store / 1000000
+                        nowarr[i].store_value = nowarr[i].store_value / 1000000
+                        nowarr[i].ip_value = nowarr[i].ip_value / 1000000
+                        nowarr[i].time_stamp = this.common.getTimes(nowarr[i].time_stamp * 1000)
+
+                    }
+                    this.tableData = nowarr
+                }
+
+            }).catch(error => {
+
+            })
+
+        },
+          getQueryInfo2() {
+          let data = {
+        page_no: 1,
+        page_size: 10,
+        login_token: "",
+        bind_user_id: parseInt(this.$route.query.user_id),
+        is_activated: this.is_activated === "" ? -1 : Number(this.is_activated),
+        import_start_ts:
+          this.import_start_ts === ""
+            ? -1
+            : new Date(this.import_start_ts).getTime(),
+        import_end_ts:
+          this.import_end_ts === ""
+            ? -1
+            : new Date(this.import_end_ts).getTime(),
+        activate_start_ts:
+          this.activate_start_ts === ""
+            ? -1
+            : new Date(this.activate_start_ts).getTime(),
+        activate_end_ts:
+          this.activate_end_ts === ""
+            ? -1
+            : new Date(this.activate_end_ts).getTime()
+      };
+      let param = Object.assign(this.common.judgeString(this.searchText), data);
+      query_devinfo_by_conditions(param)
+        .then(res => {
+            this.dialogVisible4=true
+            console.log(res)
+          if (res.status === 0) {
+
+            this.tableData2 = res.data.dev_list;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
 
         },
         searchInfo() {

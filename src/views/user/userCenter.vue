@@ -253,7 +253,10 @@ export default {
                 this.dialogVisible2 = true
             } else if (val == "freeze") {
                 this.$router.push({
-                    path: "/userInfo"
+                    path: "/userInfo",
+                    query: {
+                        user_id: rows.user_id
+                    }
                 })
             }
 
