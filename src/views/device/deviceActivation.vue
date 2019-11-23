@@ -98,85 +98,48 @@
       </el-row>
       <el-row type="flex" class="row_active">
         <el-col :span="24">
-          <!-- <tableBarActive2
-            id="rebateSetTable"
-            ref="table1"
-            tooltip-effect="dark"
-            :tableData="tableData"
-            :clomnSelection="clomnSelection"
-            :rowHeader="rowHeader"
-            :tableOption="tableOption"
-            @handleButton="handleButton"
-            :operatingStatus="operatingStatus"
-            @toOperating="toOperating"
-            @handleSelectionChange="handleSelectionChange"
-            @selectCheckBox="selectCheckBox"
-            @selectAll="selectAll"
-          ></tableBarActive2> -->
-          <el-table
-            :data="tableData"
-            border
-            style="width: 100%">
-            <el-table-column
-              fixed
-              prop = "dev_sn"
-              label = "设备SN"
-              width="150">
-            </el-table-column>
-            <el-table-column
-              prop="dev_type"
-              :formatter="formatDevType"
-              label="设备类型"
-              width="120">
-            </el-table-column>
-            <el-table-column
-              prop="rom_version"
-              label="ROM"
-              width="120">
-            </el-table-column>
-            <el-table-column
-              prop="dev_mac"
-              label="MAC地址"
-              width="120">
-            </el-table-column>
-            <el-table-column
-              prop="cpu_id"
-              label="CPU-ID"
-              width="300">
-            </el-table-column>
-            <el-table-column
-              prop="total_cap"
-              label="总容量"
-              width="120">
-            </el-table-column>
-            <el-table-column
-              prop="import_ts"
-              label="新建时间"
-              :formatter="formatterImport"
-              width="180">
-            </el-table-column>
+          <el-table :data="tableData" border style="width: 100%">
+            <el-table-column fixed prop="dev_sn" label="设备SN" width="150"></el-table-column>
+            <el-table-column prop="dev_type" :formatter="formatDevType" label="设备类型" width="120"></el-table-column>
+            <el-table-column prop="rom_version" label="ROM" width="120"></el-table-column>
+            <el-table-column prop="dev_mac" label="MAC地址" width="120"></el-table-column>
+            <el-table-column prop="cpu_id" label="CPU-ID" width="300"></el-table-column>
+            <el-table-column prop="total_cap" label="总容量" width="120"></el-table-column>
+            <el-table-column prop="import_ts" label="新建时间" :formatter="formatterImport" width="180"></el-table-column>
             <el-table-column
               prop="is_activated"
               label="设备激活"
               :formatter="formatterType"
-              width="120">
-            </el-table-column>
+              width="120"
+            ></el-table-column>
             <el-table-column
               prop="activate_ts"
               label="激活时间"
               width="180"
               :formatter="formatterActive"
-              >
-            </el-table-column>
-            <el-table-column
-              fixed="right"
-              label="操作"
-              width="200">
+            ></el-table-column>
+            <el-table-column fixed="right" label="操作" width="200">
               <template slot-scope="scope">
-                <el-button @click="open(scope.row)" type="text" size="small">开机</el-button>
-                <el-button type="text" @click="open(scope.row)" size="small">重启</el-button>
+                <el-button
+                  v-show="scope.row.is_activated!==100"
+                  @click="open(scope.row)"
+                  type="text"
+                  size="small"
+                >关机</el-button>
+                <el-button
+                  v-show="scope.row.is_activated!==100"
+                  type="text"
+                  @click="open(scope.row)"
+                  size="small"
+                >重启</el-button>
                 <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
                 <el-button type="text" @click="del(scope.row)" size="small">删除</el-button>
+                <el-button
+                  v-if="scope.row.is_activated==100"
+                  type="text"
+                  @click="activation(scope.row)"
+                  size="small"
+                >激活</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -369,8 +332,8 @@ import {
   query_devinfo_by_conditions, //查询表单
   change_device_bind_state, //解绑
   import_node_basicinfo, //新建设备
-  edit_device_basicinfo,  //编辑
-  delete_device_basicinfo  //删除
+  edit_device_basicinfo, //编辑
+  delete_device_basicinfo //删除
 } from "../../api/api";
 import { log } from "util";
 export default {
@@ -511,7 +474,7 @@ export default {
   methods: {
     getInfo() {
       let data = {
-        page_no: 1,
+        page_no: this.pager.page,
         page_size: 10,
         login_token: "",
         is_activated: this.is_activated === "" ? -1 : Number(this.is_activated),
@@ -537,6 +500,9 @@ export default {
         .then(res => {
           if (res.status === 0) {
             this.tableData = res.data.dev_list;
+            this.pager.count = res.data.total_num;
+            this.pager.page = res.data.cur_page;
+            this.pager.rows = res.data.total_page;
           }
         })
         .catch(error => {
@@ -562,7 +528,8 @@ export default {
     },
     editBasicinfo() {
       this.ruleForm1.dev_type = this.ruleForm1.dev_type === "RK3328" ? 1 : 2;
-      this.ruleForm1.is_activated = this.ruleForm1.is_activated === "未激活" ? 100 : 101;
+      this.ruleForm1.is_activated =
+        this.ruleForm1.is_activated === "未激活" ? 100 : 101;
       this.ruleForm1.total_cap = Number(this.ruleForm1.total_cap);
       this.ruleForm1.login_token = "";
       let param = {
@@ -570,12 +537,12 @@ export default {
         dev_sn: this.rowsData.dev_sn,
         info: this.ruleForm1
       };
-      console.log(param)
+      console.log(param);
       edit_device_basicinfo(param)
         .then(res => {
           this.$message({
-            message: '修改成功',
-            type: 'success'
+            message: "修改成功",
+            type: "success"
           });
           this.getInfo();
           this.dialogVisible2 = false;
@@ -593,8 +560,8 @@ export default {
         .then(res => {
           if (res.status === 0) {
             this.$message({
-              message: '新建设备成功',
-              type: 'success'
+              message: "新建设备成功",
+              type: "success"
             });
             this.getInfo();
             this.dialogVisible1 = false;
@@ -607,33 +574,61 @@ export default {
     search() {
       this.getInfo();
     },
+    activation(row) {
+      let param = {
+        login_token: "",
+        dev_sn: row.dev_sn,
+        info: {
+          new_dev_sn: row.dev_sn,
+          dev_type: row.dev_type,
+          rom_version: row.rom_version,
+          dev_mac: row.dev_mac,
+          cpu_id: row.cpu_id,
+          total_cap: row.total_cap,
+          is_activated: 101
+        }
+      };
+      console.log(param);
+      edit_device_basicinfo(param)
+        .then(res => {
+          this.$message({
+            message: "激活成功",
+            type: "success"
+          });
+          this.getInfo();
+          this.dialogVisible2 = false;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     getShow() {
       this.showState = !this.showState;
     },
-    formatDevType(row){
-      if(row.dev_type === 1){
-        return 'RK3328'
-      }else{
-        return 'AMS805'
+    formatDevType(row) {
+      if (row.dev_type === 1) {
+        return "RK3328";
+      } else {
+        return "AMS805";
       }
     },
-    formatterType(row){
-      if(row.is_activated === 100 ){
-        return '未激活'
-      }else if(row.is_activated === 101){
-        return '已激活'
+    formatterType(row) {
+      if (row.is_activated === 100) {
+        return "未激活";
+      } else {
+        return "已激活";
       }
     },
-    formatterActive(row){
-      return this.common.getTimes(row.activate_ts)
+    formatterActive(row) {
+      return this.common.getTimes(row.activate_ts);
     },
-    formatterImport(row){
-      return this.common.getTimes(row.import_ts)
+    formatterImport(row) {
+      return this.common.getTimes(row.import_ts);
     },
-    open(rows){},
-    restart(rows){},
-    edit(rows){
-      console.log(rows)
+    open(rows) {},
+    restart(rows) {},
+    edit(rows) {
+      console.log(rows);
       this.dialogVisible2 = true;
       this.ruleForm1 = rows;
       this.rowsData = rows;
@@ -642,35 +637,37 @@ export default {
         ? (this.ruleForm1.dev_type = "RK3328")
         : (this.ruleForm1.dev_type = "AMS805");
       rows.is_activated === 100
-      ? (this.ruleForm1.is_activated = "未激活")
-      : (this.ruleForm1.is_activated = "已激活");
+        ? (this.ruleForm1.is_activated = "未激活")
+        : (this.ruleForm1.is_activated = "已激活");
     },
-    del(rows){
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.confirmDel(rows)
-        }).catch(() => {
+    del(rows) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.confirmDel(rows);
+        })
+        .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
+            type: "info",
+            message: "已取消删除"
+          });
         });
     },
-    confirmDel(rows){
+    confirmDel(rows) {
       let param = {
         login_token: "",
         dev_sn: rows.dev_sn
-      }
-      console.log(param)
-      delete_device_basicinfo(this.ruleForm2)
+      };
+      console.log(param);
+      delete_device_basicinfo(param)
         .then(res => {
           if (res.status === 0) {
             this.$message({
-              type: 'success',
-              message: '删除成功!'
+              type: "success",
+              message: "删除成功!"
             });
             this.getInfo();
           }
@@ -681,6 +678,9 @@ export default {
     },
     addDev() {
       this.dialogVisible1 = true;
+    },
+    handleCurrentChange(){
+      this.search()
     },
     handleSubmit2() {},
     handleSubmit3() {},

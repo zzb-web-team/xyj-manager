@@ -232,7 +232,11 @@ export const delete_device_basicinfo = params => { return axios.post(`${ownbase}
 //西柚机设备激活   编辑
 export const edit_device_basicinfo = params => { return axios.post(`${ownbase}/miner_ctrl/edit_device_basicinfo`, params).then(res => res.data); };
 
-
+2019-11-23
+//积分管理   积分明细
+export const query_user_profit_info = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_user_profit_info`, params).then(res => res.data); };
+//积分管理   收益明细
+export const query_node_info_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_info_list`, params).then(res => res.data); };
 
 //西柚机存储明细
 
