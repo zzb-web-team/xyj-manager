@@ -244,8 +244,12 @@ export default {
           label: "在线"
         },
         {
+          value: "2",
+          label: "鉴权失败"
+        },
+        {
           value: "3",
-          label: "非法设备"
+          label: "鉴权成功"
         }
       ],
       bindFlags: [
@@ -362,6 +366,10 @@ export default {
         return '离线'
       }else if(row.online_state === 1){
         return '在线'
+      }else if(row.online_state === 2){
+        return ' 鉴权失败'
+      }else if(row.online_state === 3){
+        return '鉴权成功'
       }
     },
     formatBind(row){
@@ -376,9 +384,9 @@ export default {
         page_no: 1,
         page_size: 10,
         dev_type: this.dev_type === '' ? -1 : this.dev_type === 'RK3328' ? 1 : 2,
-        online_state: this.online_state === '' ? -1 : this.online_state,
+        online_state: this.online_state === '' ? -1 : NUmber(this.online_state),
         rom_version: this.rom_version === '' ? '' : this.rom_version,
-        bind_flag: this.bind_flag === '' ? -1 : this.bind_flag,
+        bind_flag: this.bind_flag === '' ? -1 : Number(this.bind_flag),
         bind_start_ts: this.bind_start_ts === ""
             ? -1
             : new Date(this.bind_start_ts).getTime(),
@@ -590,8 +598,6 @@ export default {
     justify-content: flex-start;
     align-items: center;
     border-bottom: 1px solid #999999;
-    i {
-    }
     .search-input {
       .el-input__inner {
         border: none;

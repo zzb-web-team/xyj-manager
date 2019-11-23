@@ -276,7 +276,7 @@
           label-position="left"
           class="demo-ruleForm"
         >
-          <h3 class="title">修改</h3>
+          <h3 class="title">修改设备</h3>
           <el-form-item prop="username">
             <el-form-item label="设备SN:">
               <el-input v-model="ruleForm1.new_dev_sn" placeholder="请输入设备SN"></el-input>
@@ -290,7 +290,7 @@
               style="width:200px;"
             >
               <el-option
-                v-for="item in dev_type"
+                v-for="item in dev_types"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"
@@ -338,7 +338,7 @@
             </el-select>
           </el-form-item>
           <el-form-item style="width:100%;display: flex;justify-content:center;">
-            <el-button type="primary" @click="handleSubmit2">确定</el-button>
+            <el-button type="primary" @click="editBasicinfo">确定</el-button>
             <el-button type="primary" @click.native.prevent="handleSubmit3">取消</el-button>
           </el-form-item>
         </el-form>
@@ -368,7 +368,9 @@ import {
   device_cnt_overview, // title查询
   query_devinfo_by_conditions, //查询表单
   change_device_bind_state, //解绑
-  import_node_basicinfo //新建设备
+  import_node_basicinfo, //新建设备
+  edit_device_basicinfo,  //编辑
+  delete_device_basicinfo  //删除
 } from "../../api/api";
 import { log } from "util";
 export default {
@@ -378,9 +380,6 @@ export default {
       dialogVisible2: false,
       dialogVisible3: false,
       searchText: "",
-      operatingStatus: true,
-      clomnSelection: false,
-      reserveselection: true,
       total_dev_cnt: "",
       activated_dev_cnt: "",
       today_import_dev_cnt: "",
@@ -479,8 +478,6 @@ export default {
           label: "1.0.1"
         }
       ],
-      rowHeader: [  
-      ],
       tableData: [],
       pager: {
         count: 0,
@@ -574,7 +571,7 @@ export default {
         info: this.ruleForm1
       };
       console.log(param)
-      device_cnt_basicinfo(param)
+      edit_device_basicinfo(param)
         .then(res => {
           this.$message({
             message: '修改成功',
@@ -640,14 +637,48 @@ export default {
       this.dialogVisible2 = true;
       this.ruleForm1 = rows;
       this.rowsData = rows;
-      rows.dev_type === 1
+      this.ruleForm1.new_dev_sn = rows.dev_sn;
+      rows.dev_type === "RK3328"
         ? (this.ruleForm1.dev_type = "RK3328")
         : (this.ruleForm1.dev_type = "AMS805");
       rows.is_activated === 100
-      ? (this.ruleForm1.dev_type = "未激活")
-      : (this.ruleForm1.dev_type = "已激活");
+      ? (this.ruleForm1.is_activated = "未激活")
+      : (this.ruleForm1.is_activated = "已激活");
     },
-    del(rows){},
+    del(rows){
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.confirmDel(rows)
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+    },
+    confirmDel(rows){
+      let param = {
+        login_token: "",
+        dev_sn: rows.dev_sn
+      }
+      console.log(param)
+      delete_device_basicinfo(this.ruleForm2)
+        .then(res => {
+          if (res.status === 0) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            this.getInfo();
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     addDev() {
       this.dialogVisible1 = true;
     },
@@ -812,8 +843,6 @@ export default {
     justify-content: flex-start;
     align-items: center;
     border-bottom: 1px solid #999999;
-    i {
-    }
     .search-input {
       .el-input__inner {
         border: none;

@@ -227,6 +227,12 @@ export const query_devinfo_by_conditions = params => { return axios.post(`${ownb
 export const change_device_bind_state = params => { return axios.post(`${ownbase}/miner_ctrl/change_device_bind_state`, params).then(res => res.data); };
 //西柚机设备激活   新建设备
 export const import_node_basicinfo = params => { return axios.post(`${ownbase}/miner_ctrl/import_node_basicinfo`, params).then(res => res.data); };
+//西柚机设备激活   删除
+export const delete_device_basicinfo = params => { return axios.post(`${ownbase}/miner_ctrl/delete_device_basicinfo`, params).then(res => res.data); };
+//西柚机设备激活   编辑
+export const edit_device_basicinfo = params => { return axios.post(`${ownbase}/miner_ctrl/edit_device_basicinfo`, params).then(res => res.data); };
+
+
 
 //西柚机存储明细
 
