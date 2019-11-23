@@ -233,8 +233,16 @@ export const import_node_basicinfo = params => { return axios.post(`${ownbase}/m
 export const delete_device_basicinfo = params => { return axios.post(`${ownbase}/miner_ctrl/delete_device_basicinfo`, params).then(res => res.data); };
 //西柚机设备激活   编辑
 export const edit_device_basicinfo = params => { return axios.post(`${ownbase}/miner_ctrl/edit_device_basicinfo`, params).then(res => res.data); };
+//西柚机设备算力  table查询
+export const getDevicePower = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_info_list`, params).then(res => res.data); };
+//西柚机设备算力   调整算力系数
+export const set_earn_param = params => { return axios.post(`${ownbase}/miner_earn/ptfs_set_earn_param`, params).then(res => res.data); };
 
-
+2019-11-23
+//积分管理   积分明细
+export const query_user_total_profit_everyday = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_user_total_profit_everyday`, params).then(res => res.data); };
+//积分管理   收益明细
+export const query_node_info_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_info_list`, params).then(res => res.data); };
 
 //西柚机存储明细
 

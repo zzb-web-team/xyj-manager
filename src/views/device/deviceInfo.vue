@@ -259,14 +259,18 @@ export default {
         },
         {
           value: "0",
-          label: "是"
+          label: "否"
         },
         {
           value: "1",
-          label: "否"
+          label: "是"
         }
       ],
       roms: [
+        {
+          value: "",
+          label: "全部"
+        },
         {
           value: "1.2.21",
           label: "1.2.21"
@@ -381,10 +385,10 @@ export default {
     },
     getInfo() {
       let data = {
-        page_no: 1,
+        page_no: this.pager.page - 1,
         page_size: 10,
         dev_type: this.dev_type === '' ? -1 : this.dev_type === 'RK3328' ? 1 : 2,
-        online_state: this.online_state === '' ? -1 : NUmber(this.online_state),
+        online_state: this.online_state === '' ? -1 : Number(this.online_state),
         rom_version: this.rom_version === '' ? '' : this.rom_version,
         bind_flag: this.bind_flag === '' ? -1 : Number(this.bind_flag),
         bind_start_ts: this.bind_start_ts === ""
@@ -399,6 +403,8 @@ export default {
         .then(res => {
           if (res.status === 0) {
             this.tableData = res.data.dev_list;
+            this.pager.count = res.data.total_num;
+            this.pager.rows = res.data.total_page;
           }
         })
         .catch(error => {
@@ -417,7 +423,7 @@ export default {
           console.log(error);
         });
     },
-    untied(id, sn) {
+    comfirmUntied(id, sn) {
       let obj = {
         bind_user_id: id,
         dev_sn: sn,
@@ -441,16 +447,35 @@ export default {
 
     },
     untied(rows){
-      this.untied(rows.bind_user_id, rows.dev_sn);
+      this.$confirm("确定删除?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.comfirmUntied(rows.bind_user_id, rows.dev_sn);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     tie(rows){
 
     },
     search() {
+      this.pager.page = 1;
       this.getInfo();
     },
     addAccout() {
       this.dialogVisible = true;
+    },
+    handleCurrentChange(val){
+      console.log(val)
+      this.pager.page = val.val
+      this.getInfo()
     }
   },
   components: {
