@@ -484,7 +484,7 @@ export default {
 
     },
     search() {
-      this.pager.page = 1;
+      this.pager.page = 0;
       this.getInfo();
     },
     addAccout() {

@@ -32,7 +32,7 @@
               <el-date-picker v-model="end_time" style="width:200px;" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" style="margin-left:68px;">确定</el-button>
+              <el-button type="primary" style="margin-left:68px;" @click="search">确定</el-button>
             </el-form-item>
             <el-form-item>
               <el-button type="primary">重置</el-button>
@@ -89,7 +89,7 @@ export default {
     return {
       dialogVisible: false,
       dialogVisible2: false,
-      searchText: "用户ID、用户昵称",
+      searchText: "",
       operatingStatus: true,
       clomnSelection: false,
       reserveselection: true,
@@ -188,7 +188,10 @@ export default {
         end_time: this.end_time === ""
             ? 0
             : new Date(this.end_time).getTime(),
+         
       };
+      let arr = Object.keys(this.common.judgeString(this.searchText));
+      data.query_type = arr.length === 0 ?  0 : 1;
       let param = Object.assign(this.common.judgeString(this.searchText), data);
       query_node_info_list(param)
         .then(res => {
@@ -206,6 +209,10 @@ export default {
     },
     getShow() {
       this.showState = !this.showState;
+    },
+    search() {
+      this.pager.page = 0;
+      this.getInfo();
     },
     addAccout() {
       this.dialogVisible = true;

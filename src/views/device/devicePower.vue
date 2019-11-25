@@ -25,7 +25,7 @@
             ></el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary">确定</el-button>
+            <el-button type="primary" @click="search">确定</el-button>
           </el-form-item>
           <el-form-item>
             <el-button type="primary">重置</el-button>
@@ -60,9 +60,9 @@
               label="当日剩余空间/总空间"
             >
                 <template slot-scope="scope">
-                <span disable-transitions>{{scope.row.free_cap}}/
+                <span disable-transitions>{{scope.row.free_cap/1024/1024/1024}}G/
                 </span>
-                <span disable-transitions>{{scope.row.total_cap}}
+                <span disable-transitions>{{scope.row.total_cap/1024/1024/1024}}G
                 </span>
                 </template>
             </el-table-column>
@@ -207,6 +207,8 @@ export default {
           this.start_time === "" ? 0 : new Date(this.start_time).getTime(),
         end_time: this.end_time === "" ? 0 : new Date(this.end_time).getTime()
       };
+      let arr = Object.keys(this.common.judgeString(this.searchText));
+      data.query_type = arr.length === 0 ?  0 : 1;
       let param = Object.assign(this.common.judgeString(this.searchText), data);
       getDevicePower(param)
         .then(res => {
@@ -222,6 +224,10 @@ export default {
     },
     getShow() {
       this.showState = !this.showState;
+    },
+    search() {
+      this.pager.page = 0;
+      this.getInfo()
     },
     addAccout() {
       this.dialogVisible = true;

@@ -56,7 +56,7 @@
                 v-model="import_start_ts"
                 type="datetime"
                 placeholder="选择开始日期时间"
-              ></el-date-picker>-
+              ></el-date-picker> -
               <el-date-picker
                 style="width: 200px;"
                 v-model="import_end_ts"
@@ -70,7 +70,7 @@
                 v-model="activate_start_ts"
                 type="datetime"
                 placeholder="选择开始日期时间"
-              ></el-date-picker>-
+              ></el-date-picker> -
               <el-date-picker
                 style="width: 200px;"
                 v-model="activate_end_ts"
@@ -474,26 +474,26 @@ export default {
   methods: {
     getInfo() {
       let data = {
-        page_no: this.pager.page,
+        page_no: this.pager.page - 1,
         page_size: 10,
         login_token: "",
         is_activated: this.is_activated === "" ? -1 : Number(this.is_activated),
         import_start_ts:
           this.import_start_ts === ""
             ? -1
-            : new Date(this.import_start_ts).getTime(),
+            : new Date(this.import_start_ts).getTime()/1000,
         import_end_ts:
           this.import_end_ts === ""
             ? -1
-            : new Date(this.import_end_ts).getTime(),
+            : new Date(this.import_end_ts).getTime()/1000,
         activate_start_ts:
           this.activate_start_ts === ""
             ? -1
-            : new Date(this.activate_start_ts).getTime(),
+            : new Date(this.activate_start_ts).getTime()/1000,
         activate_end_ts:
           this.activate_end_ts === ""
             ? -1
-            : new Date(this.activate_end_ts).getTime()
+            : new Date(this.activate_end_ts).getTime()/1000
       };
       let param = Object.assign(this.common.judgeString(this.searchText), data);
       query_devinfo_by_conditions(param)
@@ -620,10 +620,10 @@ export default {
       }
     },
     formatterActive(row) {
-      return this.common.getTimes(row.activate_ts);
+      return this.common.getTimes(row.activate_ts*1000);
     },
     formatterImport(row) {
-      return this.common.getTimes(row.import_ts);
+      return this.common.getTimes(row.import_ts*1000);
     },
     open(rows) {},
     restart(rows) {},

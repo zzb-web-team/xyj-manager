@@ -409,9 +409,9 @@ export default {
             return {
                 user_id: str
             }
-        }else if(reg2.test(str)&&reg7.test(str)){
+        }else if(reg2.test(str)&&!reg7.test(str)){
             return {
-                dev_sn: str
+                user_name: str
             }
         }else if(reg3.test(str)){
             return {
@@ -421,7 +421,7 @@ export default {
             return {
                 dev_type: str
             }
-        }else if(reg5.test(str)&&reg7.test(str)){
+        }else if(reg5.test(str)&&!reg7.test(str)){
             return {
                 dev_name: str
             }
