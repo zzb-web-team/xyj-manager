@@ -454,7 +454,7 @@ export default {
         rom_version: "",
         dev_mac: "",
         cpu_id: "",
-        total_cap: ""
+        total_cap: "" 
       },
       ruleForm1: {
         new_dev_sn: "",
