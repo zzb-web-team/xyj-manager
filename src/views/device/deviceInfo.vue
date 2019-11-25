@@ -147,6 +147,7 @@
             </el-table-column>
             <el-table-column
               prop="bind_timestamp"
+              :formatter="formatDevTime"
               label="绑定时间"
               width="180">
             </el-table-column>
@@ -199,6 +200,7 @@ import {
   device_cnt_overview,
   change_device_bind_state
 } from "../../api/api";
+import common from "../../common/js/util.js"
 export default {
   data() {
     return {
@@ -250,6 +252,14 @@ export default {
         {
           value: "3",
           label: "鉴权成功"
+        },
+        {
+          value: "100",
+          label: "未激活"
+        },
+        {
+          value: "101",
+          label: "已激活"
         }
       ],
       bindFlags: [
@@ -365,6 +375,10 @@ export default {
         return 'AMS805'
       }
     },
+    formatDevTime(row){
+        return this.common.getTimes(row.bind_timestamp*1000)
+      
+    },
     formatState(row){
       if(row.online_state === 0){
         return '离线'
@@ -374,6 +388,10 @@ export default {
         return ' 鉴权失败'
       }else if(row.online_state === 3){
         return '鉴权成功'
+      }else if(row.online_state === 100){
+        return '未激活'
+      }else if(row.online_state === 101){
+        return '已激活'
       }
     },
     formatBind(row){
@@ -393,10 +411,10 @@ export default {
         bind_flag: this.bind_flag === '' ? -1 : Number(this.bind_flag),
         bind_start_ts: this.bind_start_ts === ""
             ? -1
-            : new Date(this.bind_start_ts).getTime(),
+            : (new Date(this.bind_start_ts).getTime())/1000,
         bind_end_ts:  this.bind_end_ts === ""
             ? -1
-            : new Date(this.bind_end_ts).getTime(),
+            : (new Date(this.bind_end_ts).getTime())/1000,
       }
       let param = Object.assign(this.common.judgeString(this.searchText), data);
       devicelist(param)

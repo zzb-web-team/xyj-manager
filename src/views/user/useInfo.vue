@@ -96,7 +96,7 @@
             </el-row>
         </div>
     </el-dialog>
-     <el-dialog :visible.sync="dialogVisible4" width="50%" :before-close="handleClose">
+    <el-dialog :visible.sync="dialogVisible4" width="50%" :before-close="handleClose">
         <div class="userdetails">
             <el-row style="height:40px;line-height:40px;font-weight: bold;">
                 <el-col :span="24">
@@ -122,8 +122,8 @@ import {
     ptfs_query_list_user_store_list,
     ptfs_query_node_info_list,
     ptfs_query_user_total_profit_everyday,
-    query_devinfo_by_conditions
-    
+    devicelist
+
 } from '../../api/api';
 import common from "../../common/js/util.js"
 export default {
@@ -132,7 +132,7 @@ export default {
             dialogVisible: false,
             dialogVisible2: false,
             dialogVisible3: false,
-            dialogVisible4:false,
+            dialogVisible4: false,
             searchText: "用户ID、用户名、手机号",
             operatingStatus: false,
             clomnSelection: false,
@@ -205,7 +205,7 @@ export default {
                 },
 
             ],
-                rowHeader1: [{
+            rowHeader1: [{
                     prop: "profit_type",
                     label: "收支类型"
                 },
@@ -222,7 +222,6 @@ export default {
                     label: "时间"
                 },
 
-
             ],
             rowHeader2: [{
                     prop: "dev_sn",
@@ -233,22 +232,21 @@ export default {
                     label: "设备型号"
                 },
                 {
-                    prop: "total_profit",
+                    prop: "dev_name",
                     label: "设备名称"
                 },
                 {
                     prop: "dev_mac",
                     label: "MAC地址"
                 },
-                 {
-                    prop: "time_stamp",
+                {
+                    prop: "dev_ip",
                     label: "设备IP"
                 },
-                 {
-                    prop: "time_stamp",
+                {
+                    prop: "online_state",
                     label: "设备状态"
                 },
-
 
             ],
             tableData: [],
@@ -275,12 +273,17 @@ export default {
             },
             showState: true,
             user_id: [],
-            is_activated:"",
-            import_start_ts:"",
-            import_end_ts:"",
-            activate_start_ts:"",
-            activate_end_ts:"",
-
+            is_activated: "",
+            import_start_ts: "",
+            import_end_ts: "",
+            activate_start_ts: "",
+            activate_end_ts: "",
+            dev_type: "",
+            online_state: "",
+            rom_version: "",
+            bind_flag: "",
+            bind_start_ts: "",
+            bind_end_ts: ""
 
         };
     },
@@ -301,8 +304,8 @@ export default {
                         this.sum_profit = (res.data.store_list[0].sum_profit) / 1000000
                         this.average_store = (res.data.store_list[0].average_store) / 1000000
                         this.user_id = res.data.store_list[0].user_id
-                        this.user_name = res.data.store_list[0].user_name = "" ? res.data.store_list[0].user_name : "暂无"
-                        this.user_tel = res.data.store_list[0].user_tel = "" ? res.data.store_list[0].user_tel : "暂无"
+                        this.user_name = res.data.store_list[0].user_name
+                        this.user_tel = res.data.store_list[0].user_tel
 
                     } else {
                         this.dev_num = 0
@@ -320,37 +323,36 @@ export default {
             }).catch(error => {})
         },
         getQueryInfo() {
-       
-               let param = new Object()
+
+            let param = new Object()
             param.query_type = 1,
                 param.user_id = parseInt(this.$route.query.user_id),
                 param.profit_type = 0,
                 param.cur_page = 0,
                 param.start_time = 0,
-                param.nick_name="",
+                param.nick_name = "",
                 param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000
-                         
 
             ptfs_query_user_total_profit_everyday(param).then(res => {
                 console.log(res)
-                     this.dialogVisible2 = true
+                this.dialogVisible2 = true
                 if (res.data.total_profit_list) {
                     this.tableData1 = []
                     let nowarr = res.data.total_profit_list
                     for (var i = 0; i < nowarr.length; i++) {
                         nowarr[i].cur_profit = nowarr[i].cur_profit / 1000000
                         nowarr[i].total_profit = nowarr[i].total_profit / 1000000
-                        if(nowarr[i].profit_type ==1){
-                            nowarr[i].profit_type ="收益"
+                        if (nowarr[i].profit_type == 1) {
+                            nowarr[i].profit_type = "收益"
 
-                        } else{
-                              nowarr[i].profit_type ="兑换"
+                        } else {
+                            nowarr[i].profit_type = "兑换"
                         }
-                   
+
                         nowarr[i].time_stamp = this.common.getTimes(nowarr[i].time_stamp * 1000)
 
                     }
-                    this.tableData1= nowarr
+                    this.tableData1 = nowarr
                 }
 
             }).catch(error => {
@@ -388,43 +390,75 @@ export default {
             })
 
         },
-          getQueryInfo2() {
-          let data = {
-        page_no: 1,
-        page_size: 10,
-        login_token: "",
-        bind_user_id: parseInt(this.$route.query.user_id),
-        is_activated: this.is_activated === "" ? -1 : Number(this.is_activated),
-        import_start_ts:
-          this.import_start_ts === ""
-            ? -1
-            : new Date(this.import_start_ts).getTime(),
-        import_end_ts:
-          this.import_end_ts === ""
-            ? -1
-            : new Date(this.import_end_ts).getTime(),
-        activate_start_ts:
-          this.activate_start_ts === ""
-            ? -1
-            : new Date(this.activate_start_ts).getTime(),
-        activate_end_ts:
-          this.activate_end_ts === ""
-            ? -1
-            : new Date(this.activate_end_ts).getTime()
-      };
-      let param = Object.assign(this.common.judgeString(this.searchText), data);
-      query_devinfo_by_conditions(param)
-        .then(res => {
-            this.dialogVisible4=true
-            console.log(res)
-          if (res.status === 0) {
+        getQueryInfo2() {
 
-            this.tableData2 = res.data.dev_list;
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+            let data = {
+                page_no: this.pager.page - 1,
+                page_size: 10,
+                dev_type: this.dev_type === '' ? -1 : this.dev_type === 'RK3328' ? 1 : 2,
+                online_state: this.online_state === '' ? -1 : Number(this.online_state),
+                rom_version: this.rom_version === '' ? '' : this.rom_version,
+                bind_flag: this.bind_flag === '' ? -1 : Number(this.bind_flag),
+                bind_start_ts: this.bind_start_ts === "" ?
+                    -1 : new Date(this.bind_start_ts).getTime(),
+                bind_end_ts: this.bind_end_ts === "" ?
+                    -1 : new Date(this.bind_end_ts).getTime(),
+                bind_user_id: parseInt(this.$route.query.user_id),
+                dev_name: "",
+                dev_mac: "",
+                dev_ip: "",
+                ipfs_id: "",
+                dev_sn: "",
+
+            }
+
+            let param = Object.assign(this.common.judgeString(this.searchText), data);
+            devicelist(param).then(res => {
+                    this.dialogVisible4 = true
+                    console.log(res)
+                    if (res.status === 0) {
+                        let nowarr = res.data.dev_list
+                        for (var i = 0; i < nowarr.length; i++) {
+                            if (nowarr[i].dev_name == "") {
+                                nowarr[i].dev_name = "我的西柚机"
+                            }
+
+                            switch (nowarr[i].online_state) {
+                                case 0:
+                                    nowarr[i].online_state = "离线"
+
+                                    break;
+                                case 1:
+                                    nowarr[i].online_state = "在线"
+
+                                    break;
+                                case 2:
+                                    nowarr[i].online_state = "鉴权失败"
+
+                                    break;
+                                case 3:
+                                    nowarr[i].online_state = "鉴权成功"
+
+                                    break;
+                                case 100:
+                                    nowarr[i].online_state = "未激活"
+
+                                    break;
+                                case 101:
+                                    nowarr[i].online_state = "已激活"
+
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                        }
+                        this.tableData2 = res.data.dev_list;
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                });
 
         },
         searchInfo() {

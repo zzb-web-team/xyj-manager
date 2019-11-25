@@ -110,6 +110,7 @@
 
 <script>
 
+import tableBar  from "../../components/tableBar";
 
 import pageNation from "../../components/pageNation";
 import formInput from "../../components/formInput";
@@ -785,6 +786,7 @@ export default {
     },
 
     components: {
+        tableBar:tableBar,
         pageNation: pageNation,
         formInput: formInput,
         genderSelector: genderSelector,

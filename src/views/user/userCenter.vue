@@ -41,11 +41,11 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="注册时间" style="display: flex;">
-                        <el-date-picker v-model="valueTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                        <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="首次绑定时间" style="display: flex;">
-                        <el-date-picker v-model="valueTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                        <el-date-picker v-model="value2" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                         </el-date-picker>
                     </el-form-item>
                 </el-row>
@@ -122,7 +122,6 @@ export default {
                 account_status: 0,
                 statusText: "全部",
                 statusActiveText: "全部",
-
                 active_status: 0,
                 reg_start_time: 0,
                 reg_end_time: 0,
@@ -355,7 +354,6 @@ export default {
             if (this.value1[1] == undefined) {
                 param.reg_end_time = 0
             } else {
-                alert(this.value1[1].getTime() / 1000)
                 param.reg_end_time = this.value1[1].getTime() / 1000
             }
             if (this.value2[0] == undefined) {

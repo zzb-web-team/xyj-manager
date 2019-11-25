@@ -411,7 +411,7 @@ export default {
             }
         }else if(reg2.test(str)&&reg7.test(str)){
             return {
-                user_nickname: str
+                dev_sn: str
             }
         }else if(reg3.test(str)){
             return {
