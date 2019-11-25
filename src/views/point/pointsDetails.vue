@@ -115,7 +115,6 @@ export default {
   data() {
     return {
       searchText: "",
-      query_type: "",
       start_time: "",
       end_time: "",
       profit_type: "",
@@ -147,14 +146,14 @@ export default {
   },
   methods: {
     formatType(row) {
-        if(row.profit_type === 1){
-            return '收益'
-        }else{
-            return '兑换'
-        }
+      if(row.profit_type === 1){
+          return '收益'
+      }else{
+          return '兑换'
+      }
     },
     formatTime(row){
-        return this.common.getTimes(row.time_stamp);
+        return this.common.getTimes(row.time_stamp*1000);
     },
     getInfo() {
       let data = {
@@ -162,11 +161,13 @@ export default {
         profit_type: this.profit_type === "" ? 0 : Number(this.profit_type),
         start_time: this.start_time === ""
             ? 0
-            : new Date(this.start_time).getTime(),
+            : new Date(this.start_time).getTime()/1000,
         end_time: this.end_time === ""
             ? 0
-            : new Date(this.end_time).getTime(),
+            : new Date(this.end_time).getTime()/1000,
       };
+      let arr = Object.keys(this.common.judgeString(this.searchText));
+      data.query_type = arr.length === 0 ?  0 : 1;
       let param = Object.assign(this.common.judgeString(this.searchText), data);
       query_user_total_profit_everyday(param)
         .then(res => {
@@ -181,7 +182,8 @@ export default {
         });
     },
     search(){
-        this.getInfo()
+      this.pager.page = 0;
+      this.getInfo()
     },
     getShow() {
       this.showState = !this.showState;
