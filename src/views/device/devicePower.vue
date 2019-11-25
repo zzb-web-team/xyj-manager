@@ -113,7 +113,7 @@
         </el-col>
       </el-row>
     </div>
-    <el-dialog :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+    <el-dialog :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
       <div class="addaccout">
         <el-form
           :model="ruleForm2"
@@ -134,7 +134,7 @@
             </el-form-item>
           </el-form-item>
           <el-form-item style="width:100%;display: flex;justify-content:center;">
-            <el-button type="primary" @click="change" :loading="logining">确定</el-button>
+            <el-button type="primary" @click="submitForm('ruleForm2')" :loading="logining">确定</el-button>
             <el-button type="primary" @click="handleSubmit3">取消</el-button>
           </el-form-item>
         </el-form>
@@ -166,12 +166,21 @@ export default {
         page: 1,
         rows: 100
       },
-      showState: true
+      showState: true,
+      rules2: {
+          ip_radio: [
+            { required: true, message: '请输入IP系数', trigger: 'blur' },
+            // { min: 0.00001, max: 0.00004, message: '请输入0.00001到0.00004之间', trigger: 'blur' }
+          ],
+          store_radio: [
+            { required: true, message: '请输入存储系数', trigger: 'blur' },
+            // { min: 0.00000001, max: 0.00000006, message: '请输入0.00000001到0.00000006之间', trigger: 'blur' }
+          ],
+      }
     };
   },
   mounted() {
       this.getInfo();
-      this.getEarnParam(1)
   },
   methods: {
     formatTime(row){
@@ -226,18 +235,29 @@ export default {
       this.showState = !this.showState;
     },
     search() {
-      this.pager.page = 0;
+      this.pager.page = 1;
       this.getInfo()
     },
     addAccout() {
+      this.getEarnParam(1)
       this.dialogVisible = true;
     },
     handleCurrentChange(val){
       this.pager.page = val.val;
       this.getInfo()
     },
-    change(){
-        this.getEarnParam(0)
+    submitForm(formName){
+      this.$refs[formName].validate((valid) => {
+          if (valid) {
+            console.log(valid)
+            console.log(this.ruleForm2.ip_radio)
+            alert('submit!');
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        });
+        // this.getEarnParam(0)
     }
   },
   components: {
