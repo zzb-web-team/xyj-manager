@@ -368,12 +368,12 @@ export default {
 
             let param = new Object()
             param.query_type = 1
-                if (this.$route.query.user_id) {
+            if (this.$route.query.user_id) {
                 param.user_id = parseInt(this.$route.query.user_id)
             } else {
                 param.user_id = ""
             }
-                param.profit_type = 0,
+            param.profit_type = 0,
                 param.cur_page = 0,
                 param.nick_name = "",
                 param.start_time = (Date.parse(new Date()) - 7 * 24 * 60 * 60 * 1000) / 1000,
@@ -405,12 +405,12 @@ export default {
         getQueryInfo1() {
             let param = new Object()
             param.query_type = 1
-              if (this.$route.query.user_id) {
+            if (this.$route.query.user_id) {
                 param.user_id = parseInt(this.$route.query.user_id)
             } else {
                 param.user_id = ""
             }
-                param.dev_sn = "",
+            param.dev_sn = "",
                 param.cur_page = 0,
                 // param.start_time = 0,
                 // param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000

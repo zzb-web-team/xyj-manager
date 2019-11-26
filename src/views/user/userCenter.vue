@@ -107,7 +107,7 @@ export default {
         return {
             dialogVisible: false,
             dialogVisible2: false,
-            searchText: "用户ID、用户名、手机号",
+            searchText: "",
             operatingStatus: true,
             clomnSelection: false,
             reserveselection: true,
@@ -256,7 +256,7 @@ export default {
                     path: "/userInfo",
                     query: {
                         user_id: rows.user_id,
-                        reg_time:rows.first_reg_time
+                        reg_time: rows.first_reg_time
                     }
                 })
             }
@@ -336,7 +336,7 @@ export default {
             let param = new Object()
             let phoneNumber = /^1(3|4|5|7|8)\d{9}$/
             let user_id = /^\d{7}$/
-            if (this.searchText == "") {
+            if (this.searchText != "") {
                 if (phoneNumber.test(this.searchText) == true) {
                     param.user_id = 0
                     param.tel_num = this.searchText

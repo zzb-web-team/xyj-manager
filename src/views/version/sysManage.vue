@@ -1073,7 +1073,7 @@ export default {
                 })
                 .catch(error => {
                     this.$message({
-                        message: "网络出错，请重新请求11111",
+                        message: "网络出错，请重新请求",
                         type: "error"
                     });
                 });

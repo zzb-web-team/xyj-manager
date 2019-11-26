@@ -5,6 +5,8 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex);
 
+ //import './assets/fonts/iconfont.css'
+//import './assets/inco-frent/iconfont.js'
 
 import VCharts from 'v-charts'
 import common from "./common/js/util.js";
