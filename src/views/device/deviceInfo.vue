@@ -21,7 +21,7 @@
         <el-row type="flex">
           <div class="search-con">
             <i class="el-icon-search" style="color:#606266"></i>
-            <el-input class="search-input" v-model="searchText" placeholder="设备SN、设备型号、设备名称"></el-input>
+            <el-input class="search-input" v-model="searchText" placeholder="设备SN、设备名称、MAC地址、设备IP、节点ID"></el-input>
           </div>
           <div @click="getShow()" class="div_show" style="color:#606266">筛选</div>
         </el-row>
@@ -38,10 +38,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="ROM：" style="display: flex; width:180px;">
-              <el-select
-                v-model="rom_version"
-                placeholder="请选择"
-              >
+              <el-select v-model="rom_version" placeholder="请选择">
                 <el-option
                   v-for="item in roms"
                   :key="item.value"
@@ -71,8 +68,18 @@
               </el-select>
             </el-form-item>
             <el-form-item label="注册时间" style="display: flex;">
-              <el-date-picker v-model="bind_start_ts" style="width:150px;" type="datetime" placeholder="选择开始日期时间"></el-date-picker> -
-              <el-date-picker v-model="bind_end_ts" style="width:150px;" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
+              <el-date-picker
+                v-model="bind_start_ts"
+                style="width:150px;"
+                type="datetime"
+                placeholder="选择开始日期时间"
+              ></el-date-picker>-
+              <el-date-picker
+                v-model="bind_end_ts"
+                style="width:150px;"
+                type="datetime"
+                placeholder="选择结束日期时间"
+              ></el-date-picker>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" style="margin-left:68px;" @click="search">确定</el-button>
@@ -92,85 +99,41 @@
       </el-row>
       <el-row type="flex" class="row_active">
         <el-col :span="24">
-          <el-table
-            :data="tableData"
-            border
-            style="width: 100%">
-            <el-table-column
-              fixed
-              prop = "dev_sn"
-              label = "设备SN"
-              width="150">
-            </el-table-column>
-            <el-table-column
-              :formatter="formatDevType"
-              prop="dev_type"
-              label="设备类型"
-              width="120">
-            </el-table-column>
-            <el-table-column
-              prop="rom_version"
-              label="ROM"
-              width="120">
-            </el-table-column>
-            <el-table-column
-              prop="dev_mac"
-              label="MAC地址"
-              width="120">
-            </el-table-column>
-            <el-table-column
-              prop="cpu_id"
-              label="CPU-ID"
-              width="300">
-            </el-table-column>
-            <el-table-column
-              prop="total_cap"
-              :formatter="formatDevCap"
-              label="总容量"
-              width="120">
-            </el-table-column>
-            <el-table-column
-              prop="dev_ip"
-              label="设备IP"
-              width="180">
-            </el-table-column>
-            <el-table-column
-              prop="online_state"
-              :formatter="formatState"
-              label="设备状态"
-              width="180">
-            </el-table-column>
-            <el-table-column
-              prop="bind_flag"
-              :formatter="formatBind"
-              label="是否绑定"
-              width="120">
-            </el-table-column>
+          <el-table :data="tableData" border style="width: 100%">
+            <el-table-column fixed prop="dev_sn" label="设备SN" width="150"></el-table-column>
+            <el-table-column :formatter="formatDevType" prop="dev_type" label="设备类型" width="120"></el-table-column>
+            <el-table-column prop="rom_version" label="ROM" width="120"></el-table-column>
+            <el-table-column prop="dev_name" label="设备名称" width="120"></el-table-column>
+            <el-table-column prop="dev_mac" label="MAC地址" width="120"></el-table-column>
+            <el-table-column prop="cpu_id" label="CPU-ID" width="300"></el-table-column>
+            <el-table-column prop="total_cap" :formatter="formatDevCap" label="总容量" width="120"></el-table-column>
+            <el-table-column prop="dev_ip" label="设备IP" width="180"></el-table-column>
+            <el-table-column prop="online_state" :formatter="formatState" label="设备状态" width="180"></el-table-column>
+            <el-table-column prop="bind_flag" :formatter="formatBind" label="是否绑定" width="120"></el-table-column>
             <el-table-column
               prop="bind_timestamp"
               :formatter="formatDevTime"
               label="绑定时间"
-              width="180">
-            </el-table-column>
-            <el-table-column
-              prop="ipfs_id"
-              label="节点ID"
-              width="180">
-            </el-table-column>
-            <el-table-column
-              prop="bind_user_id"
-              label="绑定用户ID"
-              width="180">
-            </el-table-column>
-            <el-table-column
-              fixed="right"
-              label="操作"
-              width="200">
+              width="180"
+            ></el-table-column>
+            <el-table-column prop="ipfs_id" label="节点ID" width="180"></el-table-column>
+            <el-table-column prop="bind_user_id" label="绑定用户ID" width="180"></el-table-column>
+            <el-table-column fixed="right" label="操作" width="200">
               <template slot-scope="scope">
                 <el-button @click="shut(scope.row)" type="text" size="small">关机</el-button>
                 <el-button type="text" @click="restart(scope.row)" size="small">重启</el-button>
-                <el-button v-show="scope.row.bind_flag===1" @click="untied(scope.row)" type="text" size="small">强制解绑</el-button>
-                <el-button v-show="scope.row.bind_flag===0" type="text" @click="tie(scope.row)" size="small">绑定</el-button>
+                <el-button
+                  v-show="scope.row.bind_flag===1"
+                  @click="untied(scope.row)"
+                  type="text"
+                  size="small"
+                >强制解绑</el-button>
+                <el-button
+                  v-show="scope.row.bind_flag===0"
+                  type="text"
+                  @click="tie(scope.row)"
+                  size="small"
+                >绑定</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -197,11 +160,12 @@ import tableBarActive2 from "../../components/tableBarActive2";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
 import {
-  devicelist,
-  device_cnt_overview,
-  change_device_bind_state
+  devicelist, //table查询
+  device_cnt_overview, //查询title
+  change_device_bind_state, //强制解绑
+  ctrl_node_state //关机重启
 } from "../../api/api";
-import common from "../../common/js/util.js"
+import common from "../../common/js/util.js";
 export default {
   data() {
     return {
@@ -369,68 +333,83 @@ export default {
     this.getInfo();
   },
   methods: {
-    formatDevCap(row){
-      return row.total_cap/1024/1024/1024 + 'G'
+    formatDevCap(row) {
+      return row.total_cap / 1024 / 1024 / 1024 + "G";
     },
-    formatDevType(row){
-      if(row.dev_type === 1){
-        return 'RK3328'
-      }else{
-        return 'AMS805'
+    formatDevType(row) {
+      if (row.dev_type === 1) {
+        return "RK3328";
+      } else {
+        return "AMS805";
       }
     },
-    formatDevTime(row){
-        return this.common.getTimes(row.bind_timestamp*1000)
-      
+    formatDevTime(row) {
+      return this.common.getTimes(row.bind_timestamp * 1000);
     },
-    formatState(row){
-      if(row.online_state === 0){
-        return '离线'
-      }else if(row.online_state === 1){
-        return '在线'
-      }else if(row.online_state === 2){
-        return ' 鉴权失败'
-      }else if(row.online_state === 3){
-        return '鉴权成功'
-      }else if(row.online_state === 100){
-        return '未激活'
-      }else if(row.online_state === 101){
-        return '已激活'
+    formatState(row) {
+      if (row.online_state === 0) {
+        return "离线";
+      } else if (row.online_state === 1) {
+        return "在线";
+      } else if (row.online_state === 2) {
+        return " 鉴权失败";
+      } else if (row.online_state === 3) {
+        return "鉴权成功";
+      } else if (row.online_state === 100) {
+        return "未激活";
+      } else if (row.online_state === 101) {
+        return "已激活";
       }
     },
-    formatBind(row){
-      if(row.bind_flag === 0){
-        return '否'
-      }else if(row.bind_flag === 1){
-        return '是'
+    formatBind(row) {
+      if (row.bind_flag === 0) {
+        return "否";
+      } else if (row.bind_flag === 1) {
+        return "是";
       }
     },
     getInfo() {
-      let data = {
+      var data = {
         page_no: this.pager.page - 1,
         page_size: 10,
-        dev_type: this.dev_type === '' ? -1 : this.dev_type === 'RK3328' ? 1 : 2,
-        online_state: this.online_state === '' ? -1 : Number(this.online_state),
-        rom_version: this.rom_version === '' ? '' : this.rom_version,
-        bind_flag: this.bind_flag === '' ? -1 : Number(this.bind_flag),
-        bind_start_ts: this.bind_start_ts === ""
+        dev_type:
+          this.dev_type === "" ? -1 : this.dev_type === "RK3328" ? 1 : 2,
+        online_state: this.online_state === "" ? -1 : Number(this.online_state),
+        rom_version: this.rom_version === "" ? "" : this.rom_version,
+        bind_flag: this.bind_flag === "" ? -1 : Number(this.bind_flag),
+        bind_start_ts:
+          this.bind_start_ts === ""
             ? -1
-            : (new Date(this.bind_start_ts).getTime())/1000,
-        bind_end_ts:  this.bind_end_ts === ""
+            : new Date(this.bind_start_ts).getTime() / 1000,
+        bind_end_ts:
+          this.bind_end_ts === ""
             ? -1
-            : (new Date(this.bind_end_ts).getTime())/1000,
+            : new Date(this.bind_end_ts).getTime() / 1000
+      };
+      if(this.judgeString(this.searchText)){
+        var param = Object.assign(this.judgeString(this.searchText), data);
+      }else{
+        this.$message.error('设备SN、设备名称、MAC地址、设备IP、节点ID')
+        return;
       }
-      let param = Object.assign(this.common.judgeString(this.searchText), data);
       devicelist(param)
         .then(res => {
           if (res.status === 0) {
             this.tableData = res.data.dev_list;
             this.pager.count = res.data.total_num;
             this.pager.rows = res.data.total_page;
+          }else{
+            this.$message({
+              message: `${res.err_msg}`,
+              type: "error"
+            })
           }
         })
         .catch(error => {
-          console.log(error);
+          this.$message({
+              message: "网络出错，请重新请求",
+              type: "error"
+          });
         });
     },
     getOverview() {
@@ -442,50 +421,133 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+          this.$message({
+              message: "网络出错，请重新请求",
+              type: "error"
+          });
         });
     },
-    comfirmUntied(id, sn) {
+    comfirmUntied(type, sn) {
       let obj = {
-        bind_user_id: id,
+        login_token: "8vAmfX19fX3gkqggfX19fQ++",
+        bind_user_tel_num: "", 
         dev_sn: sn,
-        bind_type: 1
+        ctrl_token: "8vAmfX19fX3gkqggfX19fQ++",
+        bind_type: type  // 0 表示解绑； 1 表示绑定
       };
       change_device_bind_state(obj)
         .then(res => {
-          console.log(res);
+          if(res.status === 0) {
+            this.pager.page = 1;
+            this.getInfo();
+          }else{
+            this.$message({
+              message: `${res.err_msg}`,
+              type: "error"
+            })
+          }
         })
         .catch(error => {
-          console.log(error);
+          this.$message({
+              message: "网络出错，请重新请求",
+              type: "error"
+          });
+        });
+    },
+    closeRestore(type, sn) {
+      let obj = {
+        login_token: "8vAmfX19fX1NeaggfX19fQ==",
+        dev_sn: sn, // 需要重启的设备sn
+        extra_info: {
+          ctrl_type: type   // 1 表示重启(已实现)；2 表示 关机(当前西柚机客户端还未实现此功能)
+        }
+      };
+      ctrl_node_state(obj)
+        .then(res => {
+          if(res.status === 0) {
+            this.pager.page = 1;
+            this.getInfo();
+            console.log(res);
+          }else{
+            this.$message({
+              message: `${res.err_msg}`,
+              type: "error"
+            })
+          }
+        })
+        .catch(error => {
+          this.$message({
+              message: "网络出错，请重新请求",
+              type: "error"
+          });
         });
     },
     getShow() {
       this.showState = !this.showState;
     },
-    shut(rows){
-
-    },
-    restart(rows){
-
-    },
-    untied(rows){
-      this.$confirm("确定删除?", "提示", {
+    untied(rows) {
+      this.$confirm("确定解绑?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          this.comfirmUntied(rows.bind_user_id, rows.dev_sn);
+          this.comfirmUntied(0, rows.dev_sn);
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消解绑"
           });
         });
     },
-    tie(rows){
-
+    tie(rows) {
+      this.$confirm("确定绑定?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.comfirmUntied(1, rows.dev_sn);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消绑定"
+          });
+        });
+    },
+    shut(rows) {   //关机
+      this.$confirm("确定关机?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.closeRestore(2, rows.dev_sn);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消绑定"
+          });
+        });
+    },
+    restart(rows) {  //重启
+      this.$confirm("确定重启?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.closeRestore(1, rows.dev_sn);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消绑定"
+          });
+        });
     },
     search() {
       this.pager.page = 1;
@@ -494,10 +556,28 @@ export default {
     addAccout() {
       this.dialogVisible = true;
     },
-    handleCurrentChange(val){
-      console.log(val)
-      this.pager.page = val.val
-      this.getInfo()
+    handleCurrentChange(val) {
+      console.log(val);
+      this.pager.page = val.val;
+      this.getInfo();
+    },
+    judgeString(str){
+        const reg3 = /^(SMM)[0-9]{9}$/;
+        const reg5 = /^[\u4E00-\u9FA5A-Za-z0-9]{4,20}$/;
+        const reg7 = /^\d+$/;
+        if(reg3.test(str)){
+            return {
+                dev_sn: str
+            }
+        }else if(reg5.test(str)&&!reg7.test(str)&&!reg3.test(str)){
+            return {
+                dev_name: str
+            }
+        }else if(str === ''){
+            return {}
+        }else{
+            return false
+        }
     }
   },
   components: {

@@ -228,13 +228,15 @@ export const device_cnt_overview = params => { return axios.post(`${ownbase}/min
 //西柚机设备激活   table查询
 export const query_devinfo_by_conditions = params => { return axios.post(`${ownbase}/miner_ctrl/query_devinfo_by_conditions`, params).then(res => res.data); };
 //西柚机设备激活   解绑
-export const change_device_bind_state = params => { return axios.post(`${ownbase}/miner_ctrl/change_device_bind_state`, params).then(res => res.data); };
+export const change_device_bind_state = params => { return axios.post(`${ownbase}/miner_ctrl/change_device_bind_state2`, params).then(res => res.data); };
 //西柚机设备激活   新建设备
 export const import_node_basicinfo = params => { return axios.post(`${ownbase}/miner_ctrl/import_node_basicinfo`, params).then(res => res.data); };
 //西柚机设备激活   删除
 export const delete_device_basicinfo = params => { return axios.post(`${ownbase}/miner_ctrl/delete_device_basicinfo`, params).then(res => res.data); };
 //西柚机设备激活   编辑
 export const edit_device_basicinfo = params => { return axios.post(`${ownbase}/miner_ctrl/edit_device_basicinfo`, params).then(res => res.data); };
+//西柚机设备激活   关机/重启 
+export const ctrl_node_state = params => { return axios.post(`${ownbase}/miner_ctrl/ctrl_node_state2`, params).then(res => res.data); };
 //西柚机设备算力  table查询
 export const getDevicePower = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_info_list`, params).then(res => res.data); };
 //西柚机设备算力   调整算力系数

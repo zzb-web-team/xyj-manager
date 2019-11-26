@@ -175,7 +175,7 @@ export default {
   },
   methods: {
     formatTime(row){
-        return this.common.getTimes(row.time_stamp);
+        return this.common.getTimes(row.time_stamp*1000);
     },
     getEarnParam(val) {
       let param = {
@@ -201,15 +201,21 @@ export default {
         });
     },
     getInfo() {
-      let data = {
+      var data = {
         cur_page: this.pager.page - 1,
         start_time:
           this.start_time === "" ? 0 : new Date(this.start_time).getTime(),
         end_time: this.end_time === "" ? 0 : new Date(this.end_time).getTime()
       };
-      let arr = Object.keys(this.common.judgeString(this.searchText));
-      data.query_type = arr.length === 0 ?  0 : 1;
-      let param = Object.assign(this.common.judgeString(this.searchText), data);
+      if(this.judgeString(this.searchText)){
+        var arr = Object.keys(this.judgeString(this.searchText));
+        data.query_type = arr.length === 0 ?  0 : 1;
+        var param = Object.assign(this.judgeString(this.searchText), data);
+      }else{
+        this.$message.error('请输入正确的设备SN、用户ID')
+        return;
+      }
+      
       getDevicePower(param)
         .then(res => {
           if (res.status === 0) {
@@ -238,6 +244,27 @@ export default {
     },
     change(){
         this.getEarnParam(0)
+    },
+    judgeString(str){
+      const reg1 = /^\d{8}$/;
+      const reg3 = /^(SMM)[0-9]{9}$/;
+      if(reg1.test(str)){
+        return {
+          dev_sn: '',
+          nick_name: '',
+          user_id: Number(str)
+        }
+      }else if(reg3.test(str)){
+        return {
+          user_id: 0,
+          nick_name: '',
+          dev_sn: str
+        }
+      }else if(str === ''){
+        return {}
+      }else{
+        return false
+      }
     }
   },
   components: {

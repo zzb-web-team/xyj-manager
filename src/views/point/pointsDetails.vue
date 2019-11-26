@@ -166,9 +166,15 @@ export default {
             ? 0
             : new Date(this.end_time).getTime()/1000,
       };
-      let arr = Object.keys(this.common.judgeString(this.searchText));
-      data.query_type = arr.length === 0 ?  0 : 1;
-      let param = Object.assign(this.common.judgeString(this.searchText), data);
+      if(this.judgeString(this.searchText)){
+        var arr = Object.keys(this.judgeString(this.searchText));
+        data.query_type = arr.length === 0 ?  0 : 1;
+        var param = Object.assign(this.judgeString(this.searchText), data);
+      }else{
+        this.$message.error('请输入正确的用户ID、用户昵称')
+        return;
+      }
+
       query_user_total_profit_everyday(param)
         .then(res => {
           if (res.status === 0) {
@@ -194,6 +200,24 @@ export default {
     handleCurrentChange(val){
       this.pager.page = val.val;
       this.getInfo()
+    },
+    judgeString(str){
+      const reg1 = /^\d{8}$/;
+      const reg2 = /^[\u4E00-\u9FA5A-Za-z0-9]{4,20}$/;
+      const reg7 = /^\d+$/
+      if(reg1.test(str)){
+        return {
+            user_id: Number(str)
+        }
+      }else if(reg2.test(str)&&!reg7.test(str)){
+        return {
+            nick_name: str
+        }
+      }else if(str === ''){
+          return {}
+      }else{
+          return false
+      }
     }
   },
   components: {

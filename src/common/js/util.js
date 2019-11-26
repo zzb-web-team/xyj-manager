@@ -407,11 +407,11 @@ export default {
         const reg7 = /^\d+$/
         if(reg1.test(str)){
             return {
-                user_id: str
+                user_id: Number(str)
             }
         }else if(reg2.test(str)&&!reg7.test(str)){
             return {
-                user_name: str
+                nick_name: str
             }
         }else if(reg3.test(str)){
             return {
@@ -429,10 +429,10 @@ export default {
             return {
                 cpu_id: str
             }
+        }else if(str === ''){
+            return {}
         }else{
-            return {
-
-            }
+            return false
         }
     }
 };

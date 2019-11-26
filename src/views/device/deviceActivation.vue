@@ -33,7 +33,7 @@
         <el-row type="flex">
           <div class="search-con">
             <i class="el-icon-search" style="color:#606266"></i>
-            <el-input class="search-input" v-model="searchText" placeholder="设备SN、设备型号、CPU-ID"></el-input>
+            <el-input class="search-input" v-model="searchText" placeholder="设备SN、CPU-ID"></el-input>
           </div>
           <div @click="getShow()" class="div_show" style="color:#606266">筛选</div>
         </el-row>
@@ -473,7 +473,7 @@ export default {
   },
   methods: {
     getInfo() {
-      let data = {
+      var data = {
         page_no: this.pager.page - 1,
         page_size: 10,
         login_token: "",
@@ -495,7 +495,12 @@ export default {
             ? -1
             : new Date(this.activate_end_ts).getTime()/1000
       };
-      let param = Object.assign(this.common.judgeString(this.searchText), data);
+      if(this.judgeString(this.searchText)){
+        var param = Object.assign(this.judgeString(this.searchText), data);
+      }else{
+        this.$message.error('设备SN、CPU-ID')
+        return;
+      }
       query_devinfo_by_conditions(param)
         .then(res => {
           if (res.status === 0) {
@@ -543,6 +548,7 @@ export default {
             message: "修改成功",
             type: "success"
           });
+          this.pager.page = 1;
           this.getInfo();
           this.dialogVisible2 = false;
         })
@@ -562,6 +568,7 @@ export default {
               message: "新建设备成功",
               type: "success"
             });
+            this.pager.page = 1;
             this.getInfo();
             this.dialogVisible1 = false;
           }
@@ -595,6 +602,7 @@ export default {
             message: "激活成功",
             type: "success"
           });
+          this.pager.page = 1;
           this.getInfo();
           this.dialogVisible2 = false;
         })
@@ -672,6 +680,7 @@ export default {
               type: "success",
               message: "删除成功!"
             });
+            this.pager.page = 1;
             this.getInfo();
           }
         })
@@ -688,7 +697,19 @@ export default {
     },
     handleSubmit2() {},
     handleSubmit3() {},
-    handleClick() {}
+    handleClick() {},
+    judgeString(str){
+        const reg3 = /^(SMM)[0-9]{9}$/;
+        if(reg3.test(str)){
+            return {
+                dev_sn: str
+            }
+        }else if(str === ''){
+            return {}
+        }else{
+            return false
+        }
+    }
   },
   components: {
     pageNation: pageNation,
