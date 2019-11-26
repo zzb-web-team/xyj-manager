@@ -389,7 +389,7 @@ export default {
       if(this.judgeString(this.searchText)){
         var param = Object.assign(this.judgeString(this.searchText), data);
       }else{
-        this.$message.error('设备SN、设备名称、MAC地址、设备IP、节点ID')
+        this.$message.error('请输入正确的设备SN、设备名称、MAC地址、设备IP、节点ID')
         return;
       }
       devicelist(param)
