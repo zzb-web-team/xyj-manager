@@ -498,7 +498,7 @@ export default {
       if(this.judgeString(this.searchText)){
         var param = Object.assign(this.judgeString(this.searchText), data);
       }else{
-        this.$message.error('设备SN、CPU-ID')
+        this.$message.error('请输入正确的设备SN、CPU-ID')
         return;
       }
       query_devinfo_by_conditions(param)
