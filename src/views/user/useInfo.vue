@@ -13,7 +13,7 @@
             </el-col>
             <el-col :span="5" style="margin-left:30px;">
                 <div class="user-item">
-                    <div class="item-count">{{sum_profit}}</div>
+                    <div class="item-count">{{sum_profit1}}</div>
                     <div class="item-text" style="margin-top:7px;">累计收益</div>
                     <div class="item-text" style="margin-top:7px;">
                         <el-button type="primary" size="mini" @click="getQueryInfo1">查看明细</el-button>
@@ -64,7 +64,7 @@
             </div>
             <div class="item">
                 <div class="item-l">注册时间:</div>
-                <div class="item-r">暂无</div>
+                <div class="item-r">{{reg_time}}</div>
             </div>
         </div>
     </div>
@@ -122,6 +122,7 @@ import {
     ptfs_query_list_user_store_list,
     ptfs_query_node_info_list,
     ptfs_query_user_total_profit_everyday,
+    ptfs_query_user_store_list,
     devicelist
 
 } from '../../api/api';
@@ -143,6 +144,7 @@ export default {
             valueTime1: "",
             dev_num: "",
             sum_profit: "",
+            sum_profit1: "",
             average_store: "",
             user_id: "",
             user_name: "",
@@ -272,7 +274,7 @@ export default {
                 rows: 100
             },
             showState: true,
-            user_id: [],
+            user_id: "",
             is_activated: "",
             import_start_ts: "",
             import_end_ts: "",
@@ -283,29 +285,43 @@ export default {
             rom_version: "",
             bind_flag: "",
             bind_start_ts: "",
-            bind_end_ts: ""
+            bind_end_ts: "",
+            user_ids: [],
+            reg_time: ""
 
         };
     },
     mounted: function () {
+
+        if (this.$route.query.user_id) {
+            this.user_ids[0] = parseInt(this.$route.query.user_id)
+
+        } else {
+            this.user_ids[0] = ""
+        }
+        if (this.$route.query.reg_time) {
+            this.reg_time = this.$route.query.reg_time
+        } else {
+            this.reg_time = ""
+        }
+
         this.queryInfo()
+        this.queryInfo1()
 
     },
     methods: {
         queryInfo() {
             let params = new Object()
-            let user_id = []
-            user_id[0] = parseInt(this.$route.query.user_id)
-            params.user_id = user_id
+            params.user_id = this.user_ids
             ptfs_query_list_user_store_list(params).then(res => {
                 if (res.status == 0) {
-                    if (res.data.store_list) {
+                    if (res.data.store_list.length > 0) {
                         this.dev_num = res.data.store_list[0].dev_num
-                        this.sum_profit = (res.data.store_list[0].sum_profit) / 1000000
                         this.average_store = (res.data.store_list[0].average_store) / 1000000
                         this.user_id = res.data.store_list[0].user_id
                         this.user_name = res.data.store_list[0].user_name
                         this.user_tel = res.data.store_list[0].user_tel
+                        this.sum_profit = (res.data.store_list[0].sum_profit) / 1000000
 
                     } else {
                         this.dev_num = 0
@@ -320,19 +336,48 @@ export default {
                     })
                 }
 
-            }).catch(error => {})
+            }).catch(error => {
+
+            })
+        },
+        queryInfo1() {
+
+            let param = new Object()
+            param.query_type = 1
+            if (this.$route.query.user_id) {
+                param.user_id = parseInt(this.$route.query.user_id)
+            } else {
+                param.user_id = ""
+            }
+            param.user_name = "",
+                param.tel_num = "",
+                param.cur_page = 0,
+                ptfs_query_user_store_list(param).then(res => {
+                    console.log(res)
+                    if (res.data.store_list) {
+                        this.sum_profit1 = (res.data.store_list[0].sum_profit) / 1000000
+
+                    } else {}
+
+                }).catch(error => {
+
+                })
+
         },
         getQueryInfo() {
 
             let param = new Object()
-            param.query_type = 1,
-                param.user_id = parseInt(this.$route.query.user_id),
+            param.query_type = 1
+                if (this.$route.query.user_id) {
+                param.user_id = parseInt(this.$route.query.user_id)
+            } else {
+                param.user_id = ""
+            }
                 param.profit_type = 0,
                 param.cur_page = 0,
-                param.start_time = 0,
                 param.nick_name = "",
-                param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000
-
+                param.start_time = (Date.parse(new Date()) - 7 * 24 * 60 * 60 * 1000) / 1000,
+                param.end_time = Date.parse(new Date()) / 1000;
             ptfs_query_user_total_profit_everyday(param).then(res => {
                 console.log(res)
                 this.dialogVisible2 = true
@@ -344,13 +389,10 @@ export default {
                         nowarr[i].total_profit = nowarr[i].total_profit / 1000000
                         if (nowarr[i].profit_type == 1) {
                             nowarr[i].profit_type = "收益"
-
                         } else {
                             nowarr[i].profit_type = "兑换"
                         }
-
                         nowarr[i].time_stamp = this.common.getTimes(nowarr[i].time_stamp * 1000)
-
                     }
                     this.tableData1 = nowarr
                 }
@@ -362,12 +404,18 @@ export default {
         },
         getQueryInfo1() {
             let param = new Object()
-            param.query_type = 1,
-                param.user_id = parseInt(this.$route.query.user_id),
+            param.query_type = 1
+              if (this.$route.query.user_id) {
+                param.user_id = parseInt(this.$route.query.user_id)
+            } else {
+                param.user_id = ""
+            }
                 param.dev_sn = "",
                 param.cur_page = 0,
-                param.start_time = 0,
-                param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000
+                // param.start_time = 0,
+                // param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000
+                param.start_time = (Date.parse(new Date()) - 7 * 24 * 60 * 60 * 1000) / 1000,
+                param.end_time = Date.parse(new Date()) / 1000;
             ptfs_query_node_info_list(param).then(res => {
                 this.dialogVisible3 = true
                 if (res.data.profit_detail_list) {

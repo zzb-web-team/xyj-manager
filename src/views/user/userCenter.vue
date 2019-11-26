@@ -97,7 +97,8 @@ import {
     ptfs_query_user_list,
     ptfs_forbid_users,
     changePageCoreRecordData,
-    ptfs_query_list_user_store_list
+    ptfs_query_list_user_store_list,
+    ptfs_query_user_total_profit_everyday
 } from '../../api/api';
 import common from "../../common/js/util.js"
 
@@ -254,7 +255,8 @@ export default {
                 this.$router.push({
                     path: "/userInfo",
                     query: {
-                        user_id: rows.user_id
+                        user_id: rows.user_id,
+                        reg_time:rows.first_reg_time
                     }
                 })
             }
@@ -331,16 +333,28 @@ export default {
         },
         //获取用户列表
         queryUserList() {
-
             let param = new Object()
-            //param.query_type = this.query_type,
-            if (this.form.user_id == "") {
-                param.user_id = 0
+            let phoneNumber = /^1(3|4|5|7|8)\d{9}$/
+            let user_id = /^\d{7}$/
+            if (this.searchText == "") {
+                if (phoneNumber.test(this.searchText) == true) {
+                    param.user_id = 0
+                    param.tel_num = this.searchText
+                    param.user_name = ""
+                } else if (user_id.test(this.searchText) == true) {
+                    param.user_id = parseInt(this.searchText)
+                    param.tel_num = ""
+                    param.user_name = ""
+                } else {
+                    param.user_id = 0
+                    param.tel_num = ""
+                    param.user_name = this.searchText
+                }
             } else {
-                param.user_id = parseInt(this.form.user_id)
+                param.user_id = 0
+                param.tel_num = ""
+                param.user_name = ""
             }
-            param.user_name = this.form.user_name
-            param.tel_num = this.form.tel_num
             param.account_status = this.form.account_status
             param.account_active = this.form.active_status
             param.sex = this.form.sex

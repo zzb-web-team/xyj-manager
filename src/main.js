@@ -158,31 +158,6 @@ if (user) {
                         requireAuth: true
                     }
                 }]
-            }, {
-                path: "/b",
-                component: 'Home',
-                name: "推送设置",
-                icon: 'el-icon-menu',
-                children: [
-
-                    {
-                        path: "/PushSetting",
-                        name: "推送设置",
-                        component: 'PushSetting',
-                        icon: 'el-icon-menu',
-                        meta: {
-                            requireAuth: true
-                        }
-                    }, {
-                        path: "/PushRecord",
-                        name: "推送记录",
-                        component: 'PushRecord',
-                        icon: 'el-icon-menu',
-                        meta: {
-                            requireAuth: true
-                        }
-                    },
-                ]
             },
             {
                 path: "/a",
@@ -304,6 +279,32 @@ if (user) {
 
                 ]
             },
+            {
+                path: "/b",
+                component: 'Home',
+                name: "推送设置",
+                icon: 'el-icon-menu',
+                children: [
+
+                    {
+                        path: "/PushSetting",
+                        name: "推送设置",
+                        component: 'PushSetting',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    }, {
+                        path: "/PushRecord",
+                        name: "推送记录",
+                        component: 'PushRecord',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                ]
+            },
       
             {
                 path: "/e",
@@ -357,28 +358,29 @@ if (user) {
                 ]
             },
             {
-                path: "/f",
+                path: "/g",
                 component: 'Home',
                 name: "版本管理",
                 icon: 'el-icon-menu',
-                children: [{
-                        path: "/AppVersion",
-                        name: "版本发布管理",
-                        component: 'AppVersion',
-                        icon: 'el-icon-menu',
-                        meta: {
-                            requireAuth: true
-                        }
-                    },
-                    {
-                        path: "/AppManage",
-                        name: "应用包管理",
-                        component: 'AppManage',
-                        icon: 'el-icon-menu',
-                        meta: {
-                            requireAuth: true
-                        }
-                    },
+                children: [
+                    // {
+                    //     path: "/AppVersion",
+                    //     name: "版本发布管理",
+                    //     component: 'AppVersion',
+                    //     icon: 'el-icon-menu',
+                    //     meta: {
+                    //         requireAuth: true
+                    //     }
+                    // },
+                    // {
+                    //     path: "/AppManage",
+                    //     name: "应用包管理",
+                    //     component: 'AppManage',
+                    //     icon: 'el-icon-menu',
+                    //     meta: {
+                    //         requireAuth: true
+                    //     }
+                    // },
                     {
                         path: "/SysVersion",
                         name: "设备系统管理",
@@ -400,7 +402,7 @@ if (user) {
                 ]
             },
             {
-                path: "/g",
+                path: "/h",
                 component: 'Home',
                 name: "操作管理",
                 icon: 'el-icon-menu',

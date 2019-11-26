@@ -43,6 +43,8 @@ export const ptfs_query_user_list = params => { return axios.post(`${ownbase}/ac
 export const ptfs_query_list_user_store_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_list_user_store_list `, params).then(res => res.data); };
 export const ptfs_query_node_info_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_info_list `, params).then(res => res.data); };
 export const ptfs_query_user_total_profit_everyday = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_user_total_profit_everyday `, params).then(res => res.data); };
+//用户存储力列表查询
+export const ptfs_query_user_store_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_user_store_list `, params).then(res => res.data); };
 
 
 //新增
@@ -299,8 +301,6 @@ export const ptfs_forbid_users = params => { return axios.post(`${ownbase}/accou
 //用户管理存储力气管理
 export const ptfs_total_profit_info = params => { return axios.post(`${ownbase}/miner_earn/ptfs_total_profit_info `, params).then(res => res.data); };
 
-//用户存储力列表查询
-export const ptfs_query_user_store_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_user_store_list `, params).then(res => res.data); };
 
 //用户收益统计
 //查看用户收益列表
