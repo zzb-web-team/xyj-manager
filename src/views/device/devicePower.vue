@@ -175,7 +175,7 @@ export default {
   },
   methods: {
     formatTime(row){
-        return this.common.getTimes(row.time_stamp);
+        return this.common.getTimes(row.time_stamp*1000);
     },
     getEarnParam(val) {
       let param = {

@@ -103,6 +103,7 @@
             <el-table-column fixed prop="dev_sn" label="设备SN" width="150"></el-table-column>
             <el-table-column :formatter="formatDevType" prop="dev_type" label="设备类型" width="120"></el-table-column>
             <el-table-column prop="rom_version" label="ROM" width="120"></el-table-column>
+            <el-table-column prop="dev_name" label="设备名称" width="120"></el-table-column>
             <el-table-column prop="dev_mac" label="MAC地址" width="120"></el-table-column>
             <el-table-column prop="cpu_id" label="CPU-ID" width="300"></el-table-column>
             <el-table-column prop="total_cap" :formatter="formatDevCap" label="总容量" width="120"></el-table-column>
