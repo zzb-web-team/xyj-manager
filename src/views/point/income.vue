@@ -49,18 +49,59 @@
       </el-row>
       <el-row type="flex" class="row_active">
         <el-col :span="24">
-          <tableBarActive2
-            id="rebateSetTable"
-            ref="table1"
-            tooltip-effect="dark"
-            :tableData="tableData"
-            :clomnSelection="clomnSelection"
-            :rowHeader="rowHeader"
-            @toOperating="toOperating"
-            @handleSelectionChange="handleSelectionChange"
-            @selectCheckBox="selectCheckBox"
-            @selectAll="selectAll"
-          ></tableBarActive2>
+          <el-table
+            :data="tableData"
+            border
+            style="width: 100%">
+            <el-table-column
+              prop = "user_id"
+              label = "用户ID"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="user_nick_name"
+              label="用户昵称"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="profit"
+              label="收益金额"
+            >
+            </el-table-column>
+            <el-table-column
+              prop=""
+              label="金额"
+            >
+              <template slot-scope="scope">
+                <div v-if="scope.row.profit_type === 1 " disable-transitions>{{scope.row.cur_profit}}
+                </div>
+                <div v-if="scope.row.profit_type === 2 " disable-transitions>{{scope.row.cur_amount}}
+                </div>
+                </template>
+            </el-table-column>
+            
+            <el-table-column
+              prop="ip_value"
+              label="当日IP值"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="store_value"
+              label="当日存储值"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="store"
+              label="当日算力"
+            >
+            </el-table-column>
+            <el-table-column
+              prop="time_stamp"
+              :formatter="formatTime"
+              label="时间"
+            >
+            </el-table-column>
+          </el-table>
         </el-col>
       </el-row>
     </div>
@@ -88,84 +129,11 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      dialogVisible2: false,
       searchText: "",
-      operatingStatus: true,
-      clomnSelection: false,
-      reserveselection: true,
       yes_total_num: '',
       yes_total_profit: '',
-      value1: "",
-      value2: "",
       start_time: "",
       end_time: "",
-      options1: [
-        {
-          value: "0",
-          label: "全部"
-        },
-        {
-          value: "1",
-          label: "正常"
-        },
-        {
-          value: "2",
-          label: "冻结"
-        },
-        {
-          value: "3",
-          label: "未知"
-        }
-      ],
-      options2: [
-        {
-          value: "0",
-          label: "全部"
-        },
-        {
-          value: "1",
-          label: "男"
-        },
-        {
-          value: "2",
-          label: "女"
-        },
-        {
-          value: "3",
-          label: "未知"
-        }
-      ],
-
-      rowHeader: [
-        {
-          prop: "user_id",
-          label: "用户ID"
-        },
-        {
-          prop: "user_nick_name",
-          label: "用户昵称"
-        },
-        {
-          prop: "profit",
-          label: "收益金额"
-        },
-        {
-          prop: "ip_value",
-          label: "当日IP值"
-        },
-        {
-          prop: "store_value",
-          label: "当日存储值"
-        },
-        {
-          prop: "store",
-          label: "当日算力"
-        },
-        {
-          prop: "time_stamp",
-          label: "时间"
-        }
-      ],
       tableData: [],
       pager: {
         count: 0,
@@ -179,6 +147,9 @@ export default {
     this.getInfo();
   },
   methods: {
+    formatTime(row){
+        return this.common.getTimes(row.time_stamp*1000);
+    },
     getInfo() {
       var data = {
         cur_page: this.pager.page - 1,
