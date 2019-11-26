@@ -104,7 +104,7 @@
             <el-table-column prop="rom_version" label="ROM" width="120"></el-table-column>
             <el-table-column prop="dev_mac" label="MAC地址" width="120"></el-table-column>
             <el-table-column prop="cpu_id" label="CPU-ID" width="300"></el-table-column>
-            <el-table-column prop="total_cap" label="总容量" width="120"></el-table-column>
+            <el-table-column prop="total_cap" label="总容量" :formatter="formatDevCap" width="120"></el-table-column>
             <el-table-column prop="import_ts" label="新建时间" :formatter="formatterImport" width="180"></el-table-column>
             <el-table-column
               prop="is_activated"
@@ -571,7 +571,7 @@ export default {
         });
     },
     search() {
-      this.pager.page = 0;
+      this.pager.page = 1;
       this.getInfo();
     },
     activation(row) {
@@ -604,6 +604,9 @@ export default {
     },
     getShow() {
       this.showState = !this.showState;
+    },
+    formatDevCap(row){
+      return row.total_cap/1024/1024/1024 + 'G'
     },
     formatDevType(row) {
       if (row.dev_type === 1) {

@@ -125,6 +125,7 @@
             </el-table-column>
             <el-table-column
               prop="total_cap"
+              :formatter="formatDevCap"
               label="总容量"
               width="120">
             </el-table-column>
@@ -368,6 +369,9 @@ export default {
     this.getInfo();
   },
   methods: {
+    formatDevCap(row){
+      return row.total_cap/1024/1024/1024 + 'G'
+    },
     formatDevType(row){
       if(row.dev_type === 1){
         return 'RK3328'
@@ -484,7 +488,7 @@ export default {
 
     },
     search() {
-      this.pager.page = 0;
+      this.pager.page = 1;
       this.getInfo();
     },
     addAccout() {
