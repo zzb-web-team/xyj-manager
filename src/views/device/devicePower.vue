@@ -60,35 +60,45 @@
               label="当日剩余空间/总空间"
             >
                 <template slot-scope="scope">
-                <span disable-transitions>{{scope.row.free_cap/1024/1024/1024}}G/
-                </span>
-                <span disable-transitions>{{scope.row.total_cap/1024/1024/1024}}G
-                </span>
+                  <span disable-transitions>{{(scope.row.free_cap/1024/1024/1024).toFixed(2)}}G/
+                  </span>
+                  <span disable-transitions>{{(scope.row.total_cap/1024/1024/1024).toFixed(2)}}G
+                  </span>
                 </template>
             </el-table-column>
             <el-table-column
-              prop="up_bandwidth"
+              prop=""
               label="当日平均上下行宽带"
             >
+              <template slot-scope="scope">
+                  <span disable-transitions>{{(scope.row.up_bandwidth/1024/1024).toFixed(2)}}MB/
+                  </span>
+                  <span disable-transitions>{{(scope.row.down_bandwidth/1024/1024).toFixed(2)}}MB
+                  </span>
+                </template>
             </el-table-column>
             <el-table-column
               prop="online_time"
               label="当日在线时长"
+              :formatter="onlineTime"
             >
             </el-table-column>
             <el-table-column
               prop="ip_value"
               label="当日IP"
+              :formatter="formatNumber"
             >
             </el-table-column>
             <el-table-column
               prop="store_value"
               label="当日存储值"
+              :formatter="formatNumber"
             >
             </el-table-column>
             <el-table-column
               prop="store"
               label="当日算力"
+              :formatter="formatNumber"
             >
             </el-table-column>
             <el-table-column
@@ -176,6 +186,13 @@ export default {
   methods: {
     formatTime(row){
         return this.common.getTimes(row.time_stamp*1000);
+    },
+    formatNumber(row, column){
+      const property = column['property'];
+      return (row[property]/1000000).toFixed(6)
+    },
+    onlineTime(row){
+      return (row.online_time/3600).toFixed(2) + 'h'
     },
     getEarnParam(val) {
       let param = {

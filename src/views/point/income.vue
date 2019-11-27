@@ -4,8 +4,8 @@
       <el-row>
         <el-col :span="5">
           <div class="user-item">
-            <div class="item-count">{{yes_total_profit}} gfp</div>
-            <div class="item-text">今日总发放积分</div>
+            <div class="item-count">{{yes_total_profit/1000000}} gfp</div>
+            <div class="item-text">昨日总发放积分</div>
           </div>
         </el-col>
         <el-col :span="5" style="margin-left:30px;">
@@ -66,33 +66,25 @@
             <el-table-column
               prop="profit"
               label="收益金额"
+              :formatter="formatNumber"
             >
-            </el-table-column>
-            <el-table-column
-              prop=""
-              label="金额"
-            >
-              <template slot-scope="scope">
-                <div v-if="scope.row.profit_type === 1 " disable-transitions>{{scope.row.cur_profit}}
-                </div>
-                <div v-if="scope.row.profit_type === 2 " disable-transitions>{{scope.row.cur_amount}}
-                </div>
-                </template>
-            </el-table-column>
-            
+            </el-table-column>           
             <el-table-column
               prop="ip_value"
               label="当日IP值"
+              :formatter="formatNumber"
             >
             </el-table-column>
             <el-table-column
               prop="store_value"
               label="当日存储值"
+              :formatter="formatNumber"
             >
             </el-table-column>
             <el-table-column
               prop="store"
               label="当日算力"
+              :formatter="formatNumber"
             >
             </el-table-column>
             <el-table-column
@@ -147,6 +139,10 @@ export default {
     this.getInfo();
   },
   methods: {
+    formatNumber(row, column){
+      const property = column['property'];
+      return (row[property]/1000000).toFixed(6)
+    },
     formatTime(row){
         return this.common.getTimes(row.time_stamp*1000);
     },

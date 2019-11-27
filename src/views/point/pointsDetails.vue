@@ -69,9 +69,9 @@
               label="金额"
             >
               <template slot-scope="scope">
-                <div v-if="scope.row.profit_type === 1 " disable-transitions>{{scope.row.cur_profit}}
+                <div v-if="scope.row.profit_type === 1 " disable-transitions>{{(scope.row.cur_profit/1000000).toFixed(6)}}
                 </div>
-                <div v-if="scope.row.profit_type === 2 " disable-transitions>{{scope.row.cur_amount}}
+                <div v-if="scope.row.profit_type === 2 " disable-transitions>{{(scope.row.cur_amount/1000000).toFixed(6)}}
                 </div>
                 </template>
             </el-table-column>
@@ -79,6 +79,7 @@
             <el-table-column
               prop="total_profit"
               label="账户余额"
+              :formatter="formatNumber"
             >
             </el-table-column>
             <el-table-column
@@ -151,6 +152,10 @@ export default {
       }else{
           return '兑换'
       }
+    },
+    formatNumber(row, column){
+      const property = column['property'];
+      return (row[property]/1000000).toFixed(6)
     },
     formatTime(row){
         return this.common.getTimes(row.time_stamp*1000);

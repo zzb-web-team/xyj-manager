@@ -614,7 +614,7 @@ export default {
       this.showState = !this.showState;
     },
     formatDevCap(row){
-      return row.total_cap/1024/1024/1024 + 'G'
+      return (row.total_cap/1024/1024/1024).toFixed(2) + 'G'
     },
     formatDevType(row) {
       if (row.dev_type === 1) {
