@@ -127,7 +127,6 @@
       <div class="addaccout">
         <el-form
           :model="ruleForm2"
-          :rules="rules2"
           ref="ruleForm2"
           label-position="left"
           class="demo-ruleForm"
@@ -144,7 +143,7 @@
             </el-form-item>
           </el-form-item>
           <el-form-item style="width:100%;display: flex;justify-content:center;">
-            <el-button type="primary" @click="change" :loading="logining">确定</el-button>
+            <el-button type="primary" @click="change()" :loading="logining">确定</el-button>
             <el-button type="primary" @click="handleSubmit3">取消</el-button>
           </el-form-item>
         </el-form>
@@ -158,11 +157,11 @@ import tableBarActive2 from "../../components/tableBarActive2";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
 import { getDevicePower, set_earn_param } from "../../api/api";
+import Decimal from 'decimal';
 export default {
   data() {
     return {
       dialogVisible: false,
-      dialogVisible2: false,
       searchText: "",
       start_time: "",
       end_time: "",
@@ -176,12 +175,11 @@ export default {
         page: 1,
         rows: 100
       },
-      showState: true
+      showState: true,
     };
   },
   mounted() {
       this.getInfo();
-      this.getEarnParam(1)
   },
   methods: {
     formatTime(row){
@@ -207,10 +205,11 @@ export default {
                   this.$message({
                     type: "success",
                     message: res.err_msg
-                });
+                  });
+                  this.dialogVisible = false;
               }
-              this.ruleForm2.store_radio = res.data.store_radio/10000000;
-              this.ruleForm2.ip_radio = res.data.ip_radio/10000000;
+              this.ruleForm2.store_radio = this.scientificToNumber(res.data.store_radio/10000000);
+              this.ruleForm2.ip_radio = this.scientificToNumber(res.data.ip_radio/10000000);
           }
         })
         .catch(error => {
@@ -253,6 +252,7 @@ export default {
       this.getInfo()
     },
     addAccout() {
+      this.getEarnParam(1)
       this.dialogVisible = true;
     },
     handleCurrentChange(val){
@@ -260,7 +260,14 @@ export default {
       this.getInfo()
     },
     change(){
-        this.getEarnParam(0)
+      if(this.ruleForm2.ip_radio > 1 || this.ruleForm2.ip_radio < 0.0000001){
+        this.$message.error('IP系数在0.0000001-1')
+        return
+      }else if(this.ruleForm2.store_radio > 1 || this.ruleForm2.store_radio < 0.0000001){
+        this.$message.error('存储系数在0.0000001-1')
+        return
+      }
+      this.getEarnParam(0)
     },
     judgeString(str){
       const reg1 = /^\d{8}$/;
@@ -281,6 +288,25 @@ export default {
         return {}
       }else{
         return false
+      }
+    },
+    scientificToNumber(num) {
+      var str = num.toString();
+      var reg = /^(\d+)(e)([\-]?\d+)$/;
+      var arr, len,
+        zero = '';
+  
+      /*6e7或6e+7 都会自动转换数值*/
+      if (!reg.test(str)) {
+        return num;
+      } else {
+        /*6e-7 需要手动转换*/
+        arr = reg.exec(str);
+        len = Math.abs(arr[3]) - 1;
+        for (var i = 0; i < len; i++) {
+          zero += '0';
+        }
+        return '0.' + zero + arr[1];
       }
     }
   },
