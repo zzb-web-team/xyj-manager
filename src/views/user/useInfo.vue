@@ -403,6 +403,7 @@ export default {
 
         },
         getQueryInfo1() {
+
             let param = new Object()
             param.query_type = 1
             if (this.$route.query.user_id) {
@@ -422,7 +423,6 @@ export default {
                     this.tableData = []
                     let nowarr = res.data.profit_detail_list
                     for (var i = 0; i < nowarr.length; i++) {
-                        nowarr[i].profit = nowarr[i].profit / 1000000
                         nowarr[i].profit = nowarr[i].profit / 1000000
                         nowarr[i].store = nowarr[i].store / 1000000
                         nowarr[i].store_value = nowarr[i].store_value / 1000000
@@ -510,7 +510,7 @@ export default {
 
         },
         searchInfo() {
-            alert("搜做")
+          
         },
         getShow() {
             this.showState = !this.showState

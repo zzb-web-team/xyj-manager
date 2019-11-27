@@ -95,10 +95,10 @@ import pageNation from "../../components/pageNation";
 import {
     ptfs_query_total_users,
     ptfs_query_user_list,
-    ptfs_forbid_users,
     changePageCoreRecordData,
     ptfs_query_list_user_store_list,
-    ptfs_query_user_total_profit_everyday
+    ptfs_query_user_total_profit_everyday,
+    ptfs_forbid_users
 } from '../../api/api';
 import common from "../../common/js/util.js"
 
@@ -214,7 +214,7 @@ export default {
                     {
                         label: "冻结",
                         type: "danger",
-                        methods: "edit"
+                        methods: "clickOff"
                     },
                 ]
             },
@@ -247,10 +247,27 @@ export default {
         searchInfo() {},
         getShow() {
             this.showState = !this.showState
-        },
+        },  
         handleButton(val, rows) {
-            if (val == "edit") {
-                this.dialogVisible2 = true
+            if (val == "clickOff") {
+                let param= new Object()
+                let usr_id_list=[]
+                usr_id_list[0]=rows.user_id
+                param.usr_id_list=usr_id_list
+                param.forbid_status=0
+                 ptfs_forbid_users(param).then(res => {
+                    if (res.status == 0) {
+                         this.$message({
+                            message: "操作成功",
+                            type: "success"
+                        })
+                    } else {
+                        this.$message({
+                            message: `${res.err_msg}`,
+                            type: "error"
+                        })
+                    }
+                })
             } else if (val == "freeze") {
                 this.$router.push({
                     path: "/userInfo",
@@ -284,7 +301,7 @@ export default {
                             type: "error"
                         })
                     }
-
+                    
                 })
                 .catch(error => {
                     this.$message({
