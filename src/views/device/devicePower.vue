@@ -157,7 +157,6 @@ import tableBarActive2 from "../../components/tableBarActive2";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
 import { getDevicePower, set_earn_param } from "../../api/api";
-import Decimal from 'decimal';
 export default {
   data() {
     return {
