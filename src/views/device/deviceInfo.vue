@@ -438,7 +438,10 @@ export default {
       change_device_bind_state(obj)
         .then(res => {
           if(res.status === 0) {
-            this.pager.page = 1;
+            this.$message({
+              message: type === 0 ? "解绑成功" : "绑定成功",
+              type: "success"
+            });
             this.getInfo();
           }else{
             this.$message({
@@ -465,9 +468,11 @@ export default {
       ctrl_node_state(obj)
         .then(res => {
           if(res.status === 0) {
-            this.pager.page = 1;
+            this.$message({
+              message: type === 1 ? "重启成功" : "关机成功",
+              type: "success"
+            });
             this.getInfo();
-            console.log(res);
           }else{
             this.$message({
               message: `${res.err_msg}`,
@@ -529,7 +534,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消绑定"
+            message: "已取消关机"
           });
         });
     },
@@ -545,7 +550,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消绑定"
+            message: "已取消重启"
           });
         });
     },
