@@ -45,7 +45,10 @@ export const ptfs_query_node_info_list = params => { return axios.post(`${ownbas
 export const ptfs_query_user_total_profit_everyday = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_user_total_profit_everyday `, params).then(res => res.data); };
 //用户存储力列表查询
 export const ptfs_query_user_store_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_user_store_list `, params).then(res => res.data); };
-
+//冻结/解冻用户
+export const ptfs_forbid_users = params => { return axios.post(`${ownbase}/account/ptfs_forbid_users `, params).then(res => res.data); };
+//查询绑定用户数
+export const query_binded_user_cnt = params => { return axios.post(`${ownbase}/miner_ctrl/query_binded_user_cnt `, params).then(res => res.data); };
 
 //新增
 
@@ -297,8 +300,7 @@ export const query_device_details = params => { return axios.post(`${ownbase}/bg
 //查询用户统计信息
 export const ptfs_query_total_users = params => { return axios.post(`${ownbase}/account/ptfs_query_total_users `, params).then(res => res.data); };
 
-//冻结/解冻用户
-export const ptfs_forbid_users = params => { return axios.post(`${ownbase}/account/ptfs_forbid_users `, params).then(res => res.data); };
+
 
 //用户管理存储力气管理
 export const ptfs_total_profit_info = params => { return axios.post(`${ownbase}/miner_earn/ptfs_total_profit_info `, params).then(res => res.data); };

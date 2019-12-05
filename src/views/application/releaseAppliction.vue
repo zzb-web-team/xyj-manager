@@ -326,7 +326,7 @@ export default {
                     .then(res => {
                         if (res.status != 0) {
                             this.$message({
-                                message: `${res.msg}`,
+                                message: `${res.err_msg}`,
                                 type: "error"
                             });
                         } else {
@@ -418,7 +418,7 @@ export default {
 
                     if (res.status != 0) {
                         this.$message({
-                            message: `${res.msg}`,
+                            message: `${res.err_msg}`,
                             type: "error"
                         });
                     } else {
@@ -489,7 +489,7 @@ export default {
                 .then(res => {
                     if (res.status != 0) {
                         this.$message({
-                            message: `${res.msg}`,
+                            message: `${res.err_msg}`,
                             type: "error"
                         });
                     } else {
@@ -517,7 +517,7 @@ export default {
                 .then(res => {
                     if (res.status != 0) {
                         this.$message({
-                            message: `${res.msg}`,
+                            message: `${res.err_msg}`,
                             type: "error"
                         });
                     } else {
@@ -541,7 +541,7 @@ export default {
                     console.log(res)
                     if (res.status != 0) {
                         this.$message({
-                            message: `${res.msg}`,
+                            message: `${res.err_msg}`,
                             type: "error"
                         });
                     } else {
@@ -581,7 +581,7 @@ export default {
 
                     if (res.status != 0) {
                         this.$message({
-                            message: `${res.msg}`,
+                            message: `${res.err_msg}`,
                             type: "error"
                         });
                     } else {

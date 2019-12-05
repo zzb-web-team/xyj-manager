@@ -123,7 +123,7 @@ import {
     ptfs_query_node_info_list,
     ptfs_query_user_total_profit_everyday,
     ptfs_query_user_store_list,
-    devicelist
+    devicelist,
 
 } from '../../api/api';
 import common from "../../common/js/util.js"
@@ -310,6 +310,7 @@ export default {
 
     },
     methods: {
+
         queryInfo() {
             let params = new Object()
             params.user_id = this.user_ids
@@ -376,8 +377,9 @@ export default {
             param.profit_type = 0,
                 param.cur_page = 0,
                 param.nick_name = "",
-                param.start_time = (Date.parse(new Date()) - 7 * 24 * 60 * 60 * 1000) / 1000,
-                param.end_time = Date.parse(new Date()) / 1000;
+                param.start_time = ((new Date(new Date().toLocaleDateString()).getTime()) - 7 * 24 * 60 * 60 * 1000) / 1000,
+                param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000;
+
             ptfs_query_user_total_profit_everyday(param).then(res => {
                 console.log(res)
                 this.dialogVisible2 = true
@@ -415,8 +417,8 @@ export default {
                 param.cur_page = 0,
                 // param.start_time = 0,
                 // param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000
-                param.start_time = (Date.parse(new Date()) - 7 * 24 * 60 * 60 * 1000) / 1000,
-                param.end_time = Date.parse(new Date()) / 1000;
+                param.start_time = ((new Date(new Date().toLocaleDateString()).getTime()) - 7 * 24 * 60 * 60 * 1000) / 1000,
+                param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000;
             ptfs_query_node_info_list(param).then(res => {
                 this.dialogVisible3 = true
                 if (res.data.profit_detail_list) {
@@ -439,7 +441,6 @@ export default {
 
         },
         getQueryInfo2() {
-
             let data = {
                 page_no: this.pager.page - 1,
                 page_size: 10,
@@ -460,7 +461,7 @@ export default {
 
             }
 
-            let param = Object.assign(this.common.judgeString(this.searchText), data);
+            let param = data
             devicelist(param).then(res => {
                     this.dialogVisible4 = true
                     console.log(res)
@@ -470,11 +471,9 @@ export default {
                             if (nowarr[i].dev_name == "") {
                                 nowarr[i].dev_name = "我的西柚机"
                             }
-
                             switch (nowarr[i].online_state) {
                                 case 0:
                                     nowarr[i].online_state = "离线"
-
                                     break;
                                 case 1:
                                     nowarr[i].online_state = "在线"
@@ -482,21 +481,16 @@ export default {
                                     break;
                                 case 2:
                                     nowarr[i].online_state = "鉴权失败"
-
                                     break;
                                 case 3:
                                     nowarr[i].online_state = "鉴权成功"
-
                                     break;
                                 case 100:
                                     nowarr[i].online_state = "未激活"
-
                                     break;
                                 case 101:
                                     nowarr[i].online_state = "已激活"
-
                                     break;
-
                                 default:
                                     break;
                             }
@@ -510,7 +504,7 @@ export default {
 
         },
         searchInfo() {
-          
+
         },
         getShow() {
             this.showState = !this.showState

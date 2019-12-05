@@ -98,7 +98,8 @@ import {
     changePageCoreRecordData,
     ptfs_query_list_user_store_list,
     ptfs_query_user_total_profit_everyday,
-    ptfs_forbid_users
+    ptfs_forbid_users,
+    query_binded_user_cnt
 } from '../../api/api';
 import common from "../../common/js/util.js"
 
@@ -234,9 +235,30 @@ export default {
     mounted: function () {
         this.queryUsersTotal()
         this.queryUserList()
+        this.queryInfoUser()
 
     },
     methods: {
+        //绑定用户数查询
+        queryInfoUser() {
+            let param = new Object()
+            param.login_token = "",
+                param.create_time = ""
+            query_binded_user_cnt(param).then(res => {
+                if (res.status == 0) {
+                    if (res.data) {
+                        this.user_form.normal_num = res.data.binded_user_cnt
+                    } else {
+
+                    }
+                } else {
+                    this.user_form.normal_num = 0
+                }
+
+            }).catch(error => {
+
+            })
+        },
         queryInfo() {
 
         },
@@ -247,17 +269,17 @@ export default {
         searchInfo() {},
         getShow() {
             this.showState = !this.showState
-        },  
+        },
         handleButton(val, rows) {
             if (val == "clickOff") {
-                let param= new Object()
-                let usr_id_list=[]
-                usr_id_list[0]=rows.user_id
-                param.usr_id_list=usr_id_list
-                param.forbid_status=0
-                 ptfs_forbid_users(param).then(res => {
+                let param = new Object()
+                let usr_id_list = []
+                usr_id_list[0] = rows.user_id
+                param.usr_id_list = usr_id_list
+                param.forbid_status = 0
+                ptfs_forbid_users(param).then(res => {
                     if (res.status == 0) {
-                         this.$message({
+                        this.$message({
                             message: "操作成功",
                             type: "success"
                         })
@@ -290,7 +312,6 @@ export default {
                     if (res.status == 0 && res.err_code == 0) {
                         if (res.data) {
                             this.user_form.active_num = res.data.active_num
-                            this.user_form.normal_num = res.data.normal_num
                             this.user_form.total_num = res.data.total_num
                         } else {
 
@@ -301,7 +322,7 @@ export default {
                             type: "error"
                         })
                     }
-                    
+
                 })
                 .catch(error => {
                     this.$message({

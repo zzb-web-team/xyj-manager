@@ -457,6 +457,7 @@ export default {
             var form = new FormData();
             // 文件对象
             form.append("file", fileObj);
+            console.log(fileObj)
             uploadapk(form)
                 .then(res => {
                     if (res.status == 0) {
