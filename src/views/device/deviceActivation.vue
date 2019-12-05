@@ -548,7 +548,6 @@ export default {
             message: "修改成功",
             type: "success"
           });
-          this.pager.page = 1;
           this.getInfo();
           this.dialogVisible2 = false;
         })
@@ -568,7 +567,6 @@ export default {
               message: "新建设备成功",
               type: "success"
             });
-            this.pager.page = 1;
             this.getInfo();
             this.dialogVisible1 = false;
           }
@@ -602,12 +600,41 @@ export default {
             message: "激活成功",
             type: "success"
           });
-          this.pager.page = 1;
           this.getInfo();
           this.dialogVisible2 = false;
         })
         .catch(error => {
           console.log(error);
+        });
+    },
+    closeRestore(type, sn) {
+      let obj = {
+        login_token: "8vAmfX19fX1NeaggfX19fQ==",
+        dev_sn: sn, // 需要重启的设备sn
+        extra_info: {
+          ctrl_type: type   // 1 表示重启(已实现)；2 表示 关机(当前西柚机客户端还未实现此功能)
+        }
+      };
+      ctrl_node_state(obj)
+        .then(res => {
+          if(res.status === 0) {
+            this.$message({
+              message: type === 1 ? "重启成功" : "关机成功",
+              type: "success"
+            });
+            this.getInfo();
+          }else{
+            this.$message({
+              message: `${res.err_msg}`,
+              type: "error"
+            })
+          }
+        })
+        .catch(error => {
+          this.$message({
+              message: "网络出错，请重新请求",
+              type: "error"
+          });
         });
     },
     getShow() {
@@ -664,6 +691,38 @@ export default {
           this.$message({
             type: "info",
             message: "已取消删除"
+          });
+        });
+    },
+    shut(rows) {   //关机
+      this.$confirm("确定关机?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.closeRestore(2, rows.dev_sn);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消关机"
+          });
+        });
+    },
+    restart(rows) {  //重启
+      this.$confirm("确定重启?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.closeRestore(1, rows.dev_sn);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消重启"
           });
         });
     },
