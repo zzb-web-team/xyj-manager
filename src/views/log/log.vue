@@ -1,261 +1,456 @@
 <template>
-  <section class="myself-container">
-    <div class="device_form">
-      <el-form ref="form" :model="form">
-        <el-row type="flex">
-          <mySearch :searchText="searchText" @searchInfo="searchInfo"></mySearch>
-          <div @click="getShow()" class="div_show" style="color:#606266">筛选</div>
-        </el-row>
-        <div v-show="showState">
-          <el-row type="flex" class="row_activess">
-            <el-form-item label="状态" style="display: flex;">
-              <el-select v-model="value1" placeholder="请选择" @change="onChange2">
-                <el-option
-                  v-for="item in options1"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="操作类型" style="display: flex;">
-              <el-select v-model="value" placeholder="请选择" @change="onChange2">
-                <el-option
-                  v-for="item in options2"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="操作时间" style="display: flex;">
-              <el-date-picker
-                v-model="valueTime"
-                type="daterange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-              ></el-date-picker>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" style="margin-left:68px;">确定</el-button>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary">重置</el-button>
-            </el-form-item>
-          </el-row>
+<div class="content">
+
+    <section class="myself-container">
+        <div class="device_form">
+            <el-form ref="form" :model="form">
+                <el-row type="flex">
+                    <div class="search-con">
+                        <i class="el-icon-search" @click="searchInfo" style="color:#606266"></i>
+                        <el-input class="search-input" v-model="searchText" placeholder="请输入操作人" @keyup.enter.native="searchInfo"></el-input>
+                    </div>
+                    <div @click="getShow" class="div_show" style="color:#606266">
+                        筛选
+                        <i class="el-icon-caret-bottom" :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"></i>
+                    </div>
+                </el-row>
+                <el-row type="flex" class="row_activess" v-show="showState">
+                    <el-form-item label="状态" style="display: flex;">
+                        <el-select v-model="value" placeholder="请选择">
+                            <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="操作类型" style="display: flex;">
+                        <el-select v-model="value1" placeholder="请选择">
+                            <el-option v-for="item in options2active" :key="item" :label="item" :value="item"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="注册时间" style="display: flex;">
+                        <el-date-picker v-model="valueTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="searchInfo">确定</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="reset()">重置</el-button>
+                    </el-form-item>
+                </el-row>
+            </el-form>
         </div>
-      </el-form>
-    </div>
-    <div class="devide_table">
-      <el-row type="flex" class="row_active">
-        <el-col :span="24">
-          <tableBarActive2
-            id="rebateSetTable"
-            ref="table1"
-            tooltip-effect="dark"
-            :tableData="tableData"
-            :clomnSelection="clomnSelection"
-            :rowHeader="rowHeader"
-            :tableOption="tableOption"
-            @handleButton="handleButton"
-            
-            @toOperating="toOperating"
-            @handleSelectionChange="handleSelectionChange"
-            @selectCheckBox="selectCheckBox"
-            @selectAll="selectAll"
-          ></tableBarActive2>
-        </el-col>
-      </el-row>
-    </div>
-    <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
-      <el-row type="flex"></el-row>
-      <el-row type="flex">
-        <el-col :span="6">
-          <pageNation
-            :pager="pager"
-            @handleSizeChange="handleSizeChange"
-            @handleCurrentChange="handleCurrentChange"
-          ></pageNation>
-        </el-col>
-      </el-row>
-    </div>
-  </section>
+        <div class="devide_table">
+            <el-row type="flex" class="row_active">
+                <el-col :span="24">
+                    <tableBarActivelogs id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" :operatingStatus="operatingStatus" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toChange="toChange"></tableBarActivelogs>
+                </el-col>
+            </el-row>
+        </div>
+        <div class="devide_pageNation" style="display: flex;justify-content: flex-end;">
+
+            <el-row type="flex">
+                <el-col :span="6">
+                    <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
+                </el-col>
+            </el-row>
+        </div>
+    </section>
+</div>
 </template>
 
 <script>
-import tableBarActive2 from "../../components/tableBarActive2";
-import mySearch from "../../components/mySearch";
+import tableBarActivelogs from "../../components/tableBarActivelogs";
+
 import pageNation from "../../components/pageNation";
+import { actionlogactive } from "../../api/api";
+import common from "../../common/js/util.js";
+
 export default {
   data() {
     return {
+      form: {},
       dialogVisible: false,
+      rotate: false,
       dialogVisible2: false,
-      searchText: "操作人",
-      operatingStatus: true,
+      dialogVisible3: false,
+      searchText: "",
+      valueTime: "",
+      placeholder: "请输入账号",
+      operatingStatus: false,
       clomnSelection: false,
       reserveselection: true,
+      options2active: [
+        "全部",
+        "新增",
+        "修改",
+        "删除",
+        "发布",
+        "撤回",
+        "导入",
+        "导出"
+      ],
       value1: "",
       value2: "",
-      valueTime: "",
-      valueTime1: "",
-      options1: [
+      value: "",
+      options2: [
         {
-          value: "0",
+          value: "-1",
+          label: "全部"
+        },
+        {
+          value: "1",
           label: "成功"
         },
         {
-          value: "1",
+          value: "0",
           label: "失败"
         }
       ],
-      options2: [
-        {
-          value: "0",
-          label: "新增"
-        },
-        {
-          value: "1",
-          label: "修改"
-        },
-        {
-          value: "2",
-          label: "删除"
-        },
-        {
-          value: "3",
-          label: "启用"
-        },
-        {
-          value: "4",
-          label: "禁用"
-        },
-        {
-          value: "5",
-          label: "发布"
-        },
-        {
-          value: "6",
-          label: "撤回"
-        },
-        {
-          value: "7",
-          label: "导入"
-        },
-        {
-          value: "8",
-          label: "导出"
-        }
-      ],
+      ruleForm2: {
+        username: "",
+        nickname: "",
+        password: "",
+        password2: "",
+        value: "",
+        radio: "0",
+        name: "",
+        phone: ""
+      },
+      ruleForm3: {
+        username: "",
+        nickname: "",
+        password: "",
+        password2: "",
+        value: "",
+        radio: "0",
+        name: "",
+        phone: "",
+        id: ""
+      },
+      ruleForm4: {
+        password: "",
+        password2: ""
+      },
+      //重置密码校验
 
       rowHeader: [
         {
-          prop: "user_id",
+          prop: "status",
           label: "状态"
         },
         {
-          prop: "user_name",
+          prop: "action",
           label: "操作类型"
         },
         {
-          prop: "user_tel",
+          prop: "username",
           label: "操作人"
         },
         {
-          prop: "sex",
+          prop: "beforevalue",
           label: "原始值"
         },
         {
-          prop: "status",
+          prop: "aftervalue",
           label: "修改值"
         },
+
         {
-          prop: "status",
-          label: "操作时间"
+          prop: "description",
+          label: "操作描述"
         },
-      ],
-      tableData: [
+
         {
-          user_id: "测试数据1",
-          user_name: "测试数据1",
-          user_tel: "测试数据1",
-          user_id: "测试数据1",
-          sex: "测试数据1",
-          status: "测试数据1"
+          prop: "time_update",
+          label: "操作时间"
         }
       ],
+      tableData: [],
       tableOption: {
+        label: "操作",
+        width: "400px",
+        options: [
+          {
+            label: "修改",
+            type: "primary",
+            methods: "checkInfo"
+          },
 
+          {
+            label: "密码重置",
+            type: "danger",
+            methods: "password"
+          },
+          {
+            label: "禁用",
+            type: "danger",
+            methods: "disable"
+          },
+          {
+            label: "删除",
+            type: "danger",
+            methods: "delete"
+          }
+        ]
       },
       pager: {
         count: 0,
         page: 1,
         rows: 100
       },
-      showState: true
+      showState: false,
+      allId: []
     };
   },
-  mounted: function() {},
+  mounted: function() {
+    this.queryUserList();
+  },
   methods: {
+    //重置
+    reset() {
+      this.value1 = "全部";
+      this.searchText = "";
+      this.pager.page = 1;
+      this.search = " ";
+      this.value = "-1";
+
+      this.valueTime = "";
+      this.queryUserList();
+    },
+
+    queryUserList() {
+      let param = new Object();
+      param.page = this.pager.page - 1;
+      param.search = this.searchText;
+      param.action = this.value1;
+      param.utype = "app";
+      param.status;
+      if (this.value == "-1") {
+        param.status = null;
+      } else {
+        param.status = parseInt(this.value);
+      }
+      if (this.value1 == "全部") {
+        param.action = "";
+      } else {
+        param.action = this.value1;
+      }
+      var day1 = new Date();
+      if (!this.valueTime) {
+        param.end_ts = parseInt((day1.getTime() / 1000).toFixed(3));
+        param.start_ts = parseInt(
+          ((day1.getTime() - 3600 * 1000 * 24 * 90) / 1000).toFixed(3)
+        );
+        // param.start_ts = ""
+        // param.end_ts = ""
+      } else {
+        if (this.valueTime[0] == undefined) {
+          param.start_ts = parseInt(
+            ((day1.getTime() - 3600 * 1000 * 24 * 90) / 1000).toFixed(3)
+          );
+        } else {
+          param.start_ts = this.valueTime[0].getTime() / 1000;
+        }
+        if (this.valueTime[1] == undefined) {
+          param.end_ts = parseInt((day1.getTime() / 1000).toFixed(3));
+        } else {
+          param.end_ts = this.valueTime[1].getTime() / 1000;
+        }
+      }
+
+      actionlogactive(param)
+        .then(res => {
+          console.log(res);
+          if (res.status != 0) {
+            this.$message({
+              message: `${res.err_msg}`,
+              type: "error"
+            });
+          } else {
+            if (res.result.page == 0) {
+              this.pager.count =
+                res.result.cols.length * (res.result.page + 1) +
+                res.result.les_count;
+            } else {
+              this.pager.count =
+                10 * res.result.page +
+                res.result.les_count +
+                res.result.cols.length;
+            }
+            let nowArr = res.result.cols;
+            for (var i = 0; i < nowArr.length; i++) {
+              nowArr[i].time_create = this.common.getTimes(
+                parseInt(nowArr[i].time_create * 1000)
+              );
+              nowArr[i].time_update = this.common.getTimes(
+                parseInt(nowArr[i].time_update * 1000)
+              );
+              if (nowArr[i].status == 0) {
+                nowArr[i].status = "失败";
+              } else {
+                nowArr[i].status = "成功";
+              }
+            }
+            this.tableData = nowArr;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    //搜索
     searchInfo() {
-      alert("搜做");
+      //this.showState = false;
+      this.pager.page = 1;
+      this.queryUserList();
     },
     getShow() {
       this.showState = !this.showState;
+      this.rotate = !this.rotate;
     },
-    handleButton(val, rows) {
-      if (val == "edit") {
-        this.dialogVisible2 = true;
-      } else if (val == "freeze") {
-        this.$router.push({
-          path: "/userInfo"
-        });
-      }
+    //单页显示数据数量
+    handleSizeChange() {},
+    //分页
+    handleCurrentChange(val) {
+      this.pager.page = val.val;
+      this.queryUserList();
+    },
+    //新增
+    handleSubmit(ev) {
+      //return false
+      var _this = this;
+      this.$refs.ruleForm2.validate(valid => {
+        if (valid) {
+          var loginParams = {
+            username: this.ruleForm2.username,
+            nickname: "aa",
+            password: this.ruleForm2.password,
+            password2: this.ruleForm2.password2,
+            role_id: 0,
+            phone: this.ruleForm2.phone,
+            status: parseInt(this.ruleForm2.radio),
+            name: this.ruleForm2.name
+          };
+          userinsert(loginParams).then(data => {
+            this.dialogVisible = false;
+            let { msg, status, user } = data;
+            if (status !== 0) {
+              this.$message({
+                message: msg,
+                type: "error"
+              });
+            } else {
+              this.$message({
+                message: "添加成功",
+                type: "success"
+              });
+              this.queryUserList();
+            }
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    //取消新增
+    notall() {
+      this.dialogVisible = false;
+      this.ruleForm2.username = "";
+      this.ruleForm2.password = "";
+      this.ruleForm2.password2 = "";
+      this.ruleForm2.phone = "";
+      this.ruleForm2.name = "";
+    },
+    //禁用
+    disable(val) {
       console.log(val);
-      console.log(rows);
+      let nowstatus = 0;
+      let tampArr = [];
+      tampArr[0] = val.id;
+      if (val.status == "正常") {
+        nowstatus = 1;
+      } else {
+        nowstatus = 0;
+      }
+      let param = {
+        id: tampArr,
+        status: nowstatus
+      };
+
+      this.$confirm("确定执行该操作麽吗", "提示", {
+        type: "warning"
+      })
+        .then(() => {
+          denyuser(param).then(res => {
+            console.log(res);
+            //return false
+            if (res.status !== 0) {
+              this.$message({
+                message: msg,
+                type: "error"
+              });
+            } else {
+              this.$message({
+                message: "操作成功",
+                type: "success"
+              });
+              this.queryUserList();
+            }
+          });
+        })
+        .catch(() => {});
     },
+    //修改
+    toChange(val) {
+      this.$router.push({
+        path: "/useInfo",
+        query: {
+          id: val.id,
+          time_create: val.time_create,
+          phone: val.phone,
+          username: val.username,
+          email: val.email
+        }
+      });
+
+      //this.ruleForm3.status = parseInt(this.ruleForm3.radio)
+    },
+
     addAccout() {
       this.dialogVisible = true;
     }
   },
   components: {
     pageNation: pageNation,
-    tableBarActive2: tableBarActive2,
-    mySearch: mySearch
+    tableBarActivelogs: tableBarActivelogs
   }
 };
 </script>
 
 <style lang="less">
-.user-title {
-  margin-top: 30px;
+.search-con {
+  width: 250px;
+  height: 40px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 1px solid #999999;
 
-  .user-item {
-    background: #f2f2f2;
-    padding: 25px;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+  i {
+  }
 
-    .item-count,
-    .item-text {
-      display: flex;
-      justify-content: center;
+  .search-input {
+    .el-input__inner {
+      border: none;
+      background: none;
     }
   }
 }
 
 .myself-container {
-  .el-table th > .cell {
-    text-align: center;
-  }
-  .el-table .cell {
-    text-align: center;
-  }
   width: 100%;
   min-width: 1600px;
+  text-align: left;
 
   .devide_title {
     width: 100%;
@@ -276,7 +471,7 @@ export default {
     height: auto;
     overflow: hidden;
     margin-top: 20px;
-    background: #f2f2f2;
+    background: #ffffff;
     padding: 15px 30px;
     box-sizing: border-box;
 
@@ -357,5 +552,15 @@ export default {
   .el-form-item__error {
     margin-left: 80px;
   }
+}
+
+//旋转
+.aa {
+  transition: all 1s;
+}
+
+.go {
+  transform: rotate(-180deg);
+  transition: all 1s;
 }
 </style>

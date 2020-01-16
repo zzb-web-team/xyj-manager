@@ -5,6 +5,7 @@ let base = '';
 // let ownbase ='http://xyj.grapefruitcloud.com' //外网接口
 
 let ownbase = 'http://39.100.131.247' //外网接口
+let ownbase1 ='http://test.zzb.com' //外网接口
 
 export default {
     customData: function() {
@@ -33,7 +34,6 @@ export const batchRemoveUser = params => { return axios.get(`${base}/user/batchr
 export const editUser = params => { return axios.get(`${base}/user/edit`, { params: params }); };
 
 export const addUser = params => { return axios.get(`${base}/user/add`, { params: params }); };
-
 //批量启用，禁用，删除，
 export const userctrl = params => { return axios.post(`${ownbase}/admin/system/userctrl`, params).then(res => res.data); };
 
@@ -51,6 +51,17 @@ export const ptfs_forbid_users = params => { return axios.post(`${ownbase}/accou
 export const query_binded_user_cnt = params => { return axios.post(`${ownbase}/miner_ctrl/query_binded_user_cnt `, params).then(res => res.data); };
 
 //新增
+
+//app 应用管理
+//APP 分包上传
+export const uploadzip = params => { return axios.post(`${ownbase}/admin/uploadzip `, params).then(res => res.data); };
+//APP 更新日志列表
+export const applogList = params => { return axios.post(`${ownbase}/PTFSLogSys/applogList `, params).then(res => res.data); };
+//新增App更新包,APP确认上传
+export const savePacket = params => { return axios.post(`${ownbase}/packet/savePacket `, params).then(res => res.data); };
+//获取APP更新包列表
+export const queryPacket = params => { return axios.post(`${ownbase}/packet/queryPacket `, params).then(res => res.data); };
+
 
 
 //添加用户
@@ -84,6 +95,71 @@ export const menudelete = params => { return axios.post(`${ownbase}/admin/system
 
 //更新权限
 // export const roleupdate = params => { return axios.post(`${ownbase}/admin/system/roleupdate`, params).then(res => res.data); };
+
+//推送即时消息
+ export const pushImmediate = params => { return axios.post(`${ownbase}/noticepush/push_immediate`, params).then(res => res.data); };
+//推送定时消息
+export const pushOntimer = params => { return axios.post(`${ownbase}/noticepush/push_on_timer`, params).then(res => res.data); };
+//查询历史推送消息
+export const query_push_history_list = params => { return axios.post(`${ownbase}/noticepush/query_push_history_list`, params).then(res => res.data); };
+//撤回推送消息
+export const delete_push_on_timer = params => { return axios.post(`${ownbase}/noticepush/delete_push_on_timer`, params).then(res => res.data); };
+//图片上传
+export const saveimage = params => { return axios.post(`${ownbase}/cloud/saveimage`, params).then(res => res.data); };
+//富文本编辑
+export const savehtml = params => { return axios.post(`${ownbase}/cloud/savehtml`, params).then(res => res.data); };
+
+//通知详情
+export const getnotice = params => { return axios.post(`${ownbase}/noticepush/getnotice`, params).then(res => res.data); };
+
+
+
+//西柚机系统管理
+//测试文件上传
+export const updateNodeConfigtest = params => { return axios.post(`${ownbase}/admin/upload`, params).then(res => res.data); };
+//系统管理获取数据列表
+export const queryRom = params => { return axios.post(`${ownbase}/overview/queryRom`, params).then(res => res.data); };
+//系统管理确定上传保存数据
+export const saveRom = params => { return axios.post(`${ownbase}/overview/saveRom`, params).then(res => res.data); };
+//系统管理删除数据
+export const deleteRom = params => { return axios.post(`${ownbase}/overview/deleteRom`, params).then(res => res.data); };
+//修改包数据查询单条数据信息
+export const findRomById = params => { return axios.post(`${ownbase}/overview/findRomById`, params).then(res => res.data); };
+//修改包数据确定修改
+export const updateRom = params => { return axios.post(`${ownbase}/overview/updateRom`, params).then(res => res.data); };
+//发布查询要发布版本的信息
+export const getpacketbyversion = params => { return axios.post(`${ownbase}/overview/getpacketbyversion`, params).then(res => res.data); };
+
+//发布方式修改
+export const updateMod = params => { return axios.post(`${ownbase}/overview/updateMod`, params).then(res => res.data); };
+
+
+//西柚机操作记录
+export const actionlog = params => { return axios.post(`${ownbase}/PTFSLogSys/actionlog2`, params).then(res => res.data); };
+//上传到PTFS节点
+export const uploadpfts = params => { return axios.post(`${ownbase}/overview/uploadpfts`, params).then(res => res.data); };
+
+
+
+//ROM 升级
+//发布版本列表* 
+export const publishlistRom = params => { return axios.post(`${ownbase}/overview/publishlist`, params).then(res => res.data); };
+//当前发布版本
+export const versionlistRom = params => { return axios.post(`${ownbase}/overview/versionlist`, params).then(res => res.data); };
+//发布查询版本
+export const getversionRom = params => { return axios.post(`${ownbase}/overview/getversion`, params).then(res => res.data); };
+//确定发布
+export const publishRom = params => { return axios.post(`${ownbase}/overview/publish`, params).then(res => res.data); };
+// //撤回发布
+// export const publishRom = params => { return axios.post(`${ownbase}/overview/publish`, params).then(res => res.data); };
+
+//撤销发布的版本、
+export const rollbackRom = params => { return axios.post(`${ownbase}/overview/rollback`, params).then(res => res.data); };
+
+//ROM发布清单
+export const publishuserRom = params => { return axios.post(`${ownbase}/overview/publishuser`, params).then(res => res.data); };
+
+
 
 
 
@@ -166,6 +242,12 @@ export const queryLogTypes = params => { return axios.get(`${ownbase}/PTFSLogSys
 //删除要清空的日志列表
 export const deleteHistoryDatas = params => { return axios.post(`${ownbase}/PTFSLogSys/deleteHistoryDatas`, params).then(res => res.data); };
 
+//操作日志
+export const setactionlog = params => { return axios.post(`${ownbase}/PTFSLogSys/setactionlog`, params).then(res => res.data); };
+//操作设置
+export const setactionlogAll = params => { return axios.post(`${ownbase}/cloudterminal/setactionlog`, params).then(res => res.data) };
+//操作日志列表获取
+export const actionlogactive = params => { return axios.post(`${ownbase}/cloudterminal/actionlog`, params).then(res => res.data) };
 
 
 
@@ -174,38 +256,6 @@ export const deleteHistoryDatas = params => { return axios.post(`${ownbase}/PTFS
 
 
 
-//西柚机系统管理
-//测试文件上传
-export const updateNodeConfigtest = params => { return axios.post(`${ownbase}/admin/upload`, params).then(res => res.data); };
-//系统管理获取数据列表
-export const queryRom = params => { return axios.post(`${ownbase}/overview/queryRom`, params).then(res => res.data); };
-//系统管理确定上传保存数据
-export const saveRom = params => { return axios.post(`${ownbase}/overview/saveRom`, params).then(res => res.data); };
-//系统管理删除数据
-export const deleteRom = params => { return axios.post(`${ownbase}/overview/deleteRom`, params).then(res => res.data); };
-//修改包数据查询单条数据信息
-export const findRomById = params => { return axios.post(`${ownbase}/overview/findRomById`, params).then(res => res.data); };
-//修改包数据确定修改
-export const updateRom = params => { return axios.post(`${ownbase}/overview/updateRom`, params).then(res => res.data); };
-//发布查询要发布版本的信息
-export const getpacketbyversion = params => { return axios.post(`${ownbase}/overview/getpacketbyversion`, params).then(res => res.data); };
-//确定发布
-export const publish = params => { return axios.post(`${ownbase}/overview/publish`, params).then(res => res.data); };
-//发布方式修改
-export const updateMod = params => { return axios.post(`${ownbase}/overview/updateMod`, params).then(res => res.data); };
-//发布版本列表* 
-export const publishlist = params => { return axios.post(`${ownbase}/overview/publishlist`, params).then(res => res.data); };
-//获取版本号列表
-export const getversion = params => { return axios.post(`${ownbase}/overview/getversion`, params).then(res => res.data); };
-//西柚机操作记录
-export const actionlog = params => { return axios.post(`${ownbase}/PTFSLogSys/actionlog`, params).then(res => res.data); };
-//上传到PTFS节点
-export const uploadpfts = params => { return axios.post(`${ownbase}/overview/uploadpfts`, params).then(res => res.data); };
-//获取当前发布版本以及灰度版本列表
-export const versionlist = params => { return axios.post(`${ownbase}/overview/versionlist`, params).then(res => res.data); };
-
-//撤销与i发布的版本、
-export const rollback = params => { return axios.post(`${ownbase}/overview/rollback`, params).then(res => res.data); };
 
 
 
@@ -221,6 +271,47 @@ export const uploadapk = params => { return axios.post(`${ownbase}/admin/uploada
 export const applist = params => { return axios.post(`${ownbase}/app/applist`, params).then(res => res.data); };
 //应用发布管理查询列表
 export const appdevicelist = params => { return axios.post(`${ownbase}/app/devicelist`, params).then(res => res.data); };
+
+//App文件上传到ipfs节点
+export const uploadpftsNew = params => { return axios.post(`${ownbase}/packet/uploadpfts`, params).then(res => res.data); };
+//APP 修改描述
+export const editDescription = params => { return axios.post(`${ownbase}/packet/editDescription`, params).then(res => res.data); };
+//APP删除升级包
+export const deletePacket = params => { return axios.post(`${ownbase}/packet/deletePacket`, params).then(res => res.data); };
+//APP历史发布记录
+export const publishlistApp = params => { return axios.post(`${ownbase}/packet/publishlist`, params).then(res => res.data); };
+//APP 发布
+export const publishApp = params => { return axios.post(`${ownbase}/packet/publish`, params).then(res => res.data); };
+//发布版本列表
+export const getversionApp = params => { return axios.post(`${ownbase}/packet/getversion`, params).then(res => res.data); };
+//APP灰度全网发布
+export const versionlistNew = params => { return axios.post(`${ownbase}/packet/versionlist`, params).then(res => res.data); };
+//APP发布清单
+export const publishuser = params => { return axios.post(`${ownbase}/packet/publishuser`, params).then(res => res.data); };
+//APP
+
+
+
+
+
+//数据分析
+/* APP用户分析*/
+export const ptfs_query_user_trend_list = params => { return axios.post(`${ownbase}/account/ptfs_query_user_trend_list `, params).then(res => res.data); };
+/** 设备在线/离线分析*/
+export const device_online_curve = params => { return axios.post(`${ownbase}/grapefruit_analyse/device_online_curve `, params).then(res => res.data); };
+/** 设备在线离线表格*/
+export const device_online_table = params => { return axios.post(`${ownbase}/grapefruit_analyse/device_online_table `, params).then(res => res.data); };
+/**饼图及右侧条状图 */
+export const app_version_dist_curve = params => { return axios.post(`${ownbase}/grapefruit_analyse/app_version_dist_curve `, params).then(res => res.data); };
+/**版本分析--表格 */
+export const app_version_dist_table = params => { return axios.post(`${ownbase}/grapefruit_analyse/app_version_dist_table `, params).then(res => res.data); };
+/**版本在线分布图*/
+export const app_version_online_dist = params => { return axios.post(`${ownbase}/grapefruit_analyse/app_version_online_dist `, params).then(res => res.data); };
+/**地图及侧面表格 */
+export const app_usage_region_dist = params => { return axios.post(`${ownbase}/grapefruit_analyse/app_usage_region_dist `, params).then(res => res.data); };
+
+
+
 
 
 //2019-11-21
@@ -309,6 +400,7 @@ export const ptfs_total_profit_info = params => { return axios.post(`${ownbase}/
 //用户收益统计
 //查看用户收益列表
 export const ptfs_query_user_profit_info = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_user_profit_info `, params).then(res => res.data); };
+
 
 
 

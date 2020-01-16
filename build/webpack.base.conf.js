@@ -45,10 +45,19 @@ module.exports = {
         options: vueLoaderConfig
       },
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        include: [resolve('src'), resolve('test')]
+        
+        test: /.js$/,
+loader: 'babel-loader',
+include: [resolve('src'), resolve('test'), resolve('./node_modules/vuex-persist')]
+
+
+      
       },
+      // {
+      //   test: /\.js$/,
+      //   loader: 'babel-loader',
+      //   include: [resolve('src'), resolve('test')]
+      // },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',

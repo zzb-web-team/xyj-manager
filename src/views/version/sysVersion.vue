@@ -68,77 +68,6 @@
                 </el-form>
             </div>
         </div>
-        <!-- <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="全网发布" name="first">
-                <el-form ref="form" :model="form">
-                    <el-row type="flex">
-                        <el-col :span="5">
-                            <el-select v-model="selectedValue" placeholder="请选择" @change="change">
-                                <el-option v-for="item in optionArr" :key="item" :label="item.label" :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-col>
-                        <el-col :span="5">
-                            <el-form-item label="发布渠道">
-                                <el-radio v-model="radio" label="HTTPS" @change="changeType">HTTPS</el-radio>
-                                <el-radio v-model="radio" label="PTFS" @change="changeType">PTFS</el-radio>
-                            </el-form-item>
-                        </el-col>
-
-                        <el-col :span="6">
-                            <el-form-item label="发布描述">
-                                <el-input v-model="form.inputText" placeholder="请输入发布描述"></el-input>
-                            </el-form-item>
-                        </el-col>
-
-                        <el-col :span="2">
-                            <el-button type="primary" @click="getInfo()" :disabled="disableStatusActive">发布并预览</el-button>
-                        </el-col>
-                        <el-col :span="2">
-                            <el-button type="primary" :disabled="disableStatus" @click="getInfo()">重新发布</el-button>
-                        </el-col>
-                    </el-row>
-                </el-form>
-            </el-tab-pane>
-            <el-tab-pane label="灰度发布" name="second">
-                <el-form ref="form" :model="form">
-                    <el-row type="flex">
-                        <el-col :span="3">
-                            <el-button type="primary" @click="getShow()">添加设备清单</el-button>
-                        </el-col>
-                        <el-col :span="5">
-                            <el-select v-model="selectedValue" placeholder="请选择" @change="change">
-                                <el-option v-for="item in optionArr" :key="item" :label="item.label" :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-col>
-                        <el-col :span="5">
-                            <el-form-item label="发布渠道">
-                                <el-radio v-model="radio" label="HTTPS" @change="changeType">HTTPS</el-radio>
-                                <el-radio v-model="radio" label="PTFS" @change="changeType">PTFS</el-radio>
-                            </el-form-item>
-                        </el-col>
-
-                        <el-col :span="6">
-                            <el-form-item label="发布描述">
-                                <el-input v-model="form.inputText" placeholder="请输入发布描述"></el-input>
-                            </el-form-item>
-                        </el-col>
-
-                        <el-col :span="2">
-                            <el-button type="primary" @click="getInfo()" :disabled="disableStatusActive">发布并预览</el-button>
-                        </el-col>
-                        <el-col :span="2">
-                            <el-button type="primary" :disabled="disableStatus" @click="getInfo()">重新发布</el-button>
-                        </el-col>
-
-                    </el-row>
-                    <el-row type="flex" class="row_active" v-show="showState">
-                        <textarea placeholder="复制SN或MAC清单，用换行隔开" v-model="textareaText"></textarea>
-                    </el-row>
-                </el-form>
-            </el-tab-pane>
-        </el-tabs> -->
     </div>
     <div class="devide_table">
         <el-row type="flex" class="row_active">
@@ -836,7 +765,7 @@ export default {
         height: auto;
         overflow: hidden;
         margin-top: 20px;
-        background: #f2f2f2;
+        background: #ffffff;
         padding: 15px 30px;
         box-sizing: border-box;
 

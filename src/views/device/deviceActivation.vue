@@ -65,11 +65,15 @@
         </el-form>
     </div>
     <div class="devide_table">
-        <el-row type="flex" class="row_active">
+        <el-row type="flex" class="row_active" style="display: flex;justify-content: space-between;">
             <el-col :span="6">
                 <el-button type="primary" @click="addDev">新建设备</el-button>
                 <el-button type="primary" @click="importDev">批量导入设备</el-button>
             </el-col>
+            <el-col :span="6" style="  display: flex; justify-content: flex-end">
+                <el-button type="primary" @click="toexportExcel">导出</el-button>
+            </el-col>
+
         </el-row>
         <el-row type="flex" class="row_active">
             <el-col :span="24">
@@ -80,9 +84,9 @@
                     <el-table-column prop="dev_mac" label="MAC地址" width="120"></el-table-column>
                     <el-table-column prop="cpu_id" label="CPU-ID" width="300"></el-table-column>
                     <el-table-column prop="total_cap" label="总容量" :formatter="formatDevCap" width="120"></el-table-column>
-                    <el-table-column prop="import_ts" label="新建时间" :formatter="formatterImport" width="180"></el-table-column>
+                    <el-table-column prop="import_ts" label="新建时间" sortable :formatter="formatterImport" width="180"></el-table-column>
                     <el-table-column prop="is_activated" label="设备激活" :formatter="formatterType" width="120"></el-table-column>
-                    <el-table-column prop="activate_ts" label="激活时间" width="180" :formatter="formatterActive"></el-table-column>
+                    <el-table-column prop="activate_ts" label="激活时间" sortable width="180" :formatter="formatterActive"></el-table-column>
                     <el-table-column fixed="right" label="操作" width="200">
                         <template slot-scope="scope">
                             <el-button v-show="scope.row.is_activated!==100" @click="open(scope.row)" type="text" size="small">关机</el-button>
@@ -109,7 +113,9 @@
             <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" class="demo-ruleForm">
                 <h3 class="title">新建设备</h3>
                 <el-form-item prop="username">
-                    <el-form-item label="设备SN:">
+                    <el-form-item label="设备SN:" :rules="[
+      {validator: jiousername, trigger: 'blur' }
+    ]">
                         <el-input v-model="ruleForm2.dev_sn" placeholder="请输入设备SN"></el-input>
                     </el-form-item>
                 </el-form-item>
@@ -337,7 +343,7 @@ export default {
                 page: 1,
                 rows: 100
             },
-            showState: true,
+            showState: false,
             ruleForm2: {
                 dev_sn: "",
                 dev_type: "",
@@ -354,7 +360,9 @@ export default {
                 cpu_id: "",
                 total_cap: "",
                 is_activated: ""
-            }
+            },
+                 tableData2: [],
+      pageActive: 0
         };
     },
     mounted() {
@@ -362,6 +370,45 @@ export default {
         this.getInfo();
     },
     methods: {
+
+        //导出的方法
+        exportExcel() {
+            require.ensure([], () => {
+                const {
+                    export_json_to_excel
+                } = require("../../excel/Export2Excel");
+                const tHeader = [
+                    "设备SN",
+                    "设备类型",
+                    "ROM",
+                    "MAC地址",
+                    "CPU-ID",
+                    "总容量",
+                    "新建时间",
+                    "设备激活",
+                    "激活时间",
+                ];
+                // 上面设置Excel的表格第一行的标题
+                const filterVal = [
+                    "dev_sn",
+                    "dev_type",
+                    "rom_version",
+                    "dev_mac",
+                    "cpu_id",
+                    "total_cap",
+                    "import_ts",
+                    "is_activated",
+                    "activate_ts",
+                ];
+                // 上面的index、nickName、name是tableData里对象的属性
+                const list = this.tableData; //把data里的tableData存到list
+                const data = this.formatJson(filterVal, list);
+                export_json_to_excel(tHeader, data, "设备激活信息表");
+            });
+        },
+          formatJson(filterVal, jsonData) {
+            return jsonData.map(v => filterVal.map(j => v[j]));
+        },
 
         //文件上传前回调
         beforeUpload(file) {
@@ -436,6 +483,57 @@ export default {
                     }
                 })
                 .catch(error => {
+                    console.log(error);
+                });
+        },
+        //导出
+             toexportExcel() {
+            var data = {
+                page_no: this.pageActive,
+                page_size: 10,
+                login_token: "",
+                is_activated: this.is_activated === "" ? -1 : Number(this.is_activated),
+                import_start_ts: this.import_start_ts === "" ?
+                    -1 : new Date(this.import_start_ts).getTime() / 1000,
+                import_end_ts: this.import_end_ts === "" ?
+                    -1 : new Date(this.import_end_ts).getTime() / 1000,
+                activate_start_ts: this.activate_start_ts === "" ?
+                    -1 : new Date(this.activate_start_ts).getTime() / 1000,
+                activate_end_ts: this.activate_end_ts === "" ?
+                    -1 : new Date(this.activate_end_ts).getTime() / 1000
+            };
+            if (this.judgeString(this.searchText)) {
+                var param = Object.assign(this.judgeString(this.searchText), data);
+            } else {
+                this.$message.error('请输入正确的设备SN、CPU-ID')
+                return;
+            }
+            query_devinfo_by_conditions(param)
+                .then(res => {
+                     if (res.status === 0) {
+            //this.tableData2 = res.data.dev_list;
+            // this.pager.count = res.data.total_num;
+            // this.pager.rows = res.data.total_page;
+            this.pageActive = res.data.cur_page;
+            if (res.data.cur_page >= res.data.total_page) {
+              this.exportExcel();
+              this.common.monitoringLogs("导出", "导出设备激活表", 1);
+            } else {
+              this.tableData2 = this.tableData2.concat(res.data.dev_list);
+              this.pageActive++;
+              this.toexportExcel();
+            }
+          } else {
+            this.$message({
+              message: `${res.err_msg}`,
+              type: "error"
+            });
+            this.common.monitoringLogs("导出", "导出设备激活表", 0);
+          }
+                })
+                .catch(error => {
+                                this.common.monitoringLogs("导出", "导出设备激活表", 0);
+
                     console.log(error);
                 });
         },

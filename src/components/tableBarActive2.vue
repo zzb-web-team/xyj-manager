@@ -1,7 +1,7 @@
 <template>
-<el-table border :data="tableData" ref="table" style="width: 100%" @selection-change="handleSelectionChange" @select="selectCheckBox" @select-all="selectAll" id="rebateSetTable">
+<el-table border :data="tableData" ref="table" style="width: 100%" @selection-change="handleSelectionChange" @sort-change='tableSortChange' @select="selectCheckBox" @select-all="selectAll" id="rebateSetTable">
     <el-table-column type="selection" width="55" v-if="clomnSelection"> </el-table-column>
-    <el-table-column v-for="(item,index) in rowHeader" :key="index" :prop="item.prop" :label="item.label" :width="item.width">
+    <el-table-column v-for="(item,index) in rowHeader" :key="index" :sortable="item.sortable"  :prop="item.prop" :label="item.label" :width="item.width">
     </el-table-column>
        <el-table-column :label="tableOption.label" :width="tableOption.width" v-if="operatingStatus">
         <template slot-scope="scope">
@@ -56,6 +56,9 @@ export default {
 
     },
     methods: {
+          tableSortChange(val) {
+            this.$emit('tableSortChange', val)
+        },
         clearSelection() {
             this.$refs.table.clearSelection();
         },

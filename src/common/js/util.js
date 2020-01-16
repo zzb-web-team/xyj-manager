@@ -1,5 +1,7 @@
 var SIGN_REGEXP = /([yMdhsm])(\1*)/g;
 var DEFAULT_PATTERN = 'yyyy-MM-dd';
+import { setactionlogAll } from "../../api/api.js";
+import VueCookies from "vue-cookies";
 
 function padding(s, len) {
     var len = len - (s + '').length;
@@ -224,6 +226,46 @@ export default {
         let endTime = `${year}-${month}-${day}`;
         return endTime
     },
+    //日志操作公共方法
+     //操作日志公共方法
+  monitoringLogs: function(
+    action,
+    description,
+    status,
+    beforevalue,
+    aftervalue
+  ) {
+    let param = new Object();
+    param.action = action;
+    param.description = description;
+    param.status = status;
+    if (beforevalue) {
+      param.beforevalue = beforevalue;
+    } else {
+      param.beforevalue = "-";
+    }
+
+    if (aftervalue) {
+      param.aftervalue = aftervalue;
+    } else {
+      param.aftervalue = "-";
+    }
+    param.utype = "app";
+    let tempInfo =JSON.parse(this.get('userInfo'))
+    console.log(tempInfo)
+    param.id = tempInfo.id;
+    param.name =tempInfo.username; 
+
+    setactionlogAll(param)
+      .then()
+      .catch();
+  },
+  //获取COOKIE 公共方法
+  get: function (name) {
+    var v = window.document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return v ? v[2] : null;
+
+},
 
     //错误提示码返回
 

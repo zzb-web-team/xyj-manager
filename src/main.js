@@ -5,7 +5,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex);
 
- //import './assets/fonts/iconfont.css'
+//import './assets/fonts/iconfont.css'
 //import './assets/inco-frent/iconfont.js'
 
 import VCharts from 'v-charts'
@@ -39,37 +39,20 @@ import RegionAnalysis from './views/analysis/regionAnalysis.vue'
 import UserAnalysis from './views/analysis/userAnalysis.vue'
 import VersionAnalysis from './views/analysis/versionAnalysis.vue'
 import AppVersion from './views/version/appVersion.vue'
-import AppManage from './views/version/appManage.vue'
-import SysVersion from './views/version/sysVersion.vue'
+import SysVersion1 from './views/version/sysVersion_copy.vue'
 import SysManage from './views/version/sysManage.vue'
+import SysManage1 from './views/version/sysManage_copy.vue'
+import SysManageMiddle from './views/version/middle.vue'
+import SysManageMiddleActive from './views/version/middleActive.vue'
+
+import AppManage from './views/version/AppManage.vue'
 import Log from './views/log/log.vue'
 // import accountInfo from './views/account/accountInfo.vue'
 // import accountManagement from './views/account/accountManagement.vue'
 
 import Home from './views/Home.vue'
 
-// import managementuser from './views/authority/managementuser.vue'
-// import managementauthority from './views/authority/managementauthority.vue'
 
-// import middledevive from './views/devicemanagement/middle.vue'
-
-// import userinformation from './views/usercenter/deviceinformation.vue'
-
-// import storagepower from './views/usercenter/storagepower.vue'
-// import system from './views/devicemanagement/system.vue'
-// import systemset from './views/devicemanagement/systemset.vue'
-// import recording from './views/devicemanagement/recording.vue'
-
-// import application from './views/application/applicationmanagement.vue'
-// import applicationmiddle from './views/application/middle.vue'
-// import releasemanagement from './views/application/releasemanagement.vue'
-// import deviceinformation from './views/deviceinformation/information.vue'
-// import monitor from './views/devicemanagement/monitor.vue'
-// import detail from './views/devicemanagement/detail.vue'
-// import storage from './views/devicemanagement/storage.vue'
-// import income from './views/income/income.vue'
-
-// import systems from './views/system/index.vue'
 
 
 
@@ -104,24 +87,27 @@ if (user) {
             'deviceInfo': deviceInfo,
             'PushSetting': PushSetting,
             'PushRecord': PushRecord,
-            'middle':middle,
-            'devicePower':devicePower,
-            'deviceActivation':deviceActivation,
-            'income':income,
-            'pointsDetails':pointsDetails,
+            'middle': middle,
+            'devicePower': devicePower,
+            'deviceActivation': deviceActivation,
+            'income': income,
+            'pointsDetails': pointsDetails,
             'DeviceAnalysis': DeviceAnalysis,
             'RegionAnalysis': RegionAnalysis,
             'UserAnalysis': UserAnalysis,
             'VersionAnalysis': VersionAnalysis,
-            'addAppliction':addAppliction,
-            'releaseAppliction':releaseAppliction,
+            'addAppliction': addAppliction,
+            'releaseAppliction': releaseAppliction,
             'AppVersion': AppVersion,
             'AppManage': AppManage,
             'SysVersion': AppVersion,
             'SysManage': SysManage,
-            
-            'SysVersion': SysVersion,
+            'SysManageMiddle': SysManageMiddle,
+            'SysManageMiddleActive': SysManageMiddleActive,
+
+            'SysVersion1': SysVersion1,
             'SysManage': SysManage,
+            'AppManage': AppManage,
             "Log": Log
             // 'userinformation': userinformation,
             // 'storagepower': storagepower,
@@ -152,7 +138,7 @@ if (user) {
                 name: "后台管理",
                 icon: 'el-icon-menu',
                 children: [{
-                    path: "/accountManagement",
+                    path: "/",
                     name: "后台账户管理",
                     component: 'accountManagement',
                     icon: 'el-icon-menu',
@@ -186,98 +172,95 @@ if (user) {
                     },
 
                 ]
-          },
-          {
-            path: "/c",
-            component: 'Home',
-            name: "设备管理",
-            icon: 'el-icon-menu',
-            children: [
-                {
-                    path: "/deviceInfo",
-                    name: "设备信息",
-                    component: 'deviceInfo',
-                    icon: 'el-icon-menu',
-                    meta : {                     
-                        requireAuth:true    
-                     }
-                },
-                {
-                    path: "/devicePower",
-                    name: "设备算力",
-                    component: 'devicePower',
-                    icon: 'el-icon-menu',
-                    meta : {                     
-                        requireAuth:true    
-                     }
-            
-                },
-                {
-                    path: "/deviceActivation",
-                    name: "设备激活",
-                    component: 'deviceActivation',
-                    icon: 'el-icon-menu',
-                    meta : {                     
-                        requireAuth:true    
-                     }
-            
-                },
-                                
-                ]
-          },
-          {
-            path: "/f",
-            component: 'Home',
-            name: "盒子应用管理",
-            icon: 'el-icon-menu',
-            children: [
-                {
-                    path: "/releaseAppliction",
-                    name: "应用发布管理",
-                    component: 'releaseAppliction',
-                    icon: 'el-icon-menu',
-                    meta : {                     
-                        requireAuth:true    
-                     }
-                },
-                {
-                    path: "/addAppliction",
-                    name: "应用新增管理",
-                    component: 'addAppliction',
-                    icon: 'el-icon-menu',
-                    meta : {                     
-                        requireAuth:true    
-                     }
-            
-                },                                
+            },
+            {
+                path: "/c",
+                component: 'Home',
+                name: "设备管理",
+                icon: 'el-icon-menu',
+                children: [{
+                        path: "/deviceInfo",
+                        name: "设备信息",
+                        component: 'deviceInfo',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/devicePower",
+                        name: "设备算力",
+                        component: 'devicePower',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+
+                    },
+                    {
+                        path: "/deviceActivation",
+                        name: "设备激活",
+                        component: 'deviceActivation',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+
+                    },
 
                 ]
             },
-          {
-            path: "/d",
-            component: 'Home',
-            name: "积分管理",
-            icon: 'el-icon-menu',
-            children: [
-                {
-                    path: "/pointsDetails",
-                    name: "积分明细",
-                    component: 'pointsDetails',
-                    icon: 'el-icon-menu',
-                    meta : {                     
-                        requireAuth:true    
-                     }
-                },
-                {
-                    path: "/income",
-                    name: "收益明细",
-                    component: 'income',
-                    icon: 'el-icon-menu',
-                    meta : {                     
-                        requireAuth:true    
-                     }
-            
-                },                                
+            {
+                path: "/f",
+                component: 'Home',
+                name: "盒子应用管理",
+                icon: 'el-icon-menu',
+                children: [{
+                        path: "/releaseAppliction",
+                        name: "应用发布管理",
+                        component: 'releaseAppliction',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/addAppliction",
+                        name: "应用新增管理",
+                        component: 'addAppliction',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+
+                    },
+
+                ]
+            },
+            {
+                path: "/d",
+                component: 'Home',
+                name: "积分管理",
+                icon: 'el-icon-menu',
+                children: [{
+                        path: "/pointsDetails",
+                        name: "积分明细",
+                        component: 'pointsDetails',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/income",
+                        name: "收益明细",
+                        component: 'income',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+
+                    },
 
                 ]
             },
@@ -307,7 +290,7 @@ if (user) {
                     },
                 ]
             },
-      
+
             {
                 path: "/e",
                 component: 'Home',
@@ -315,37 +298,37 @@ if (user) {
                 icon: 'el-icon-menu',
                 children: [
                     // {
-                        // path: "/UserAnalysis",
-                        // name: "APP用户分析",
-                        // icon: 'el-icon-menu',
-                        // children: [
-                        {
-                            path: "/UserAnalysis",
-                            name: "APP用户分析",
-                            component: 'UserAnalysis',
-                            icon: 'el-icon-menu',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-                        {
-                            path: "/RegionAnalysis",
-                            name: "地域分析",
-                            component: 'RegionAnalysis',
-                            icon: 'el-icon-menu',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-                        {
-                            path: "/VersionAnalysis",
-                            name: "版本分析",
-                            component: 'VersionAnalysis',
-                            icon: 'el-icon-menu',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
+                    // path: "/UserAnalysis",
+                    // name: "APP用户分析",
+                    // icon: 'el-icon-menu',
+                    // children: [
+                    {
+                        path: "/UserAnalysis",
+                        name: "APP用户分析",
+                        component: 'UserAnalysis',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/RegionAnalysis",
+                        name: "地域分析",
+                        component: 'RegionAnalysis',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/VersionAnalysis",
+                        name: "版本分析",
+                        component: 'VersionAnalysis',
+                        icon: 'el-icon-menu',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
                     // ]
                     // },
                     {
@@ -364,43 +347,64 @@ if (user) {
                 component: 'Home',
                 name: "版本管理",
                 icon: 'el-icon-menu',
-                children: [
-                    // {
-                    //     path: "/AppVersion",
-                    //     name: "版本发布管理",
-                    //     component: 'AppVersion',
-                    //     icon: 'el-icon-menu',
-                    //     meta: {
-                    //         requireAuth: true
-                    //     }
-                    // },
-                    // {
-                    //     path: "/AppManage",
-                    //     name: "应用包管理",
-                    //     component: 'AppManage',
-                    //     icon: 'el-icon-menu',
-                    //     meta: {
-                    //         requireAuth: true
-                    //     }
-                    // },
-                    {
-                        path: "/SysVersion",
-                        name: "设备系统管理",
-                        component: 'SysVersion',
+                children: [{
+                        path: "/SysManageMiddle",
+                        name: "APP应用版本管理",
+                        component: 'SysManageMiddle',
                         icon: 'el-icon-menu',
+                        children: [{
+                                path: "/AppVersion",
+                                name: "版本发布管理",
+                                component: 'AppVersion',
+                                icon: 'el-icon-menu',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                            {
+                                path: "/AppManage",
+                                name: "应用包管理",
+                                component: 'AppManage',
+                                icon: 'el-icon-menu',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+
+                        ],
                         meta: {
                             requireAuth: true
                         }
                     },
                     {
-                        path: "/SysManage",
-                        name: "系统包管理",
-                        component: 'SysManage',
+                        path: "/SysManageMiddleActive",
+                        name: "设备系统版本管理",
+                        component: 'SysManageMiddleActive',
                         icon: 'el-icon-menu',
+                        children: [{
+                                path: "/SysVersion1",
+                                name: "设备系统版本管理",
+                                component: 'SysVersion1',
+                                icon: 'el-icon-menu',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                            {
+                                path: "/SysManage",
+                                name: "系统包管理",
+                                component: 'SysManage',
+                                icon: 'el-icon-menu',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+
+                        ],
                         meta: {
                             requireAuth: true
                         }
-                    }
+                    },
                 ]
             },
             {
@@ -409,15 +413,14 @@ if (user) {
                 name: "操作管理",
                 icon: 'el-icon-menu',
                 children: [{
-                        path: "/Log",
-                        name: "操作日志",
-                        component: 'Log',
-                        icon: 'el-icon-menu',
-                        meta: {
-                            requireAuth: true
-                        }
+                    path: "/Log",
+                    name: "操作日志",
+                    component: 'Log',
+                    icon: 'el-icon-menu',
+                    meta: {
+                        requireAuth: true
                     }
-                ]
+                }]
             }
 
         ]

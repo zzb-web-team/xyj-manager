@@ -32,9 +32,8 @@
             <el-col :span="5" style="margin-left:30px;">
                 <div class="user-item">
                     <div class="item-count">{{average_store}}</div>
-                    <div class="item-text" style="margin-top:7px;">平均算力</div>
+                    <div class="item-text" style="margin-top:7px;">日平均算力</div>
                     <div class="item-text" style="margin-top:7px;">
-                        <el-button type="primary" size="mini" @click="getQueryInfo3">查看明细</el-button>
                     </div>
                 </div>
             </el-col>
@@ -62,9 +61,14 @@
                 <div class="item-l">手 机 号:</div>
                 <div class="item-r">{{user_tel}}</div>
             </div>
+
             <div class="item">
                 <div class="item-l">注册时间:</div>
                 <div class="item-r">{{reg_time}}</div>
+            </div>
+            <div class="item">
+                <div class="item-l">首次绑定时间:</div>
+                <div class="item-r">{{reg_time1}}</div>
             </div>
         </div>
     </div>
@@ -77,9 +81,11 @@
             </el-row>
             <el-row type="flex" class="row_active">
                 <el-col :span="24">
-                    <tableBarActive2 id="rebateSetTable1" ref="table1" tooltip-effect="dark" :tableData="tableData1" :clomnSelection="clomnSelection" :rowHeader="rowHeader1" :tableOption="tableOption" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
+                    <tableBarActive2 id="rebateSetTable1" ref="table1" tooltip-effect="dark" @tableSortChange="tableSortChange" :tableData="tableData1" :clomnSelection="clomnSelection" :rowHeader="rowHeader1" :tableOption="tableOption" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
                 </el-col>
             </el-row>
+            <pageNation :pager="pager1" @handleSizeChange="handleSizeChange1" @handleCurrentChange="handleCurrentChange1"></pageNation>
+
         </div>
     </el-dialog>
     <el-dialog :visible.sync="dialogVisible3" width="50%" :before-close="handleClose">
@@ -91,16 +97,18 @@
             </el-row>
             <el-row type="flex" class="row_active">
                 <el-col :span="24">
-                    <tableBarActive2 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
+                    <tableBarActive2 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" @tableSortChange="tableSortChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
                 </el-col>
             </el-row>
+            <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
+
         </div>
     </el-dialog>
     <el-dialog :visible.sync="dialogVisible4" width="50%" :before-close="handleClose">
         <div class="userdetails">
             <el-row style="height:40px;line-height:40px;font-weight: bold;">
                 <el-col :span="24">
-                    用户收益明细
+                    用户设备明细
                 </el-col>
             </el-row>
             <el-row type="flex" class="row_active">
@@ -108,6 +116,8 @@
                     <tableBarActive2 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData2" :clomnSelection="clomnSelection" :rowHeader="rowHeader2" :tableOption="tableOption" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
                 </el-col>
             </el-row>
+            <pageNation :pager="pager2" @handleSizeChange="handleSizeChange2" @handleCurrentChange="handleCurrentChange2"></pageNation>
+
         </div>
     </el-dialog>
 
@@ -130,6 +140,21 @@ import common from "../../common/js/util.js"
 export default {
     data() {
         return {
+            pager: {
+                count: 0,
+                page: 1,
+                rows: 100
+            },
+            pager1: {
+                count: 0,
+                page: 1,
+                rows: 100
+            },
+            pager2: {
+                count: 0,
+                page: 1,
+                rows: 100
+            },
             dialogVisible: false,
             dialogVisible2: false,
             dialogVisible3: false,
@@ -149,6 +174,7 @@ export default {
             user_id: "",
             user_name: "",
             user_tel: "",
+            user_email: "",
             options1: [{
                     value: '0',
                     label: '全部'
@@ -188,10 +214,7 @@ export default {
                     prop: "profit",
                     label: "收益金额"
                 },
-                {
-                    prop: "store",
-                    label: "当日算力"
-                },
+
                 {
                     prop: "ip_value",
                     label: "当日IP值"
@@ -200,10 +223,15 @@ export default {
                     prop: "store_value",
                     label: "当日存储值"
                 },
+                {
+                    prop: "store_value",
+                    label: "当日算力"
+                },
 
                 {
                     prop: "time_stamp",
-                    label: "时间"
+                    label: "时间",
+                    sortable: true,
                 },
 
             ],
@@ -287,22 +315,28 @@ export default {
             bind_start_ts: "",
             bind_end_ts: "",
             user_ids: [],
-            reg_time: ""
+            reg_time: "",
+            reg_time1: "",
+            order: 0,
 
         };
     },
     mounted: function () {
-
         if (this.$route.query.user_id) {
-            this.user_ids[0] = parseInt(this.$route.query.user_id)
+            this.user_ids = parseInt(this.$route.query.user_id)
 
         } else {
-            this.user_ids[0] = ""
+            this.user_ids = ""
         }
         if (this.$route.query.reg_time) {
             this.reg_time = this.$route.query.reg_time
         } else {
             this.reg_time = ""
+        }
+        if (this.$route.query.reg_time1) {
+            this.reg_time1 = this.$route.query.reg_time1
+        } else {
+            this.reg_time1 = ""
         }
 
         this.queryInfo()
@@ -311,7 +345,35 @@ export default {
     },
     methods: {
 
+        //排序
+        tableSortChange(column) {
+            if (column.order == "descending") {
+                this.order = 0
+            } else {
+                this.order = 1
+            }
+            this.getQueryInfo1()
+
+        },
+        //分页
+        handleCurrentChange(val) {
+            this.pager.page = val.val
+            this.getQueryInfo1()
+        },
+        //分页
+        handleCurrentChange1(val) {
+            this.pager1.page = val.val
+            this.getQueryInfo()
+        },
+        //分页
+        handleCurrentChange2(val) {
+            this.pager1.page = val.val
+            this.getQueryInfo2()
+        },
+
         queryInfo() {
+
+            //let routerParam=localStorage.getItem('routerparam')
             let params = new Object()
             params.user_id = this.user_ids
             ptfs_query_list_user_store_list(params).then(res => {
@@ -331,10 +393,10 @@ export default {
                     }
 
                 } else {
-                    this.$message({
-                        message: `${res.err_msg}`,
-                        type: "error"
-                    })
+                    // this.$message({
+                    //     message: `${res.err_msg}`,
+                    //     type: "error"
+                    // })
                 }
 
             }).catch(error => {
@@ -352,7 +414,7 @@ export default {
             }
             param.user_name = "",
                 param.tel_num = "",
-                param.cur_page = 0,
+                param.cur_page = this.pager.page - 1,
                 ptfs_query_user_store_list(param).then(res => {
                     console.log(res)
                     if (res.data.store_list) {
@@ -375,9 +437,10 @@ export default {
                 param.user_id = ""
             }
             param.profit_type = 0,
-                param.cur_page = 0,
+                param.cur_page = this.pager1.page - 1,
                 param.nick_name = "",
-                param.start_time = ((new Date(new Date().toLocaleDateString()).getTime()) - 7 * 24 * 60 * 60 * 1000) / 1000,
+                param.order = this.order
+            param.start_time = ((new Date(new Date().toLocaleDateString()).getTime()) - 7 * 24 * 60 * 60 * 1000) / 1000,
                 param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000;
 
             ptfs_query_user_total_profit_everyday(param).then(res => {
@@ -397,6 +460,7 @@ export default {
                         nowarr[i].time_stamp = this.common.getTimes(nowarr[i].time_stamp * 1000)
                     }
                     this.tableData1 = nowarr
+                    this.pager1.count = res.data.total_num
                 }
 
             }).catch(error => {
@@ -413,8 +477,9 @@ export default {
             } else {
                 param.user_id = ""
             }
+            param.order = this.order
             param.dev_sn = "",
-                param.cur_page = 0,
+                param.cur_page = this.pager.page - 1,
                 // param.start_time = 0,
                 // param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000
                 param.start_time = ((new Date(new Date().toLocaleDateString()).getTime()) - 7 * 24 * 60 * 60 * 1000) / 1000,
@@ -433,6 +498,7 @@ export default {
 
                     }
                     this.tableData = nowarr
+                    this.pager.count = res.data.total_num
                 }
 
             }).catch(error => {
@@ -458,6 +524,7 @@ export default {
                 dev_ip: "",
                 ipfs_id: "",
                 dev_sn: "",
+                order: this.order
 
             }
 
@@ -496,6 +563,8 @@ export default {
                             }
                         }
                         this.tableData2 = res.data.dev_list;
+                        this.pager2.count = res.data.total_num
+
                     }
                 })
                 .catch(error => {
@@ -541,6 +610,7 @@ export default {
         display: flex;
         justify-content: center;
         flex-direction: column;
+        height: 90px;
 
         .item-count,
         .item-text {

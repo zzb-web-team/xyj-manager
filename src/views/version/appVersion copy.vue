@@ -233,11 +233,12 @@ export default {
         time: '',
         date: ''
       },
+      
       assigning: '',
       timing: '',
-      operatingStatus: true,
       dialogVisible: false,
       dialogVisible2: false,
+      operatingStatus: true,
       rowHeader: [
         {
           prop: "version",
@@ -298,7 +299,7 @@ export default {
     handleButton(val, rows) {
       if (val == "withdraw") {
         this.dialogVisible2 = true;
-      }
+      } 
     },
     add() {
       this.dialogVisible = true;
