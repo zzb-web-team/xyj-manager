@@ -200,8 +200,7 @@ export default {
   .el-table .cell {
     text-align: center;
   }
-  width: 100%;
-  min-width: 1600px;
+
 
   .devide_title {
     width: 100%;
@@ -218,13 +217,7 @@ export default {
   }
 
   .device_form {
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    margin-top: 20px;
-    background: #f2f2f2;
-    padding: 15px 30px;
-    box-sizing: border-box;
+
 
     .el-form-item__label {
       white-space: nowrap;

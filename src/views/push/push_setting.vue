@@ -489,10 +489,7 @@ export default {
   }
 
   .device_form {
-    width: 100%;
-    height: auto;
-    margin-top: 20px;
-    padding: 15px 30px;
+ 
 
     .title {
       height: 40px;
@@ -580,5 +577,8 @@ export default {
 }
 .myself-container.pushing .device_form .el-form-item {
   margin-bottom: 10px;
+}
+.pushing{
+  padding-bottom: 30px;
 }
 </style>

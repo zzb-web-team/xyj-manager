@@ -52,7 +52,7 @@
                         <el-date-picker v-model="bind_end_ts" style="width:150px;" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" style="margin-left:68px;" @click="search">确定</el-button>
+                        <el-button type="primary" style="" @click="search">确定</el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="resetInfo">重置</el-button>
@@ -68,22 +68,22 @@
             </el-col>
         </el-row>
         <el-row type="flex" class="row_active">
-            <el-col :span="24">
-                <el-table :data="tableData" border style="width: 100%">
-                    <el-table-column fixed prop="dev_sn" label="设备SN" width="150"></el-table-column>
-                    <el-table-column :formatter="formatDevType" prop="dev_type" label="设备类型" width="120"></el-table-column>
-                    <el-table-column prop="rom_version" label="ROM" width="120"></el-table-column>
-                    <el-table-column prop="dev_name" label="设备名称" width="120"></el-table-column>
-                    <el-table-column prop="dev_mac" label="MAC地址" width="120"></el-table-column>
-                    <el-table-column prop="cpu_id" label="CPU-ID" width="300"></el-table-column>
-                    <el-table-column prop="total_cap" :formatter="formatDevCap" label="总容量" width="120"></el-table-column>
-                    <el-table-column prop="dev_ip" label="设备IP" width="180"></el-table-column>
-                    <el-table-column prop="online_state" :formatter="formatState" label="设备状态" width="180"></el-table-column>
-                    <el-table-column prop="bind_flag" :formatter="formatBind" label="是否绑定" width="120"></el-table-column>
-                    <el-table-column prop="bind_timestamp" :formatter="formatDevTime" label="绑定时间" sortable width="180"></el-table-column>
-                    <el-table-column prop="ipfs_id" label="节点ID" width="180"></el-table-column>
-                    <el-table-column prop="bind_user_id" label="绑定用户ID" width="180"></el-table-column>
-                    <el-table-column fixed="right" label="操作" width="200">
+            <el-col>
+                <el-table :data="tableData" border width="100%" >
+                    <el-table-column prop="dev_sn" label="设备SN" ></el-table-column>
+                    <el-table-column :formatter="formatDevType" prop="dev_type" label="设备类型" ></el-table-column>
+                    <el-table-column prop="rom_version" label="ROM" ></el-table-column>
+                    <el-table-column prop="dev_name" label="设备名称" ></el-table-column>
+                    <el-table-column prop="dev_mac" label="MAC地址" ></el-table-column>
+                    <el-table-column prop="cpu_id" label="CPU-ID" ></el-table-column>
+                    <el-table-column prop="total_cap" :formatter="formatDevCap" label="总容量"></el-table-column>
+                    <el-table-column prop="dev_ip" label="设备IP" ></el-table-column>
+                    <el-table-column prop="online_state" :formatter="formatState" label="设备状态" ></el-table-column>
+                    <el-table-column prop="bind_flag" :formatter="formatBind" label="是否绑定" ></el-table-column>
+                    <el-table-column prop="bind_timestamp" :formatter="formatDevTime" label="绑定时间" sortable ></el-table-column>
+                    <el-table-column prop="ipfs_id" label="节点ID"></el-table-column>
+                    <el-table-column prop="bind_user_id" label="绑定用户ID" ></el-table-column>
+                    <el-table-column label="操作" width="200px">
                         <template slot-scope="scope">
                             <el-button @click="shut(scope.row)" type="text" size="small">关机</el-button>
                             <el-button type="text" @click="restart(scope.row)" size="small">重启</el-button>
@@ -711,9 +711,7 @@ export default {
     text-align: center;
   }
 
-  width: 100%;
-  min-width: 1600px;
-
+  background: #ffffff;
   .devide_title {
     width: 100%;
     height: auto;
@@ -729,13 +727,7 @@ export default {
   }
 
   .device_form {
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    margin-top: 20px;
-    background: #f2f2f2;
-    padding: 15px 30px;
-    box-sizing: border-box;
+  
 
     .el-form-item__label {
       white-space: nowrap;

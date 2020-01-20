@@ -2,23 +2,26 @@
 <section class="myself-container">
     <div class="devide_table">
         <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-start;">
-            <el-col style="display: flex;justify-content: flex-start;">
+            <el-col :span="2" style="display: flex;justify-content: flex-start;">
                 <el-button type="primary" @click="upload">上传应用包</el-button>
+            </el-col>
+                <el-col :span="2">
+                <el-button type="primary" @click="golink()" >版本发布</el-button>
             </el-col>
         </el-row>
         <el-row type="flex" class="row_active">
             <el-col :span="24">
                 <el-table :data="tableData" border style="width: 100%">
 
-                    <el-table-column prop="packet_name" label="应用包名"   width="120" >
+                    <el-table-column prop="packet_name" label="应用包名"   width="150" >
                     </el-table-column>
-                    <el-table-column prop="packet_size" label="文件大小" width="120">
+                    <el-table-column prop="packet_size" label="文件大小" width="90">
                     </el-table-column>
                     <el-table-column prop="packet_md5" label="MD5" width="300">
                     </el-table-column>
-                    <el-table-column prop="packet_hash" label="hashid" width="300">
+                    <el-table-column prop="packet_hash" label="hashid" width="400">
                     </el-table-column>
-                    <el-table-column prop="ptfs_file_upload_status" label="是否上传到IPFS节点" width="300px">
+                    <el-table-column prop="ptfs_file_upload_status" label="是否上传到IPFS节点" width="150px">
                         <template slot-scope="scope">
                             <div style="display: flex;justify-content: center;align-items: center;">
                                 <!-- {{scope.row}} -->
@@ -31,15 +34,18 @@
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="packet_version" label="版本号" width="120">
+                    <el-table-column prop="packet_version" label="版本号" >
                     </el-table-column>
-                    <el-table-column prop="packet_description" label="文件描述" >
+                    <el-table-column  label="文件描述" >
+                        <template slot-scope="scope">
+                            <div style="overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:280px;margin:0 auto;">{{scope.row.packet_description}}</div>
+                        </template>
                     </el-table-column>
-                    <el-table-column prop="time_create" label="上传日期" width="200">
+                    <el-table-column prop="time_create" label="上传日期" width="170">
                     </el-table-column>
-                    <el-table-column prop="time_update" label="最近修改" width="200">
+                    <el-table-column prop="time_update" label="最近修改" width="170">
                     </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="100">
+                    <el-table-column  label="操作" width="200" >
                         <template slot-scope="scope">
                             <el-button @click="handleEdit(scope.row)" type="text" size="small">修改</el-button>
                             <el-button type="text" size="small" @click="handleDelete(scope.row)">删除</el-button>
@@ -60,7 +66,7 @@
     <!-- 详情弹窗 -->
     <el-dialog title="新增发布" :visible.sync="dialog" custom-class="customWidth" width="30%">
         <div class="add-sdk">
-            <div class="item" style="align-items: flex-start;">
+            <div class="item" style=" align-items: flex-start; display: flex;justify-content: center;">
                 <div class="item_l">应用包：</div>
                 <div class="item-r" style="position: relative;">
                     <el-button class="choose-file" size="mini">请选择要上传的文件</el-button>
@@ -120,7 +126,8 @@ import {
   queryPacket,
   uploadpftsNew,
   editDescription,
-  deletePacket
+  deletePacket,
+   hostUrl
 } from "../../api/api.js";
 export default {
   data() {
@@ -166,6 +173,12 @@ export default {
     this.queryInfo();
   },
   methods: {
+      //发布设置跳转
+    golink() {
+      this.$router.push({
+        path: "/AppVersion"
+      });
+    },
     //确认修改、
     onEdit() {
       let param = {
@@ -341,7 +354,7 @@ export default {
         formData.append("end", end);
         formData.append("totalSize", totalSize);
         formData.append("total", tota_temp);
-        var url = "http://39.100.131.247/admin/uploadzip";
+        var url = hostUrl+ "/admin/uploadzip";
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = onchange;
         xhr.open("POST", url);
@@ -419,6 +432,11 @@ export default {
               nowarractive[i].time_update = this.common.getTimes(
                 parseInt(nowarractive[i].time_update * 1000)
               );
+              if(nowarractive[i].packet_size==0){
+                nowarractive[i].packet_size=0
+              }else{
+                nowarractive[i].packet_size=this.common.formatByteActive(nowarractive[i].packet_size)
+              }
               if (nowarractive[i].packet_description.length >= 20) {
                 nowarractive[i].packet_description =
                   nowarractive[i].packet_description.substr(0, 20) + "...";
@@ -505,8 +523,7 @@ export default {
     text-align: center;
   }
 
-  width: 100%;
-  min-width: 1600px;
+
 
   .devide_title {
     width: 100%;
@@ -523,13 +540,7 @@ export default {
   }
 
   .device_form {
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    margin-top: 20px;
-    background: #f2f2f2;
-    padding: 15px 30px;
-    box-sizing: border-box;
+   
 
     .el-form-item__label {
       white-space: nowrap;

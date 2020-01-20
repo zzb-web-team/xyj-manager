@@ -2,7 +2,7 @@
 <section class="myself-container">
     <div class="user-title" style="margin-bottom:20px;">
         <el-button-group>
-            <el-button v-show="!shoudzyx" @click="today()">今天</el-button>
+            <!-- <el-button v-show="!shoudzyx" @click="today()">今天</el-button> -->
             <el-button v-show="!shoudzyx" @click="yesterday()">昨天</el-button>
             <el-button v-show="!shoudzyx" @click="sevendat()">近7天</el-button>
             <el-button v-show="!shoudzyx" @click="thirtyday()">近30天</el-button>
@@ -14,34 +14,34 @@
 
     </div>
     <div class="devive_tab">
-      <div class="switch_tab">
       
-            <el-radio-group v-model="radio1" @change="onchangeTab">
-      <el-radio-button label="在线"></el-radio-button>
-      <el-radio-button label="离线"></el-radio-button>
-     
-    </el-radio-group>
-        
-      </div>
-        <div class="device_tab_on"  v-if="showType">
+        <div class="device_tab_on" v-if="showType">
             <div class="user-title">
                 <el-row style="margin-top:20px;">
                     <el-col :span="12">
                         <div class="user-item">
-                            <div class="item-count">{{onlinePer}}%</div>
+                            <div class="item-count">{{onlinePer}}</div>
                             <div class="item-text">设备在线率</div>
                         </div>
                     </el-col>
                     <el-col :span="12" style="">
                         <div class="user-item">
-                            <div class="item-count">{{avgOnlineTimeInSec}}s</div>
+                            <div class="item-count">{{avgOnlineTimeInSec}}</div>
                             <div class="item-text">设备平均在线时长</div>
                         </div>
                     </el-col>
                 </el-row>
             </div>
-            <div class="device_form">
-                <div id="myEchart" style="width: 100%; height: 300px;margin-top:20px;"></div>
+            <div class="device_form" >
+            <div class="switch_tab">
+            <el-radio-group v-model="radio1" @change="onchangeTab"  style="display: flex;justify-content: flex-start;">
+                <el-radio-button label="在线"></el-radio-button>
+                <el-radio-button label="离线"></el-radio-button>
+                 <el-button style="margin-left:20px;" type="text" @click="toexportExcel">导出</el-button>
+            </el-radio-group>
+           
+        </div>
+                <div id="myEchart" style="width: 100%; height: 300px;margin-top:50px;"></div>
             </div>
             <div class="devide_table">
                 <el-row type="flex" class="row_active">
@@ -61,20 +61,28 @@
                 <el-row style="margin-top:20px;">
                     <el-col :span="12">
                         <div class="user-item">
-                            <div class="item-count">{{offlinePer}}%</div>
+                            <div class="item-count">{{offlinePer}}</div>
                             <div class="item-text">设备离线率</div>
                         </div>
                     </el-col>
-                    <el-col :span="12" >
+                    <el-col :span="12">
                         <div class="user-item">
-                            <div class="item-count">{{avgofflineTimeInSec}}s</div>
+                            <div class="item-count">{{avgofflineTimeInSec}}</div>
                             <div class="item-text">设备平均离线时长</div>
                         </div>
                     </el-col>
                 </el-row>
             </div>
-            <div class="device_form">
-                <div id="myEchart1" style="width: 100%; height: 300px;margin-top:20px;"></div>
+            <div class="device_form device_form_active">
+                <div class="switch_tab">
+            <el-radio-group v-model="radio1" @change="onchangeTab"  style="display: flex;justify-content: flex-start;">
+                <el-radio-button label="在线"></el-radio-button>
+                <el-radio-button label="离线"></el-radio-button>
+                 <el-button style="margin-left:20px;" type="text" @click="toexportExcel">导出</el-button>
+            </el-radio-group>
+           
+        </div>
+                <div id="myEchart1" style="width: 100%; height: 300px;margin-top:50px;"></div>
             </div>
             <div class="devide_table">
                 <el-row type="flex" class="row_active">
@@ -90,7 +98,6 @@
             </div>
         </div>
     </div>
-  
 
 </section>
 </template>
@@ -104,6 +111,7 @@ import {
   query_playdata_table
 } from "../../api/api";
 import pageNation from "../../components/pageNation";
+import common from "../../common/js/util.js";
 
 export default {
   data() {
@@ -220,6 +228,7 @@ export default {
       onLineY: [],
       offLineX: [],
       offLineY: [],
+      tableData2: [],
       pager: {
         count: 0,
         page: 1,
@@ -234,7 +243,8 @@ export default {
       avgOnlineTimeInSec: 0,
       offlinePer: 0,
       avgofflineTimeInSec: 0,
-      flag: 1
+      flag: 1,
+      pageActives: 1
     };
   },
   mounted() {
@@ -415,13 +425,113 @@ export default {
             let tempArr = res.data.list;
             for (var i = 0; i < tempArr.length; i++) {
               tempArr[i].percent = (tempArr[i].percent * 100).toFixed(4) + "%";
+              if (tempArr[i].timeStamp == 0) {
+                tempArr[i].timeStamp = 0;
+              } else {
+                tempArr[i].timeStamp = this.common.getTimes(
+                  tempArr[i].timeStamp * 1000
+                );
+              }
+
+              if (tempArr[i].avgTime == 0) {
+                tempArr[i].avgTime = 0;
+              } else {
+                tempArr[i].avgTime =
+                  (tempArr[i].avgTime / 60 / 60).toFixed(2) + "h";
+              }
             }
             this.tableData = tempArr;
             this.pager.count = res.data.totalCnt;
+          } else {
+            this.$message({
+              message: "服务出错",
+              type: "error"
+            });
           }
         })
         .catch(error => {
           console.log(error);
+        });
+    },
+    exportExcel() {
+      require.ensure([], () => {
+        const { export_json_to_excel } = require("../../excel/Export2Excel");
+        const tHeader = [
+          "日期",
+          "总设备",
+          "设备在线",
+          "设备在线率",
+          "平均在线时长"
+        ];
+        // 上面设置Excel的表格第一行的标题
+        const filterVal = [
+          "timeStamp",
+          "totalDevCnt",
+          "onlineDevCnt",
+          "percent",
+          "avgTime"
+        ];
+        // 上面的index、nickName、name是tableData里对象的属性
+        const list = this.tableData2; //把data里的tableData存到list
+        const data = this.formatJson(filterVal, list);
+        export_json_to_excel(tHeader, data, "设备趋势图");
+      });
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => v[j]));
+    },
+    toexportExcel() {
+      let startTime = new Date().getTime() / 1000;
+      let endTime = (new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
+      if (this.valueTime4) {
+        if (this.valueTime4 == "") {
+          startTime = new Date().getTime() / 1000;
+          endTime = (new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
+        } else {
+          endTime = Math.floor(this.valueTime4[1].getTime() / 1000);
+          startTime = Math.floor(this.valueTime4[0].getTime() / 1000);
+        }
+      } else {
+        startTime = new Date().getTime() / 1000;
+        endTime = (new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
+      }
+      let param = {
+        start_ts: this.starttime,
+        end_ts: this.endtime,
+        flag: 1,
+        pageNo: this.pageActives - 1,
+        pageSize: 10
+      };
+      device_online_table(param)
+        .then(res => {
+          if (res.status == 0) {
+            console.log(res);
+
+            let tempArr = res.data.list;
+            for (var i = 0; i < tempArr.length; i++) {
+              tempArr[i].percent = (tempArr[i].percent * 100).toFixed(4) + "%";
+            }
+            this.tableData2 = this.tableData2.concat(tempArr);
+
+            if (this.pageActives >= res.data.totalPageCnt) {
+              console.log(this.pageActives);
+              this.common.monitoringLogs("导出", "导出设备趋势图", 1);
+              this.exportExcel();
+            } else {
+              this.pageActives++;
+              this.toexportExcel();
+            }
+          } else {
+            this.common.monitoringLogs("导出", "导出设备趋势图", 0);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          this.$message({
+            message: "服务出错",
+            type: "error"
+          });
+          this.common.monitoringLogs("导出", "导出设备趋势图", 0);
         });
     },
     //离线线table
@@ -441,8 +551,8 @@ export default {
         endTime = (new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
       }
       let param = {
-        start_ts: parseInt(startTime),
-        end_ts: parseInt(endTime),
+        start_ts: this.starttime,
+        end_ts: this.endtime,
         flag: 0,
         pageNo: this.pager1.page - 1,
         pageSize: 10
@@ -451,6 +561,24 @@ export default {
         .then(res => {
           if (res.status == 0) {
             console.log(res);
+            let tempArr = res.data.list;
+            for (var i = 0; i < tempArr.length; i++) {
+              tempArr[i].percent = (tempArr[i].percent * 100).toFixed(4) + "%";
+              if (tempArr[i].timeStamp == 0) {
+                tempArr[i].timeStamp = 0;
+              } else {
+                tempArr[i].timeStamp = this.common.getTimes(
+                  tempArr[i].timeStamp * 1000
+                );
+              }
+
+              if (tempArr[i].avgTime == 0) {
+                tempArr[i].avgTime = 0;
+              } else {
+                tempArr[i].avgTime =
+                  (tempArr[i].avgTime / 60 / 60).toFixed(2) + "h";
+              }
+            }
             this.tableData1 = res.data.list;
             this.pager1.count = res.data.totalCnt;
           }
@@ -483,8 +611,13 @@ export default {
         .then(res => {
           console.log(res);
           if (res.status == 0) {
-            this.onlinePer = res.data.onlinePer;
-            this.avgOnlineTimeInSec = res.data.avgOnlineTimeInSec;
+            this.onlinePer = res.data.onlinePer * 100 + "%";
+            if (res.data.avgOnlineTimeInSec == 0) {
+              this.avgOnlineTimeInSec = 0;
+            } else {
+              this.avgOnlineTimeInSec =
+                (res.data.avgOnlineTimeInSec / 60 / 60).toFixed(2) + "h";
+            }
             this.onLineX = [];
             this.onLineX = res.data.onlineCntArray;
             let temp = [];
@@ -495,7 +628,7 @@ export default {
             this.onLineY = [];
             this.onLineY = temp;
 
-            setTimeout(this.drawLine(this.onLineX, this.onLineY), 0);
+            this.drawLine(this.onLineX, this.onLineY);
             // this.drawLine(this.AccelerateX,this.AccelerateY);
           }
         })
@@ -529,7 +662,12 @@ export default {
           console.log(res);
           if (res.status == 0) {
             this.offlinePer = res.data.onlinePer;
-            this.avgofflineTimeInSec = res.data.avgOnlineTimeInSec;
+            if (res.data.avgOnlineTimeInSec == 0) {
+              this.avgOnlineTimeInSec = 0;
+            } else {
+              this.avgOnlineTimeInSec =
+                (res.data.avgOnlineTimeInSec / 60 / 60).toFixed(2) + "h";
+            }
             this.offLineX = [];
             this.offLineX = res.data.onlineCntArray;
             let temp = [];
@@ -540,7 +678,7 @@ export default {
             this.offLineY = [];
             this.offLineY = temp;
 
-            setTimeout(this.drawLine1(this.offLineX, this.offLineY), 0);
+            this.drawLine1(this.offLineX, this.offLineY);
             // this.drawLine(this.AccelerateX,this.AccelerateY);
           }
         })
@@ -636,28 +774,24 @@ export default {
   .devive_tab {
     width: 100%;
     height: auto;
+
     .switch_tab {
-      position: absolute;
-      right: 8%;
-      top: 300px;
+      
+      right: 9%;
+      height: 40px;
+      float:right;
+      // background: red;
     }
+
     .device_tab_on {
       margin-top: 35px;
     }
   }
 
-  width: 100%;
-  min-width: 1600px;
-
   .device_form {
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    margin-top: 20px;
-    background: #f2f2f2;
-    padding: 15px 30px;
-    box-sizing: border-box;
-    margin-top: 50px;
+    &.device_form_active {
+      position: relative;
+    }
 
     .bottom {
       margin-top: 20px;

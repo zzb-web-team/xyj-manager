@@ -78,7 +78,7 @@
             <el-form-item label="发布设备">
                 <el-radio-group v-model="form.user" @change="changeAssign">
                     <el-radio label="全网用户" border :disabled="allType"></el-radio>
-                    <el-radio label="指定用户" border :disabled="oneType"></el-radio>
+                    <el-radio label="指定设备" border :disabled="oneType"></el-radio>
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="      " v-if="allType">
@@ -108,10 +108,9 @@
     <!--批量导入-->
     <el-dialog class="dialog_active2" :visible.sync="dialogVisible4">
         <div>
-            <el-upload class="upload-demo" ref="upload" :limit="1" action="http://39.100.131.247/packet/uploadtxt" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :on-success="handleAvatarSuccess" name="excel" :auto-upload="false">
+            <el-upload class="upload-demo" ref="upload" :limit="1" :action="UploadUrl()" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :on-success="handleAvatarSuccess" name="excel" :auto-upload="false">
                 <el-button slot="trigger" size="small" class="MyctiveButton" type="primary">上传Excel文件</el-button>
                 <el-button type="primary" @click="down" plain id="dwonexcel">下载模板</el-button>
-                <!-- <a href="data:text/plain;charset=utf-8,http://39.100.131.247/static/app_user.txt" download="模板"></a> -->
                 <el-button style="position: absolute;left: 37px;bottom: 23px;width:85px;" size="small" type="success" @click="submitUpload">导 入</el-button>
                 <el-button style="position: absolute;left: 130px;bottom: 23px;width:85px;" size="small" type="success" :disabled="noClick" @click="submitUploadOK">确定</el-button>
             </el-upload>
@@ -158,7 +157,12 @@
                 <span>{{form1.timeActive}}</span>
             </el-form-item>
             <el-form-item label="发布设备:">
-                <span>全网用户</span>
+                <span v-if="this.userType=='全网用户'">{{userType}}</span>
+                <div  v-else>
+                  <span>指定设备</span>
+                   <el-button type="text" @click="getBackInfo">发布清单</el-button>
+                </div>
+
             </el-form-item>
             <p><b>版本撤回选项</b></p>
             <el-form-item label="撤回至版本">
@@ -206,7 +210,8 @@ import {
   publishRom,
   publishuser,
   rollbackRom,
-  publishuserRom
+  publishuserRom,
+  hostUrl
 } from "../../api/api.js";
 import tableBarActive2 from "../../components/tableBarActive2";
 import tableBarActive2pub from "../../components/tableBarActive2pub";
@@ -215,6 +220,8 @@ import pageNation from "../../components/pageNation";
 export default {
   data() {
     return {
+      backPushkey:"",
+      userType: "",
       operatingStatus1: true,
       tableType: false,
       dialogVisible5: false,
@@ -317,7 +324,7 @@ export default {
           label: "状态"
         },
         {
-          prop: "timingActive",
+          prop: "time_create",
           label: "发布时间"
         },
         // {
@@ -331,7 +338,7 @@ export default {
         //     label: "发布时间"
         // },
         {
-          prop: "time_update",
+          prop: "timingActive",
           label: "修改时间"
         }
       ],
@@ -437,8 +444,19 @@ export default {
     // this.queryPublishuser()
   },
   methods: {
+       //导出地址变量
+        UploadUrl(){
+            return hostUrl+"/url_mgmt/excel_url"
+        },
+    //撤回清单
+    getBackInfo(){
+      this.pagePublic=0
+      this.blackList()
+
+    },
     //撤回
-    onSubmitBack() {
+    onSubmitBack(val) {
+   
       let timetype = 1;
       let timeNums = 0;
       if (this.form1.time == "立即撤回") {
@@ -446,7 +464,14 @@ export default {
         timeNums = 0;
       } else {
         timetype = 0;
-        timeNums = this.form1.date / 1000;
+        timeNums = parseInt(this.form1.date / 1000);
+        if (timeNums <= Date.parse(new Date()) / 1000) {
+          this.$message({
+            message: "指定时间不能小于当前时间",
+            type: "error"
+          });
+          return false;
+        }
       }
       if (this.form1.backversion == "") {
         this.$message({
@@ -465,8 +490,7 @@ export default {
         timing: timeNums,
         id: this.backId,
         push_key: this.pushKey,
-        dev_type:this.dev_type,
-
+        dev_type: this.dev_type
       };
       console.log(this.form1);
       rollbackRom(param)
@@ -549,6 +573,32 @@ export default {
             } else {
               this.pagePublic++;
               this.handleButton2(val, row);
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    //发布清单
+    blackList() {
+      this.dialogVisible5 = true;
+      let param = {
+        push_key: this.backPushkey,
+        page: this.pagePublic
+      };
+      publishuserRom(param)
+        .then(res => {
+          if (res.status == 0) {
+            let tempArr = res.result.cols;
+            this.pubUser = this.pubUser.concat(tempArr);
+
+            if (res.result.les_count == 0) {
+              console.log(this.pubUser);
+              return false;
+            } else {
+              this.pagePublic++;
+              this.blackList();
             }
           }
         })
@@ -668,7 +718,7 @@ export default {
         });
         return false;
       }
-      if (this.form.user == "指定用户") {
+      if (this.form.user == "指定设备") {
         if (this.form.version == "") {
           this.$message({
             message: "请输入指定账号",
@@ -745,7 +795,7 @@ export default {
               );
 
               if (nowArr[i].push_type == "灰度发布") {
-                nowArr[i].push_type_active = "指定用户";
+                nowArr[i].push_type_active = "指定设备";
               } else {
                 nowArr[i].push_type_active = "全网发布";
               }
@@ -777,6 +827,9 @@ export default {
                   nowArr[i].timing * 1000
                 );
               }
+              if (nowArr[i].act_type== 1) {
+                nowArr[i].timingActive = "-"
+              }
               if (nowArr[i].atonce == 0) {
                 nowArr[i].atonceactive = "定时发布";
               } else {
@@ -801,7 +854,7 @@ export default {
         this.oneType = true;
         this.allType = false;
       } else {
-        this.form.user = "指定用户";
+        this.form.user = "指定设备";
         this.oneType = false;
         this.allType = true;
       }
@@ -861,7 +914,9 @@ export default {
       this.showState = !this.showState;
     },
     handleButton(val, rows) {
-      console.log(rows);
+     
+      this.backPushkey=rows.push_key
+      this.userType = "全网用户";
       this.dialogVisible2 = true;
       this.romVersion = rows.rom_version;
       this.oldversion = rows.rom_version;
@@ -918,7 +973,8 @@ export default {
     //灰度撤回
 
     handleButton1(val, rows) {
-      console.log(rows);
+      this.backPushkey=rows.push_key
+        this.userType = "指定设备";
       this.dialogVisible2 = true;
       if (rows.dev_type == 0) {
         this.form1.pushTabActive = "RK3328";
@@ -1055,7 +1111,7 @@ export default {
     },
     errormove(err, file, fileList) {},
     down() {
-      var url = "http://39.100.131.247/static/app_user.xls";
+      var url = hostUrl +"/static/app_user.xls";
       // window.location.href = url;
       window.open(url, "_blank");
     }
@@ -1136,8 +1192,7 @@ export default {
     text-align: center;
   }
 
-  width: 100%;
-  min-width: 1600px;
+
 
   .devide_table {
     width: 100%;

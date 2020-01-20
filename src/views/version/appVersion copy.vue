@@ -346,8 +346,7 @@ export default {
   .el-table .cell {
     text-align: center;
   }
-  width: 100%;
-  min-width: 1600px;
+
 
   .devide_table {
     width: 100%;

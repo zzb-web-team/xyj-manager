@@ -4,15 +4,22 @@ let base = '';
 
 // let ownbase ='http://xyj.grapefruitcloud.com' //外网接口
 
-let ownbase = 'http://39.100.131.247' //外网接口
-let ownbase1 ='http://test.zzb.com' //外网接口
-
-export default {
-    customData: function() {
-        return ownbase;
-    }
-
+var href = window.location.href
+if (href.indexOf('xyj.grapefruitcloud.com') >= 0) {
+    var ownbase = 'http://xyj.grapefruitcloud.com' //PHP服务域名
+} else {
+    var ownbase = 'http://zzb.onezen.net' //PHP服务域名
 }
+
+
+// export default {
+//     customData: function() {
+//         return ownbase;
+//     }
+
+// }
+
+export const hostUrl = ownbase;
 
 //2019/11/21
 //登录
@@ -428,10 +435,10 @@ export const file_dlinfo = params => { return axios.post(`${ownbase}/file_bgmgr/
 
 //西柚机系统管理 
 //查询备用地址配置
-export const query_domain_list = params => { return axios.post(`${ownbase1}/domain/query_domain_list `, params).then(res => res.data); };
+export const query_domain_list = params => { return axios.post(`${ownbase}/domain/query_domain_list `, params).then(res => res.data); };
 
 //修改备用地址配置
-export const modify_domain_list = params => { return axios.post(`${ownbase1}/domain/modify_domain_list `, params).then(res => res.data); };
+export const modify_domain_list = params => { return axios.post(`${ownbase}/domain/modify_domain_list `, params).then(res => res.data); };
 
 //PTFS节点管理
 //节点控制台

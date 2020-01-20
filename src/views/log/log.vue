@@ -45,7 +45,7 @@
                 </el-col>
             </el-row>
         </div>
-        <div class="devide_pageNation" style="display: flex;justify-content: flex-end;">
+        <div class="devide_pageNation" style="display: flex;justify-content: flex-end; margin-bottom:30px;">
 
             <el-row type="flex">
                 <el-col :span="6">
@@ -448,9 +448,7 @@ export default {
 }
 
 .myself-container {
-  width: 100%;
-  min-width: 1600px;
-  text-align: left;
+
 
   .devide_title {
     width: 100%;
@@ -467,13 +465,7 @@ export default {
   }
 
   .device_form {
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    margin-top: 20px;
-    background: #ffffff;
-    padding: 15px 30px;
-    box-sizing: border-box;
+
 
     .el-form-item__label {
       white-space: nowrap;

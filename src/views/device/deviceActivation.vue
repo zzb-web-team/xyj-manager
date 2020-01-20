@@ -40,22 +40,22 @@
             <div v-show="showState">
                 <el-row type="flex" class="row_activess">
                     <el-form-item label="设备激活：" style="display: flex;">
-                        <el-select v-model="is_activated" placeholder="请选择">
+                        <el-select v-model="is_activated" placeholder="请选择" style="width:180px;">
                             <el-option v-for="item in actives" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
 
                     <el-form-item label="新建时间：" style="display: flex;">
-                        <el-date-picker style="width: 200px;" v-model="import_start_ts" type="datetime" placeholder="选择开始日期时间"></el-date-picker> -
-                        <el-date-picker style="width: 200px;" v-model="import_end_ts" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
+                        <el-date-picker style="width: 180px;" v-model="import_start_ts" type="datetime" placeholder="选择开始日期时间"></el-date-picker> -
+                        <el-date-picker style="width: 180px;" v-model="import_end_ts" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
                     </el-form-item>
                     <el-form-item label="激活时间：" style="display: flex;">
-                        <el-date-picker style="width: 200px;" v-model="activate_start_ts" type="datetime" placeholder="选择开始日期时间"></el-date-picker> -
-                        <el-date-picker style="width: 200px;" v-model="activate_end_ts" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
+                        <el-date-picker style="width: 180px;" v-model="activate_start_ts" type="datetime" placeholder="选择开始日期时间"></el-date-picker> -
+                        <el-date-picker style="width:180px;" v-model="activate_end_ts" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
                     </el-form-item>
 
                     <el-form-item>
-                        <el-button type="primary" style="margin-left:82px;" @click="search">确定</el-button>
+                        <el-button type="primary" style="margin-left:10px;" @click="search">确定</el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary">重置</el-button>
@@ -78,16 +78,16 @@
         <el-row type="flex" class="row_active">
             <el-col :span="24">
                 <el-table :data="tableData" border style="width: 100%">
-                    <el-table-column fixed prop="dev_sn" label="设备SN" width="150"></el-table-column>
+                    <el-table-column fixed prop="dev_sn" label="设备SN" width="200"></el-table-column>
                     <el-table-column prop="dev_type" :formatter="formatDevType" label="设备类型" width="120"></el-table-column>
                     <el-table-column prop="rom_version" label="ROM" width="120"></el-table-column>
-                    <el-table-column prop="dev_mac" label="MAC地址" width="120"></el-table-column>
+                    <el-table-column prop="dev_mac" label="MAC地址" width="200"></el-table-column>
                     <el-table-column prop="cpu_id" label="CPU-ID" width="300"></el-table-column>
                     <el-table-column prop="total_cap" label="总容量" :formatter="formatDevCap" width="120"></el-table-column>
-                    <el-table-column prop="import_ts" label="新建时间" sortable :formatter="formatterImport" width="180"></el-table-column>
+                    <el-table-column prop="import_ts" label="新建时间" sortable :formatter="formatterImport" ></el-table-column>
                     <el-table-column prop="is_activated" label="设备激活" :formatter="formatterType" width="120"></el-table-column>
-                    <el-table-column prop="activate_ts" label="激活时间" sortable width="180" :formatter="formatterActive"></el-table-column>
-                    <el-table-column fixed="right" label="操作" width="200">
+                    <el-table-column prop="activate_ts" label="激活时间" sortable  :formatter="formatterActive"></el-table-column>
+                    <el-table-column fixed="right" label="操作" >
                         <template slot-scope="scope">
                             <el-button v-show="scope.row.is_activated!==100" @click="open(scope.row)" type="text" size="small">关机</el-button>
                             <el-button v-show="scope.row.is_activated!==100" type="text" @click="open(scope.row)" size="small">重启</el-button>
@@ -211,7 +211,7 @@
       </div>
     </el-dialog> -->
     <el-dialog :visible.sync="dialogVisible3" width="20%" :before-close="handleClose">
-        <el-upload style="text-align: center;margin：0 auto;" class="upload-demo" ref="upload" name="excel" action="http://39.100.131.247/device/exceldevice" :before-upload="beforeUpload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
+        <el-upload style="text-align: center;margin：0 auto;" class="upload-demo" ref="upload" name="excel" :action="UploadUrl()"  :before-upload="beforeUpload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">确定上传</el-button>
             <div slot="tip" class="el-upload__tip">只能上传.XLS的文件！！！</div>
@@ -231,7 +231,8 @@ import {
     change_device_bind_state, //解绑
     import_node_basicinfo, //新建设备
     edit_device_basicinfo, //编辑
-    delete_device_basicinfo //删除
+    delete_device_basicinfo, //删除
+    hostUrl
 } from "../../api/api";
 import {
     log
@@ -370,6 +371,10 @@ export default {
         this.getInfo();
     },
     methods: {
+          //导出地址变量
+        UploadUrl(){
+            return hostUrl+"/url_mgmt/excel_url"
+        },
 
         //导出的方法
         exportExcel() {
@@ -763,7 +768,7 @@ export default {
                             type: "success",
                             message: "删除成功!"
                         });
-                        this.pager.page = 1;
+                        //this.pager.page = 1;
                         this.getInfo();
                     }
                 })
@@ -842,9 +847,6 @@ export default {
         text-align: center;
     }
 
-    width: 100%;
-    min-width: 1600px;
-
     .devide_title {
         width: 100%;
         height: auto;
@@ -860,13 +862,7 @@ export default {
     }
 
     .device_form {
-        width: 100%;
-        height: auto;
-        overflow: hidden;
-        margin-top: 20px;
-        background: #f2f2f2;
-        padding: 15px 30px;
-        box-sizing: border-box;
+     
 
         .el-form-item__label {
             white-space: nowrap;

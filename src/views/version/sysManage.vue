@@ -2,11 +2,11 @@
 <section class="myself-container">
     <div class="devide_table">
         <el-row type="flex" class="row_active">
-            <el-col :span="2">
+            <el-col :span="2" style="display: flex;justify-content: flex-start;">
                 <el-button type="primary" @click="dialogFormVisible">上传系统包</el-button>
             </el-col>
-            <el-col :span="2">
-                <el-button type="primary" @click="golink()">发布设置</el-button>
+            <el-col :span="2" >
+                <el-button type="primary" @click="golink()">版本发布</el-button>
             </el-col>
         </el-row>
         <el-row type="flex" class="row_active">
@@ -40,7 +40,7 @@
 
                         </template>
                     </el-table-column>
-                    <el-table-column prop="hashid" label="hashid" width="400">
+                    <el-table-column prop="hashid" label="hashid" width="200">
                         <template slot-scope="scope">
                             <div style="text-align:center" v-for="(item,index) in scope.row.hashid" :key="index">{{item}}</div>
                         </template>
@@ -59,16 +59,19 @@
                     </el-table-column>
                     <el-table-column prop="rom_version" label="版本号" width="70">
                     </el-table-column>
-                    <el-table-column prop="rom_desc" label="文件描述">
-                    </el-table-column>
-                    <el-table-column prop="time_create" label="上传日期">
-                    </el-table-column>
-                    <el-table-column prop="push_mod" label="发布方式">
-                    </el-table-column>
-                    <el-table-column prop="time_update" label="近发布日期">
-                    </el-table-column>
-                    <el-table-column>
+                    <el-table-column prop="" label="文件描述" width="300px;">
                         <template slot-scope="scope">
+                            <div style="overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:280px;margin:0 auto;">{{scope.row.rom_desc}}</div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="time_create" label="上传日期" width="200">
+                    </el-table-column>
+                    <el-table-column prop="push_mod" label="发布方式" width="70">
+                    </el-table-column>
+                    <el-table-column prop="time_update" label="近发布日期" width="200">
+                    </el-table-column>
+                    <el-table-column width="100" label="操作">
+                        <template slot-scope="scope"  >
                             <a style="color:#6699ff;cursor: pointer;" @click="toDelete(scope.row)" type="danger" size="small">删除</a>
                             <a style="color:#6699ff;cursor: pointer;" @click="toChange(scope.row)" type="primary" size="small">修改</a>
                         </template>
@@ -93,8 +96,8 @@
             </el-row>
         </div>
     </div>
-    <el-dialog :visible.sync="dialogFormState" id="my_dialogForm" :show-close="false" :close-on-click-modal="false">
-        <div class="dialog_div" v-loading="loading2" element-loading-text="上传中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+    <el-dialog :visible.sync="dialogFormState" id="my_dialogForm" :show-close="false"  :close-on-click-modal="false">
+        <div class="dialog_div" width="28%" v-loading="loading2" element-loading-text="上传中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
 
             <div v-for="item in uploadsize" :key="item">
                 <div class="dialog_div_con">
@@ -215,7 +218,8 @@ import {
   getpacketbyversion,
   publish,
   updateMod,
-  uploadpfts
+  uploadpfts,
+  hostUrl
 } from "../../api/api.js";
 import common from "../../common/js/util.js";
 import echarts from "echarts";
@@ -770,7 +774,7 @@ export default {
         formData.append("end", end);
         formData.append("totalSize", totalSize);
         formData.append("total", tota_temp);
-        var url = "http://39.100.131.247/admin/upload";
+        var url = hostUrl +"/admin/upload";
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = onchange;
         xhr.open("POST", url);
@@ -885,7 +889,7 @@ export default {
         formData.append("end", end);
         formData.append("totalSize", totalSize);
         formData.append("total", tota_temp);
-        var url = "http://39.100.131.247/admin/upload";
+        var url = hostUrl + "/admin/upload";
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = onchange;
         xhr.open("POST", url);
@@ -962,8 +966,7 @@ export default {
 
 <style lang="less">
 .myself-container {
-  width: 100%;
-  min-width: 1600px;
+
 
   #my_dialogForm {
     .upload-demo {
@@ -971,7 +974,7 @@ export default {
     }
 
     .el-dialog {
-      width: 25%;
+      width: 35%;
 
       .dialog-footer {
         display: flex;
@@ -1018,7 +1021,7 @@ export default {
 
   .my_dialog_set {
     .el-dialog {
-      width: 20%;
+  
 
       .el-dialog__body {
         padding: 0px 20px;
@@ -1037,7 +1040,7 @@ export default {
 
   .my_dialog_update {
     .el-dialog {
-      width: 27%;
+      width: 30%;
 
       .el-dialog__body {
         padding: 0px;
@@ -1091,13 +1094,7 @@ export default {
   }
 
   .device_form {
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    margin-top: 20px;
-    background: #f2f2f2;
-    padding: 15px 30px;
-    box-sizing: border-box;
+  
 
     .el-form-item {
       margin-bottom: 0px;

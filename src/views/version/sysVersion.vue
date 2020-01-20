@@ -743,8 +743,7 @@ export default {
 
 <style lang="less">
 .myself-container {
-    width: 100%;
-    min-width: 1600px;
+
 
     .devide_title {
         width: 100%;
@@ -761,13 +760,7 @@ export default {
     }
 
     .device_form {
-        width: 100%;
-        height: auto;
-        overflow: hidden;
-        margin-top: 20px;
-        background: #ffffff;
-        padding: 15px 30px;
-        box-sizing: border-box;
+      
 
         .device_form_button {
             width: 100%;

@@ -40,20 +40,8 @@
                     <el-table-column prop="user_id" label="绑定用户ID">
                     </el-table-column>
                     <el-table-column prop="active1" label="当日剩余空间/总空间">
-                        <!-- <template slot-scope="scope">
-                            <span disable-transitions>{{(scope.row.free_cap/1024/1024/1024).toFixed(2)}}G/
-                            </span>
-                            <span disable-transitions>{{(scope.row.total_cap/1024/1024/1024).toFixed(2)}}G
-                            </span>
-                        </template> -->
                     </el-table-column>
                     <el-table-column prop="active2" label="当日平均上下行宽带">
-                        <!-- <template slot-scope="scope">
-                            <span disable-transitions>{{(scope.row.up_bandwidth/1024/1024).toFixed(2)}}MB/
-                            </span>
-                            <span disable-transitions>{{(scope.row.down_bandwidth/1024/1024).toFixed(2)}}MB
-                            </span>
-                        </template> -->
                     </el-table-column>
                     <el-table-column prop="online_time" label="当日在线时长" :formatter="onlineTime">
                     </el-table-column>
@@ -83,17 +71,17 @@
                 <h3 class="title">调整算力系数</h3>
                 <el-form-item prop="username">
                     <el-form-item label="IP 系数:">
-                        <el-input v-model="ruleForm2.ip_radio" placeholder="请输入IP 系数"></el-input>
+                        <el-input v-model="ruleForm2.ip_radio" placeholder="请输入IP 系数" style="width:350px"></el-input>
                     </el-form-item>
                 </el-form-item>
                 <el-form-item prop="nickname">
-                    <el-form-item label="存储系数:">
-                        <el-input v-model="ruleForm2.store_radio" placeholder="请输入存储系数"></el-input>
+                    <el-form-item label="存储系数:" >
+                        <el-input v-model="ruleForm2.store_radio" placeholder="请输入存储系数" style="width:350px" ></el-input>
                     </el-form-item>
                 </el-form-item>
                 <el-form-item style="width:100%;display: flex;justify-content:center;">
                     <el-button type="primary" @click="change()" :loading="logining">确定</el-button>
-                    <el-button type="primary" @click="handleSubmit3">取消</el-button>
+                    <el-button type="primary" @click="dialogVisible=false">取消</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -214,16 +202,16 @@ export default {
             for (var i = 0; i < teamarr.length; i++) {
               teamarr[i].active1 =
                 (teamarr[i].free_cap / 1024 / 1024 / 1024).toFixed(2) +
-                "MB" +
+                "GB" +
                 "/" +
                 (teamarr[i].total_cap / 1024 / 1024 / 1024).toFixed(2) +
-                "MB";
+                "GB";
               teamarr[i].active2 =
                 (teamarr[i].up_bandwidth / 1024 / 1024 / 1024).toFixed(2) +
-                "MB" +
+                "GB" +
                 "/" +
                 (teamarr[i].down_bandwidth / 1024 / 1024 / 1024).toFixed(2) +
-                "MB";
+                "GB";
 
               teamarr[i].time_stamp = this.common.getTimess(
                 teamarr[i].time_stamp * 1000
@@ -447,8 +435,7 @@ export default {
 
 <style lang="less">
 .myself-container {
-  width: 100%;
-  min-width: 1600px;
+
 
   .devide_title {
     width: 100%;
@@ -465,13 +452,7 @@ export default {
   }
 
   .device_form {
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    margin-top: 20px;
-    background: #f2f2f2;
-    padding: 15px 30px;
-    box-sizing: border-box;
+ 
 
     .el-form-item__label {
       white-space: nowrap;

@@ -366,7 +366,6 @@ export default {
     },
     //冻结，解冻
     disable(val) {
-      debugger;
       console.log(val);
       let param = new Object();
       if (val.account_status == "正常") {
@@ -380,22 +379,7 @@ export default {
       param.usr_id_list = usr_id_list;
 
       ptfs_forbid_users(param).then(res => {
-        if ((param.forbid_status = 1)) {
-          if (res.status == 0) {
-            this.$message({
-              message: "解冻成功",
-              type: "success"
-            });
-            this.queryUserList();
-            this.common.monitoringLogs("修改", "解冻账户", 1);
-          } else {
-            this.$message({
-              message: `${res.err_msg}`,
-              type: "error"
-            });
-            this.common.monitoringLogs("修改", "解冻账户", 0);
-          }
-        } else {
+        if ((param.forbid_status == 1)) {
           if (res.status == 0) {
             this.$message({
               message: "冻结成功",
@@ -409,6 +393,21 @@ export default {
               type: "error"
             });
             this.common.monitoringLogs("修改", "冻结账户", 0);
+          }
+        } else {
+          if (res.status == 0) {
+            this.$message({
+              message: "解冻成功",
+              type: "success"
+            });
+            this.queryUserList();
+            this.common.monitoringLogs("修改", "解冻账户", 1);
+          } else {
+            this.$message({
+              message: `${res.err_msg}`,
+              type: "error"
+            });
+            this.common.monitoringLogs("修改", "解冻账户", 0);
           }
         }
       });
@@ -762,9 +761,7 @@ export default {
     text-align: center;
   }
 
-  width: 100%;
-  min-width: 1600px;
-
+  
   .devide_title {
     width: 100%;
     height: auto;
@@ -780,12 +777,7 @@ export default {
   }
 
   .device_form {
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    margin-top: 20px;
-    background: #f2f2f2;
-    padding: 15px 30px;
+
     box-sizing: border-box;
 
     .el-form-item__label {

@@ -5,8 +5,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex);
 
-//import './assets/fonts/iconfont.css'
-//import './assets/inco-frent/iconfont.js'
+import './assets/inon_frent/iconfont.css'
 
 import VCharts from 'v-charts'
 import common from "./common/js/util.js";
@@ -70,7 +69,6 @@ import {
 } from './api/api';
 var user = JSON.parse(common.get('userInfo'))
 if (user) {
-    console.log(store.state.userInfo.id)
     let param = new Object
     if (store.state.userInfo.id) {
         param.id = store.state.userInfo.id
@@ -132,16 +130,18 @@ if (user) {
 
         }
         //var newRoutes = res.msg
-        var newRoutes = [{
+        var newRoutes = [
+            {
                 path: "/",
                 component: 'Home',
                 name: "后台管理",
-                icon: 'el-icon-menu',
+                icon: 'iconfont icon-houtaiguanli',
+                titleActive:"账户",
                 children: [{
                     path: "/",
                     name: "后台账户管理",
                     component: 'accountManagement',
-                    icon: 'el-icon-menu',
+                    icon: 'iconfont icon-dian',
                     meta: {
                         requireAuth: true
                     }
@@ -151,12 +151,12 @@ if (user) {
                 path: "/a",
                 component: 'Home',
                 name: "用户管理",
-                icon: 'el-icon-menu',
+                icon: 'iconfont icon-yonghu',
                 children: [{
                         path: "/userCenter",
                         name: "注册用户",
                         component: 'userCenter',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
@@ -165,7 +165,7 @@ if (user) {
                         path: "/userInfo",
                         name: "用户个人详情",
                         component: 'userInfo',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
@@ -177,12 +177,13 @@ if (user) {
                 path: "/c",
                 component: 'Home',
                 name: "设备管理",
-                icon: 'el-icon-menu',
+                titleActive:"设备",
+                icon: 'iconfont icon-shebeiguanli1',
                 children: [{
                         path: "/deviceInfo",
                         name: "设备信息",
                         component: 'deviceInfo',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
@@ -191,7 +192,7 @@ if (user) {
                         path: "/devicePower",
                         name: "设备算力",
                         component: 'devicePower',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
@@ -201,7 +202,7 @@ if (user) {
                         path: "/deviceActivation",
                         name: "设备激活",
                         component: 'deviceActivation',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
@@ -214,12 +215,13 @@ if (user) {
                 path: "/f",
                 component: 'Home',
                 name: "盒子应用管理",
-                icon: 'el-icon-menu',
+                titleActive:false,
+                icon: 'iconfont icon-dianbozhibov1213',
                 children: [{
                         path: "/releaseAppliction",
                         name: "应用发布管理",
                         component: 'releaseAppliction',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
@@ -228,7 +230,7 @@ if (user) {
                         path: "/addAppliction",
                         name: "应用新增管理",
                         component: 'addAppliction',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
@@ -241,12 +243,13 @@ if (user) {
                 path: "/d",
                 component: 'Home',
                 name: "积分管理",
-                icon: 'el-icon-menu',
+                titleActive:"积分",
+                icon: 'iconfont icon-jifenguanli',
                 children: [{
                         path: "/pointsDetails",
                         name: "积分明细",
                         component: 'pointsDetails',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
@@ -255,7 +258,7 @@ if (user) {
                         path: "/income",
                         name: "收益明细",
                         component: 'income',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
@@ -268,14 +271,15 @@ if (user) {
                 path: "/b",
                 component: 'Home',
                 name: "推送设置",
-                icon: 'el-icon-menu',
+                titleActive:"内容推送",
+                icon: 'iconfont icon-tuisongguanli',
                 children: [
 
                     {
                         path: "/PushSetting",
                         name: "推送设置",
                         component: 'PushSetting',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
@@ -283,7 +287,7 @@ if (user) {
                         path: "/PushRecord",
                         name: "推送记录",
                         component: 'PushRecord',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
@@ -295,7 +299,8 @@ if (user) {
                 path: "/e",
                 component: 'Home',
                 name: "数据分析",
-                icon: 'el-icon-menu',
+                titleActive:"数据分析",
+                icon: 'iconfont icon-shujufenxi',
                 children: [
                     // {
                     // path: "/UserAnalysis",
@@ -306,7 +311,7 @@ if (user) {
                         path: "/UserAnalysis",
                         name: "APP用户分析",
                         component: 'UserAnalysis',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
@@ -315,7 +320,7 @@ if (user) {
                         path: "/RegionAnalysis",
                         name: "地域分析",
                         component: 'RegionAnalysis',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
@@ -324,7 +329,7 @@ if (user) {
                         path: "/VersionAnalysis",
                         name: "版本分析",
                         component: 'VersionAnalysis',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
@@ -335,7 +340,7 @@ if (user) {
                         path: "/DeviceAnalysis",
                         name: "设备在线分析",
                         component: 'DeviceAnalysis',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
@@ -346,17 +351,18 @@ if (user) {
                 path: "/g",
                 component: 'Home',
                 name: "版本管理",
-                icon: 'el-icon-menu',
+                titleActive:"系统版本",
+                icon: 'iconfont icon-xitong',
                 children: [{
                         path: "/SysManageMiddle",
                         name: "APP应用版本管理",
                         component: 'SysManageMiddle',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-banbenguanli',
                         children: [{
                                 path: "/AppVersion",
                                 name: "版本发布管理",
                                 component: 'AppVersion',
-                                icon: 'el-icon-menu',
+                                icon: 'iconfont icon-dian',
                                 meta: {
                                     requireAuth: true
                                 }
@@ -365,7 +371,7 @@ if (user) {
                                 path: "/AppManage",
                                 name: "应用包管理",
                                 component: 'AppManage',
-                                icon: 'el-icon-menu',
+                                icon: 'iconfont icon-dian',
                                 meta: {
                                     requireAuth: true
                                 }
@@ -380,12 +386,12 @@ if (user) {
                         path: "/SysManageMiddleActive",
                         name: "设备系统版本管理",
                         component: 'SysManageMiddleActive',
-                        icon: 'el-icon-menu',
+                        icon: 'iconfont icon-ziyuanguanli',
                         children: [{
                                 path: "/SysVersion1",
                                 name: "设备系统版本管理",
                                 component: 'SysVersion1',
-                                icon: 'el-icon-menu',
+                                icon: 'iconfont icon-dian',
                                 meta: {
                                     requireAuth: true
                                 }
@@ -394,7 +400,7 @@ if (user) {
                                 path: "/SysManage",
                                 name: "系统包管理",
                                 component: 'SysManage',
-                                icon: 'el-icon-menu',
+                                icon: 'iconfont icon-dian',
                                 meta: {
                                     requireAuth: true
                                 }
@@ -411,12 +417,12 @@ if (user) {
                 path: "/h",
                 component: 'Home',
                 name: "操作管理",
-                icon: 'el-icon-menu',
+                icon: 'iconfont icon-rizhi',
                 children: [{
                     path: "/Log",
                     name: "操作日志",
                     component: 'Log',
-                    icon: 'el-icon-menu',
+                    icon: 'iconfont icon-dian',
                     meta: {
                         requireAuth: true
                     }

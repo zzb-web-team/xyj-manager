@@ -88,10 +88,9 @@
     <!--批量导入-->
     <el-dialog class="dialog_active2" :visible.sync="dialogVisible4">
         <div>
-            <el-upload class="upload-demo" ref="upload" :limit="1" action="http://39.100.131.247/packet/uploadtxt" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :on-success="handleAvatarSuccess" name="excel" :auto-upload="false">
+            <el-upload class="upload-demo" ref="upload" :limit="1" :action="UploadUrl()" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :on-success="handleAvatarSuccess" name="excel" :auto-upload="false">
                 <el-button slot="trigger" size="small" class="MyctiveButton" type="primary">上传Excel文件</el-button>
                 <el-button type="primary" @click="down" plain id="dwonexcel">下载模板</el-button>
-                <!-- <a href="data:text/plain;charset=utf-8,http://39.100.131.247/static/app_user.txt" download="模板"></a> -->
                 <el-button style="position: absolute;left: 37px;bottom: 23px;width:85px;" size="small" type="success" @click="submitUpload">导 入</el-button>
                 <el-button style="position: absolute;left: 130px;bottom: 23px;width:85px;" size="small" type="success" :disabled="noClick" @click="submitUploadOK">确定</el-button>
             </el-upload>
@@ -130,7 +129,8 @@ import {
   publishApp,
   getversionApp,
   versionlistNew,
-  publishuser
+  publishuser,
+  hostUrl
 } from "../../api/api.js";
 import tableBarActive2 from "../../components/tableBarActive2";
 import tableBarActive2app from "../../components/tableBarActive2app";
@@ -309,6 +309,10 @@ export default {
     // this.queryPublishuser()
   },
   methods: {
+     //导出地址变量
+        UploadUrl(){
+            return hostUrl+"/url_mgmt/excel_url"
+        },
     //关闭回调
     beforeclose() {
       this.dialogVisible5 = false;
@@ -450,7 +454,8 @@ export default {
           return false;
         }
       }
-      if (this.form.user == "正式发布") {
+    
+      if (this.form.type == "正式发布") {
         user_list = [];
       } else {
         user_list = this.form.version.split(",");
@@ -709,7 +714,7 @@ export default {
     },
     errormove(err, file, fileList) {},
     down() {
-      var url = "http://39.100.131.247/static/app_user.xls";
+      var url = hostUrl + "/static/app_user.xls";
       // window.location.href = url;
       window.open(url, "_blank");
     }
@@ -790,8 +795,7 @@ export default {
     text-align: center;
   }
 
-  width: 100%;
-  min-width: 1600px;
+
 
   .devide_table {
     width: 100%;

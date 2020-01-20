@@ -497,6 +497,7 @@ export default {
                             message: "操作成功",
                             type: "success"
                         });
+                        this.form.inputText1=""
                         this.getinfo();
                     }
                 })
@@ -538,7 +539,6 @@ export default {
             let param = new Object()
             applistfortree(param)
                 .then(res => {
-                    console.log(res)
                     if (res.status != 0) {
                         this.$message({
                             message: `${res.err_msg}`,
@@ -550,7 +550,7 @@ export default {
                 })
                 .catch(error => {
                     this.$message({
-                        message: "网络出错，请重新请求",
+                        message: "服务出错",
                         type: "error"
                     });
 
@@ -645,7 +645,7 @@ export default {
                 })
                 .catch(error => {
                     this.$message({
-                        message: "网络出错，请重新请求",
+                        message: "服务出错",
                         type: "error"
                     });
 
@@ -669,8 +669,7 @@ export default {
 
 <style lang="less">
 .myself-container {
-    width: 100%;
-    min-width: 1600px;
+
 
     .my_dialogForm .el-dialog {
         width: 25%;
@@ -735,13 +734,10 @@ export default {
 
             .dialog_item_r {
                 width: 350px;
-
             }
         }
     }
-
 }
-
 .device_release {
     width: 100%;
     height: auto;

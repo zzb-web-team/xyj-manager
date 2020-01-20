@@ -6,11 +6,25 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "314515",
+      "name": "应用",
+      "font_class": "dianbozhibov1213",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
       "icon_id": "1308173",
       "name": "025操作_管理_设置",
       "font_class": "025caozuo_guanli_shezhi",
       "unicode": "e62e",
       "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "1920286",
+      "name": "点",
+      "font_class": "dian",
+      "unicode": "e609",
+      "unicode_decimal": 58889
     },
     {
       "icon_id": "2154586",
@@ -20,11 +34,32 @@
       "unicode_decimal": 58906
     },
     {
+      "icon_id": "2283874",
+      "name": "日志",
+      "font_class": "rizhi",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
       "icon_id": "2500664",
       "name": "数据分析",
       "font_class": "shujufenxi",
       "unicode": "e604",
       "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "4506836",
+      "name": "设备管理",
+      "font_class": "shebeiguanli1",
+      "unicode": "ebb7",
+      "unicode_decimal": 60343
+    },
+    {
+      "icon_id": "6510092",
+      "name": "系统",
+      "font_class": "xitong",
+      "unicode": "e835",
+      "unicode_decimal": 59445
     },
     {
       "icon_id": "7481823",
@@ -67,6 +102,13 @@
       "font_class": "tuisongguanli",
       "unicode": "e66e",
       "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "11223796",
+      "name": "版本管理",
+      "font_class": "banbenguanli",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
     },
     {
       "icon_id": "11976827",

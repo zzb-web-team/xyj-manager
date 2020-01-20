@@ -5,7 +5,7 @@
         </el-date-picker>
         <el-button type="primary" @click="onQueryInfo" style="margin-left:20px;">确定</el-button> -->
 
-        <div class="device_form">
+        <div class="device_form" style="display: flex;justify-content: space-around;">
             <div id="myEchart" style="width: 600px; height: 300px;"></div>
             <div id="myEchart1" style="width: 600px; height: 300px;"></div>
         </div>
@@ -415,18 +415,10 @@ pager: {
 
 <style lang="less">
 .myself-container {
-    width: 100%;
-    min-width: 1600px;
+  
 
     .device_form {
-        width: 100%;
-        height: auto;
-        display: flex;
-        overflow: hidden;
-        margin-top: 20px;
-        background: #f2f2f2;
-        padding: 15px 30px;
-        box-sizing: border-box;
+      
 
         .bottom {
             margin-top: 20px;

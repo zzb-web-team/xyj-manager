@@ -34,23 +34,7 @@ export default {
     data() {
         return {
             chart: null,
-            tableData: [{
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-            }, {
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-            }, {
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-            }, {
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-            }],
+            tableData: [],
             echartsX:[],
             echartsY:[]
 
@@ -83,6 +67,7 @@ export default {
                     let tempArr=res.data.regionList
                      this.echartsX=[]
                     for(var i=0;i<tempArr.length;i++){
+
                         let obj={
                             value:tempArr[i].times,
                             name:tempArr[i].region
@@ -188,120 +173,6 @@ export default {
                         show: true
                     },
                     data:this.echartsX
-                    // 这是需要配置地图上的某个地区的数据，根据后台的返回的数据进行拼接（下面是我定义的假数据）
-                    // data: [{
-                    //         'name': '北京',
-                    //         'value': 599,
-                    //         'perf': '0.501s', // 性能
-                    //         'downloadSpeep': '1.221MB/s', // 下载速度
-                    //         'usability': '100%', // 可用性
-                    //         'point': '250' // 监测点
-                    //     }, {
-                    //         'name': '上海',
-                    //         'value': 142
-                    //     }, {
-                    //         'name': '黑龙江',
-                    //         'value': 44
-                    //     }, {
-                    //         'name': '新疆',
-                    //         'value': 999,
-                    //         'perf': '0.501s', // 性能
-                    //         'downloadSpeep': '1.221MB/s', // 下载速度
-                    //         'usability': '100%', // 可用性
-                    //         'point': '250' // 监测点
-                    //     }, {
-                    //         'name': '广东',
-                    //         'value': 92
-                    //     }, {
-                    //         'name': '湖北',
-                    //         'value': 810
-                    //     }, {
-                    //         'name': '湖南',
-                    //         'value': 453
-                    //     }, {
-                    //         'name': '江西',
-                    //         'value': 92
-                    //     }, {
-                    //         'name': '浙江',
-                    //         'value': 810
-                    //     }, {
-                    //         'name': '福建',
-                    //         'value': 453
-                    //     }, {
-                    //         'name': '江苏',
-                    //         'value': 92
-                    //     }, {
-                    //         'name': '山东',
-                    //         'value': 810
-                    //     }, {
-                    //         'name': '天津',
-                    //         'value': 453
-                    //     }, {
-                    //         'name': '吉林',
-                    //         'value': 92
-                    //     }, {
-                    //         'name': '辽宁',
-                    //         'value': 810
-                    //     }, {
-                    //         'name': '内蒙古',
-                    //         'value': 453
-                    //     }, {
-                    //         'name': '河北',
-                    //         'value': 92
-                    //     }, {
-                    //         'name': '山西',
-                    //         'value': 810
-                    //     }, {
-                    //         'name': '陕西',
-                    //         'value': 453
-                    //     }, {
-                    //         'name': '青海',
-                    //         'value': 92
-                    //     }, {
-                    //         'name': '甘肃',
-                    //         'value': 810
-                    //     }, {
-                    //         'name': '西藏',
-                    //         'value': 453
-                    //     }, {
-                    //         'name': '宁夏',
-                    //         'value': 92
-                    //     }, {
-                    //         'name': '四川',
-                    //         'value': 810
-                    //     }, {
-                    //         'name': '云南',
-                    //         'value': 453
-                    //     }, {
-                    //         'name': '贵州',
-                    //         'value': 92
-                    //     }, {
-                    //         'name': '重庆',
-                    //         'value': 810
-                    //     }, {
-                    //         'name': '广西',
-                    //         'value': 453
-                    //     }, {
-                    //         'name': '安徽',
-                    //         'value': 92
-                    //     }, {
-                    //         'name': '河南',
-                    //         'value': 810
-                    //     }, {
-                    //         'name': '海南',
-                    //         'value': 453
-                    //     }, {
-                    //         'name': '香港',
-                    //         'value': 92
-                    //     }, {
-                    //         'name': '澳门',
-                    //         'value': 810
-                    //     }, {
-                    //         'name': '台湾',
-                    //         'value': 453
-                    //     },
-
-                    // ]
                 }]
 
             })

@@ -1,33 +1,6 @@
 <template>
-<section class="myself-container">
-    <!-- <div class="device_echars_active">
-     
-        <div class="bodyCon08">
-         
-            <div class="students">
-
-                <div id="four_flash">
-                    <div class="flashBg">
-                        <ul class="mobile">
-                            <li v-for="(item,index) in item_echarslength" :key="item">
-                                <EchartsCoponent :titlective="titleactive[index]" :chartData="chartDataActive[index]"></EchartsCoponent>
-                            </li>
-                              <li v-for="(item,index) in item_echarslength" :key="item">
-                                <EchartsCoponent :titlective="titleactive[index]" :chartData="chartDataActive[index]"></EchartsCoponent>
-                            </li>
-                      
-
-                        </ul>
-                    </div>
-
-                </div>
-                <el-button type="primary"  :disabled="lengthStatus" class="but_left">Left</el-button>
-                <el-button type="primary"  :disabled="lengthStatus" class="but_right">Right</el-button>
-
-            </div>
-        </div>
-
-    </div> -->
+<section class="myself-container myself-container-add">
+    
 
     <div class="devide_table">
         <el-row type="flex" class="row_active">
@@ -57,7 +30,7 @@
             </el-row>
         </div>
     </div>
-    <el-dialog :visible.sync="dialogFormState" class="my_dialogForm" :show-close="false" :close-on-click-modal="false">
+    <el-dialog :visible.sync="dialogFormState" class="my_dialogForm" width="26%" :show-close="false" :close-on-click-modal="false">
         <div class="dialog_div" v-loading="loading2" element-loading-text="上传中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
             <div class="dialog_div_con">
                 <div class="dialog_div_title" style="margin-bottom:10px;">新增应用</div>
@@ -266,71 +239,7 @@ export default {
       titleactive: [],
       titlectivess: "测试数据1",
       chartDataActive: [
-        // [{
-        //         value: 5000,
-        //         name: '1.1.1版'
-        //     },
-        //     {
-        //         value: 1000,
-        //         name: '1.1.2版'
-        //     },
-        //     {
-        //         value: 3000,
-        //         name: '1.1.3版'
-        //     }
-        // ],
-        // [{
-        //         value: 501,
-        //         name: '1.1.1.1版'
-        //     },
-        //     {
-        //         value: 101,
-        //         name: '1.1.2.2版'
-        //     },
-        //     {
-        //         value: 301,
-        //         name: '1.1.3.2版'
-        //     }
-        // ],
-        // [{
-        //         value: 502,
-        //         name: '1.1.1.1版'
-        //     },
-        //     {
-        //         value: 102,
-        //         name: '1.1.2.2版'
-        //     },
-        //     {
-        //         value: 302,
-        //         name: '1.1.3.2版'
-        //     }
-        // ],
-        // [{
-        //         value: 503,
-        //         name: '1.1.1.1版'
-        //     },
-        //     {
-        //         value: 103,
-        //         name: '1.1.2.2版'
-        //     },
-        //     {
-        //         value: 303,
-        //         name: '1.1.3.2版'
-        //     }
-        // ],
-        // [{
-        //         value: 504,
-        //         name: '1.1.1.1版'
-        //     },
-        //     {
-        //         value: 104,
-        //         name: '1.1.2.2版'
-        //     },
-        //     {
-        //         value: 304,
-        //         name: '1.1.3.2版'
-        //     }
-        // ]
+        
       ]
     };
   },
@@ -794,12 +703,11 @@ export default {
 </script>
 
 <style lang="less">
-.myself-container {
-  width: 100%;
-  min-width: 1600px;
+.myself-container-add{
+
 
   .my_dialogForm .el-dialog {
-    width: 25%;
+    
 
     .dialog-footer {
       text-align: center;
@@ -833,21 +741,21 @@ export default {
   }
 
   .dialog_div .dialog_div_upload .el-upload-dragger {
-    width: 390px;
+    width: 335px;
   }
 
   .dialog_div .dialog_div_desc {
     padding-left: 0px;
 
     textarea {
-      width: 96%;
+      width: 95%;
       border: 1px solid #dcdfe6;
     }
   }
 
   .my_dialogForm {
     .dialog_item {
-      width: 90%;
+      width: 76%;
       height: auto;
       display: flex;
       justify-content: space-between;

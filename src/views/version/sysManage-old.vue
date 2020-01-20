@@ -1441,8 +1441,7 @@ export default {
 
 <style lang="less">
 .myself-container {
-    width: 100%;
-    min-width: 1600px;
+
 
     #my_dialogForm {
         .upload-demo {
@@ -1576,13 +1575,7 @@ export default {
     }
 
     .device_form {
-        width: 100%;
-        height: auto;
-        overflow: hidden;
-        margin-top: 20px;
-        background: #f2f2f2;
-        padding: 15px 30px;
-        box-sizing: border-box;
+      
 
         .el-form-item {
             margin-bottom: 0px;

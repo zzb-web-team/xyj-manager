@@ -34,7 +34,7 @@
         </el-row>
         <el-row type="flex" class="row_active">
             <el-col :span="24">
-                <tableBarActiveAccount id="rebateSetTable" ref="table1" tooltip-effect="dark" @tableSortChange='tableSortChange' :tableData="tableData" @toDetail="toDetail" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toChange="toChange" @changePassword="changePassword" @toDelete="toDelete"></tableBarActiveAccount>
+                <tableBarActiveAccount width="100%" id="rebateSetTable" ref="table1" tooltip-effect="dark" @tableSortChange='tableSortChange' :tableData="tableData" @toDetail="toDetail" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toChange="toChange" @changePassword="changePassword" @toDelete="toDelete"></tableBarActiveAccount>
             </el-col>
         </el-row>
     </div>
@@ -1067,8 +1067,7 @@ export default {
 }
 
 .myself-container {
-  width: 100%;
-  min-width: 1600px;
+
 
   .devide_title {
     width: 100%;
@@ -1090,7 +1089,7 @@ export default {
     overflow: hidden;
     margin-top: 20px;
     background: #f2f2f2;
-    padding: 15px 30px;
+    padding: 15px 10px;
     box-sizing: border-box;
 
     .el-form-item__label {
