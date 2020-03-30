@@ -252,7 +252,6 @@ export default {
     }
     param.utype = "app";
     let tempInfo =JSON.parse(this.get('userInfo'))
-    console.log(tempInfo)
     param.id = tempInfo.id;
     param.name =tempInfo.username; 
 

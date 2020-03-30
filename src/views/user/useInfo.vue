@@ -341,6 +341,7 @@ export default {
 
         this.queryInfo()
         this.queryInfo1()
+        this.getQueryInfo2Active()
 
     },
     methods: {
@@ -379,7 +380,7 @@ export default {
             ptfs_query_list_user_store_list(params).then(res => {
                 if (res.status == 0) {
                     if (res.data.store_list.length > 0) {
-                        this.dev_num = res.data.store_list[0].dev_num
+                       // this.dev_num = res.data.store_list[0].dev_num
                         this.average_store = (res.data.store_list[0].average_store) / 1000000
                         this.user_id = res.data.store_list[0].user_id
                         this.user_name = res.data.store_list[0].user_name
@@ -387,7 +388,7 @@ export default {
                         this.sum_profit = (res.data.store_list[0].sum_profit) / 1000000
 
                     } else {
-                        this.dev_num = 0
+                      //  this.dev_num = 0
                         this.sum_profit = 0
                         this.average_store = 0
                     }
@@ -533,8 +534,10 @@ export default {
                     this.dialogVisible4 = true
                     console.log(res)
                     if (res.status === 0) {
-                        let nowarr = res.data.dev_list
-                        for (var i = 0; i < nowarr.length; i++) {
+                       let nowarr=[] 
+                         nowarr = res.data.dev_list
+                         if(nowarr.length>0){
+                              for (var i = 0; i < nowarr.length; i++) {
                             if (nowarr[i].dev_name == "") {
                                 nowarr[i].dev_name = "我的西柚机"
                             }
@@ -562,8 +565,87 @@ export default {
                                     break;
                             }
                         }
-                        this.tableData2 = res.data.dev_list;
+                         }
+                         else{
+
+                         }
+                      
+                        this.tableData2 = nowarr;
                         this.pager2.count = res.data.total_num
+                        this.dev_num=res.data.total_num
+
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+
+        },
+        getQueryInfo2Active() {
+            let data = {
+                page_no: this.pager.page - 1,
+                page_size: 10,
+                dev_type: this.dev_type === '' ? -1 : this.dev_type === 'RK3328' ? 1 : 2,
+                online_state: this.online_state === '' ? -1 : Number(this.online_state),
+                rom_version: this.rom_version === '' ? '' : this.rom_version,
+                bind_flag: this.bind_flag === '' ? -1 : Number(this.bind_flag),
+                bind_start_ts: this.bind_start_ts === "" ?
+                    -1 : new Date(this.bind_start_ts).getTime(),
+                bind_end_ts: this.bind_end_ts === "" ?
+                    -1 : new Date(this.bind_end_ts).getTime(),
+                bind_user_id: parseInt(this.$route.query.user_id),
+                dev_name: "",
+                dev_mac: "",
+                dev_ip: "",
+                ipfs_id: "",
+                dev_sn: "",
+                order: this.order
+
+            }
+
+            let param = data
+            devicelist(param).then(res => {
+                    console.log(res)
+                    if (res.status === 0) {
+                       let nowarr=[] 
+                         nowarr = res.data.dev_list
+                         if(nowarr.length>0){
+                              for (var i = 0; i < nowarr.length; i++) {
+                            if (nowarr[i].dev_name == "") {
+                                nowarr[i].dev_name = "我的西柚机"
+                            }
+                            switch (nowarr[i].online_state) {
+                                case 0:
+                                    nowarr[i].online_state = "离线"
+                                    break;
+                                case 1:
+                                    nowarr[i].online_state = "在线"
+
+                                    break;
+                                case 2:
+                                    nowarr[i].online_state = "鉴权失败"
+                                    break;
+                                case 3:
+                                    nowarr[i].online_state = "鉴权成功"
+                                    break;
+                                case 100:
+                                    nowarr[i].online_state = "未激活"
+                                    break;
+                                case 101:
+                                    nowarr[i].online_state = "已激活"
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                         }
+                         else{
+
+                         }
+                      
+                        this.tableData2 = res.data.nowarr;
+                        this.pager2.count = res.data.total_num
+                        this.dev_num=res.data.total_num
 
                     }
                 })

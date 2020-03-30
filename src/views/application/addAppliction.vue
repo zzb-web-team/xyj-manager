@@ -30,7 +30,7 @@
             </el-row>
         </div>
     </div>
-    <el-dialog :visible.sync="dialogFormState" class="my_dialogForm" width="26%" :show-close="false" :close-on-click-modal="false">
+    <el-dialog :visible.sync="dialogFormState" class="my_dialogForm" width="30%" :show-close="false" :close-on-click-modal="false">
         <div class="dialog_div" v-loading="loading2" element-loading-text="上传中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
             <div class="dialog_div_con">
                 <div class="dialog_div_title" style="margin-bottom:10px;">新增应用</div>
@@ -498,6 +498,14 @@ export default {
     beforeAvatarUpload(file) {
       var fileName = new Array();
       fileName = file.name.split(".");
+      // console.log(fileName)
+      // if(fileName[1]!= "apk"){
+      //       this.$message({
+      //     message: "上传文件只能是.apk格式的压缩包",
+      //     type: "warning"
+      //   });
+      // }
+      //   return false;
       const extension = fileName[fileName.length - 1] === "apk";
 
       if (!extension) {

@@ -1,28 +1,12 @@
 <template>
 <section class="myself-container">
-    <div class="user-title">
-        <el-row>
-            <el-col :span="5">
-                <div class="user-item">
-                    <div class="item-count">{{user_form.total_num}}</div>
-                    <div class="item-text">注册用户</div>
-                </div>
-            </el-col>
-            <el-col :span="5" style="margin-left:30px;">
-                <div class="user-item">
-                    <div class="item-count">{{user_form.normal_num}}</div>
-                    <div class="item-text">绑定用户</div>
-                </div>
-            </el-col>
-
-        </el-row>
-    </div>
+  
     <div class="device_form">
         <el-form ref="form" :model="form">
             <el-row type="flex">
                 <div class="search-con">
                     <i class="el-icon-search" @click="searchInfo" style="color:#606266"></i>
-                    <el-input class="search-input" v-model="searchText" placeholder="用户ID、用户昵称、手机号" @keyup.enter.native="onSubmitKey"></el-input>
+                    <el-input class="search-input" v-model="searchText" placeholder="用户昵称，节点编号" @keyup.enter.native="onSubmitKey"></el-input>
                 </div>
                 <div @click="getShow()" class="div_show" style="color:#606266">筛选
                     <i
@@ -33,26 +17,13 @@
             </el-row>
             <div v-show="showState">
                 <el-row type="flex" class="row_activess">
-                    <el-form-item label="状态" style="display: flex;">
+                    <el-form-item label="节点等级" style="display: flex;">
                         <el-select v-model="form.statusText" placeholder="请选择" @change="onChange">
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="性别" style="display: flex;">
-                        <el-select v-model="form.sex" placeholder="请选择" @change="onChange2">
-                            <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="注册时间" style="display: flex;">
-                        <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="首次绑定时间" style="display: flex;">
-                        <el-date-picker v-model="value2" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                        </el-date-picker>
-                    </el-form-item>
+                 
                 </el-row>
                 <el-row type="flex" class="row_activess">
                     <el-form-item>
@@ -74,7 +45,7 @@
         </el-row>
         <el-row type="flex" class="row_active">
             <el-col :span="24">
-                <tableBarActiveUser id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBarActiveUser>
+                <tableBarminging id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBarminging>
             </el-col>
         </el-row>
     </div>
@@ -94,17 +65,11 @@
 </template>
 
 <script>
-import tableBarActiveUser from "../../components/tableBarActiveUser";
+import tableBarminging from "../../components/tableBarminging";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
 import {
-  ptfs_query_total_users,
-  ptfs_query_user_list,
-  changePageCoreRecordData,
-  ptfs_query_list_user_store_list,
-  ptfs_query_user_total_profit_everyday,
-  ptfs_forbid_users,
-  query_binded_user_cnt
+  ptfs_query_node_grade
 } from "../../api/api";
 import common from "../../common/js/util.js";
 
@@ -114,10 +79,10 @@ export default {
       dialogVisible: false,
       dialogVisible2: false,
       searchText: "",
-      rotate: false,
-      operatingStatus: true,
+      operatingStatus: false,
       clomnSelection: false,
       reserveselection: true,
+        rotate: false,
       value1: "",
       value2: "",
       valueTime: "",
@@ -126,6 +91,7 @@ export default {
         user_id: "",
         user_name: "",
         tel_num: "",
+           order: 0,
         sex: "全部",
         account_status: 0,
         statusText: "全部",
@@ -143,16 +109,24 @@ export default {
       },
       options: [
         {
-          value: "0",
+          value: "-1",
           label: "全部"
         },
         {
-          value: "1",
-          label: "正常"
+          value: "0",
+          label: "普通节点"
         },
         {
-          value: "2",
-          label: "冻结"
+          value: "2000",
+          label: "黄金节点"
+        },
+        {
+          value: "6000",
+          label: "铂金节点"
+        },
+          {
+          value: "18000",
+          label: "钻石节点"
         }
       ],
       options2: [
@@ -176,45 +150,28 @@ export default {
           label: "用户ID"
         },
         {
-          prop: "user_name",
+          prop: "nick_name",
           label: "用户昵称"
         },
         {
-          prop: "user_tel",
-          label: "手机号"
+          prop: "dev_sn",
+          label: "节点编号"
         },
         {
-          prop: "sex",
-          label: "性别"
+          prop: "dev_name",
+          label: "节点ID"
+        },
+       
+        {
+          prop: "dev_name",
+          label: "节点等级"
         },
         {
-          prop: "sum_profit",
-          label: "总积分",
-          sortable: "custom"
+          prop: "total_value",
+          label: "节点贡献值",
+           sortable: "custom"
         },
-        {
-          prop: "average_store",
-          label: "平均算力",
-          sortable: "custom"
-        },
-        {
-          prop: "dev_num",
-          label: "设备总数"
-        },
-        {
-          prop: "first_login_time",
-          label: "注册时间",
-          sortable: "custom"
-        },
-        {
-          prop: "first_bind_time",
-          label: "首次绑定时间",
-          sortable: "custom"
-        },
-        {
-          prop: "account_status",
-          label: "状态"
-        }
+
       ],
       tableData: [],
       tableOption: {
@@ -247,44 +204,27 @@ export default {
       user_sex: "",
       tableData2: [],
       pageActive: 0,
-      pageActives: 1
+      pageActives: 1,
+      nodegrade:0,
+      user_nick_name:""
     };
   },
   mounted: function() {
-    this.queryUsersTotal();
+    //this.queryUsersTotal();
     this.queryUserList();
-    this.queryInfoUser();
+    //this.queryInfoUser();
   },
   methods: {
     //排序
     tableSortChange(column, prop, order) {
-      if (column.column.label == "平均算力") {
-        if (column.column.order == "descending") {
-          this.order = 6;
-        } else {
-          this.order = 7;
-        }
-      } else if (column.column.label == "总积分") {
-        if (column.column.order == "descending") {
-          this.order = 4;
-        } else {
-          this.order = 5;
-        }
-      } else if (column.column.label == "注册时间") {
-        if (column.column.order == "descending") {
-          this.order = 0;
-        } else {
-          this.order = 1;
-        }
-      } else if (column.column.label == "首次绑定时间") {
-        if (column.column.order == "descending") {
-          this.order = 2;
-        } else {
-          this.order = 3;
-        }
+        this.pager.page = 1;
+      if (column.order == "descending") {
+        this.order = 0;
+      } else {
+        this.order = 1;
       }
 
-      this.pager.page = 1;
+     
       // if (column.order == "descending") {
       //     this.order = 0
       // } else {
@@ -317,8 +257,7 @@ export default {
     searchInfo() {},
     getShow() {
       this.showState = !this.showState;
-            this.rotate = !this.rotate;
-
+      this.rotate = !this.rotate;
     },
     //导出的方法
 
@@ -450,17 +389,10 @@ export default {
         });
     },
     onChange(item) {
-      this.form.account_status = parseInt(item);
-      if (item == 0) {
-        this.form.statusText = "全部";
-        this.user_status = -1;
-      } else if (item == 1) {
-        this.user_status = 0;
-        this.form.statusText = "正常";
-      } else if (item == 2) {
-        this.user_status = 1;
-        this.form.statusText = "冻结";
-      }
+      console.log(item)
+      this.nodegrade=item
+      this.queryUserList();
+
     },
     onChange1(item) {
       this.form.active_status = parseInt(item);
@@ -502,6 +434,8 @@ export default {
       this.value1 = "";
       this.user_sex = "";
       this.user_status = -1;
+       this.nodegrade=0,
+       this.user_nick_name=""
       this.queryUserList();
     },
 
@@ -510,94 +444,74 @@ export default {
       let param = new Object();
       let phoneNumber = /^1(3|4|5|7|8)\d{9}$/;
       let user_id = /^\d{7}$/;
-      if (this.searchText != "") {
-        if (phoneNumber.test(this.searchText) == true) {
-          param.user_id = 0;
-          param.user_tel = this.searchText;
-          param.user_name = "";
-        } else if (user_id.test(this.searchText) == true) {
-          param.user_id = parseInt(this.searchText);
-          param.user_tel = "";
-          param.user_name = "";
-        } else {
-          param.user_id = 0;
-          param.user_tel = "";
-          param.user_name = this.searchText;
-        }
-      } else {
-        param.user_id = "";
-        param.user_tel = "";
-        param.user_name = "";
-      }
-      param.user_status = this.user_status;
-      param.user_sex = this.user_sex;
-      param.cur_page = this.pager.page - 1;
-      param.order = this.order;
+      // if (this.searchText != "") {
+      //   if (phoneNumber.test(this.searchText) == true) {
+      //     param.user_id = 0;
+      //     param.user_tel = this.searchText;
+      //     param.user_name = "";
+      //   } else if (user_id.test(this.searchText) == true) {
+      //     param.user_id = parseInt(this.searchText);
+      //     param.user_tel = "";
+      //     param.user_name = "";
+      //   } else {
+      //     param.user_id = 0;
+      //     param.user_tel = "";
+      //     param.user_name = this.searchText;
+      //   }
+      // } else {
+      //   param.user_id = "";
+      //   param.user_tel = "";
+      //   param.user_name = "";
+      // }
 
-      if (!this.value1) {
-        param.reg_start_time = 0;
-        param.reg_end_time = 0;
-      } else {
-        if (this.value1[0] == undefined) {
-          param.reg_start_time = 0;
-        } else {
-          param.reg_start_time = this.value1[0].getTime() / 1000;
-        }
-        if (this.value1[1] == undefined) {
-          param.reg_end_time = 0;
-        } else {
-          param.reg_end_time = this.value1[1].getTime() / 1000;
-        }
-      }
-      if (!this.value2) {
-        param.bind_start_time = 0;
-        param.bind_end_time = 0;
-      } else {
-        if (this.value2[0] == undefined) {
-          param.bind_start_time = 0;
-        } else {
-          param.bind_start_time = this.value2[0].getTime() / 1000;
-        }
-        if (this.value2[1] == undefined) {
-          param.bind_end_time = 0;
-        } else {
-          param.bind_end_time = this.value2[1].getTime() / 1000;
-        }
-      }
+let paramactive=new Object()
+     {
+    paramactive.user_nick_name=this.user_nick_name,
+    paramactive.node_index= 0,
+    paramactive.node_grade=parseInt(this.nodegrade) ,
+    paramactive.cur_page=  this.pager.page - 1,
+    paramactive.order=this.order
+}
+    
       let routerparam = JSON.stringify(param);
       localStorage.setItem("routerparam", routerparam);
-      ptfs_query_list_user_store_list(param)
+        ptfs_query_node_grade(paramactive)
         .then(res => {
-          if (res.status == 0 && res.err_code == 0) {
+          console.log(res)
+          if (res.status == 0) {
             console.log(res);
+                  if(res.data.con_value_list){
+             this.tableData = res.data.con_value_list;
+          }
+             
+            this.pager.count = res.data.total_num;
             let tempArr = [];
 
             tempArr = res.data.store_list;
-            for (var i = 0; i < tempArr.length; i++) {
-              tempArr[i].average_store = tempArr[i].average_store / 1000000;
-              tempArr[i].sum_profit = tempArr[i].sum_profit / 1000000;
-              if (tempArr[i].first_bind_time == 0) {
-                tempArr[i].first_bind_time = 0;
-              } else {
-                tempArr[i].first_bind_time = this.common.getTimes(
-                  tempArr[i].first_bind_time * 1000
-                );
-              }
-              if (tempArr[i].first_login_time == 0) {
-                tempArr[i].first_login_time = 0;
-              } else {
-                tempArr[i].first_login_time = this.common.getTimes(
-                  tempArr[i].first_login_time * 1000
-                );
-              }
-              if (tempArr[i].account_status == 0) {
-                tempArr[i].account_status = "正常";
-              } else {
-                tempArr[i].account_status = "冻结";
-              }
-            }
-            this.tableData = tempArr;
-            this.pager.count = res.data.total_num;
+            // for (var i = 0; i < tempArr.length; i++) {
+            //   tempArr[i].average_store = tempArr[i].average_store / 1000000;
+            //   tempArr[i].sum_profit = tempArr[i].sum_profit / 1000000;
+            //   if (tempArr[i].first_bind_time == 0) {
+            //     tempArr[i].first_bind_time = 0;
+            //   } else {
+            //     tempArr[i].first_bind_time = this.common.getTimes(
+            //       tempArr[i].first_bind_time * 1000
+            //     );
+            //   }
+            //   if (tempArr[i].first_login_time == 0) {
+            //     tempArr[i].first_login_time = 0;
+            //   } else {
+            //     tempArr[i].first_login_time = this.common.getTimes(
+            //       tempArr[i].first_login_time * 1000
+            //     );
+            //   }
+            //   if (tempArr[i].account_status == 0) {
+            //     tempArr[i].account_status = "正常";
+            //   } else {
+            //     tempArr[i].account_status = "冻结";
+            //   }
+            // }
+        
           } else {
             this.$message({
               message: "后台服务无响应",
@@ -607,7 +521,7 @@ export default {
         })
         .catch(error => {
           this.$message({
-            message: "网络出错，请重新请求",
+             message: "后台服务无响应",
             type: "error"
           });
         });
@@ -734,7 +648,7 @@ export default {
   },
   components: {
     pageNation: pageNation,
-    tableBarActiveUser: tableBarActiveUser,
+    tableBarminging: tableBarminging,
     mySearch: mySearch
   }
 };

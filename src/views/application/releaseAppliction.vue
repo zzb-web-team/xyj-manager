@@ -1,5 +1,5 @@
 <template>
-<section class="myself-container">
+<section class="myself-container myself-container-adds">
     <div class="device_release">
         <div class="bottom_boador">
             <el-row type="flex" class="row_active" justify="center" style="margin-bottom:20px;">
@@ -121,7 +121,7 @@
             </el-row>
         </div>
     </div>
-    <!-- <el-dialog :visible.sync="newdialogReleaseState" class="my_dialog_setnew" :show-close="false">
+    <el-dialog :visible.sync="newdialogReleaseState" class="my_dialog_setnew" :show-close="false">
         <el-row type="flex" class="row_active">
             <el-col :span="24">
                 <template>
@@ -142,7 +142,7 @@
                 </el-pagination>
             </el-col>
         </el-row>
-    </el-dialog> -->
+    </el-dialog>
 
 </section>
 </template>
@@ -204,7 +204,10 @@ export default {
                 labelName2: "",
                 inputText2: "",
                 inputTextactive2: "请输入SN终止编号",
-                optionArr: ["全部", "P001", "P002"],
+                optionArr: [
+                    {type: 1, type_info: "RK3328"},
+                    {type: 2, type_info: "AMS805"}
+                ],
                 selectedValue: "",
                 selectedlabel: "",
                 selectedlabel1: "",
@@ -522,7 +525,7 @@ export default {
                             type: "error"
                         });
                     } else {
-                        this.form.optionArr = res.data
+                       // this.form.optionArr = res.data
                     }
                 })
                 .catch(error => {
@@ -592,8 +595,11 @@ export default {
                         this.dataNum = nowarrLength
                         for (var i = 0; i < nowarr.length; i++) {
                             switch (nowarr[i].dev_type) {
+                                case 1:
+                                    nowarr[i].dev_type = "RK33228"
+                                    break;
                                 case 2:
-                                    nowarr[i].dev_type = "初代西柚机"
+                                    nowarr[i].dev_type = "AMS805"
                                     break;
                             }
                             switch (nowarr[i].status) {
@@ -602,6 +608,9 @@ export default {
                                     break;
                                 case 1:
                                     nowarr[i].status = "在线"
+                                    break;
+                                       case 99:
+                                    nowarr[i].status = "新建"
                                     break;
 
                             }
@@ -701,7 +710,7 @@ export default {
         margin: 0 auto;
     }
 
-    .dialog_div .dialog_div_upload .el-upload-dragger {
+   .myself-container-adds .dialog_div .dialog_div_upload .el-upload-dragger {
         width: 390px;
     }
 
@@ -777,7 +786,7 @@ export default {
             padding-left: 5px;
             box-sizing: border-box;
             font-family: "微软雅黑";
-            width: 300px;
+            width: 180px;
         }
 
         &.row_active2 {

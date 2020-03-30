@@ -7,7 +7,12 @@
                     <i class="el-icon-search" style="color:#606266"></i>
                     <el-input class="search-input" v-model="searchText" placeholder="用户ID、用户昵称" @keyup.enter.native="onSubmitKey"></el-input>
                 </div>
-                <div @click="getShow()" class="div_show" style="color:#606266">筛选</div>
+                <div @click="getShow()" class="div_show" style="color:#606266">筛选
+                              <i
+                class="el-icon-caret-bottom"
+                :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
+              ></i>
+                </div>
             </el-row>
             <div v-show="showState">
                 <el-row type="flex" class="row_activess">
@@ -88,6 +93,7 @@ export default {
             searchText: "",
             start_time: "",
             end_time: "",
+            rotate: false,
             profit_type: "",
             profit_types: [{
                     value: "0",
@@ -306,6 +312,7 @@ export default {
         },
         getShow() {
             this.showState = !this.showState;
+            this.rotate = !this.rotate;
         },
         addAccout() {
             this.dialogVisible = true;

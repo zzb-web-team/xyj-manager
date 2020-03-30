@@ -35,6 +35,7 @@
         background:#283049;
         box-shadow: 3px 0px 7px 0px rgba(0, 0, 0, 0.12);
         width: 250px;
+        overflow: auto;
     }
     .el-submenu .el-menu {
         box-shadow: 3px 0px 7px 0px rgba(0, 0, 0, 0.12);
@@ -58,4 +59,5 @@
 .myself-container {
     padding-bottom: 30px;
 }
+
 

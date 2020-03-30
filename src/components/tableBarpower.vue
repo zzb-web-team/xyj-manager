@@ -3,7 +3,7 @@
     <el-table-column type="selection" width="55" v-if="clomnSelection" :selectable="checkboxT"> </el-table-column>
     <el-table-column v-for="(item,index) in rowHeader" :sortable="item.sortable" :key="index" :prop="item.prop" :label="item.label" :width="item.width">
     </el-table-column>
-    <el-table-column :label="tableOption.label" :width="tableOption.width">
+    <!-- <el-table-column :label="tableOption.label" :width="tableOption.width">
         <template slot-scope="scope">
             <el-button @click="toDetail(scope.row)" size="mini">详情</el-button>
             <el-button @click="toChange(scope.row)" size="mini">修改</el-button>
@@ -12,7 +12,7 @@
             <el-button @click="toDelete(scope.row)" size="mini">删除</el-button>
 
         </template>
-    </el-table-column>
+    </el-table-column> -->
 </el-table>
 </template>
 

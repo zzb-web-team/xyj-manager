@@ -5,30 +5,17 @@
         <el-row type="flex">
           <div class="search-con">
             <i class="el-icon-search" style="color:#606266"></i>
-            <el-input class="search-input" v-model="searchText" placeholder="设备SN、用户ID"></el-input>
+            <el-input class="search-input" v-model="searchText" placeholder="设备SN、用户ID" @keyup.enter.native="searchInfo"></el-input>
           </div>
           <div @click="getShow()" class="div_show" style="color:#606266">筛选
-                    <i
+                      <i
                 class="el-icon-caret-bottom"
                 :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
               ></i>
           </div>
         </el-row>
         <el-row type="flex" class="row_activess" v-show="showState">
-          <el-form-item label="日期" style="display: flex;">
-            <el-date-picker
-              v-model="start_time"
-              style="width:200px;"
-              type="datetime"
-              placeholder="选择开始日期时间"
-            ></el-date-picker>-
-            <el-date-picker
-              v-model="end_time"
-              style="width:200px;"
-              type="datetime"
-              placeholder="选择结束日期时间"
-            ></el-date-picker>
-          </el-form-item>
+      
           <el-form-item>
             <el-button type="primary" @click="search">确定</el-button>
           </el-form-item>
@@ -40,8 +27,7 @@
     </div>
     <div class="devide_table">
       <el-row type="flex" class="row_active">
-        <el-col :span="24" style="display: flex;justify-content: space-between;">
-          <el-button type="primary" @click="addAccout">调整算力系数</el-button>
+        <el-col :span="24" style="display: flex;justify-content: flex-end">
           <el-button type="primary" @click="toexportExcel">导出</el-button>
         </el-col>
       </el-row>
@@ -49,14 +35,10 @@
         <el-col :span="24">
           <el-table :data="tableData" border style="width: 100%" @sort-change="tableSortChange">
             <el-table-column prop="dev_sn" label="设备SN"></el-table-column>
+            <el-table-column prop="dev_name" label="设备名称"></el-table-column>
             <el-table-column prop="user_id" label="绑定用户ID"></el-table-column>
-            <el-table-column prop="active1" label="当日剩余空间/总空间"></el-table-column>
-            <el-table-column prop="active2" label="当日平均上下行宽带"></el-table-column>
-            <el-table-column prop="online_time" label="当日在线时长" :formatter="onlineTime"></el-table-column>
-            <el-table-column prop="ip_value" label="当日IP" :formatter="formatNumber"></el-table-column>
-            <el-table-column prop="store_value" label="当日存储值" :formatter="formatNumber"></el-table-column>
-            <el-table-column prop="store" label="当日算力" :formatter="formatNumber"></el-table-column>
-            <el-table-column prop="time_stamp" sortable="custom" label="时间"></el-table-column>
+            <el-table-column prop="total_value"  sortable="custom" label="算力值"></el-table-column>
+
           </el-table>
         </el-col>
       </el-row>
@@ -101,14 +83,14 @@
 import tableBarActive2 from "../../components/tableBarActive2";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
-import { getDevicePower, set_earn_param } from "../../api/api";
+import {ptfs_query_cp_value_list } from "../../api/api";
 import common from "../../common/js/util.js";
 
 export default {
   data() {
     return {
-      dialogVisible: false,
       rotate: false,
+      dialogVisible: false,
       searchText: "",
       start_time: "",
       end_time: "",
@@ -137,6 +119,7 @@ export default {
       this.pager.page = 1;
       this.start_time = "";
       this.end_time = "";
+      this.searchText=""
       this.getInfo()
     },
     //排序
@@ -148,6 +131,10 @@ export default {
         this.order = 1;
       }
       this.getInfo();
+    },
+    searchInfo(){
+         this.getInfo();
+
     },
     formatTime(row) {
       return this.common.getTimes(row.time_stamp * 1000);
@@ -192,48 +179,55 @@ export default {
         });
     },
     getInfo() {
-      var data = {
-        cur_page: this.pager.page - 1,
-        order: this.order,
-        start_time:
-          this.start_time === "" ? 0 : new Date(this.start_time).getTime(),
-        end_time: this.end_time === "" ? 0 : new Date(this.end_time).getTime()
-      };
-      if (this.judgeString(this.searchText)) {
-        var arr = Object.keys(this.judgeString(this.searchText));
-        data.query_type = arr.length === 0 ? 0 : 1;
-        var param = Object.assign(this.judgeString(this.searchText), data);
-      } else {
-        this.$message.error("请输入正确的设备SN、用户ID");
-        return;
-      }
+      // var data = {
+      //   cur_page: this.pager.page - 1,
+      //   order: this.order,
+      //   start_time:
+      //     this.start_time === "" ? 0 : new Date(this.start_time).getTime(),
+      //   end_time: this.end_time === "" ? 0 : new Date(this.end_time).getTime()
+      // };
+      // if (this.judgeString(this.searchText)) {
+      //   var arr = Object.keys(this.judgeString(this.searchText));
+      //   data.query_type = arr.length === 0 ? 0 : 1;
+      //   var param = Object.assign(this.judgeString(this.searchText), data);
+      // } else {
+      //   this.$message.error("请输入正确的设备SN、用户ID");
+      //   return;
+      // }
+      let param =new Object()
+   
+          param.user_id= 0,
+         param.dev_sn=this.searchText
+         param.order=this.order,
+        param.cur_page=this.pager.page - 1
 
-      getDevicePower(param)
+      ptfs_query_cp_value_list(param)
         .then(res => {
           if (res.status === 0) {
+            console.log(res)
             this.pager.count = res.data.total_num;
             this.pager.rows = res.data.total_page;
             //this.tableData = res.data.total_profit_list;
             let teamarr = [];
-            if (res.data.profit_detail_list) {
-              teamarr = res.data.profit_detail_list;
+            if (res.data.com_power_list) {
+              teamarr = res.data.com_power_list;
               for (var i = 0; i < teamarr.length; i++) {
-                teamarr[i].active1 =
-                  (teamarr[i].free_cap / 1024 / 1024 / 1024).toFixed(2) +
-                  "GB" +
-                  "/" +
-                  (teamarr[i].total_cap / 1024 / 1024 / 1024).toFixed(2) +
-                  "GB";
-                teamarr[i].active2 =
-                  (teamarr[i].up_bandwidth / 1024 / 1024 / 1024).toFixed(2) +
-                  "GB" +
-                  "/" +
-                  (teamarr[i].down_bandwidth / 1024 / 1024 / 1024).toFixed(2) +
-                  "GB";
+                // teamarr[i].active1 =
+                //   (teamarr[i].free_cap / 1024 / 1024 / 1024).toFixed(2) +
+                //   "GB" +
+                //   "/" +
+                //   (teamarr[i].total_cap / 1024 / 1024 / 1024).toFixed(2) +
+                //   "GB";
+                // teamarr[i].active2 =
+                //   (teamarr[i].up_bandwidth / 1024 / 1024 / 1024).toFixed(2) +
+                //   "GB" +
+                //   "/" +
+                //   (teamarr[i].down_bandwidth / 1024 / 1024 / 1024).toFixed(2) +
+                //   "GB";
 
-                teamarr[i].time_stamp = this.common.getTimess(
-                  teamarr[i].time_stamp * 1000
-                );
+                // teamarr[i].time_stamp = this.common.getTimess(
+                //   teamarr[i].time_stamp * 1000
+                // );
               }
             } else {
               let teamarr = [];
@@ -340,7 +334,6 @@ export default {
     getShow() {
       this.showState = !this.showState;
       this.rotate = !this.rotate;
-
     },
     search() {
       this.pager.page = 1;

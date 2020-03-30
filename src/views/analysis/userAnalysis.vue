@@ -216,13 +216,12 @@ export default {
                 cur_page: this.pager.page - 1
             }
             ptfs_query_user_trend_list(param).then(res => {
-                console.log(res)
                 if (res.status == 0) {
                     this.range_total_user = res.data.range_total_user
                     this.total_user = res.data.total_user
                     // this.total_bind_num = res.data.total_bind_num
                     this.range_total_bind_num = res.data.range_total_bind_num
-                    this.percentage = ((this.range_total_user) / (this.total_user)) * 100
+                    this.percentage = (((this.range_total_user) / (this.total_user)) * 100).toFixed(2)
                     this.tableData = res.data.user_trend_list
                     for (var i = 0; i < this.tableData.length; i++) {
                         this.tableData[i].time_stamp = this.common.getTimess((this.tableData[i].time_stamp) * 1000)

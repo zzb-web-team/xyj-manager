@@ -10,7 +10,12 @@
                             <i class="el-icon-search" style="color:#606266"></i>
                             <el-input class="search-input" v-model="notice_title" placeholder="请输入标题" @keyup.enter.native="onSubmitKey"></el-input>
                         </div>
-                        <div @click="getShow" class="div_show" style="color:#606266">筛选</div>
+                        <div @click="getShow" class="div_show" style="color:#606266">筛选
+                                    <i
+                class="el-icon-caret-bottom"
+                :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
+              ></i>
+                        </div>
                     </el-row>
                     <el-row type="flex" class="row_activess" v-show="showState">
                         <el-form-item label="状态">
@@ -52,7 +57,12 @@
                             <i class="el-icon-search" style="color:#606266"></i>
                             <el-input class="search-input" v-model="notice_title" placeholder="请输入标题" @keyup.enter.native="onSubmitKey"></el-input>
                         </div>
-                        <div @click="getShow" class="div_show" style="color:#606266">筛选</div>
+                        <div @click="getShow" class="div_show" style="color:#606266">筛选
+                                    <i
+                class="el-icon-caret-bottom"
+                :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
+              ></i>
+                        </div>
                     </el-row>
                     <el-row type="flex" class="row_activess" v-show="showState">
                         <el-form-item label="状态">
@@ -153,6 +163,7 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
+       rotate: false,
       Notice_reach_nums_active: 0,
       Notice_open_nums_active: 0,
       Notice_del_nums_active: 0,
@@ -452,9 +463,11 @@ export default {
 
     getShow() {
       this.showState = !this.showState;
+      this.rotate = !this.rotate;
     },
     getShow1() {
       this.showState1 = !this.showState1;
+      this.rotate = !this.rotate;
     },
     //通知详情
     toDetails(val) {

@@ -1,31 +1,15 @@
 <template>
 <section class="myself-container">
-    <div class="user-title">
-        <el-row>
-            <el-col :span="5">
-                <div class="user-item">
-                    <div class="item-count">{{user_form.total_num}}</div>
-                    <div class="item-text">注册用户</div>
-                </div>
-            </el-col>
-            <el-col :span="5" style="margin-left:30px;">
-                <div class="user-item">
-                    <div class="item-count">{{user_form.normal_num}}</div>
-                    <div class="item-text">绑定用户</div>
-                </div>
-            </el-col>
-
-        </el-row>
-    </div>
+  
     <div class="device_form">
         <el-form ref="form" :model="form">
             <el-row type="flex">
                 <div class="search-con">
                     <i class="el-icon-search" @click="searchInfo" style="color:#606266"></i>
-                    <el-input class="search-input" v-model="searchText" placeholder="用户ID、用户昵称、手机号" @keyup.enter.native="onSubmitKey"></el-input>
+                    <el-input class="search-input" v-model="searchText" placeholder="设备SN，用户ID" @keyup.enter.native="onSubmitKey"></el-input>
                 </div>
                 <div @click="getShow()" class="div_show" style="color:#606266">筛选
-                    <i
+                             <i
                 class="el-icon-caret-bottom"
                 :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
               ></i>
@@ -33,26 +17,17 @@
             </el-row>
             <div v-show="showState">
                 <el-row type="flex" class="row_activess">
-                    <el-form-item label="状态" style="display: flex;">
+                    <el-form-item label="类型" style="display: flex;">
                         <el-select v-model="form.statusText" placeholder="请选择" @change="onChange">
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="性别" style="display: flex;">
-                        <el-select v-model="form.sex" placeholder="请选择" @change="onChange2">
-                            <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="注册时间" style="display: flex;">
+                        <el-form-item label="时间" style="display: flex;">
                         <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                         </el-date-picker>
                     </el-form-item>
-                    <el-form-item label="首次绑定时间" style="display: flex;">
-                        <el-date-picker v-model="value2" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                        </el-date-picker>
-                    </el-form-item>
+                 
                 </el-row>
                 <el-row type="flex" class="row_activess">
                     <el-form-item>
@@ -74,7 +49,7 @@
         </el-row>
         <el-row type="flex" class="row_active">
             <el-col :span="24">
-                <tableBarActiveUser id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBarActiveUser>
+                <tableBarpower id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBarpower>
             </el-col>
         </el-row>
     </div>
@@ -94,28 +69,22 @@
 </template>
 
 <script>
-import tableBarActiveUser from "../../components/tableBarActiveUser";
+import tableBarpower from "../../components/tableBarpower";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
 import {
-  ptfs_query_total_users,
-  ptfs_query_user_list,
-  changePageCoreRecordData,
-  ptfs_query_list_user_store_list,
-  ptfs_query_user_total_profit_everyday,
-  ptfs_forbid_users,
-  query_binded_user_cnt
+  ptfs_query_node_info_list
 } from "../../api/api";
 import common from "../../common/js/util.js";
 
 export default {
   data() {
     return {
+       rotate: false,
       dialogVisible: false,
       dialogVisible2: false,
       searchText: "",
-      rotate: false,
-      operatingStatus: true,
+      operatingStatus: false,
       clomnSelection: false,
       reserveselection: true,
       value1: "",
@@ -148,12 +117,13 @@ export default {
         },
         {
           value: "1",
-          label: "正常"
+          label: "新增"
         },
-        {
+         {
           value: "2",
-          label: "冻结"
-        }
+          label: "扣除"
+        },
+     
       ],
       options2: [
         {
@@ -173,48 +143,35 @@ export default {
       rowHeader: [
         {
           prop: "user_id",
-          label: "用户ID"
+          label: "设备SN"
         },
         {
-          prop: "user_name",
-          label: "用户昵称"
+          prop: "node_id",
+          label: "绑定用户ID"
         },
         {
-          prop: "user_tel",
-          label: "手机号"
+          prop: "opt_active",
+          label: "类型"
         },
         {
-          prop: "sex",
-          label: "性别"
+          prop: "type",
+          label: "用户行为"
+        },
+       
+        {
+          prop: "opt_value",
+          label: "变化值"
         },
         {
-          prop: "sum_profit",
-          label: "总积分",
+          prop: "total_value",
+          label: "算力值"
+        },
+          {
+          prop: "time_stamp",
+          label: "日期",
           sortable: "custom"
         },
-        {
-          prop: "average_store",
-          label: "平均算力",
-          sortable: "custom"
-        },
-        {
-          prop: "dev_num",
-          label: "设备总数"
-        },
-        {
-          prop: "first_login_time",
-          label: "注册时间",
-          sortable: "custom"
-        },
-        {
-          prop: "first_bind_time",
-          label: "首次绑定时间",
-          sortable: "custom"
-        },
-        {
-          prop: "account_status",
-          label: "状态"
-        }
+
       ],
       tableData: [],
       tableOption: {
@@ -247,41 +204,23 @@ export default {
       user_sex: "",
       tableData2: [],
       pageActive: 0,
-      pageActives: 1
+      pageActives: 1,
+      ad_type:0,
+      order:0
     };
   },
   mounted: function() {
-    this.queryUsersTotal();
+    //this.queryUsersTotal();
     this.queryUserList();
-    this.queryInfoUser();
+    //this.queryInfoUser();
   },
   methods: {
     //排序
     tableSortChange(column, prop, order) {
-      if (column.column.label == "平均算力") {
-        if (column.column.order == "descending") {
-          this.order = 6;
-        } else {
-          this.order = 7;
-        }
-      } else if (column.column.label == "总积分") {
-        if (column.column.order == "descending") {
-          this.order = 4;
-        } else {
-          this.order = 5;
-        }
-      } else if (column.column.label == "注册时间") {
-        if (column.column.order == "descending") {
-          this.order = 0;
-        } else {
-          this.order = 1;
-        }
-      } else if (column.column.label == "首次绑定时间") {
-        if (column.column.order == "descending") {
-          this.order = 2;
-        } else {
-          this.order = 3;
-        }
+         if (column.order == "descending") {
+        this.order = 0;
+      } else {
+        this.order = 1;
       }
 
       this.pager.page = 1;
@@ -317,8 +256,7 @@ export default {
     searchInfo() {},
     getShow() {
       this.showState = !this.showState;
-            this.rotate = !this.rotate;
-
+      this.rotate = !this.rotate;
     },
     //导出的方法
 
@@ -451,16 +389,18 @@ export default {
     },
     onChange(item) {
       this.form.account_status = parseInt(item);
-      if (item == 0) {
-        this.form.statusText = "全部";
-        this.user_status = -1;
-      } else if (item == 1) {
-        this.user_status = 0;
-        this.form.statusText = "正常";
-      } else if (item == 2) {
-        this.user_status = 1;
-        this.form.statusText = "冻结";
-      }
+      this.ad_type=item
+      this.queryUserList()
+      // if (item == 0) {
+      //   this.form.statusText = "全部";
+      //   this.user_status = -1;
+      // } else if (item == 1) {
+      //   this.user_status = 0;
+      //   this.form.statusText = "正常";
+      // } else if (item == 2) {
+      //   this.user_status = 1;
+      //   this.form.statusText = "冻结";
+      // }
     },
     onChange1(item) {
       this.form.active_status = parseInt(item);
@@ -510,90 +450,109 @@ export default {
       let param = new Object();
       let phoneNumber = /^1(3|4|5|7|8)\d{9}$/;
       let user_id = /^\d{7}$/;
-      if (this.searchText != "") {
-        if (phoneNumber.test(this.searchText) == true) {
-          param.user_id = 0;
-          param.user_tel = this.searchText;
-          param.user_name = "";
-        } else if (user_id.test(this.searchText) == true) {
-          param.user_id = parseInt(this.searchText);
-          param.user_tel = "";
-          param.user_name = "";
-        } else {
-          param.user_id = 0;
-          param.user_tel = "";
-          param.user_name = this.searchText;
-        }
-      } else {
-        param.user_id = "";
-        param.user_tel = "";
-        param.user_name = "";
-      }
-      param.user_status = this.user_status;
-      param.user_sex = this.user_sex;
-      param.cur_page = this.pager.page - 1;
-      param.order = this.order;
+      // if (this.searchText != "") {
+      //   if (phoneNumber.test(this.searchText) == true) {
+      //     param.user_id = 0;
+      //     param.user_tel = this.searchText;
+      //     param.user_name = "";
+      //   } else if (user_id.test(this.searchText) == true) {
+      //     param.user_id = parseInt(this.searchText);
+      //     param.user_tel = "";
+      //     param.user_name = "";
+      //   } else {
+      //     param.user_id = 0;
+      //     param.user_tel = "";
+      //     param.user_name = this.searchText;
+      //   }
+      // } else {
+      //   param.user_id = "";
+      //   param.user_tel = "";
+      //   param.user_name = "";
+      // }
+      // param.user_status = this.user_status;
+      // param.user_sex = this.user_sex;
+      // param.cur_page = this.pager.page - 1;
+      // param.order = this.order;
 
-      if (!this.value1) {
-        param.reg_start_time = 0;
-        param.reg_end_time = 0;
+    
+      // let routerparam = JSON.stringify(param);
+      // localStorage.setItem("routerparam", routerparam);
+      let paramactive=new Object()
+     
+     paramactive.order= this.order,
+     paramactive.user_id= 0,
+     paramactive.dev_sn=this.searchText,
+     paramactive.ad_type= parseInt(this.ad_type),
+     paramactive.cur_page= this.pager.page - 1,
+     paramactive.start_time= 0,
+     paramactive.end_time= 2493043200
+       if (!this.value1) {
+        paramactive.start_time = 0;
+        paramactive.end_time = 2493043200;
       } else {
         if (this.value1[0] == undefined) {
-          param.reg_start_time = 0;
+          paramactive.start_time = 0;
         } else {
-          param.reg_start_time = this.value1[0].getTime() / 1000;
+          paramactive.start_time = this.value1[0].getTime() / 1000;
         }
         if (this.value1[1] == undefined) {
-          param.reg_end_time = 0;
+          paramactive.end_time = 2493043200;
         } else {
-          param.reg_end_time = this.value1[1].getTime() / 1000;
+          paramactive.end_time = this.value1[1].getTime() / 1000;
         }
       }
-      if (!this.value2) {
-        param.bind_start_time = 0;
-        param.bind_end_time = 0;
-      } else {
-        if (this.value2[0] == undefined) {
-          param.bind_start_time = 0;
-        } else {
-          param.bind_start_time = this.value2[0].getTime() / 1000;
-        }
-        if (this.value2[1] == undefined) {
-          param.bind_end_time = 0;
-        } else {
-          param.bind_end_time = this.value2[1].getTime() / 1000;
-        }
-      }
-      let routerparam = JSON.stringify(param);
-      localStorage.setItem("routerparam", routerparam);
-      ptfs_query_list_user_store_list(param)
+      ptfs_query_node_info_list(paramactive)
         .then(res => {
-          if (res.status == 0 && res.err_code == 0) {
+          if (res.status == 0) {
             console.log(res);
             let tempArr = [];
+           
 
-            tempArr = res.data.store_list;
+            tempArr = res.data.cp_list;
             for (var i = 0; i < tempArr.length; i++) {
-              tempArr[i].average_store = tempArr[i].average_store / 1000000;
-              tempArr[i].sum_profit = tempArr[i].sum_profit / 1000000;
-              if (tempArr[i].first_bind_time == 0) {
-                tempArr[i].first_bind_time = 0;
-              } else {
-                tempArr[i].first_bind_time = this.common.getTimes(
-                  tempArr[i].first_bind_time * 1000
+              // tempArr[i].average_store = tempArr[i].average_store / 1000000;
+              // tempArr[i].sum_profit = tempArr[i].sum_profit / 1000000;
+              // if (tempArr[i].first_bind_time == 0) {
+              //   tempArr[i].first_bind_time = 0;
+              // } else {
+              //   tempArr[i].first_bind_time = this.common.getTimes(
+              //     tempArr[i].first_bind_time * 1000
+              //   );
+              // }
+              // if (tempArr[i].first_login_time == 0) {
+              //   tempArr[i].first_login_time = 0;
+              // } else {
+              //   tempArr[i].first_login_time = this.common.getTimes(
+              //     tempArr[i].first_login_time * 1000
+              //   );
+              // }
+                  tempArr[i].time_stamp = this.common.getTimes(
+                  tempArr[i].time_stamp  * 1000
                 );
-              }
-              if (tempArr[i].first_login_time == 0) {
-                tempArr[i].first_login_time = 0;
+                  switch (tempArr[i].type){
+                   case 202:
+                 tempArr[i].type="绑定"
+                   break;
+                  case 203:
+                 tempArr[i].type="解绑"
+                   break;
+                       case 204:
+                 tempArr[i].type="用户签到"
+                   break;
+                       case 205:
+                 tempArr[i].type="在线24个小时"
+                   break;
+                       case 206:
+                 tempArr[i].type="离线一次 扣除一分， 最多扣除3次 "
+                   break;
+             
+                  
+
+               }
+              if (tempArr[i].opt_value >= 0) {
+                tempArr[i].opt_active = "新增";
               } else {
-                tempArr[i].first_login_time = this.common.getTimes(
-                  tempArr[i].first_login_time * 1000
-                );
-              }
-              if (tempArr[i].account_status == 0) {
-                tempArr[i].account_status = "正常";
-              } else {
-                tempArr[i].account_status = "冻结";
+                tempArr[i].opt_active = "扣除";
               }
             }
             this.tableData = tempArr;
@@ -734,7 +693,7 @@ export default {
   },
   components: {
     pageNation: pageNation,
-    tableBarActiveUser: tableBarActiveUser,
+    tableBarpower: tableBarpower,
     mySearch: mySearch
   }
 };

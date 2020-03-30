@@ -48,7 +48,7 @@ export const userctrl = params => { return axios.post(`${ownbase}/admin/system/u
 //查询用户详情
 export const ptfs_query_user_list = params => { return axios.post(`${ownbase}/account/ptfs_query_user_list `, params).then(res => res.data); };
 export const ptfs_query_list_user_store_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_list_user_store_list `, params).then(res => res.data); };
-export const ptfs_query_node_info_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_info_list `, params).then(res => res.data); };
+//export const ptfs_query_node_info_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_info_list `, params).then(res => res.data); };
 export const ptfs_query_user_total_profit_everyday = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_user_total_profit_everyday `, params).then(res => res.data); };
 //用户存储力列表查询
 export const ptfs_query_user_store_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_user_store_list `, params).then(res => res.data); };
@@ -339,9 +339,11 @@ export const edit_device_basicinfo = params => { return axios.post(`${ownbase}/m
 //西柚机设备激活   关机/重启 
 export const ctrl_node_state = params => { return axios.post(`${ownbase}/miner_ctrl/ctrl_node_state2`, params).then(res => res.data); };
 //西柚机设备算力  table查询
-export const getDevicePower = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_info_list`, params).then(res => res.data); };
+//export const getDevicePower = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_info_list`, params).then(res => res.data); };
 //西柚机设备算力   调整算力系数
 export const set_earn_param = params => { return axios.post(`${ownbase}/miner_earn/ptfs_set_earn_param`, params).then(res => res.data); };
+//设备激活
+export const chg_device_state = params => { return axios.post(`${ownbase}/miner_ctrl/chg_device_state`, params).then(res => res.data); };
 
 2019-11-23
 //积分管理   积分明细
@@ -445,4 +447,57 @@ export const modify_domain_list = params => { return axios.post(`${ownbase}/doma
 export const send_ptfs_cmd = params => { return axios.post(`${ownbase2}/bg_manager_tool/send_ptfs_cmd`, params).then(res => res.data); };
 export const query_ptfs_cmd_result = params => { return axios.post(`${ownbase}/bg_manager_tool/query_ptfs_cmd_result`, params).then(res => res.data); };
 
-                               
+ 
+
+
+//20200319新增
+//
+export const ptfs_query_node_grade = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_grade `, params).then(res => res.data); };
+//
+export const ptfs_query_con_value_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_con_value_list `, params).then(res => res.data); };
+//
+export const ptfs_get_con_param_add = params => { return axios.post(`${ownbase}/miner_earn/ptfs_get_con_param_add `, params).then(res => res.data); };
+//
+export const ptfs_get_con_param_dec = params => { return axios.post(`${ownbase}/miner_earn/ptfs_get_con_param_dec `, params).then(res => res.data); };
+//
+export const ptfs_set_con_param_add = params => { return axios.post(`${ownbase}/miner_earn/ptfs_set_con_param_add `, params).then(res => res.data); };
+//
+export const ptfs_set_con_param_dec = params => { return axios.post(`${ownbase}/miner_earn/ptfs_set_con_param_dec `, params).then(res => res.data); };
+
+//
+export const ptfs_query_cp_value_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_cp_value_list `, params).then(res => res.data); };
+//
+export const ptfs_query_node_info_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_info_list `, params).then(res => res.data); };
+//
+export const ptfs_get_com_power_scale = params => { return axios.post(`${ownbase}/miner_earn/ptfs_get_com_power_scale `, params).then(res => res.data); };
+//
+export const ptfs_get_com_power_add = params => { return axios.post(`${ownbase}/miner_earn/ptfs_get_com_power_add `, params).then(res => res.data); };
+//
+export const ptfs_get_com_power_dec = params => { return axios.post(`${ownbase}/miner_earn/ptfs_get_com_power_dec `, params).then(res => res.data); };
+
+//
+export const ptfs_set_com_power_scale = params => { return axios.post(`${ownbase}/miner_earn/ptfs_set_com_power_scale `, params).then(res => res.data); };
+//
+export const ptfs_set_com_power_add = params => { return axios.post(`${ownbase}/miner_earn/ptfs_set_com_power_add `, params).then(res => res.data); };
+//
+export const ptfs_set_com_power_dec = params => { return axios.post(`${ownbase}/miner_earn/ptfs_set_com_power_dec `, params).then(res => res.data); };
+//
+export const ptfs_query_user_profit_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_user_profit_list `, params).then(res => res.data); };
+
+//帮助中心
+//新建
+export const create_help_cat_info = params => { return axios.post(`${ownbase}/miner_ctrl/create_help_cat_info `, params).then(res => res.data); };
+//查询
+export const query_help_cat_info = params => { return axios.post(`${ownbase}/miner_ctrl/query_help_cat_info `, params).then(res => res.data); };
+//修改
+export const modify_help_cat_info = params => { return axios.post(`${ownbase}/miner_ctrl/modify_help_cat_info `, params).then(res => res.data); };
+//删除
+export const delete_help_cat_info = params => { return axios.post(`${ownbase}/miner_ctrl/delete_help_cat_info `, params).then(res => res.data); };
+
+
+
+
+
+
+
+

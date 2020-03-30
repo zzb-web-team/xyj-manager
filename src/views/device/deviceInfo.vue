@@ -1,5 +1,5 @@
 <template>
-<section class="myself-container">
+<section class="myself-container deviceinfo">
     <div class="user-title">
         <el-row>
             <el-col :span="5">
@@ -23,33 +23,38 @@
                     <i class="el-icon-search" style="color:#606266"></i>
                     <el-input class="search-input" v-model="searchText" placeholder="设备SN、设备名称、MAC地址、设备IP、节点ID" @keyup.enter.native="onSubmitKey"></el-input>
                 </div>
-                <div @click="getShow()" class="div_show" style="color:#606266">筛选</div>
+                <div @click="getShow()" class="div_show" style="color:#606266">筛选
+                          <i
+                class="el-icon-caret-bottom"
+                :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
+              ></i>
+                </div>
             </el-row>
             <div v-show="showState">
                 <el-row type="flex" class="row_activess">
-                    <el-form-item label="设备类型" style="display: flex;width:180px;">
+                    <el-form-item label="设备类型" style="display: flex;width:170px;">
                         <el-select v-model="dev_type" placeholder="请选择">
                             <el-option v-for="item in dev_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="ROM：" style="display: flex; width:180px;">
+                    <el-form-item label="ROM" style="display: flex; width:130px;">
                         <el-select v-model="rom_version" placeholder="请选择">
                             <el-option v-for="item in roms" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="设备状态" style="display: flex;width:180px;">
+                    <el-form-item label="设备状态" style="display: flex;width:170px;">
                         <el-select v-model="online_state" placeholder="请选择">
                             <el-option v-for="item in onlineStates" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="绑定" style="display: flex;width:180px;">
+                    <el-form-item label="绑定" style="display: flex;width:130px;">
                         <el-select v-model="bind_flag" placeholder="请选择" @change="onChange2">
                             <el-option v-for="item in bindFlags" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="注册时间" style="display: flex;">
-                        <el-date-picker v-model="bind_start_ts" style="width:150px;" type="datetime" placeholder="选择开始日期时间"></el-date-picker>-
-                        <el-date-picker v-model="bind_end_ts" style="width:150px;" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
+                        <el-date-picker v-model="bind_start_ts" style="width:110px;" type="datetime" placeholder="选择开始日期时间"></el-date-picker>-
+                        <el-date-picker v-model="bind_end_ts" style="width:110px;" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" style="" @click="search">确定</el-button>
@@ -80,15 +85,16 @@
                     <el-table-column prop="dev_ip" label="设备IP" ></el-table-column>
                     <el-table-column prop="online_state" :formatter="formatState" label="设备状态" ></el-table-column>
                     <el-table-column prop="bind_flag" :formatter="formatBind" label="是否绑定" ></el-table-column>
-                    <el-table-column prop="bind_timestamp" :formatter="formatDevTime" label="绑定时间" sortable ></el-table-column>
+                    <el-table-column prop="bind_timestamp" :formatter="formatDevTime" width="150" label="绑定时间" sortable ></el-table-column>
                     <el-table-column prop="ipfs_id" label="节点ID"></el-table-column>
                     <el-table-column prop="bind_user_id" label="绑定用户ID" ></el-table-column>
-                    <el-table-column label="操作" width="200px">
-                        <template slot-scope="scope">
+                    <el-table-column label="操作" fixed="right" width="200px">
+                        <template slot-scope="scope" >
                             <el-button @click="shut(scope.row)" type="text" size="small">关机</el-button>
                             <el-button type="text" @click="restart(scope.row)" size="small">重启</el-button>
                             <el-button v-show="scope.row.bind_flag===1" @click="untied(scope.row)" type="text" size="small">强制解绑</el-button>
-                            <el-button v-show="scope.row.bind_flag===0" type="text" @click="tie(scope.row)" size="small">绑定</el-button>
+                            <!-- <el-button v-show="scope.row.bind_flag===0" type="text" @click="tie(scope.row)" size="small">绑定</el-button> -->
+                            <el-button v-show="scope.row.bind_flag===0" type="text" @click="tieactive(scope.row)" size="small">绑定</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -103,6 +109,18 @@
             </el-col>
         </el-row>
     </div>
+      <el-dialog :visible.sync="dialogVisibleactive" width="30%" :before-close="handleClose">
+        <el-form ref="form">
+             <el-form-item label="请输入需要绑定ID:">
+                  <el-input v-model="IDvalue"></el-input>
+            </el-form-item>
+           
+            <div style="text-align: center;">
+                <el-button type="primary" @click="onSubmitScale">确定</el-button>
+                <el-button @click="dialogVisible=false">取消</el-button>
+            </div>
+        </el-form>
+    </el-dialog>
 </section>
 </template>
 
@@ -120,13 +138,16 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
+      IDvalue:"",
       dialogVisible: false,
       dialogVisible2: false,
       searchText: "",
       bound_dev_cnt: "",
       online_dev_cnt: "",
+      rotate: false,
       operatingStatus: true,
       clomnSelection: false,
+      dialogVisibleactive:false,
       reserveselection: true,
       rom_version: "",
       dev_type: "",
@@ -286,6 +307,36 @@ export default {
     this.getInfo();
   },
   methods: {
+    tieactive(){
+      this.dialogVisibleactive=true
+
+    },
+     //增长设置
+    onSubmitScale(){
+       this.dialogVisibleactive=false
+      // let param=new Object()
+      // param.con_param_add_type=0,
+      // param.con_param_add_value=this.scalevalue
+      // ptfs_set_com_power_scale(param).then(res=>{
+      //   if(res.status==0){
+      //      this.$message({
+      //       message: "修改成功",
+      //       type: "success"
+      //     });
+
+      //   }
+      //   else{
+      //      this.$message({
+      //       message: "修改失败",
+      //       type: "error"
+      //     });
+      //   }
+
+      // }).catch(error=>{
+
+      // })
+
+    },
     //回车键搜索
     onSubmitKey() {
       this.getInfo();
@@ -345,6 +396,7 @@ export default {
       this.bind_start_ts = "";
       this.dev_type = "";
       this.online_state = "";
+      this.rom_version="";
       this.getInfo();
     },
     formatJson(filterVal, jsonData) {
@@ -577,6 +629,7 @@ export default {
     },
     getShow() {
       this.showState = !this.showState;
+        this.rotate = !this.rotate;
     },
     untied(rows) {
       this.$confirm("确定解绑?", "提示", {
@@ -822,5 +875,11 @@ export default {
       }
     }
   }
+}
+.deviceinfo{
+    .el-button{
+    padding: 8px 8px !important;
+
+}
 }
 </style>

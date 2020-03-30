@@ -150,7 +150,7 @@ export default {
         align-items: center;
 
         .login-con-l {
-            width: 600px;
+            width: 550px;
             margin: 0 auto;
             height: auto;
             display: flex;

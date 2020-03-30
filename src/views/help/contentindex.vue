@@ -1,28 +1,12 @@
 <template>
 <section class="myself-container">
-    <div class="user-title">
-        <el-row>
-            <el-col :span="5">
-                <div class="user-item">
-                    <div class="item-count">{{user_form.total_num}}</div>
-                    <div class="item-text">注册用户</div>
-                </div>
-            </el-col>
-            <el-col :span="5" style="margin-left:30px;">
-                <div class="user-item">
-                    <div class="item-count">{{user_form.normal_num}}</div>
-                    <div class="item-text">绑定用户</div>
-                </div>
-            </el-col>
-
-        </el-row>
-    </div>
+  
     <div class="device_form">
         <el-form ref="form" :model="form">
             <el-row type="flex">
                 <div class="search-con">
                     <i class="el-icon-search" @click="searchInfo" style="color:#606266"></i>
-                    <el-input class="search-input" v-model="searchText" placeholder="用户ID、用户昵称、手机号" @keyup.enter.native="onSubmitKey"></el-input>
+                    <el-input class="search-input" v-model="searchText" placeholder="分组名称" @keyup.enter.native="onSubmitKey"></el-input>
                 </div>
                 <div @click="getShow()" class="div_show" style="color:#606266">筛选
                     <i
@@ -33,26 +17,13 @@
             </el-row>
             <div v-show="showState">
                 <el-row type="flex" class="row_activess">
-                    <el-form-item label="状态" style="display: flex;">
+                    <el-form-item label="节点等级" style="display: flex;">
                         <el-select v-model="form.statusText" placeholder="请选择" @change="onChange">
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="性别" style="display: flex;">
-                        <el-select v-model="form.sex" placeholder="请选择" @change="onChange2">
-                            <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="注册时间" style="display: flex;">
-                        <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="首次绑定时间" style="display: flex;">
-                        <el-date-picker v-model="value2" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                        </el-date-picker>
-                    </el-form-item>
+                 
                 </el-row>
                 <el-row type="flex" class="row_activess">
                     <el-form-item>
@@ -68,13 +39,13 @@
     </div>
     <div class="devide_table">
         <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
-            <el-col style="display: flex;justify-content: flex-end;">
-                <el-button type="primary" @click="toexportExcel">导出</el-button>
+            <el-col style="display: flex;justify-content: flex-start;">
+                <el-button type="primary" @click="onImport">新建</el-button>
             </el-col>
         </el-row>
         <el-row type="flex" class="row_active">
             <el-col :span="24">
-                <tableBarActiveUser id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBarActiveUser>
+                <tableBar id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData"  :operatingStatus="operatingStatus" @handleButton="handleButton" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBar>
             </el-col>
         </el-row>
     </div>
@@ -89,35 +60,61 @@
         </el-row>
 
     </div>
+       <el-dialog :visible.sync="dialogVisibleGroup" width="30%" :before-close="handleClose">
+        <el-form ref="form">
+             <el-form-item label="分组名称:">
+                  <el-input v-model="groupvalue"></el-input>
+            </el-form-item>
+           
+            <div style="text-align: center;">
+                <el-button type="primary" @click="onSubmitGroup">确定</el-button>
+                <el-button @click="dialogVisibleGroup=false">取消</el-button>
+            </div>
+        </el-form>
+    </el-dialog>
+      <el-dialog :visible.sync="dialogVisibleGroupEdit" width="30%" :before-close="handleClose">
+        <el-form ref="form">
+             <el-form-item label="分组名称:">
+                  <el-input v-model="groupEditvalue"></el-input>
+            </el-form-item>
+           
+            <div style="text-align: center;">
+                <el-button type="primary" @click="onSubmitGroupEdit">确定</el-button>
+                <el-button @click="dialogVisibleGroupEdit=false">取消</el-button>
+            </div>
+        </el-form>
+    </el-dialog>
 
 </section>
 </template>
 
 <script>
-import tableBarActiveUser from "../../components/tableBarActiveUser";
+import tableBar from "../../components/tableBar";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
 import {
-  ptfs_query_total_users,
-  ptfs_query_user_list,
-  changePageCoreRecordData,
-  ptfs_query_list_user_store_list,
-  ptfs_query_user_total_profit_everyday,
-  ptfs_forbid_users,
-  query_binded_user_cnt
+  ptfs_query_node_grade,
+  create_help_cat_info,
+  query_help_cat_info,
+  modify_help_cat_info,
+  delete_help_cat_info
 } from "../../api/api";
 import common from "../../common/js/util.js";
 
 export default {
   data() {
     return {
+        groupvalue:"",
+        groupEditvalue:"",
+        dialogVisibleGroup:false,
+        dialogVisibleGroupEdit:false,
       dialogVisible: false,
       dialogVisible2: false,
       searchText: "",
-      rotate: false,
       operatingStatus: true,
       clomnSelection: false,
       reserveselection: true,
+        rotate: false,
       value1: "",
       value2: "",
       valueTime: "",
@@ -126,6 +123,7 @@ export default {
         user_id: "",
         user_name: "",
         tel_num: "",
+           order: 0,
         sex: "全部",
         account_status: 0,
         statusText: "全部",
@@ -141,93 +139,34 @@ export default {
         active_num: "",
         total_num: ""
       },
-      options: [
-        {
-          value: "0",
-          label: "全部"
-        },
-        {
-          value: "1",
-          label: "正常"
-        },
-        {
-          value: "2",
-          label: "冻结"
-        }
-      ],
-      options2: [
-        {
-          value: "0",
-          label: "全部"
-        },
-        {
-          value: "1",
-          label: "男"
-        },
-        {
-          value: "2",
-          label: "女"
-        }
-      ],
-
       rowHeader: [
         {
-          prop: "user_id",
-          label: "用户ID"
+          prop: "cat_name",
+          label: "分组名称"
         },
         {
-          prop: "user_name",
-          label: "用户昵称"
+          prop: "cat_owner",
+          label: "修改人"
         },
         {
-          prop: "user_tel",
-          label: "手机号"
+          prop: "cat_tm",
+          label: "修改时间"
         },
-        {
-          prop: "sex",
-          label: "性别"
-        },
-        {
-          prop: "sum_profit",
-          label: "总积分",
-          sortable: "custom"
-        },
-        {
-          prop: "average_store",
-          label: "平均算力",
-          sortable: "custom"
-        },
-        {
-          prop: "dev_num",
-          label: "设备总数"
-        },
-        {
-          prop: "first_login_time",
-          label: "注册时间",
-          sortable: "custom"
-        },
-        {
-          prop: "first_bind_time",
-          label: "首次绑定时间",
-          sortable: "custom"
-        },
-        {
-          prop: "account_status",
-          label: "状态"
-        }
+    
+
       ],
       tableData: [],
       tableOption: {
         label: "操作",
         options: [
           {
-            label: "详情",
+            label: "修改",
             type: "primary",
             methods: "freeze"
           },
           {
-            label: "冻结",
-            type: "danger",
+            label: "删除",
+            type: "delete",
             methods: "clickOff"
           }
         ]
@@ -247,44 +186,137 @@ export default {
       user_sex: "",
       tableData2: [],
       pageActive: 0,
-      pageActives: 1
+      pageActives: 1,
+      nodegrade:0,
+      user_nick_name:"",
+      uname:"",
+      cat_name:"",
+      cat_id:"",
+      cat_owner:""
+
+
     };
   },
   mounted: function() {
-    this.queryUsersTotal();
+    //this.queryUsersTotal();
     this.queryUserList();
-    this.queryInfoUser();
+    let tempInfo =JSON.parse(this.get('userInfo'))
+        this.uname=tempInfo.username;
+          this.uid =tempInfo.id;
+    //this.queryInfoUser();
   },
   methods: {
+      onSubmitGroupEdit(){
+          let param=new Object()
+          param.cat_id=this.cat_id
+          param.cat_owner=this.cat_owner
+            param.cat_name=this.groupEditvalue
+              modify_help_cat_info(param).then(res=>{
+            if(res.status==0){
+                   this.$message({
+              message: "修改成功",
+              type: "success"
+            });
+            this.dialogVisibleGroupEdit=false
+
+            }else{
+                   this.$message({
+              message: "修改失败",
+              type: "success"
+            });
+            this.dialogVisibleGroupEdit=false
+
+            }
+            this.queryUserList()
+        })
+      },
+      //修改和删除
+      handleButton(val,row){
+          console.log(val)
+          if(val.methods=="freeze"){
+              this.dialogVisibleGroupEdit=true
+              this.groupEditvalue=val.row.cat_name
+              this.cat_id=val.row.cat_id,
+             this.cat_owner=this.uname
+    
+
+          }else{
+              let param=new Object()
+              param.cat_id=val.row.cat_id
+              delete_help_cat_info(param).then(res=>{
+                  if(res.status==0){
+                               this.$message({
+              message: "删除成功",
+              type: "success"
+            });
+
+                  }else{
+            this.$message({
+              message: "删除失败",
+              type: "success"
+            });
+                  }
+                    this.queryUserList()
+
+              }).catch(error=>{
+
+              })
+
+          }
+
+      },
+           get: function (name) {
+        var v = window.document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+          return v ? v[2] : null;
+
+    },
+      onSubmitGroup(){
+          let param= new Object()
+          param.cat_name=this.groupvalue,
+        param.cat_owner=this.uname
+        create_help_cat_info(param).then(res=>{
+           
+
+            if(res.status==0){
+                   this.$message({
+              message: "创建成功",
+              type: "success"
+            });
+            this.dialogVisibleGroup=false
+
+            }
+            else{
+                   this.$message({
+              message: "创建失败",
+              type: "error"
+            });
+            this.dialogVisibleGroup=false
+            }
+             this.queryUserList()
+
+        }).catch(error=>{
+
+        })
+
+
+
+      },
+    //新建
+    onImport(){
+        this.dialogVisibleGroup=true
+        this.groupvalue=""
+
+    },
     //排序
     tableSortChange(column, prop, order) {
-      if (column.column.label == "平均算力") {
-        if (column.column.order == "descending") {
-          this.order = 6;
-        } else {
-          this.order = 7;
-        }
-      } else if (column.column.label == "总积分") {
-        if (column.column.order == "descending") {
-          this.order = 4;
-        } else {
-          this.order = 5;
-        }
-      } else if (column.column.label == "注册时间") {
-        if (column.column.order == "descending") {
-          this.order = 0;
-        } else {
-          this.order = 1;
-        }
-      } else if (column.column.label == "首次绑定时间") {
-        if (column.column.order == "descending") {
-          this.order = 2;
-        } else {
-          this.order = 3;
-        }
+        this.pager.page = 1;
+      if (column.order == "descending") {
+        this.order = 0;
+      } else {
+        this.order = 1;
       }
 
-      this.pager.page = 1;
+     
       // if (column.order == "descending") {
       //     this.order = 0
       // } else {
@@ -317,8 +349,7 @@ export default {
     searchInfo() {},
     getShow() {
       this.showState = !this.showState;
-            this.rotate = !this.rotate;
-
+      this.rotate = !this.rotate;
     },
     //导出的方法
 
@@ -424,67 +455,7 @@ export default {
     addAccout() {
       this.dialogVisible = true;
     },
-    //获取注册用户和绑定用户
-    queryUsersTotal() {
-      let param = new Object();
-      ptfs_query_total_users(param)
-        .then(res => {
-          if (res.status == 0 && res.err_code == 0) {
-            if (res.data) {
-              this.user_form.active_num = res.data.active_num;
-              this.user_form.total_num = res.data.total_num;
-            } else {
-            }
-          } else {
-            this.$message({
-              message: `${res.err_msg}`,
-              type: "error"
-            });
-          }
-        })
-        .catch(error => {
-          this.$message({
-            message: "后台服务无响应",
-            type: "error"
-          });
-        });
-    },
-    onChange(item) {
-      this.form.account_status = parseInt(item);
-      if (item == 0) {
-        this.form.statusText = "全部";
-        this.user_status = -1;
-      } else if (item == 1) {
-        this.user_status = 0;
-        this.form.statusText = "正常";
-      } else if (item == 2) {
-        this.user_status = 1;
-        this.form.statusText = "冻结";
-      }
-    },
-    onChange1(item) {
-      this.form.active_status = parseInt(item);
-      if (item == 0) {
-        this.form.statusActiveText = "全部";
-      } else if (item == 1) {
-        this.form.statusActiveText = "否";
-      } else if (item == 2) {
-        this.form.statusActiveText = "是";
-      }
-    },
-    onChange2(item) {
-      console.log(item);
-      if (item == 0) {
-        this.form.sex = "全部";
-        this.user_sex = "";
-      } else if (item == 1) {
-        this.form.sex = "男";
-        this.user_sex = "男";
-      } else if (item == 2) {
-        this.form.sex = "女";
-        this.user_sex = "女";
-      }
-    },
+   
     //回车键绑定事件
     onSubmitKey() {
       this.queryUserList();
@@ -492,16 +463,8 @@ export default {
     //重置
     resetInfo() {
       this.pager.page = 1;
-      this.searchText = "";
-      this.value = "";
-      this.form.sex = "全部";
-      this.form.statusText = "全部";
-      this.form.account_status = 0;
-      this.form.active_status = 0;
-      this.value2 = "";
-      this.value1 = "";
-      this.user_sex = "";
-      this.user_status = -1;
+       this.nodegrade=0,
+       this.user_nick_name=""
       this.queryUserList();
     },
 
@@ -510,94 +473,56 @@ export default {
       let param = new Object();
       let phoneNumber = /^1(3|4|5|7|8)\d{9}$/;
       let user_id = /^\d{7}$/;
-      if (this.searchText != "") {
-        if (phoneNumber.test(this.searchText) == true) {
-          param.user_id = 0;
-          param.user_tel = this.searchText;
-          param.user_name = "";
-        } else if (user_id.test(this.searchText) == true) {
-          param.user_id = parseInt(this.searchText);
-          param.user_tel = "";
-          param.user_name = "";
-        } else {
-          param.user_id = 0;
-          param.user_tel = "";
-          param.user_name = this.searchText;
-        }
-      } else {
-        param.user_id = "";
-        param.user_tel = "";
-        param.user_name = "";
-      }
-      param.user_status = this.user_status;
-      param.user_sex = this.user_sex;
-      param.cur_page = this.pager.page - 1;
-      param.order = this.order;
+      // if (this.searchText != "") {
+      //   if (phoneNumber.test(this.searchText) == true) {
+      //     param.user_id = 0;
+      //     param.user_tel = this.searchText;
+      //     param.user_name = "";
+      //   } else if (user_id.test(this.searchText) == true) {
+      //     param.user_id = parseInt(this.searchText);
+      //     param.user_tel = "";
+      //     param.user_name = "";
+      //   } else {
+      //     param.user_id = 0;
+      //     param.user_tel = "";
+      //     param.user_name = this.searchText;
+      //   }
+      // } else {
+      //   param.user_id = "";
+      //   param.user_tel = "";
+      //   param.user_name = "";
+      // }
 
-      if (!this.value1) {
-        param.reg_start_time = 0;
-        param.reg_end_time = 0;
-      } else {
-        if (this.value1[0] == undefined) {
-          param.reg_start_time = 0;
-        } else {
-          param.reg_start_time = this.value1[0].getTime() / 1000;
-        }
-        if (this.value1[1] == undefined) {
-          param.reg_end_time = 0;
-        } else {
-          param.reg_end_time = this.value1[1].getTime() / 1000;
-        }
-      }
-      if (!this.value2) {
-        param.bind_start_time = 0;
-        param.bind_end_time = 0;
-      } else {
-        if (this.value2[0] == undefined) {
-          param.bind_start_time = 0;
-        } else {
-          param.bind_start_time = this.value2[0].getTime() / 1000;
-        }
-        if (this.value2[1] == undefined) {
-          param.bind_end_time = 0;
-        } else {
-          param.bind_end_time = this.value2[1].getTime() / 1000;
-        }
-      }
-      let routerparam = JSON.stringify(param);
-      localStorage.setItem("routerparam", routerparam);
-      ptfs_query_list_user_store_list(param)
+let paramactive=new Object()
+     {
+    paramactive.page_no=  this.pager.page - 1
+    }
+    
+
+        query_help_cat_info(paramactive)
         .then(res => {
-          if (res.status == 0 && res.err_code == 0) {
-            console.log(res);
+          console.log(res)
+          if (res.status == 0) {
+        
+                  if(res.data.cat_list){
+         
+            this.pager.count = res.data.total_num;
             let tempArr = [];
 
-            tempArr = res.data.store_list;
+            tempArr = res.data.cat_list;
             for (var i = 0; i < tempArr.length; i++) {
-              tempArr[i].average_store = tempArr[i].average_store / 1000000;
-              tempArr[i].sum_profit = tempArr[i].sum_profit / 1000000;
-              if (tempArr[i].first_bind_time == 0) {
-                tempArr[i].first_bind_time = 0;
+  
+              if (tempArr[i].cat_tm == 0) {
+                tempArr[i].cat_tm = 0;
               } else {
-                tempArr[i].first_bind_time = this.common.getTimes(
-                  tempArr[i].first_bind_time * 1000
+                tempArr[i].cat_tm = this.common.getTimes(
+                  tempArr[i].cat_tm * 1000
                 );
-              }
-              if (tempArr[i].first_login_time == 0) {
-                tempArr[i].first_login_time = 0;
-              } else {
-                tempArr[i].first_login_time = this.common.getTimes(
-                  tempArr[i].first_login_time * 1000
-                );
-              }
-              if (tempArr[i].account_status == 0) {
-                tempArr[i].account_status = "正常";
-              } else {
-                tempArr[i].account_status = "冻结";
               }
             }
-            this.tableData = tempArr;
-            this.pager.count = res.data.total_num;
+                this.tableData = tempArr;
+        }
+        
           } else {
             this.$message({
               message: "后台服务无响应",
@@ -607,7 +532,7 @@ export default {
         })
         .catch(error => {
           this.$message({
-            message: "网络出错，请重新请求",
+             message: "后台服务无响应",
             type: "error"
           });
         });
@@ -734,7 +659,7 @@ export default {
   },
   components: {
     pageNation: pageNation,
-    tableBarActiveUser: tableBarActiveUser,
+    tableBar: tableBar,
     mySearch: mySearch
   }
 };

@@ -21,9 +21,14 @@
             <el-row type="flex">
                 <div class="search-con">
                     <i class="el-icon-search" style="color:#606266"></i>
-                    <el-input class="search-input" v-model="searchText" placeholder="用户ID、用户昵称" @keyup.enter.native="onSubmitKey"></el-input>
+                    <el-input class="search-input" v-model="searchText" placeholder="用户ID，用户昵称，设备SN" @keyup.enter.native="onSubmitKey"></el-input>
                 </div>
-                <div @click="getShow()" class="div_show" style="color:#606266">筛选</div>
+                <div @click="getShow()" class="div_show" style="color:#606266">筛选
+                              <i
+                class="el-icon-caret-bottom"
+                :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
+              ></i>
+                </div>
             </el-row>
             <div v-show="showState">
                 <el-row type="flex" class="row_activess">
@@ -56,13 +61,22 @@
                     </el-table-column>
                     <el-table-column prop="profit" label="收益金额" :formatter="formatNumber">
                     </el-table-column>
-                    <el-table-column prop="ip_value" label="当日IP值" :formatter="formatNumber">
+                     <el-table-column prop="dev_sn" label="设备SN">
+                    </el-table-column>
+                    <el-table-column prop="com_power" label="当日算力" sortable="custom">
+                    </el-table-column>
+                      <el-table-column prop="total_cap" label="挖矿空间" >
+                    </el-table-column>
+                     <el-table-column prop="up_bandwidth" label="上行宽带" :formatter="formatUp">
+                    </el-table-column>
+                     <el-table-column prop="down_bandwidth" label="下行宽带" :formatter="formatDown">
+                    </el-table-column>
+                    <!-- <el-table-column prop="ip_value" label="当日IP值" :formatter="formatNumber">
                     </el-table-column>
                     <el-table-column prop="store_value" label="当日存储值" :formatter="formatNumber">
-                    </el-table-column>
-                    <el-table-column prop="store" label="当日算力" sortable="custom" :formatter="formatNumber">
-                    </el-table-column>
-                    <el-table-column prop="time_stamp" sortable="custom" label="时间">
+                    </el-table-column> -->
+                    
+                    <el-table-column prop="time_stamp"  label="时间">
                     </el-table-column>
                 </el-table>
             </el-col>
@@ -84,13 +98,15 @@ import tableBarActive2 from "../../components/tableBarActive2";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
 import {
-    query_node_info_list
+    query_node_info_list,
+    ptfs_query_user_profit_list
 } from "../../api/api";
 export default {
     data() {
         return {
             dialogVisible: false,
             searchText: "",
+             rotate: false,
             yes_total_num: '',
             yes_total_profit: '',
             start_time: "",
@@ -115,9 +131,9 @@ export default {
         tableSortChange(column) {
             this.pager.page = 1
             if (column.order == "descending") {
-                this.order = 0
+                this.order = 2
             } else {
-                this.order = 1
+                this.order = 3
             }
             this.getInfo()
 
@@ -180,11 +196,35 @@ export default {
             const property = column['property'];
             return (row[property] / 1000000).toFixed(6)
         },
+          formatUp(row, column) {
+            if(row.up_bandwidth==0){
+                return 0+"Mbps"
+            }
+            else{
+              row.up_bandwidth +"Mbps"
+            }
+            //return (row[property] / 1000000).toFixed(6)
+        },
+          formatDown(row, column) {
+            if(row.down_bandwidth==0){
+                return 0+"Mbps"
+            }
+            else{
+              row.down_bandwidth +"Mbps"
+            }
+            //return (row[property] / 1000000).toFixed(6)
+        },
+        
         formatTime(row) {
             return this.common.getTimess(row.time_stamp * 1000);
         },
         getInfo() {
             var data = {
+                dev_sn:"",
+                nick_name:"",
+                user_id:"",
+
+
                 order: this.order,
                 cur_page: this.pager.page - 1,
                 start_time: this.start_time === "" ?
@@ -202,7 +242,7 @@ export default {
                 return;
             }
 
-            query_node_info_list(param)
+            ptfs_query_user_profit_list(param)
                 .then(res => {
                     if (res.status === 0) {
                         // this.tableData = res.data.profit_detail_list;
@@ -274,6 +314,7 @@ export default {
         },
         getShow() {
             this.showState = !this.showState;
+             this.rotate = !this.rotate;
         },
         search() {
             this.pager.page = 1;

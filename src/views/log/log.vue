@@ -11,8 +11,10 @@
                     </div>
                     <div @click="getShow" class="div_show" style="color:#606266">
                         筛选
-                        <i class="el-icon-caret-bottom" :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"></i>
-                    </div>
+              <i
+                class="el-icon-caret-bottom"
+                :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
+              ></i>                    </div>
                 </el-row>
                 <el-row type="flex" class="row_activess" v-show="showState">
                     <el-form-item label="状态" style="display: flex;">
@@ -198,13 +200,23 @@ export default {
         rows: 100
       },
       showState: false,
-      allId: []
+      allId: [],
+      uid:"",
+      uname:""
     };
   },
   mounted: function() {
+      let tempInfo =JSON.parse(this.get('userInfo'))
+        this.uid =tempInfo.id;
+        this.uname=tempInfo.username;
     this.queryUserList();
   },
   methods: {
+         get: function (name) {
+        var v = window.document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+          return v ? v[2] : null;
+
+    },
     //重置
     reset() {
       this.value1 = "全部";
@@ -328,7 +340,9 @@ export default {
             role_id: 0,
             phone: this.ruleForm2.phone,
             status: parseInt(this.ruleForm2.radio),
-            name: this.ruleForm2.name
+            name: this.ruleForm2.name,
+               uname:this.uname,
+            uid:this.uid
           };
           userinsert(loginParams).then(data => {
             this.dialogVisible = false;

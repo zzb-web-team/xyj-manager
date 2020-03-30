@@ -8,7 +8,12 @@
                     <i class="el-icon-search" @click="searchInfo" style="color:#606266"></i>
                     <el-input class="search-input" v-model="searchText" placeholder="请输入账号" @keyup.enter.native="onSubmitKey"></el-input>
                 </div>
-                <div @click="getShow()" class="div_show" style="color:#606266">筛选</div>
+                <div @click="getShow()" class="div_show" style="color:#606266">筛选
+                    <i
+                class="el-icon-caret-bottom"
+                :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
+              ></i>
+                </div>
             </el-row>
             <el-row type="flex" class="row_activess" v-show="showState">
                 <el-form-item label="状态" style="display: flex;">
@@ -53,7 +58,7 @@
         </el-row>
 
     </div>
-    <el-dialog :visible.sync="dialogVisible" width="17%" :before-close="handleClose" @close="handleClose1">
+    <el-dialog :visible.sync="dialogVisible" width="25%" :before-close="handleClose" @close="handleClose1">
         <div class="addaccout">
             <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" class="demo-ruleForm ">
                 <h3 class="title">新建用户</h3>
@@ -228,6 +233,7 @@ export default {
       dialogVisible3: false,
       dialogVisibleDetail: false,
       searchText: "",
+       rotate: false,
       placeholder: "请输入账号",
       operatingStatus: true,
       clomnSelection: true,
@@ -472,14 +478,24 @@ export default {
         rows: 100
       },
       showState: false,
-      allId: []
+      allId: [],
+       uid:"",
+       uname:""
     };
   },
   mounted: function() {
+            let tempInfo =JSON.parse(this.get('userInfo'))
+        this.uid =tempInfo.id;
+        this.uname=tempInfo.username;
     this.queryUserList();
   },
 
   methods: {
+       get: function (name) {
+        var v = window.document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+          return v ? v[2] : null;
+
+    },
     //排序
     tableSortChange(column) {
       this.pager.page = 1;
@@ -512,7 +528,8 @@ export default {
       if (value === "") {
         callback(new Error("请输入账号"));
       } else {
-        var fsdusername = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{4,20}$/;
+        var fsdusername = /^(?![0-9]+$)[0-9A-Za-z]{4,20}$/;
+        //var fsdusername = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{4,20}$/;必须英文和数字组合
         if (fsdusername.test(value) === false) {
           callback(new Error("账号格式错误"));
         } else {
@@ -604,6 +621,8 @@ export default {
           let param = new Object();
           param.ids = this.allId.join(",");
           param.type = 0;
+          param.uid=this.uid;
+          param.uname=this.uname
           userctrl(param)
             .then(res => {
               if (res.status == 0) {
@@ -637,6 +656,8 @@ export default {
           let param = new Object();
           param.ids = this.allId.join(",");
           param.type = 0;
+          param.uid=this.uid;
+          param.uname=this.uname
           userctrl(param)
             .then(res => {
               if (res.status == 0) {
@@ -671,6 +692,8 @@ export default {
           let param = new Object();
           param.ids = this.allId.join(",");
           param.type = 1;
+          param.uid=this.uid;
+          param.uname=this.uname
           userctrl(param)
             .then(res => {
               if (res.status == 0) {
@@ -704,6 +727,8 @@ export default {
           let param = new Object();
           param.ids = this.allId.join(",");
           param.type = 2;
+          param.uid=this.uid;
+          param.uname=this.uname
           userctrl(param)
             .then(res => {
               if (res.status == 0) {
@@ -770,6 +795,7 @@ export default {
     },
     getShow() {
       this.showState = !this.showState;
+         this.rotate = !this.rotate;
     },
     //分页
     handleCurrentChange(val) {
@@ -783,7 +809,7 @@ export default {
       this.$refs.ruleForm2.validate(valid => {
         if (valid) {
           this.logining = true;
-
+          console.log(this.ruleForm2)
           var loginParams = {
             username: this.ruleForm2.username,
             nickname: "aa",
@@ -792,7 +818,9 @@ export default {
             role_id: 0,
             phone: this.ruleForm2.phone,
             status: parseInt(this.ruleForm2.radio),
-            name: this.ruleForm2.name
+            name: this.ruleForm2.name,
+            uname:this.uname,
+            uid:this.uid
           };
           userinsert(loginParams).then(data => {
             this.logining = false;
@@ -834,8 +862,12 @@ export default {
       } else {
         this.ruleForm3.status = 0;
       }
+      this.ruleForm3.uid=this.uid
+      this.ruleForm3.uname=this.uname
       let param = new Object();
       param = this.ruleForm3;
+     
+  
 
       this.$confirm("确定执行该操作麽吗", "提示", {
         type: "warning"
@@ -974,6 +1006,8 @@ export default {
       this.$refs.ruleForm3.validate(valid => {
         if (valid) {
           this.logining = true;
+                this.ruleForm3.uid=this.uid
+      this.ruleForm3.uname=this.uname
           var loginParams = this.ruleForm3;
           this.ruleForm3.status = parseInt(this.ruleForm3.radio);
           userupdate(loginParams).then(data => {
@@ -1011,6 +1045,8 @@ export default {
           this.ruleForm3.password = this.ruleForm4.password;
           this.ruleForm3.password2 = this.ruleForm4.password2;
           this.ruleForm3.status = parseInt(this.ruleForm3.radio);
+            this.ruleForm3.uid=this.uid
+      this.ruleForm3.uname=this.uname
 
           userupdate(loginParams).then(data => {
             this.logining = false;

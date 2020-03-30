@@ -49,6 +49,19 @@ import Log from './views/log/log.vue'
 // import accountInfo from './views/account/accountInfo.vue'
 // import accountManagement from './views/account/accountManagement.vue'
 
+import miningmiddle from './views/mining/middle.vue'
+import miningindex from './views/mining/miningindex.vue'
+import contributionindex from './views/mining/contributionindex.vue'
+import powerindex from './views/mining/powerindex.vue'
+import devicepower from './views/devicepower/middle.vue'
+import powerinfo from './views/devicepower/powerinfo.vue'
+import powerdetails from './views/devicepower/powerdetails.vue'
+import powermanagement from './views/devicepower/powermanagement.vue'
+import helpmiddle from './views/help/middle.vue'
+import contentindex from './views/help/contentindex.vue'
+import groupindex from './views/help/groupindex.vue'
+
+
 import Home from './views/Home.vue'
 
 
@@ -106,7 +119,19 @@ if (user) {
             'SysVersion1': SysVersion1,
             'SysManage': SysManage,
             'AppManage': AppManage,
-            "Log": Log
+            "Log": Log,
+             //新增
+             'miningmiddle': miningmiddle,
+             'miningindex':miningindex,
+             'contributionindex':contributionindex,
+             'powerindex':powerindex,
+             'devicepower':devicepower,
+            'powerinfo':powerinfo,
+            'powerdetails':powerdetails,
+            'helpmiddle':helpmiddle,
+            'contentindex':contentindex,
+            'groupindex':groupindex,
+         
             // 'userinformation': userinformation,
             // 'storagepower': storagepower,
             // 'deviceinformation': deviceinformation,
@@ -166,6 +191,7 @@ if (user) {
                         name: "用户个人详情",
                         component: 'userInfo',
                         icon: 'iconfont icon-dian',
+                        hidden: true,
                         meta: {
                             requireAuth: true
                         }
@@ -210,6 +236,105 @@ if (user) {
                     },
 
                 ]
+            },
+            {
+                path: "/cc",
+                component: 'Home',
+                name: "挖矿节点",
+                icon: 'iconfont icon-shebeiguanli1',
+                children: [
+                    {
+                        path: "/miningindex",
+                        name: "节点等级",
+                        component: 'miningindex',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/contributionindex",
+                        name: "贡献值明细",
+                        component: 'contributionindex',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/powerindex",
+                        name: "贡献值管理",
+                        component: 'powerindex',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    
+
+                ],
+            },
+            {
+                path: "/ccc",
+                component: 'Home',
+                name: "设备算力",
+                icon: 'iconfont icon-shebeiguanli1',
+                children: [{
+                    path: "/powerinfo",
+                    name: "算力信息",
+                    component: 'powerinfo',
+                    icon: 'iconfont icon-dian',
+                    meta: {
+                        requireAuth: true
+                    }
+                },
+                {
+                    path: "/powerdetails",
+                    name: "算力值明细",
+                    component: 'powerdetails',
+                    icon: 'iconfont icon-dian',
+                    meta: {
+                        requireAuth: true
+                    }
+                },
+                {
+                    path: "/powermanagement",
+                    name: "算力值管理",
+                    component: 'powermanagement',
+                    icon: 'iconfont icon-dian',
+                    meta: {
+                        requireAuth: true
+                    }
+                },
+
+            ],
+            },
+            {
+                path: "/cccc",
+                component: 'Home',
+                name: "分组管理",
+                icon: 'iconfont icon-shebeiguanli1',
+                children: [{
+                    path: "/groupindex",
+                    name: "分组管理",
+                    component: 'groupindex',
+                    icon: 'iconfont icon-dian',
+                    meta: {
+                        requireAuth: true
+                    }
+                },
+                {
+                    path: "/contentindex",
+                    name: "内容管理",
+                    component: 'contentindex',
+                    icon: 'iconfont icon-dian',
+                    meta: {
+                        requireAuth: true
+                    }
+                },
+          
+
+            ],
             },
             {
                 path: "/f",
