@@ -1,17 +1,28 @@
 <template>
-<div class="rank_con" style="margin-top:30px;display: flex;justify-content: space-around">
+
+    <div>
+        <div style="margin-top:30px;">
+         <el-date-picker v-model="valueTime" type="datetimerange"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left">
+        </el-date-picker>
+             <el-select v-model="versointype" placeholder="请选择" @change="onChange">
+                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+            </el-select>
+      <el-button type="primary" @click="onQueryInfo" style="margin-left:20px;">确定</el-button>
+ </div>
+        <div class="rank_con" style="margin-top:30px;display: flex;justify-content: space-around"> 
     <div style='width:800px;height:800px;' id="myEchart"></div>
     <div class="rank">
         <el-table border :data="tableData" style="width: 100%">
-            <el-table-column  label="地域分布">
+            <el-table-column  label="省市">
                   <template slot-scope="scope">
                         <div>{{scope.row.indexActive}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{scope.row.region}}</div>
 
                 </template>
             </el-table-column>
-            <el-table-column prop="times" label="启动次数">
+            <el-table-column prop="times" label="设备数">
             </el-table-column>
-            <el-table-column  label="启动次数占比">
+            <el-table-column  label="占比">
                 <template slot-scope="scope">
                         <div>{{(scope.row.percent)*100}}%</div>
 
@@ -19,6 +30,7 @@
             </el-table-column>
         </el-table>
     </div>
+       </div>
 </div>
 </template>
 
@@ -36,7 +48,23 @@ export default {
             chart: null,
             tableData: [],
             echartsX:[],
-            echartsY:[]
+            echartsY:[],
+            versointype:"0",
+               options: [
+        {
+          value: "0",
+          label: "全部版本"
+        },
+        {
+          value: "1",
+          label: "3.2.2"
+        },
+         {
+          value: "2",
+          label: "3.2.3"
+        },
+     
+      ],
 
         };
     },

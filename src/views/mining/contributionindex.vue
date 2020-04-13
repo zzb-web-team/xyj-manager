@@ -150,7 +150,7 @@ export default {
           label: "用户昵称"
         },
         {
-          prop: "node_no",
+          prop: "node_index",
           label: "节点编号"
         },
         {
@@ -173,7 +173,7 @@ export default {
           {
           prop: "total_value",
           label: "贡献值",
-            sortable: "custom"
+            // sortable: "custom"
         },
           {
           prop: "time_stamp",

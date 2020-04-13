@@ -28,17 +28,14 @@ import deviceActivation from './views/device/deviceActivation.vue'
 import pointsmiddle from './views/point/middle.vue'
 import pointsDetails from './views/point/pointsDetails.vue'
 import income from './views/point/income.vue'
-import setparam from './views/point/setparam.vue'
 import Applictionmiddle from './views/application/middle.vue'
 import addAppliction from './views/application/addAppliction.vue'
 import releaseAppliction from './views/application/releaseAppliction.vue'
+
+
 import PushSetting from './views/push/push_setting.vue'
 import PushRecord from './views/push/push_record.vue'
 import DeviceAnalysis from './views/analysis/deviceAnalysis.vue'
-import Analysismiddle from './views/analysis/middle.vue'
-import Analysismiddle1 from './views/analysis/middle1.vue'
-import deviceterminal from './views/analysis/deviceterminal.vue'
-
 import RegionAnalysis from './views/analysis/regionAnalysis.vue'
 import UserAnalysis from './views/analysis/userAnalysis.vue'
 import VersionAnalysis from './views/analysis/versionAnalysis.vue'
@@ -115,13 +112,9 @@ if (user) {
             'devicePower': devicePower,
             'deviceActivation': deviceActivation,
             'income': income,
-            'setparam':setparam,
             'pointsmiddle':pointsmiddle,
             'pointsDetails': pointsDetails,
             'DeviceAnalysis': DeviceAnalysis,
-            'Analysismiddle':Analysismiddle,
-            'Analysismiddle1':Analysismiddle,
-            'deviceterminal':deviceterminal,
             'RegionAnalysis': RegionAnalysis,
             'UserAnalysis': UserAnalysis,
             'VersionAnalysis': VersionAnalysis,
@@ -144,7 +137,6 @@ if (user) {
              'miningindex':miningindex,
              'contributionindex':contributionindex,
              'powerindex':powerindex,
-             'powermanagement':powermanagement,
              'devicepower':devicepower,
             'powerinfo':powerinfo,
             'powerdetails':powerdetails,
@@ -225,44 +217,6 @@ if (user) {
                         meta: {
                             requireAuth: true
                         }
-                    },
-
-                ]
-            },
-             {
-                path: "/c1",
-                component: 'Home',
-                name: "设备管理",
-                titleActive:"设备",
-                icon: 'iconfont icon-shebeiguanli1',
-                children: [{
-                        path: "/deviceInfo",
-                        name: "设备信息",
-                        component: 'deviceInfo',
-                        icon: 'iconfont icon-dian',
-                        meta: {
-                            requireAuth: true
-                        }
-                    },
-                    // {
-                    //     path: "/devicePower",
-                    //     name: "设备算力",
-                    //     component: 'devicePower',
-                    //     icon: 'iconfont icon-dian',
-                    //     meta: {
-                    //         requireAuth: true
-                    //     }
-
-                    // },
-                    {
-                        path: "/deviceActivation",
-                        name: "设备激活",
-                        component: 'deviceActivation',
-                        icon: 'iconfont icon-dian',
-                        meta: {
-                            requireAuth: true
-                        }
-
                     },
 
                 ]
@@ -378,17 +332,6 @@ if (user) {
                                 }
         
                             },
-                            {
-                                path: "/setparam",
-                                name: "调整收益参数",
-                                component: 'setparam',
-                                icon: 'iconfont icon-dian',
-                                hidden: true,
-                                meta: {
-                                    requireAuth: true
-                                }
-        
-                            },
         
                         ],
                         meta: {
@@ -428,7 +371,145 @@ if (user) {
                     },
                 ]
             },
-           
+            // {
+            //     path: "/c",
+            //     component: 'Home',
+            //     name: "设备管理",
+            //     titleActive:"设备",
+            //     icon: 'iconfont icon-shebeiguanli1',
+            //     children: [{
+            //             path: "/deviceInfo",
+            //             name: "设备信息",
+            //             component: 'deviceInfo',
+            //             icon: 'iconfont icon-dian',
+            //             meta: {
+            //                 requireAuth: true
+            //             }
+            //         },
+            //         {
+            //             path: "/devicePower",
+            //             name: "设备算力",
+            //             component: 'devicePower',
+            //             icon: 'iconfont icon-dian',
+            //             meta: {
+            //                 requireAuth: true
+            //             }
+
+            //         },
+            //         {
+            //             path: "/deviceActivation",
+            //             name: "设备激活",
+            //             component: 'deviceActivation',
+            //             icon: 'iconfont icon-dian',
+            //             meta: {
+            //                 requireAuth: true
+            //             }
+
+            //         },
+
+            //     ]
+            // },
+            // {
+            //     path: "/cc",
+            //     component: 'Home',
+            //     name: "挖矿节点",
+            //     icon: 'iconfont icon-shebeiguanli1',
+            //     children: [
+            //         {
+            //             path: "/miningindex",
+            //             name: "节点等级",
+            //             component: 'miningindex',
+            //             icon: 'iconfont icon-dian',
+            //             meta: {
+            //                 requireAuth: true
+            //             }
+            //         },
+            //         {
+            //             path: "/contributionindex",
+            //             name: "贡献值明细",
+            //             component: 'contributionindex',
+            //             icon: 'iconfont icon-dian',
+            //             meta: {
+            //                 requireAuth: true
+            //             }
+            //         },
+            //         {
+            //             path: "/powerindex",
+            //             name: "贡献值管理",
+            //             component: 'powerindex',
+            //             icon: 'iconfont icon-dian',
+            //             meta: {
+            //                 requireAuth: true
+            //             }
+            //         },
+                    
+
+            //     ],
+            // },
+            // {
+            //     path: "/ccc",
+            //     component: 'Home',
+            //     name: "设备算力",
+            //     icon: 'iconfont icon-shebeiguanli1',
+            //     children: [
+            //         {
+            //         path: "/powerinfo",
+            //         name: "算力信息",
+            //         component: 'powerinfo',
+            //         icon: 'iconfont icon-dian',
+            //         meta: {
+            //             requireAuth: true
+            //         }
+            //     },
+            //     {
+            //         path: "/powerdetails",
+            //         name: "算力值明细",
+            //         component: 'powerdetails',
+            //         icon: 'iconfont icon-dian',
+            //         meta: {
+            //             requireAuth: true
+            //         }
+            //     },
+            //     {
+            //         path: "/powermanagement",
+            //         name: "算力值管理",
+            //         component: 'powermanagement',
+            //         icon: 'iconfont icon-dian',
+            //         meta: {
+            //             requireAuth: true
+            //         }
+            //     },
+
+            // ],
+            // },
+            // {
+            //     path: "/cccc",
+            //     component: 'Home',
+            //     name: "分组管理",
+            //     icon: 'iconfont icon-shebeiguanli1',
+            //     children: [
+            //         {
+            //         path: "/groupindex",
+            //         name: "分组管理",
+            //         component: 'groupindex',
+            //         icon: 'iconfont icon-dian',
+            //         meta: {
+            //             requireAuth: true
+            //         }
+            //     },
+            //     {
+            //         path: "/contentindex",
+            //         name: "内容管理",
+            //         component: 'contentindex',
+            //         icon: 'iconfont icon-dian',
+            //         meta: {
+            //             requireAuth: true
+            //         }
+            //     },
+          
+
+            // ],
+            // },
             {
                 path: "/g1",
                 component: 'Home',
@@ -512,20 +593,291 @@ if (user) {
                                 requireAuth: true
                             }
                         },
-                                    {
-                    path: "/marketgroupindex",
-                            name: "分组管理",
-                            component: 'marketgroupindex',
-                            icon: 'iconfont icon-dian',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
+                                     {
+            path: "/marketgroupindex",
+                    name: "分组管理",
+                    component: 'marketgroupindex',
+                    icon: 'iconfont icon-dian',
+                    meta: {
+                        requireAuth: true
+                    }
+                },
                   
                     ],
                     },
+                    // {
+                    //     path: "/marketmiddle",
+                    //     name: "内嵌应用",
+                    //     component: 'marketmiddle',
+                    //     icon: 'iconfont icon-banbenguanli',
+                    //     children: [
+                    //         {
+                    // path: "/marketindex",
+                    //         name: "应用管理",
+                    //         component: 'marketindex',
+                    //         icon: 'iconfont icon-dian',
+                    //         meta: {
+                    //             requireAuth: true
+                    //         }
+                    //     },
+                    //     {
+                    //         path: "/addmarket",
+                    //         name: "新增应用",
+                    //         component: 'addmarket',
+                    //         icon: 'iconfont icon-dian',
+                    //         meta: {
+                    //             requireAuth: true
+                    //         }
+                    //     },
+                    //     {
+                    //         path: "/marketdetail",
+                    //         name: "应用详请",
+                    //         component: 'marketdetail',
+                    //         icon: 'iconfont icon-dian',
+                    //         meta: {
+                    //             requireAuth: true
+                    //         }
+                    //     },
+                        
+                    //     {
+                    //         path: "/editmarket",
+                    //         name: "编辑应用",
+                    //         component: 'editmarket',
+                    //         icon: 'iconfont icon-dian',
+                    //         meta: {
+                    //             requireAuth: true
+                    //         }
+                    //     },
+                  
+                    // ],
+                    //     meta: {
+                    //         requireAuth: true
+                    //     }
+                    // },
+                    // {
+                    //     path: "/marketgroupmiddle",
+                    //     name: "应用市场",
+                    //     component: 'marketgroupmiddle',
+                    //     icon: 'iconfont icon-banbenguanli',
+                    //     children: [
+                    //         {
+                    // path: "/marketgroupindex",
+                    //         name: "分组管理",
+                    //         component: 'marketgroupindex',
+                    //         icon: 'iconfont icon-dian',
+                    //         meta: {
+                    //             requireAuth: true
+                    //         }
+                    //     },
+                       
+                  
+                    // ],
+                    //     meta: {
+                    //         requireAuth: true
+                    //     }
+                    // },
+                ]
+            },
+            // {
+            //     path: "/ccccc",
+            //     component: 'Home',
+            //     name: "应用市场",
+            //     icon: 'iconfont icon-shebeiguanli1',
+            //     children: [
+            //         {
+            // path: "/marketindex",
+            //         name: "应用管理",
+            //         component: 'marketindex',
+            //         icon: 'iconfont icon-dian',
+            //         meta: {
+            //             requireAuth: true
+            //         }
+            //     },
+            //     {
+            //         path: "/addmarket",
+            //         name: "新增应用",
+            //         component: 'addmarket',
+            //         icon: 'iconfont icon-dian',
+            //         meta: {
+            //             requireAuth: true
+            //         }
+            //     },
+            //     {
+            //         path: "/marketdetail",
+            //         name: "应用详请",
+            //         component: 'marketdetail',
+            //         icon: 'iconfont icon-dian',
+            //         meta: {
+            //             requireAuth: true
+            //         }
+            //     },
+                
+            //     {
+            //         path: "/editmarket",
+            //         name: "编辑应用",
+            //         component: 'editmarket',
+            //         icon: 'iconfont icon-dian',
+            //         meta: {
+            //             requireAuth: true
+            //         }
+            //     },
+          
+            // ],
+            // },
+        //     {
+        //         path: "/cccccc",
+        //         component: 'Home',
+        //         name: "应用市场分组管理",
+        //         icon: 'iconfont icon-shebeiguanli1',
+        //         children: [
+        //             {
+        //     path: "/marketgroupindex",
+        //             name: "分组管理",
+        //             component: 'marketgroupindex',
+        //             icon: 'iconfont icon-dian',
+        //             meta: {
+        //                 requireAuth: true
+        //             }
+        //         },
                
-               
+          
+        //     ],
+        // },
+            {
+                path: "/f",
+                component: 'Home',
+                name: "盒子应用管理",
+                titleActive:false,
+                icon: 'iconfont icon-dianbozhibov1213',
+                children: [{
+                        path: "/releaseAppliction",
+                        name: "应用发布管理",
+                        component: 'releaseAppliction',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/addAppliction",
+                        name: "应用新增管理",
+                        component: 'addAppliction',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+
+                    },
+
+                ]
+            },
+            {
+                path: "/d",
+                component: 'Home',
+                name: "积分管理",
+                titleActive:"积分",
+                icon: 'iconfont icon-jifenguanli',
+                children: [
+                    {
+                        path: "/pointsDetails",
+                        name: "积分明细",
+                        component: 'pointsDetails',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/income",
+                        name: "收益明细",
+                        component: 'income',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+
+                    },
+
+                ]
+            },
+            {
+                path: "/b",
+                component: 'Home',
+                name: "推送设置",
+                titleActive:"内容推送",
+                icon: 'iconfont icon-tuisongguanli',
+                children: [
+
+                    {
+                        path: "/PushSetting",
+                        name: "推送设置",
+                        component: 'PushSetting',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+                    }, {
+                        path: "/PushRecord",
+                        name: "推送记录",
+                        component: 'PushRecord',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                ]
+            },
+
+            {
+                path: "/e",
+                component: 'Home',
+                name: "数据分析",
+                titleActive:"数据分析",
+                icon: 'iconfont icon-shujufenxi',
+                children: [
+                    // {
+                    // path: "/UserAnalysis",
+                    // name: "APP用户分析",
+                    // icon: 'el-icon-menu',
+                    // children: [
+                    {
+                        path: "/UserAnalysis",
+                        name: "APP用户分析",
+                        component: 'UserAnalysis',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/RegionAnalysis",
+                        name: "地域分析",
+                        component: 'RegionAnalysis',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/VersionAnalysis",
+                        name: "版本分析",
+                        component: 'VersionAnalysis',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    // ]
+                    // },
+                    {
+                        path: "/DeviceAnalysis",
+                        name: "设备在线分析",
+                        component: 'DeviceAnalysis',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+                    }
                 ]
             },
             {
@@ -594,170 +946,10 @@ if (user) {
                     },
                 ]
             },
-            
-            {
-                path: "/b",
-                component: 'Home',
-                name: "推送设置",
-                titleActive:"内容推送",
-                icon: 'iconfont icon-tuisongguanli',
-                children: [
-
-                    {
-                        path: "/PushSetting",
-                        name: "推送设置",
-                        component: 'PushSetting',
-                        icon: 'iconfont icon-dian',
-                        meta: {
-                            requireAuth: true
-                        }
-                    }, {
-                        path: "/PushRecord",
-                        name: "推送记录",
-                        component: 'PushRecord',
-                        icon: 'iconfont icon-dian',
-                        meta: {
-                            requireAuth: true
-                        }
-                    },
-                ]
-            },
-            {
-                path: "/g2",
-                component: 'Home',
-                name: "数据分析",
-                titleActive:"数据分析",
-                icon: 'iconfont icon-xitong',
-                children: [{
-                        path: "/Analysismiddle",
-                        name: "西柚机APP",
-                        component: 'Analysismiddle',
-                        icon: 'iconfont icon-banbenguanli',
-                        children: [
-                            {
-                                path: "/UserAnalysis",
-                                name: "APP用户分析",
-                                component: 'UserAnalysis',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
-                            {
-                                path: "/VersionAnalysis",
-                                name: "版本分析",
-                                component: 'VersionAnalysis',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
-
-                        ],
-                        meta: {
-                            requireAuth: true
-                        }
-                    },
-                    {
-                        path: "/Analysismiddle1",
-                        name: "西柚机设备",
-                        component: 'Analysismiddle1',
-                        icon: 'iconfont icon-banbenguanli',
-                        children: [
-                            {
-                                path: "/DeviceAnalysis",
-                                name: "设备在线分析",
-                                component: 'DeviceAnalysis',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
-                            {
-                                path: "/RegionAnalysis",
-                                name: "地域分布",
-                                component: 'RegionAnalysis',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
-                            {
-                                path: "/deviceterminal",
-                                name: "设备终端",
-                                component: 'deviceterminal',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
-                            
-
-                        ],
-                        meta: {
-                            requireAuth: true
-                        }
-                    },
-                ]
-            },
-            // {
-            //     path: "/e",
-            //     component: 'Home',
-            //     name: "数据分析",
-            //     titleActive:"数据分析",
-            //     icon: 'iconfont icon-shujufenxi',
-            //     children: [
-            //         // {
-            //         // path: "/UserAnalysis",
-            //         // name: "APP用户分析",
-            //         // icon: 'el-icon-menu',
-            //         // children: [
-            //         {
-            //             path: "/UserAnalysis",
-            //             name: "APP用户分析",
-            //             component: 'UserAnalysis',
-            //             icon: 'iconfont icon-dian',
-            //             meta: {
-            //                 requireAuth: true
-            //             }
-            //         },
-            //         {
-            //             path: "/RegionAnalysis",
-            //             name: "地域分析",
-            //             component: 'RegionAnalysis',
-            //             icon: 'iconfont icon-dian',
-            //             meta: {
-            //                 requireAuth: true
-            //             }
-            //         },
-            //         {
-            //             path: "/VersionAnalysis",
-            //             name: "版本分析",
-            //             component: 'VersionAnalysis',
-            //             icon: 'iconfont icon-dian',
-            //             meta: {
-            //                 requireAuth: true
-            //             }
-            //         },
-            //         // ]
-            //         // },
-            //         {
-            //             path: "/DeviceAnalysis",
-            //             name: "设备在线分析",
-            //             component: 'DeviceAnalysis',
-            //             icon: 'iconfont icon-dian',
-            //             meta: {
-            //                 requireAuth: true
-            //             }
-            //         }
-            //     ]
-            // },
-        
             {
                 path: "/h",
                 component: 'Home',
                 name: "操作管理",
-                titleActive:"后台操作",
                 icon: 'iconfont icon-rizhi',
                 children: [{
                     path: "/Log",

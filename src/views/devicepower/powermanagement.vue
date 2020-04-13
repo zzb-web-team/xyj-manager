@@ -135,7 +135,7 @@ export default {
 
         {
           prop: "earn_pensent",
-          label: "收益百分比1"
+          label: "收益百分比"
         }
       ],
       rowHeader2: [
@@ -290,6 +290,7 @@ export default {
   methods: {
       // 算力值收益占比获取
   queryscaleInfo(){
+    this.tableActive=[]
     let param=new Object()
     param.time="0"
     ptfs_get_com_power_scale(param)
@@ -416,6 +417,7 @@ export default {
             type: "error"
           });
         }
+    this.queryaddInfo()
 
       }).catch(error=>{
 
@@ -426,8 +428,8 @@ export default {
     onSubmitScale(){
       this.dialogVisible=false
       let param=new Object()
-      param.con_param_add_type=0,
-      param.con_param_add_value=this.scalevalue
+      param.cp_param_set_type=0,
+      param.cp_param_set_value= parseInt(this.scalevalue) 
       ptfs_set_com_power_scale(param).then(res=>{
         if(res.status==0){
            this.$message({
@@ -442,6 +444,7 @@ export default {
             type: "error"
           });
         }
+   this.queryscaleInfo()
 
       }).catch(error=>{
 
@@ -468,7 +471,8 @@ export default {
             type: "error"
           });
         }
-
+        
+    this.querydesInfo()
       }).catch(error=>{
 
       })

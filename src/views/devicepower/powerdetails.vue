@@ -142,11 +142,11 @@ export default {
 
       rowHeader: [
         {
-          prop: "user_id",
+          prop: "dev_sn",
           label: "设备SN"
         },
         {
-          prop: "node_id",
+          prop: "user_id",
           label: "绑定用户ID"
         },
         {
@@ -530,6 +530,8 @@ export default {
                   tempArr[i].time_stamp  * 1000
                 );
                   switch (tempArr[i].type){
+                       case 201:
+                 tempArr[i].type="等级升级"
                    case 202:
                  tempArr[i].type="绑定"
                    break;

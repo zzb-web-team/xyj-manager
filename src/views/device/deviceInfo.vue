@@ -428,6 +428,8 @@ export default {
         return "未激活";
       } else if (row.online_state === 101) {
         return "已激活";
+      }else if (row.online_state === 99) {
+        return "新建";
       }
     },
     formatBind(row) {

@@ -194,7 +194,7 @@ export default {
         },
         formatNumber(row, column) {
             const property = column['property'];
-            return (row[property] / 1000000).toFixed(6)
+            return (row[property] / 100).toFixed(2)
         },
         formatTime(row) {
             return this.common.getTimess(row.time_stamp * 1000);
@@ -226,10 +226,10 @@ export default {
                         for (var i = 0; i < teamarr.length; i++) {
                             if (teamarr[i].profit_type === 1) {
                                 teamarr[i].profit_type = "收益"
-                                teamarr[i].profit_typeActive = ((teamarr[i].cur_profit) / 1000000).toFixed(6)
+                                teamarr[i].profit_typeActive = ((teamarr[i].cur_profit) / 100).toFixed(2)
                             } else {
                                 teamarr[i].profit_type = "兑换"
-                                teamarr[i].profit_typeActive = ((teamarr[i].cur_amount) / 1000000).toFixed(6)
+                                teamarr[i].profit_typeActive = ((teamarr[i].cur_amount) / 100).toFixed(2)
 
                             }
                             teamarr[i].time_stamp = this.common.getTimess(teamarr[i].time_stamp * 1000)
@@ -281,10 +281,10 @@ export default {
                             for (var i = 0; i < teamarr.length; i++) {
                                 if (teamarr[i].profit_type === 1) {
                                     teamarr[i].profit_type = "收益"
-                                    teamarr[i].profit_typeActive = ((teamarr[i].cur_profit) / 1000000).toFixed(6)
+                                    teamarr[i].profit_typeActive = ((teamarr[i].cur_profit) / 100).toFixed(2)
                                 } else {
                                     teamarr[i].profit_type = "兑换"
-                                    teamarr[i].profit_typeActive = ((teamarr[i].cur_amount) / 1000000).toFixed(6)
+                                    teamarr[i].profit_typeActive = ((teamarr[i].cur_amount) / 100).toFixed(2)
 
                                 }
                                 teamarr[i].time_stamp = this.common.getTimess(teamarr[i].time_stamp * 1000)

@@ -6,17 +6,17 @@
             <el-row type="flex">
                 <div class="search-con">
                     <i class="el-icon-search" @click="searchInfo" style="color:#606266"></i>
-                    <el-input class="search-input" v-model="searchText" placeholder="分组名称" @keyup.enter.native="onSubmitKey"></el-input>
+                    <el-input class="search-input" v-model="cat_name" placeholder="分组名称" @keyup.enter.native="onSubmitKey"></el-input>
                 </div>
-                <div @click="getShow()" class="div_show" style="color:#606266">筛选
+                <!-- <div @click="getShow()" class="div_show" style="color:#606266">筛选
                     <i
                 class="el-icon-caret-bottom"
                 :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
               ></i>
-                </div>
+                </div> -->
             </el-row>
             <div v-show="showState">
-                <el-row type="flex" class="row_activess">
+                <!-- <el-row type="flex" class="row_activess">
                     <el-form-item label="节点等级" style="display: flex;">
                         <el-select v-model="form.statusText" placeholder="请选择" @change="onChange">
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -24,15 +24,15 @@
                         </el-select>
                     </el-form-item>
                  
-                </el-row>
-                <el-row type="flex" class="row_activess">
+                </el-row> -->
+                <!-- <el-row type="flex" class="row_activess">
                     <el-form-item>
                         <el-button type="primary" style="margin-left:68px;" @click="onSumit()">确定</el-button>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="resetInfo">重置</el-button>
                     </el-form-item>
-                </el-row>
+                </el-row> -->
             </div>
 
         </el-form>
@@ -495,7 +495,14 @@ export default {
 
 let paramactive=new Object()
      {
-    paramactive.page_no=  this.pager.page - 1
+    paramactive.page_no=  this.pager.page - 1,
+    paramactive.page_size=10
+    
+                  paramactive.cat_name=this.cat_name,
+           paramactive.cat_order=0
+
+
+
     }
     
 

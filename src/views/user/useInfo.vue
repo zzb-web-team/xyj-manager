@@ -92,7 +92,7 @@
         <div class="userdetails">
             <el-row style="height:40px;line-height:40px;font-weight: bold;">
                 <el-col :span="24">
-                    用户收益明细
+                   '{{user_ids}}' 用户收益明细
                 </el-col>
             </el-row>
             <el-row type="flex" class="row_active">
@@ -108,7 +108,7 @@
         <div class="userdetails">
             <el-row style="height:40px;line-height:40px;font-weight: bold;">
                 <el-col :span="24">
-                    用户设备明细
+                    '{{user_ids}}' 用户设备明细
                 </el-col>
             </el-row>
             <el-row type="flex" class="row_active">
@@ -134,6 +134,7 @@ import {
     ptfs_query_user_total_profit_everyday,
     ptfs_query_user_store_list,
     devicelist,
+    ptfs_query_user_profit_list
 
 } from '../../api/api';
 import common from "../../common/js/util.js"
@@ -216,15 +217,23 @@ export default {
                 },
 
                 {
-                    prop: "ip_value",
-                    label: "当日IP值"
+                    prop: "dev_sn",
+                    label: "设备SN"
                 },
                 {
-                    prop: "store_value",
-                    label: "当日存储值"
+                    prop: "total_cap",
+                    label: "挖矿空间"
                 },
                 {
-                    prop: "store_value",
+                    prop: "up_bandwidth",
+                    label: "上行宽带"
+                },
+                {
+                    prop: "down_bandwidth",
+                    label: "下行宽带"
+                },
+                 {
+                    prop: "com_power",
                     label: "当日算力"
                 },
 
@@ -264,6 +273,10 @@ export default {
                 {
                     prop: "dev_name",
                     label: "设备名称"
+                },
+                   {
+                    prop: "dev_name",
+                    label: "ROM"
                 },
                 {
                     prop: "dev_mac",
@@ -469,10 +482,55 @@ export default {
             })
 
         },
+        // getQueryInfo1() {
+
+        //     let param = new Object()
+        //     param.query_type = 1
+        //     if (this.$route.query.user_id) {
+        //         param.user_id = parseInt(this.$route.query.user_id)
+        //     } else {
+        //         param.user_id = ""
+        //     }
+        //     param.order = this.order
+        //     param.dev_sn = "",
+        //         param.cur_page = this.pager.page - 1,
+        //         // param.start_time = 0,
+        //         // param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000
+        //         param.start_time = ((new Date(new Date().toLocaleDateString()).getTime()) - 7 * 24 * 60 * 60 * 1000) / 1000,
+        //         param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000;
+        //     ptfs_query_node_info_list(param).then(res => {
+        //         this.dialogVisible3 = true
+        //         if (res.data.profit_detail_list) {
+        //             this.tableData = []
+        //             let nowarr = res.data.profit_detail_list
+        //             for (var i = 0; i < nowarr.length; i++) {
+        //                 nowarr[i].profit = nowarr[i].profit / 1000000
+        //                 nowarr[i].store = nowarr[i].store / 1000000
+        //                 nowarr[i].store_value = nowarr[i].store_value / 1000000
+        //                 nowarr[i].ip_value = nowarr[i].ip_value / 1000000
+        //                 nowarr[i].time_stamp = this.common.getTimes(nowarr[i].time_stamp * 1000)
+
+        //             }
+        //             this.tableData = nowarr
+        //             this.pager.count = res.data.total_num
+        //         }
+
+        //     }).catch(error => {
+
+        //     })
+
+        // },
         getQueryInfo1() {
 
+
+
+
+
+
+
+
             let param = new Object()
-            param.query_type = 1
+            param.query_type = 0
             if (this.$route.query.user_id) {
                 param.user_id = parseInt(this.$route.query.user_id)
             } else {
@@ -480,12 +538,12 @@ export default {
             }
             param.order = this.order
             param.dev_sn = "",
+            param.nick_name=""
+            param.order=0
                 param.cur_page = this.pager.page - 1,
-                // param.start_time = 0,
-                // param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000
                 param.start_time = ((new Date(new Date().toLocaleDateString()).getTime()) - 7 * 24 * 60 * 60 * 1000) / 1000,
                 param.end_time = (new Date(new Date().toLocaleDateString()).getTime()) / 1000;
-            ptfs_query_node_info_list(param).then(res => {
+            ptfs_query_user_profit_list(param).then(res => {
                 this.dialogVisible3 = true
                 if (res.data.profit_detail_list) {
                     this.tableData = []
@@ -495,7 +553,31 @@ export default {
                         nowarr[i].store = nowarr[i].store / 1000000
                         nowarr[i].store_value = nowarr[i].store_value / 1000000
                         nowarr[i].ip_value = nowarr[i].ip_value / 1000000
+                        nowarr[i].com_power = nowarr[i].com_power / 1000000
+                        
                         nowarr[i].time_stamp = this.common.getTimes(nowarr[i].time_stamp * 1000)
+                        if( nowarr[i].up_bandwidth==0 ){
+                           nowarr[i].up_bandwidth==0 
+                        }
+                        else{
+                            nowarr[i].up_bandwidth=((nowarr[i].up_bandwidth/1024/1024).toFixed(2))+"Mbps"
+                        }
+                           if( nowarr[i].down_bandwidth==0 ){
+                           nowarr[i].down_bandwidth==0 
+                        }
+                        else{
+                            nowarr[i].down_bandwidth=((nowarr[i].down_bandwidth/1024/1024).toFixed(2))+"Mbps"
+                        }
+                         if( nowarr[i].total_cap==0 ){
+                           nowarr[i].total_cap==0 
+                        }
+                        else{
+                            nowarr[i].total_cap=this.common.formatByteActive(nowarr[i].total_cap)
+                            
+
+                        }
+                        
+                        
 
                     }
                     this.tableData = nowarr
@@ -507,6 +589,7 @@ export default {
             })
 
         },
+        
         getQueryInfo2() {
             let data = {
                 page_no: this.pager.page - 1,

@@ -1,127 +1,37 @@
 <template>
   <section class="myself-container">
-    <div class="user-title">
-      <el-row>
-        <el-col :span="5">
-          <div class="user-item">
-            <div class="item-count">{{yes_total_profit/1000000}} gfp</div>
-            <div class="item-text">昨日总发放积分</div>
-          </div>
-        </el-col>
-        <el-col :span="5" style="margin-left:30px;">
-          <div class="user-item">
-            <div class="item-count">{{yes_total_num}} 人</div>
-            <div class="item-text">总发放用户</div>
-          </div>
-        </el-col>
-      </el-row>
+        <div class="goback" style="width: 100%;line-height: 50px;">
+      <div style="margin-top:20px;">
+        
+        <el-button type="primary" class="el-upload__tip" @click="$router.go(-1)">返回</el-button>
+      </div>
+      
     </div>
+   
     <div class="device_form">
-      <el-form ref="form" :model="form">
-        <el-row type="flex">
-          <div class="search-con">
-            <i class="el-icon-search" style="color:#606266"></i>
-            <el-input
-              class="search-input"
-              v-model="searchText"
-              placeholder="用户ID，用户昵称，设备SN"
-              @keyup.enter.native="onSubmitKey"
-            ></el-input>
-          </div>
-          <div @click="getShow()" class="div_show" style="color:#606266">
-            筛选
-            <i
-              class="el-icon-caret-bottom"
-              :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
-            ></i>
-          </div>
-        </el-row>
-        <div v-show="showState">
-          <el-row type="flex" class="row_activess">
-            <el-form-item label="时间" style="display: flex;">
-              <el-date-picker
-                v-model="start_time"
-                style="width:200px;"
-                type="datetime"
-                placeholder="选择开始日期时间"
-              ></el-date-picker>-
-              <el-date-picker
-                v-model="end_time"
-                style="width:200px;"
-                type="datetime"
-                placeholder="选择结束日期时间"
-              ></el-date-picker>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" style="margin-left:68px;" @click="search">确定</el-button>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="onReset">重置</el-button>
-            </el-form-item>
-          </el-row>
-        </div>
-      </el-form>
-    </div>
-    <div class="devide_table">
-      <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
-        <el-col>
-          <el-button type="primary" @click="setparam">调整收益参数</el-button>
-        </el-col>
-        <el-col style="display: flex;justify-content: flex-end;">
-          <el-button type="primary" @click="toexportExcel">导出</el-button>
-        </el-col>
-      </el-row>
-      <el-row type="flex" class="row_active">
-        <el-col :span="24">
-          <el-table :data="tableData" border style="width: 100%" @sort-change="tableSortChange">
-            <el-table-column prop="user_id" label="用户ID"></el-table-column>
-            <el-table-column prop="user_nick_name" label="用户昵称"></el-table-column>
-            <el-table-column prop="profit" label="收益金额" :formatter="formatNumber"></el-table-column>
-            <el-table-column prop="dev_sn" label="设备SN"></el-table-column>
-            <el-table-column prop="com_power" label="当日算力" sortable="custom"></el-table-column>
-            <el-table-column prop="total_cap" label="挖矿空间" :formatter="formatCap"></el-table-column>
-            <el-table-column prop="up_bandwidth" label="上行宽带" :formatter="formatUp"></el-table-column>
-            <el-table-column prop="down_bandwidth" label="下行宽带" :formatter="formatDown"></el-table-column>
-            <!-- <el-table-column prop="ip_value" label="当日IP值" :formatter="formatNumber">
-                    </el-table-column>
-                    <el-table-column prop="store_value" label="当日存储值" :formatter="formatNumber">
-            </el-table-column>-->
-
-            <el-table-column prop="time_stamp" label="时间"></el-table-column>
-          </el-table>
-        </el-col>
-      </el-row>
-    </div>
-    <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
-      <el-row type="flex"></el-row>
-      <el-row type="flex">
-        <el-col :span="6">
-          <pageNation
-            :pager="pager"
-            @handleSizeChange="handleSizeChange"
-            @handleCurrentChange="handleCurrentChange"
-          ></pageNation>
-        </el-col>
-      </el-row>
-    </div>
-    <el-dialog :visible.sync="dialogVisibleparam" width="30%" :before-close="handleClose">
       <el-form ref="form">
         <el-form-item label>
-          收益公司介绍
+          收益公式介绍
           <br />收益=P-(P1+P2)/2*P=((B+S)*V1*T/24-[(B1*V1+B2*V1+B3*V1*45%)+B4*V1*T/24+(F1*V2+F2*V2+F3*V2*45%)*T2*2*R]
           <br />p1每日节点理论收益宽带(b)，存储(s),单位宽带价值，日累计在线时常 P2每日节点贡献产生收益流量F,单位流量价值，日累计在线时长(t)
         </el-form-item>
-        <el-form-item label="单位宽带价值=">
+        <el-form-item label="单位宽带价值=" style="margin-top:10px;">
           <el-input v-model="param_v1"></el-input>
         </el-form-item>
-        <el-form-item label="单位流量价值=">
+        <el-form-item label="单位流量价值="  style="margin-top:10px;">
           <el-input v-model="param_v2"></el-input>
         </el-form-item>
         <div style="text-align: center;">
           <el-button type="primary" @click="onSubmitparam">确定</el-button>
-          <el-button @click="dialogVisibleGroup=false">取消</el-button>
+          <el-button @click="$router.go(-1)">取消</el-button>
         </div>
       </el-form>
+   
+    </div>
+   
+  
+    <el-dialog :visible.sync="dialogVisibleparam" width="30%" :before-close="handleClose">
+     
     </el-dialog>
   </section>
 </template>
@@ -166,14 +76,38 @@ export default {
     this.getInfo();
   },
   methods: {
-      setparam(){
-        this.$router.push({
-          path:"/setparam"
+   
+    //参数设置
+    onSubmitparam() {
+      let param = new Object();
+      param.param_type = 0;
+      param.param_v1 = this.param_v1;
+      param.param_v2 = this.param_v2;
+      ptfs_set_earn_param(param)
+        .then(res => {
+          if (res.status == 0) {
+            this.$message({
+              message: "修改成功",
+              type: "success"
+            });
+               this.$router.push({
+          path:"/income"
         })
-        
-
-      },
-    
+          } else {
+            this.$message({
+              message: "设置失败",
+              type: "error"
+            });
+          }
+          
+        })
+        .catch(error => {
+          this.$message({
+            message: "后台服务出错",
+            type: "error"
+          });
+        });
+    },
     //排序
     tableSortChange(column) {
       this.pager.page = 1;
@@ -232,7 +166,7 @@ export default {
     },
     formatNumber(row, column) {
       const property = column["property"];
-      return (row[property] / 100).toFixed(2);
+      return (row[property] / 1000000).toFixed(6);
     },
     formatUp(row, column) {
       if (row.up_bandwidth == 0) {

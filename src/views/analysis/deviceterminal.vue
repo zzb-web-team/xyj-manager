@@ -1,22 +1,17 @@
 <template>
 <section class="myself-container">
     <div class="user-title" style="margin-bottom:20px;">
-        <el-button-group>
-            <!-- <el-button v-show="!shoudzyx" @click="today()">今天</el-button> -->
-            <el-button v-show="!shoudzyx" @click="yesterday()">昨天</el-button>
-            <el-button v-show="!shoudzyx" @click="sevendat()">近7天</el-button>
-            <el-button v-show="!shoudzyx" @click="thirtyday()">近30天</el-button>
-            <el-button @click="showzdyx">自定义<i class="el-icon-date"></i></el-button>
-        </el-button-group>
-        <el-date-picker v-show="shoudzyx" style="margin-left:10px;" v-model="val2" type="datetimerange" :picker-options="pickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left" @change="gettimes"></el-date-picker>
-    <el-select v-model="versointime" placeholder="请选择" @change="onChange">
-                            <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-            </el-select>   
-  <el-select v-model="versointype" placeholder="请选择" @change="onChange">
+               <el-radio-group v-model="radio1" @change="onchangeTab"  style="display: flex;justify-content: flex-start;margin-bottom:20px;">
+                <el-radio-button label="设备类型"></el-radio-button>
+                <el-radio-button label="ROM"></el-radio-button>
+            </el-radio-group>
+              <el-select v-model="versointype" placeholder="请选择" @change="onChange" v-if="!showType">
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
-            </el-select>        
+            </el-select>
+
+           <el-date-picker v-model="valueTime" type="datetimerange"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left">
+        </el-date-picker>     
             <el-button type="primary" style="margin-left:20px;" @click="onsumbit()">确定</el-button>
 
     </div>
@@ -40,14 +35,7 @@
                 </el-row>
             </div> -->
             <div class="device_form" >
-            <div class="switch_tab">
-            <el-radio-group v-model="radio1" @change="onchangeTab"  style="display: flex;justify-content: flex-start;">
-                <el-radio-button label="离线次数"></el-radio-button>
-                <el-radio-button label="在线时长"></el-radio-button>
-                 <el-button style="margin-left:20px;" type="text" @click="toexportExcel">导出</el-button>
-            </el-radio-group>
-           
-        </div>
+    
                 <div id="myEchart" style="width: 100%; height: 300px;margin-top:50px;"></div>
             </div>
             <div class="devide_table">
@@ -81,15 +69,7 @@
                 </el-row>
             </div> -->
             <div class="device_form device_form_active">
-                <div class="switch_tab">
-            <el-radio-group v-model="radio1" @change="onchangeTab"  style="display: flex;justify-content: flex-start;">
-              
-                <el-radio-button label="离线次数"></el-radio-button>
-                  <el-radio-button label="在线时长"></el-radio-button>
-                 <!-- <el-button style="margin-left:20px;" type="text" @click="toexportExcel">导出</el-button> -->
-            </el-radio-group>
-           
-        </div>
+            
                 <div id="myEchart1" style="width: 100%; height: 300px;margin-top:50px;"></div>
             </div>
             <div class="devide_table">
@@ -124,6 +104,7 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
+        radio1:"设备类型",
       versointype:"0",
       versointime:"0",
        options: [
@@ -162,7 +143,6 @@ export default {
         },
        
         ],
-      radio1: "离线次数",
       showType: true,
       shoudzyx: false,
       showzdyz: false,
@@ -224,11 +204,11 @@ export default {
       rowHeader: [
         {
           prop: "timeStamp",
-          label: "离线次数区间"
+          label: "设备类型"
         },
         {
           prop: "totalDevCnt",
-          label: "设备数"
+          label: "设备增长"
         },
         {
           prop: "onlineDevCnt",
@@ -247,11 +227,11 @@ export default {
       rowHeader1: [
         {
           prop: "timeStamp",
-          label: "离线次数区间"
+          label: "设备ROM"
         },
         {
           prop: "totalDevCnt",
-          label: "设备数"
+          label: "新增设备"
         },
         {
           prop: "onlineDevCnt",
@@ -308,7 +288,7 @@ export default {
   },
   methods: {
     onchangeTab(val) {
-      if (val == "在线时长") {
+      if (val == "设备类型") {
         this.showType = true;
         this.queryOnlineinfo();
         this.queryOnlineTable();
@@ -748,25 +728,62 @@ export default {
       let myChart = echarts.init(document.getElementById("myEchart")); //这里是为了获得容器所在位置
       // let myChart1 = echarts.init(document.getElementById('myEchart1'));
       window.onresize = myChart.resize;
-      let options = {
-        title: {
-          text: "在线时长趋势图",
-          left: "left"
-        },
-        xAxis: {
-          type: "category",
-          data: arry
-        },
-        yAxis: {
-          type: "value"
-        },
-        series: [
-          {
-            data: arrx,
-            type: "line"
-          }
-        ]
-      };
+    //   let options = {
+    //     title: {
+    //       text: "设备类型",
+    //       left: "left"
+    //     },
+    //     xAxis: {
+    //       type: "category",
+    //       data: arry
+    //     },
+    //     yAxis: {
+    //       type: "value"
+    //     },
+    //     series: [
+    //       {
+    //         data: arrx,
+    //         type: "line"
+    //       }
+    //     ]
+    //   };
+  let   options = {
+    color: ['#3398DB'],
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+        }
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: [
+        {
+            type: 'category',
+            data: ['RK328', 'AMS805',],
+            axisTick: {
+                alignWithLabel: true
+            }
+        }
+    ],
+    yAxis: [
+        {
+            type: 'value'
+        }
+    ],
+    series: [
+        {
+            name: '新增设备',
+            type: 'bar',
+            barWidth: '10%',
+            data: [ 52, 200, ]
+        }
+    ]
+};
       myChart.setOption(options);
       //myChart1.setOption(options);
     },
@@ -785,25 +802,60 @@ export default {
       let myChart = echarts.init(document.getElementById("myEchart1")); //这里是为了获得容器所在位置
       // let myChart1 = echarts.init(document.getElementById('myEchart1'));
       window.onresize = myChart.resize;
-      let options = {
-        title: {
-          text: "离线次数趋势图",
-          left: "left"
+    //   let options = {
+    //     title: {
+    //       text: "设备ROM",
+    //       left: "left"
+    //     },
+    //     xAxis: {
+    //       type: "category",
+    //       data: arry
+    //     },
+    //     yAxis: {
+    //       type: "value"
+    //     },
+    //     series: [
+    //       {
+    //         data: arrx,
+    //         type: "line"
+    //       }
+    //     ]
+    //   };
+  let  options = {
+    title: {
+        text: '设备ROM',
+      
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
+        }
+    },
+ 
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'value',
+        boundaryGap: [0, 0.01]
+    },
+    yAxis: {
+        type: 'category',
+        data: ['1.2.0', '1.2.1', '1.2.2', '1.2.3', '1.2.4', '1.2.5']
+    },
+    series: [
+        {
+            name: '2011年',
+            type: 'bar',
+            data: [122, 222, 333, 55, 6, 88]
         },
-        xAxis: {
-          type: "category",
-          data: arry
-        },
-        yAxis: {
-          type: "value"
-        },
-        series: [
-          {
-            data: arrx,
-            type: "line"
-          }
-        ]
-      };
+       
+    ]
+};
       myChart.setOption(options);
       //myChart1.setOption(options);
     }

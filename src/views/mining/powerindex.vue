@@ -177,10 +177,10 @@ export default {
           behavior: "用户矿机绑定设备",
         },
         {
-          behavior: "用户矿机设备每日累计在线一小时",
+          behavior: "用户矿机设备每日累计在线1小时",
         },
          {
-          behavior: "用户的矿机节点网络宽带被调用一次",
+          behavior: "用户的矿机节点网络宽带被调用1次",
         },
          {
           behavior: "用户的矿机节点储存空间每日被调用>=8小时",
@@ -195,7 +195,7 @@ export default {
           behavior: "用户矿机设备每日离线累计>=1小时",
         },
          {
-          behavior: "用户的矿机节点网络宽带被调用一次",
+          behavior: "用户的矿机节点网络宽带被调用1次",
         },
          {
           behavior: "用户的矿机节点储存空间每日被调用>=8小时",
@@ -333,6 +333,7 @@ export default {
     },
       //增长获取
   queryaddInfo(){
+    this.tableActive=[]
     let param =new Object()
     param.time=0
     ptfs_get_con_param_add(param)
@@ -367,6 +368,7 @@ export default {
   },
         //减少获取
   querydesInfo(){
+    this.tableActive1=[]
     let param =new Object()
         param.time=0
     ptfs_get_con_param_dec(param)

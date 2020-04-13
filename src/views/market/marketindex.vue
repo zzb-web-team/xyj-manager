@@ -1,88 +1,141 @@
 <template>
-<section class="myself-container">
-  
+  <section class="myself-container">
     <div class="device_form">
-        <el-form ref="form" :model="form">
-            <el-row type="flex">
-                <div class="search-con">
-                    <i class="el-icon-search" @click="searchInfo" style="color:#606266"></i>
-                    <el-input class="search-input" v-model="searchText" placeholder="用户昵称，节点编号" @keyup.enter.native="onSubmitKey"></el-input>
-                </div>
-                <div @click="getShow()" class="div_show" style="color:#606266">筛选
-                    <i
-                class="el-icon-caret-bottom"
-                :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
-              ></i>
-                </div>
-            </el-row>
-            <div v-show="showState">
-                <el-row type="flex" class="row_activess">
-                    <el-form-item label="节点等级" style="display: flex;">
-                        <el-select v-model="form.statusText" placeholder="请选择" @change="onChange">
-                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                 
-                </el-row>
-                <el-row type="flex" class="row_activess">
-                    <el-form-item>
-                        <el-button type="primary" style="margin-left:68px;" @click="onSumit()">确定</el-button>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="resetInfo">重置</el-button>
-                    </el-form-item>
-                </el-row>
-            </div>
-
-        </el-form>
+      <el-form ref="form" :model="form">
+        <el-row type="flex">
+          <div class="search-con">
+            <i class="el-icon-search" @click="searchInfo" style="color:#606266"></i>
+            <el-input
+              class="search-input"
+              v-model="app_name"
+              placeholder="应用名称"
+              @keyup.enter.native="onSubmitKey"
+            ></el-input>
+          </div>
+          <div @click="getShow()" class="div_show" style="color:#606266">
+            筛选
+            <i
+              class="el-icon-caret-bottom"
+              :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
+            ></i>
+          </div>
+        </el-row>
+        <div v-show="showState">
+          <el-row type="flex" class="row_activess">
+            <el-form-item label="一级分类" style="display: flex;">
+              <el-select v-model="form.statusText" placeholder="请选择" @change="onChange">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="二级分类" style="display: flex;">
+              <el-select v-model="form.statusText" placeholder="请选择" @change="onChange">
+                <el-option
+                  v-for="item in options1"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="状态" style="display: flex;">
+              <el-select v-model="form.statusText" placeholder="请选择" @change="onChange">
+                <el-option
+                  v-for="item in options2"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-row>
+          <el-row type="flex" class="row_activess">
+            <el-form-item>
+              <el-button type="primary" style="margin-left:68px;" @click="onSumit()">确定</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="resetInfo">重置</el-button>
+            </el-form-item>
+          </el-row>
+        </div>
+      </el-form>
     </div>
     <div class="devide_table">
-        <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
-            <el-col style="display: flex;justify-content: flex-end;">
-                <el-button type="primary" @click="toexportExcel">导出</el-button>
-            </el-col>
-        </el-row>
-        <el-row type="flex" class="row_active">
-            <el-col :span="24">
-                <tableBarminging id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBarminging>
-            </el-col>
-        </el-row>
+      <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-start;">
+        <el-col style="display: flex;justify-content: flex-start;">
+          <el-button type="primary" @click="addmarket">新增应用</el-button>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row_active">
+        <el-col :span="24">
+          <tableBar
+            id="rebateSetTable"
+            ref="table1"
+            tooltip-effect="dark"
+            :tableData="tableData"
+            :operatingStatus="operatingStatus"
+            @handleButton="handleButton"
+            @tableSortChange="tableSortChange"
+            @handleSelectionChange="handleSelectionChange"
+            :clomnSelection="clomnSelection"
+            :rowHeader="rowHeader"
+            :tableOption="tableOption"
+            @disable="disable"
+            @toDetails="toDetails"
+            @changePassword="changePassword"
+            @toDelete="toDelete"
+          ></tableBar>
+          <!-- <tableBar id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBar> -->
+        </el-col>
+      </el-row>
     </div>
     <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
-        <el-row type="flex">
-
-        </el-row>
-        <el-row type="flex">
-            <el-col :span="6">
-                <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
-            </el-col>
-        </el-row>
-
+      <el-row type="flex">
+        <el-col :span="6" style="display: flex;justify-content: justify-content: flex-start;">
+          <el-button type="primary" size="small" @click="clickAppon">发布</el-button>
+          <el-button type="primary" size="small" @click="clickAppoff">下架</el-button>
+        </el-col>
+      </el-row>
+      <el-row type="flex">
+        <el-col :span="6">
+          <pageNation
+            :pager="pager"
+            @handleSizeChange="handleSizeChange"
+            @handleCurrentChange="handleCurrentChange"
+          ></pageNation>
+        </el-col>
+      </el-row>
     </div>
-
-</section>
+  </section>
 </template>
 
 <script>
-import tableBarminging from "../../components/tableBarminging";
+import tableBar from "../../components/tableBar";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
 import {
-  ptfs_query_node_grade
+  ptfs_query_node_grade,
+  get_all_app,
+  app_on,
+  app_off
 } from "../../api/api";
 import common from "../../common/js/util.js";
 
 export default {
   data() {
     return {
+      app_name: "",
       dialogVisible: false,
       dialogVisible2: false,
       searchText: "",
-      operatingStatus: false,
-      clomnSelection: false,
+      operatingStatus: true,
+      clomnSelection: true,
       reserveselection: true,
-        rotate: false,
+      rotate: false,
       value1: "",
       value2: "",
       valueTime: "",
@@ -91,7 +144,7 @@ export default {
         user_id: "",
         user_name: "",
         tel_num: "",
-           order: 0,
+        order: 0,
         sex: "全部",
         account_status: 0,
         statusText: "全部",
@@ -114,19 +167,25 @@ export default {
         },
         {
           value: "0",
-          label: "普通节点"
+          label: "分类1"
         },
         {
-          value: "2000",
-          label: "黄金节点"
+          value: "1",
+          label: "分类2"
+        }
+      ],
+      options1: [
+        {
+          value: "-1",
+          label: "全部"
         },
         {
-          value: "6000",
-          label: "铂金节点"
+          value: "0",
+          label: "分类1"
         },
-          {
-          value: "18000",
-          label: "钻石节点"
+        {
+          value: "1",
+          label: "分类2"
         }
       ],
       options2: [
@@ -136,56 +195,75 @@ export default {
         },
         {
           value: "1",
-          label: "男"
+          label: "在线"
         },
         {
           value: "2",
-          label: "女"
+          label: "离线"
         }
       ],
 
       rowHeader: [
         {
-          prop: "user_id",
-          label: "用户ID"
+          prop: "app_icon",
+          label: "LOGO"
         },
         {
-          prop: "nick_name",
-          label: "用户昵称"
+          prop: "app_name",
+          label: "应用名称"
         },
         {
-          prop: "node_index",
-          label: "节点编号"
+          prop: "app_type1",
+          label: "一级分类"
         },
         {
-          prop: "node_id",
-          label: "节点ID"
-        },
-       
-        {
-          prop: "node_lve",
-          label: "节点等级"
-        },
-        {
-          prop: "total_value",
-          label: "节点贡献值",
-           sortable: "custom"
+          prop: "app_type2",
+          label: "二级标签"
         },
 
+        {
+          prop: "app_version",
+          label: "应用版本"
+        },
+        {
+          prop: "pkg_name",
+          label: "包名"
+        },
+        {
+          prop: "create_time",
+          label: "创建时间",
+          sortable: "custom"
+        },
+        {
+          prop: "publish_time",
+          label: "发布时间",
+          sortable: "custom"
+        }
       ],
       tableData: [],
       tableOption: {
         label: "操作",
+        width: 200,
         options: [
           {
-            label: "详情",
+            label: "发布",
             type: "primary",
-            methods: "freeze"
+            methods: "onapp"
           },
           {
-            label: "冻结",
+            label: "下架",
             type: "danger",
-            methods: "clickOff"
+            methods: "offapp"
+          },
+          {
+            label: "编辑",
+            type: "danger",
+            methods: "edit"
+          },
+          {
+            label: "详情",
+            type: "danger",
+            methods: "goddetail"
           }
         ]
       },
@@ -205,8 +283,10 @@ export default {
       tableData2: [],
       pageActive: 0,
       pageActives: 1,
-      nodegrade:0,
-      user_nick_name:""
+      nodegrade: 0,
+      user_nick_name: "",
+      appIds: [],
+      linkappid: 0
     };
   },
   mounted: function() {
@@ -215,16 +295,168 @@ export default {
     //this.queryInfoUser();
   },
   methods: {
+    //编辑
+    handleButton(val) {
+      console.log(val);
+      let linkappid = val.row.app_id;
+
+      if (val.methods == "edit") {
+        this.$router.push({
+          path: "/editmarket",
+          query: {
+            linkappid: linkappid
+          }
+        });
+      } else if (val.methods == "onapp") {
+        let param = new Object();
+        param.app_array = [];
+        param.app_array.push(linkappid);
+             param.publish_time =  parseInt(Date.now() / 1000);;
+        // param.data_count = 1;
+
+        app_on(param)
+          .then(res => {
+            if (res.status == 0) {
+              this.$message({
+                message: "发布成功",
+                type: "success"
+              });
+            } else {
+              this.$message({
+                message: "发布失败",
+                type: "error"
+              });
+            }
+          })
+          .catch(error => {
+             this.$message({
+                message: "后台服务出错",
+                type: "error"
+              });
+          });
+      }
+      else if(val.methods=='offapp'){
+         let param = new Object();
+        param.app_array= [];
+        param.app_array.push(linkappid);
+   
+        
+       
+
+        app_off(param)
+          .then(res => {
+            if (res.status == 0) {
+              this.$message({
+                message: "下架成功",
+                type: "success"
+              });
+            } else {
+              this.$message({
+                message: "下架失败",
+                type: "error"
+              });
+            }
+          })
+          .catch(error => {
+             this.$message({
+                message: "后台服务出错",
+                type: "error"
+              });
+          });
+      }
+      else if(val.methods=="goddetail"){
+            this.$router.push({
+          path: "/marketdetail",
+          query: {
+            linkappid: linkappid
+          }
+        });
+      }
+    },
+    //新增
+    addmarket() {
+      this.$router.push({
+        path: "/addmarket"
+      });
+    },
+    //批量上架选择ID
+    handleSelectionChange(val) {
+      let temp = val;
+      for (var i = 0; i < temp.length; i++) {
+        if (temp.length > 0) {
+          this.appIds.push(temp[i].app_id);
+        }
+      }
+    },
+    //上架
+    clickAppon() {
+      if (this.appIds.length == 0) {
+        this.$message({
+          message: "请至少勾选一项",
+          type: "error"
+        });
+        return false
+      }
+
+      let param = new Object();
+      param.data_array = this.appIds;
+      param.data_count = this.appIds.length;
+
+      app_on(param)
+        .then(res => {
+          if (res.status == 0) {
+            this.$message({
+              message: "发布成功",
+              type: "success"
+            });
+          } else {
+            this.$message({
+              message: "发布失败",
+              type: "error"
+            });
+          }
+        })
+        .catch(error => {});
+    },
+    //下架
+    clickAppoff() {
+      if (this.appIds.length == 0) {
+        this.$message({
+          message: "请至少勾选一项",
+          type: "error"
+        });
+         return false
+      }
+
+      let param = new Object();
+      param.data_array = this.appIds;
+      param.data_count = this.appIds.length;
+
+      app_off(param)
+        .then(res => {
+          if (res.status == 0) {
+            this.$message({
+              message: "下架成功",
+              type: "success"
+            });
+          } else {
+            this.$message({
+              message: "下架成功",
+              type: "error"
+            });
+          }
+        })
+        .catch(error => {});
+    },
     //排序
     tableSortChange(column, prop, order) {
-        this.pager.page = 1;
+      this.pager.page = 1;
       if (column.order == "descending") {
         this.order = 0;
       } else {
         this.order = 1;
       }
 
-     
       // if (column.order == "descending") {
       //     this.order = 0
       // } else {
@@ -261,43 +493,6 @@ export default {
     },
     //导出的方法
 
-    exportExcel() {
-      require.ensure([], () => {
-        const { export_json_to_excel } = require("../../excel/Export2Excel");
-        const tHeader = [
-          "用户ID",
-          "用户昵称",
-          "手机号",
-          "性别",
-          "总积分",
-          "平均算力",
-          "设备总数",
-          "注册时间",
-          "首次绑定时间",
-          "状态"
-        ];
-        // 上面设置Excel的表格第一行的标题
-        const filterVal = [
-          "user_id",
-          "user_name",
-          "user_tel",
-          "sex",
-          "sum_profit",
-          "average_store",
-          "dev_num",
-          "first_login_time",
-          "first_bind_time",
-          "account_status"
-        ];
-        // 上面的index、nickName、name是tableData里对象的属性
-        const list = this.tableData2; //把data里的tableData存到list
-        const data = this.formatJson(filterVal, list);
-        export_json_to_excel(tHeader, data, "用户注册信息");
-      });
-    },
-    formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => v[j]));
-    },
     //跳转至详情
     toDetails(val) {
       console.log(val);
@@ -326,7 +521,7 @@ export default {
       param.usr_id_list = usr_id_list;
 
       ptfs_forbid_users(param).then(res => {
-        if ((param.forbid_status == 1)) {
+        if (param.forbid_status == 1) {
           if (res.status == 0) {
             this.$message({
               message: "冻结成功",
@@ -363,36 +558,11 @@ export default {
     addAccout() {
       this.dialogVisible = true;
     },
-    //获取注册用户和绑定用户
-    queryUsersTotal() {
-      let param = new Object();
-      ptfs_query_total_users(param)
-        .then(res => {
-          if (res.status == 0 && res.err_code == 0) {
-            if (res.data) {
-              this.user_form.active_num = res.data.active_num;
-              this.user_form.total_num = res.data.total_num;
-            } else {
-            }
-          } else {
-            this.$message({
-              message: `${res.err_msg}`,
-              type: "error"
-            });
-          }
-        })
-        .catch(error => {
-          this.$message({
-            message: "后台服务无响应",
-            type: "error"
-          });
-        });
-    },
-    onChange(item) {
-      console.log(item)
-      this.nodegrade=item
-      this.queryUserList();
 
+    onChange(item) {
+      console.log(item);
+      this.nodegrade = item;
+      this.queryUserList();
     },
     onChange1(item) {
       this.form.active_status = parseInt(item);
@@ -434,8 +604,8 @@ export default {
       this.value1 = "";
       this.user_sex = "";
       this.user_status = -1;
-       this.nodegrade=0,
-       this.user_nick_name=""
+      (this.nodegrade = 0), (this.user_nick_name = "");
+      this.app_name = "";
       this.queryUserList();
     },
 
@@ -464,67 +634,49 @@ export default {
       //   param.user_name = "";
       // }
 
-let paramactive=new Object()
-     {
-    paramactive.user_nick_name=this.user_nick_name,
-    paramactive.node_index= 0,
-    paramactive.node_grade=parseInt(this.nodegrade) ,
-    paramactive.cur_page=  this.pager.page - 1,
-    paramactive.order=this.order
-}
-    
-      let routerparam = JSON.stringify(param);
-      localStorage.setItem("routerparam", routerparam);
-        ptfs_query_node_grade(paramactive)
+      let paramactive = new Object();
+      {
+        (paramactive.app_name = this.app_name),
+          (paramactive.page = this.pager.page - 1),
+          (paramactive.app_type1 = 0);
+        paramactive.app_type2 = 0;
+      }
+
+      get_all_app(paramactive)
         .then(res => {
-          console.log(res)
+          console.log(res);
           if (res.status == 0) {
             console.log(res);
-                  if(res.data.con_value_list){
-            // 
-         
-             
+            //         if(res.data.appinfo){
+            //    this.tableData = res.data.appinfo;
+            // }
+
             this.pager.count = res.data.total_num;
             let tempArr = [];
 
-            tempArr = res.data.con_value_list;
+            tempArr = res.data.appinfo;
             for (var i = 0; i < tempArr.length; i++) {
-      
-              if(tempArr[i].total_value>= 0 && tempArr[i].total_value<2000){
-                tempArr[i].node_lve="普通节点"
-              }else if(tempArr[i].total_value>= 2000 && tempArr[i].total_value<6000){
-tempArr[i].node_lve="黄金节点"
-              }else if(tempArr[i].total_value>= 6000 && tempArr[i].total_value<18000){
-tempArr[i].node_lve="铂金节点"
-              }else if(tempArr[i].total_value>=18000){
-tempArr[i].node_lve="钻石节点"
+              if (tempArr[i].publish_time == 0) {
+                tempArr[i].publish_time = 0;
+              } else {
+                tempArr[i].publish_time = this.common.getTimes(
+                  tempArr[i].publish_time * 1000
+                );
               }
-              
-            this.tableData =tempArr
-         
-              // tempArr[i].average_store = tempArr[i].average_store / 1000000;
-              // tempArr[i].sum_profit = tempArr[i].sum_profit / 1000000;
-              // if (tempArr[i].first_bind_time == 0) {
-              //   tempArr[i].first_bind_time = 0;
-              // } else {
-              //   tempArr[i].first_bind_time = this.common.getTimes(
-              //     tempArr[i].first_bind_time * 1000
-              //   );
-              // }
-              // if (tempArr[i].first_login_time == 0) {
-              //   tempArr[i].first_login_time = 0;
-              // } else {
-              //   tempArr[i].first_login_time = this.common.getTimes(
-              //     tempArr[i].first_login_time * 1000
-              //   );
-              // }
+              if (tempArr[i].create_time == 0) {
+                tempArr[i].create_time = 0;
+              } else {
+                tempArr[i].create_time = this.common.getTimes(
+                  tempArr[i].create_time * 1000
+                );
+              }
               // if (tempArr[i].account_status == 0) {
               //   tempArr[i].account_status = "正常";
               // } else {
               //   tempArr[i].account_status = "冻结";
               // }
             }
-         }
+            this.tableData = tempArr;
           } else {
             this.$message({
               message: "后台服务无响应",
@@ -533,9 +685,8 @@ tempArr[i].node_lve="钻石节点"
           }
         })
         .catch(error => {
-          console.log(error)
           this.$message({
-             message: "后台服务无响应",
+            message: "后台服务无响应",
             type: "error"
           });
         });
@@ -662,7 +813,7 @@ tempArr[i].node_lve="钻石节点"
   },
   components: {
     pageNation: pageNation,
-    tableBarminging: tableBarminging,
+    tableBar: tableBar,
     mySearch: mySearch
   }
 };
@@ -697,7 +848,6 @@ tempArr[i].node_lve="钻石节点"
     text-align: center;
   }
 
-  
   .devide_title {
     width: 100%;
     height: auto;
@@ -713,7 +863,6 @@ tempArr[i].node_lve="钻石节点"
   }
 
   .device_form {
-
     box-sizing: border-box;
 
     .el-form-item__label {

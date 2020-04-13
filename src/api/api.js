@@ -341,7 +341,7 @@ export const ctrl_node_state = params => { return axios.post(`${ownbase}/miner_c
 //西柚机设备算力  table查询
 //export const getDevicePower = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_node_info_list`, params).then(res => res.data); };
 //西柚机设备算力   调整算力系数
-export const set_earn_param = params => { return axios.post(`${ownbase}/miner_earn/ptfs_set_earn_param`, params).then(res => res.data); };
+// export const set_earn_param = params => { return axios.post(`${ownbase}/miner_earn/ptfs_set_earn_param`, params).then(res => res.data); };
 //设备激活
 export const chg_device_state = params => { return axios.post(`${ownbase}/miner_ctrl/chg_device_state`, params).then(res => res.data); };
 
@@ -483,6 +483,9 @@ export const ptfs_set_com_power_add = params => { return axios.post(`${ownbase}/
 export const ptfs_set_com_power_dec = params => { return axios.post(`${ownbase}/miner_earn/ptfs_set_com_power_dec `, params).then(res => res.data); };
 //
 export const ptfs_query_user_profit_list = params => { return axios.post(`${ownbase}/miner_earn/ptfs_query_user_profit_list `, params).then(res => res.data); };
+//
+export const ptfs_set_earn_param = params => { return axios.post(`${ownbase}/miner_earn/ptfs_set_earn_param `, params).then(res => res.data); };
+
 
 //帮助中心
 //新建
@@ -494,6 +497,53 @@ export const modify_help_cat_info = params => { return axios.post(`${ownbase}/mi
 //删除
 export const delete_help_cat_info = params => { return axios.post(`${ownbase}/miner_ctrl/delete_help_cat_info `, params).then(res => res.data); };
 
+//内容管理
+//查询
+export const query_help_item_info = params => { return axios.post(`${ownbase}/miner_ctrl/query_help_item_info `, params).then(res => res.data); };
+//新增
+export const create_help_item_info = params => { return axios.post(`${ownbase}/miner_ctrl/create_help_item_info `, params).then(res => res.data); };
+//删除
+export const delete_help_item_info = params => { return axios.post(`${ownbase}/miner_ctrl/delete_help_item_info `, params).then(res => res.data); };
+//修改
+export const modify_help_item_info = params => { return axios.post(`${ownbase}/miner_ctrl/modify_help_item_info `, params).then(res => res.data); };
+
+ 
+//应用市场
+//APP列表
+export const get_all_app = params => { return axios.post(`${ownbase}/appmarket/get_all_app `, params).then(res => res.data); };
+//上架
+export const app_on = params => { return axios.post(`${ownbase}/appmarket/app_on `, params).then(res => res.data); };
+
+//x下架
+export const app_off = params => { return axios.post(`${ownbase}/appmarket/app_off`, params).then(res => res.data); };
+//新增app
+export const add_app = params => { return axios.post(`${ownbase}/appmarket/add_app`, params).then(res => res.data); };
+//查询APP详请
+export const get_app_by_appid = params => { return axios.post(`${ownbase}/appmarket/get_app_by_appid`, params).then(res => res.data); };
+//更新APP信息
+export const update_app = params => { return axios.post(`${ownbase}/appmarket/update_app`, params).then(res => res.data); };
+
+
+//查询分组列表
+export const query_all_group = params => { return axios.post(`${ownbase}/appmarket/query_all_group`, params).then(res => res.data); };
+//添加组
+export const add_group = params => { return axios.post(`${ownbase}/appmarket/add_group`, params).then(res => res.data); };
+//获取关联应用
+export const get_app = params => { return axios.post(`${ownbase}/appmarket/get_app`, params).then(res => res.data); };
+
+//删除组
+export const del_group = params => { return axios.post(`${ownbase}/appmarket/del_group`, params).then(res => res.data); };
+
+//新增多张照片
+export const saveimagemore = params => { return axios.post(`${ownbase}/cloud/saveimagemore`, params).then(res => res.data); };
+
+//更新应用分组
+export const update_group = params => { return axios.post(`${ownbase}/appmarket/update_group`, params).then(res => res.data); };
+
+
+
+
+ 
 
 
 
