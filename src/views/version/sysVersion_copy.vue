@@ -165,12 +165,12 @@
 
             </el-form-item>
             <p><b>版本撤回选项</b></p>
-            <el-form-item label="撤回至版本">
+            <!-- <el-form-item label="撤回至版本">
                 <el-select v-model="form1.backversion" placeholder="请选择版本" style="width:220px;">
                     <el-option v-for="item in versionsListActive" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled">
                     </el-option>
                 </el-select>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="撤回时间">
                 <el-radio-group v-model="form1.time" @change="changeTime">
                     <el-radio label="立即撤回"></el-radio>
@@ -182,10 +182,10 @@
                     <el-date-picker type="datetime" placeholder="选择日期" v-model="form1.date" style="300px;"></el-date-picker>
                 </el-col>
             </el-form-item>
-            <el-form-item>
+            <div style="text-align: center;">
                 <el-button type="primary" @click="onSubmitBack">撤回</el-button>
                 <el-button @click="dialogVisible2=false">取消</el-button>
-            </el-form-item>
+            </div>
         </el-form>
     </el-dialog>
 
@@ -432,7 +432,9 @@ export default {
       versionsListActive: [],
       backId: "",
       pushKey: "",
-      oldversion: ""
+      oldversion: "",
+      rom_version_active:""
+
     };
   },
   mounted: function() {
@@ -473,15 +475,15 @@ export default {
           return false;
         }
       }
-      if (this.form1.backversion == "") {
+      if (this.rom_version_active == 0) {
         this.$message({
-          message: "请选择撤回版本",
+          message: "当前已是最低版本，已经最低版本可撤回",
           type: "error"
         });
         return false;
       }
       let param = {
-        rom_version: this.form1.backversion,
+        rom_version: this.rom_version_active,
         // push_type: this.form1.type,
         // dev_type: this.form1.tab,
         // push_mod: this.form1.modelType,
@@ -492,7 +494,6 @@ export default {
         push_key: this.pushKey,
         dev_type: this.dev_type
       };
-      console.log(this.form1);
       rollbackRom(param)
         .then(res => {
           console.log(res);
@@ -879,7 +880,17 @@ export default {
 
               // obj.label= item.id+"+"+item.chanid+"+"+item.name
               this.versionsList.push(obj);
+              
             });
+            if(this.versionsListActive.length==0){
+              this.rom_version_active=="0"
+            }else{
+               let nowindex=this.versionsListActive.length-1
+              this.rom_version_active=this.versionsListActive[nowindex].value
+
+            }
+           
+
             if (res.result.les_count == 0) {
               return false;
             } else {
@@ -939,7 +950,10 @@ export default {
       param.page = this.pageActive1;
       param.dev_type = this.dev_type;
       param.rom_version = this.tempRomVersion;
-      param.to_version = "0.0.0";
+       param.rom_version= rows.rom_version
+       param.to_version = "0.0.0";
+      // param.to_version = "0.0.0";
+     //param.to_version= rows.rom_version
       getversionRom(param)
         .then(res => {
           if (res.status == 0) {
@@ -953,6 +967,14 @@ export default {
               // obj.label= item.id+"+"+item.chanid+"+"+item.name
               this.versionsListActive.push(obj);
             });
+  
+            if(this.versionsListActive.length==0){
+              this.rom_version_active=="0"
+            }else{
+               let nowindex=this.versionsListActive.length-1
+              this.rom_version_active=this.versionsListActive[nowindex].value
+
+            }
             if (res.result.les_count == 0) {
               return false;
             } else {
@@ -1013,7 +1035,15 @@ export default {
 
               // obj.label= item.id+"+"+item.chanid+"+"+item.name
               this.versionsListActive.push(obj);
+            if(this.versionsListActive.length==0){
+              this.rom_version_active=="0"
+            }else{
+               let nowindex=this.versionsListActive.length-1
+              this.rom_version_active=this.versionsListActive[nowindex].value
+
+            }
             });
+            ///console.log(this.versionsListActive[0].value)
             if (res.result.les_count == 0) {
               return false;
             } else {

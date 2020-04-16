@@ -112,11 +112,11 @@
       <el-dialog :visible.sync="dialogVisibleactive" width="30%" :before-close="handleClose">
         <el-form ref="form">
              <el-form-item label="请输入需要绑定ID:">
-                  <el-input v-model="IDvalue"></el-input>
+                  <el-input v-model="user_id_active"></el-input>
             </el-form-item>
            
             <div style="text-align: center;">
-                <el-button type="primary" @click="onSubmitScale">确定</el-button>
+                <el-button type="primary" @click="onSubmitBind">确定</el-button>
                 <el-button @click="dialogVisible=false">取消</el-button>
             </div>
         </el-form>
@@ -132,7 +132,8 @@ import {
   devicelist, //table查询
   device_cnt_overview, //查询title
   change_device_bind_state, //强制解绑
-  ctrl_node_state //关机重启
+  ctrl_node_state, //关机重启
+  web_change_device_state
 } from "../../api/api";
 import common from "../../common/js/util.js";
 export default {
@@ -299,7 +300,10 @@ export default {
       },
       showState: false,
       tableData2: [],
-      pageActive: 0
+      pageActive: 0,
+      user_id_active:"",
+      dev_sn_active:"",
+      bind_user_tel_num:""
     };
   },
   mounted() {
@@ -307,34 +311,43 @@ export default {
     this.getInfo();
   },
   methods: {
-    tieactive(){
+    tieactive(val){
+      this.dev_sn_active=val.dev_sn
       this.dialogVisibleactive=true
 
     },
      //增长设置
-    onSubmitScale(){
-       this.dialogVisibleactive=false
-      // let param=new Object()
-      // param.con_param_add_type=0,
-      // param.con_param_add_value=this.scalevalue
-      // ptfs_set_com_power_scale(param).then(res=>{
-      //   if(res.status==0){
-      //      this.$message({
-      //       message: "修改成功",
-      //       type: "success"
-      //     });
+    onSubmitBind(){
+    
+      let param=new Object()
+      param.bind_type=1,
+      param.user_id=parseInt(this.user_id_active) ,
+      param.dev_sn=this.dev_sn_active,
+      param.bind_user_tel_num="",
 
-      //   }
-      //   else{
-      //      this.$message({
-      //       message: "修改失败",
-      //       type: "error"
-      //     });
-      //   }
+      web_change_device_state(param).then(res=>{
+        if(res.status==0){
+           this.$message({
+            message: "绑定成功",
+            type: "success"
+          });
 
-      // }).catch(error=>{
+        }
+        else{
+           this.$message({
+            message: "绑定失败",
+            type: "error"
+          });
+        }
+   this.dialogVisibleactive=false
+    this.getInfo();
+      }).catch(error=>{
+         this.$message({
+            message: "后台服务出错",
+            type: "error"
+          });
 
-      // })
+      })
 
     },
     //回车键搜索
@@ -737,7 +750,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less"> 
 .user-title {
   margin-top: 30px;
 

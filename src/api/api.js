@@ -447,7 +447,10 @@ export const modify_domain_list = params => { return axios.post(`${ownbase}/doma
 export const send_ptfs_cmd = params => { return axios.post(`${ownbase2}/bg_manager_tool/send_ptfs_cmd`, params).then(res => res.data); };
 export const query_ptfs_cmd_result = params => { return axios.post(`${ownbase}/bg_manager_tool/query_ptfs_cmd_result`, params).then(res => res.data); };
 
- 
+//20200416 设备绑定输入ID新增
+export const web_change_device_state = params => { return axios.post(`${ownbase}/miner_ctrl/web_change_device_state `, params).then(res => res.data); };
+
+
 
 
 //20200319新增

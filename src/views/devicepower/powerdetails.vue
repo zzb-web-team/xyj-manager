@@ -206,7 +206,8 @@ export default {
       pageActive: 0,
       pageActives: 1,
       ad_type:0,
-      order:0
+      order:0,
+      exportLinks:''
     };
   },
   mounted: function() {
@@ -258,49 +259,8 @@ export default {
       this.showState = !this.showState;
       this.rotate = !this.rotate;
     },
-    //导出的方法
-
-    exportExcel() {
-      require.ensure([], () => {
-        const { export_json_to_excel } = require("../../excel/Export2Excel");
-        const tHeader = [
-          "用户ID",
-          "用户昵称",
-          "手机号",
-          "性别",
-          "总积分",
-          "平均算力",
-          "设备总数",
-          "注册时间",
-          "首次绑定时间",
-          "状态"
-        ];
-        // 上面设置Excel的表格第一行的标题
-        const filterVal = [
-          "user_id",
-          "user_name",
-          "user_tel",
-          "sex",
-          "sum_profit",
-          "average_store",
-          "dev_num",
-          "first_login_time",
-          "first_bind_time",
-          "account_status"
-        ];
-        // 上面的index、nickName、name是tableData里对象的属性
-        const list = this.tableData2; //把data里的tableData存到list
-        const data = this.formatJson(filterVal, list);
-        export_json_to_excel(tHeader, data, "用户注册信息");
-      });
-    },
-    formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => v[j]));
-    },
     //跳转至详情
     toDetails(val) {
-      console.log(val);
-
       this.$router.push({
         path: "/userInfo",
         query: {
@@ -312,7 +272,6 @@ export default {
     },
     //冻结，解冻
     disable(val) {
-      console.log(val);
       let param = new Object();
       if (val.account_status == "正常") {
         param.forbid_status = 1;
@@ -362,45 +321,10 @@ export default {
     addAccout() {
       this.dialogVisible = true;
     },
-    //获取注册用户和绑定用户
-    queryUsersTotal() {
-      let param = new Object();
-      ptfs_query_total_users(param)
-        .then(res => {
-          if (res.status == 0 && res.err_code == 0) {
-            if (res.data) {
-              this.user_form.active_num = res.data.active_num;
-              this.user_form.total_num = res.data.total_num;
-            } else {
-            }
-          } else {
-            this.$message({
-              message: `${res.err_msg}`,
-              type: "error"
-            });
-          }
-        })
-        .catch(error => {
-          this.$message({
-            message: "后台服务无响应",
-            type: "error"
-          });
-        });
-    },
     onChange(item) {
       this.form.account_status = parseInt(item);
       this.ad_type=item
       this.queryUserList()
-      // if (item == 0) {
-      //   this.form.statusText = "全部";
-      //   this.user_status = -1;
-      // } else if (item == 1) {
-      //   this.user_status = 0;
-      //   this.form.statusText = "正常";
-      // } else if (item == 2) {
-      //   this.user_status = 1;
-      //   this.form.statusText = "冻结";
-      // }
     },
     onChange1(item) {
       this.form.active_status = parseInt(item);
@@ -412,19 +336,7 @@ export default {
         this.form.statusActiveText = "是";
       }
     },
-    onChange2(item) {
-      console.log(item);
-      if (item == 0) {
-        this.form.sex = "全部";
-        this.user_sex = "";
-      } else if (item == 1) {
-        this.form.sex = "男";
-        this.user_sex = "男";
-      } else if (item == 2) {
-        this.form.sex = "女";
-        this.user_sex = "女";
-      }
-    },
+
     //回车键绑定事件
     onSubmitKey() {
       this.queryUserList();
@@ -447,41 +359,23 @@ export default {
 
     //获取用户列表
     queryUserList() {
-      let param = new Object();
-      let phoneNumber = /^1(3|4|5|7|8)\d{9}$/;
-      let user_id = /^\d{7}$/;
-      // if (this.searchText != "") {
-      //   if (phoneNumber.test(this.searchText) == true) {
-      //     param.user_id = 0;
-      //     param.user_tel = this.searchText;
-      //     param.user_name = "";
-      //   } else if (user_id.test(this.searchText) == true) {
-      //     param.user_id = parseInt(this.searchText);
-      //     param.user_tel = "";
-      //     param.user_name = "";
-      //   } else {
-      //     param.user_id = 0;
-      //     param.user_tel = "";
-      //     param.user_name = this.searchText;
-      //   }
-      // } else {
-      //   param.user_id = "";
-      //   param.user_tel = "";
-      //   param.user_name = "";
-      // }
-      // param.user_status = this.user_status;
-      // param.user_sex = this.user_sex;
-      // param.cur_page = this.pager.page - 1;
-      // param.order = this.order;
-
-    
-      // let routerparam = JSON.stringify(param);
-      // localStorage.setItem("routerparam", routerparam);
+   
       let paramactive=new Object()
+       let phoneNumber = /^[0-9]*[1-9][0-9]*$/;
+      if (this.searchText != "") {
+        if (phoneNumber.test(this.searchText) == true) {
+          paramactive.dev_sn = "";
+          paramactive.user_id = parseInt(this.searchText);
+        } else {
+          paramactive.dev_sn = this.searchText;
+          paramactive.user_id = 0;
+        }
+      } else {
+        paramactive.dev_sn = "";
+        paramactive.user_id = 0;
+      }
      
      paramactive.order= this.order,
-     paramactive.user_id= 0,
-     paramactive.dev_sn=this.searchText,
      paramactive.ad_type= parseInt(this.ad_type),
      paramactive.cur_page= this.pager.page - 1,
      paramactive.start_time= 0,
@@ -504,28 +398,11 @@ export default {
       ptfs_query_node_info_list(paramactive)
         .then(res => {
           if (res.status == 0) {
-            console.log(res);
             let tempArr = [];
-           
+           this.exportLinks=res.data.filename
 
             tempArr = res.data.cp_list;
             for (var i = 0; i < tempArr.length; i++) {
-              // tempArr[i].average_store = tempArr[i].average_store / 1000000;
-              // tempArr[i].sum_profit = tempArr[i].sum_profit / 1000000;
-              // if (tempArr[i].first_bind_time == 0) {
-              //   tempArr[i].first_bind_time = 0;
-              // } else {
-              //   tempArr[i].first_bind_time = this.common.getTimes(
-              //     tempArr[i].first_bind_time * 1000
-              //   );
-              // }
-              // if (tempArr[i].first_login_time == 0) {
-              //   tempArr[i].first_login_time = 0;
-              // } else {
-              //   tempArr[i].first_login_time = this.common.getTimes(
-              //     tempArr[i].first_login_time * 1000
-              //   );
-              // }
                   tempArr[i].time_stamp = this.common.getTimes(
                   tempArr[i].time_stamp  * 1000
                 );
@@ -547,9 +424,6 @@ export default {
                        case 206:
                  tempArr[i].type="离线一次 扣除一分， 最多扣除3次 "
                    break;
-             
-                  
-
                }
               if (tempArr[i].opt_value >= 0) {
                 tempArr[i].opt_active = "新增";
@@ -573,119 +447,10 @@ export default {
           });
         });
     },
-    //导出
+      //导出
     toexportExcel() {
-      let param = new Object();
-      let phoneNumber = /^1(3|4|5|7|8)\d{9}$/;
-      let user_id = /^\d{7}$/;
-      if (this.searchText != "") {
-        if (phoneNumber.test(this.searchText) == true) {
-          param.user_id = 0;
-          param.user_tel = this.searchText;
-          param.user_name = "";
-        } else if (user_id.test(this.searchText) == true) {
-          param.user_id = parseInt(this.searchText);
-          param.user_tel = "";
-          param.user_name = "";
-        } else {
-          param.user_id = 0;
-          param.user_tel = "";
-          param.user_name = this.searchText;
-        }
-      } else {
-        param.user_id = "";
-        param.user_tel = "";
-        param.user_name = "";
-      }
-      param.user_status = this.user_status;
-      param.user_sex = this.user_sex;
-      param.cur_page = this.pageActives - 1;
-      param.order = this.order;
-
-      if (!this.value1) {
-        param.reg_start_time = 0;
-        param.reg_end_time = 0;
-      } else {
-        if (this.value1[0] == undefined) {
-          param.reg_start_time = 0;
-        } else {
-          param.reg_start_time = this.value1[0].getTime() / 1000;
-        }
-        if (this.value1[1] == undefined) {
-          param.reg_end_time = 0;
-        } else {
-          param.reg_end_time = this.value1[1].getTime() / 1000;
-        }
-      }
-      if (!this.value2) {
-        param.bind_start_time = 0;
-        param.bind_end_time = 0;
-      } else {
-        if (this.value2[0] == undefined) {
-          param.bind_start_time = 0;
-        } else {
-          param.bind_start_time = this.value2[0].getTime() / 1000;
-        }
-        if (this.value2[1] == undefined) {
-          param.bind_end_time = 0;
-        } else {
-          param.bind_end_time = this.value2[1].getTime() / 1000;
-        }
-      }
-      ptfs_query_list_user_store_list(param)
-        .then(res => {
-          if (res.status == 0 && res.err_code == 0) {
-            let tempArr = [];
-            tempArr = res.data.store_list;
-            for (var i = 0; i < tempArr.length; i++) {
-              tempArr[i].average_store = tempArr[i].average_store / 1000000;
-              tempArr[i].sum_profit = tempArr[i].sum_profit / 1000000;
-              if (tempArr[i].first_bind_time == 0) {
-                tempArr[i].first_bind_time = 0;
-              } else {
-                tempArr[i].first_bind_time = this.common.getTimes(
-                  tempArr[i].first_bind_time * 1000
-                );
-              }
-              if (tempArr[i].first_login_time == 0) {
-                tempArr[i].first_login_time = 0;
-              } else {
-                tempArr[i].first_login_time = this.common.getTimes(
-                  tempArr[i].first_login_time * 1000
-                );
-              }
-              if (tempArr[i].account_status == 0) {
-                tempArr[i].account_status = "正常";
-              } else {
-                tempArr[i].account_status = "冻结";
-              }
-            }
-
-            this.tableData2 = this.tableData2.concat(tempArr);
-
-            if (this.pageActives >= res.data.total_page) {
-              console.log(this.pageActives);
-              this.common.monitoringLogs("导出", "导出注册用户信息表", 1);
-              this.exportExcel();
-            } else {
-              this.pageActives++;
-              this.toexportExcel();
-            }
-          } else {
-            this.$message({
-              message: "后台服务无响应",
-              type: "error"
-            });
-            this.common.monitoringLogs("导出", "导出注册用户信息表", 0);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-          this.$message({
-            message: "后台服务无响应",
-            type: "error"
-          });
-        });
+       window.location.href = this.exportLinks
+    
     },
     //分页
     handleCurrentChange(val) {

@@ -93,7 +93,7 @@
         </el-col>
       </el-row>
     </div>
-    <el-dialog :visible.sync="dialogVisibleGroup" width="30%" :before-close="handleClose">
+    <!-- <el-dialog :visible.sync="dialogVisibleGroup" width="30%" :before-close="handleClose">
       <el-form ref="form">
         <el-form-item label="分组名称:">
           <el-input v-model="groupvalue"></el-input>
@@ -104,19 +104,8 @@
           <el-button @click="dialogVisibleGroup=false">取消</el-button>
         </div>
       </el-form>
-    </el-dialog>
-    <!-- <el-dialog :visible.sync="dialogVisibleGroupEdit" width="30%" :before-close="handleClose">
-      <el-form ref="form">
-        <el-form-item label="分组名称:">
-          <el-input v-model="groupEditvalue"></el-input>
-        </el-form-item>
-
-        <div style="text-align: center;">
-          <el-button type="primary" @click="onSubmitContent">确定</el-button>
-          <el-button @click="dialogVisibleGroupEdit=false">取消</el-button>
-        </div>
-      </el-form>
-    </el-dialog>-->
+    </el-dialog> -->
+  
     <el-dialog :visible.sync="dialogVisiblecontent" width="50%" :before-close="handleClose">
       <el-form ref="form">
         <el-form-item label="选择分组:" style="display: flex;">
@@ -538,28 +527,28 @@ export default {
       var v = window.document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)");
       return v ? v[2] : null;
     },
-    onSubmitGroup() {
-      let param = new Object();
-      (param.cat_name = this.groupvalue), (param.cat_owner = this.uname);
-      create_help_item_info(param)
-        .then(res => {
-          if (res.status == 0) {
-            this.$message({
-              message: "创建成功",
-              type: "success"
-            });
-            this.dialogVisibleGroup = false;
-          } else {
-            this.$message({
-              message: "创建失败",
-              type: "error"
-            });
-            this.dialogVisibleGroup = false;
-          }
-          this.queryUserList();
-        })
-        .catch(error => {});
-    },
+    // onSubmitGroup() {
+    //   let param = new Object();
+    //   (param.cat_name = this.groupvalue), (param.cat_owner = this.uname);
+    //   create_help_item_info(param)
+    //     .then(res => {
+    //       if (res.status == 0) {
+    //         this.$message({
+    //           message: "创建成功",
+    //           type: "success"
+    //         });
+    //         this.dialogVisibleGroup = false;
+    //       } else {
+    //         this.$message({
+    //           message: "创建失败",
+    //           type: "error"
+    //         });
+    //         this.dialogVisibleGroup = false;
+    //       }
+    //       this.queryUserList();
+    //     })
+    //     .catch(error => {});
+    // },
     //新建
     onImport() {
       this.dialogVisiblecontent = true;

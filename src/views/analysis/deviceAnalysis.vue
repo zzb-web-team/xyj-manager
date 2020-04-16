@@ -44,7 +44,7 @@
             <el-radio-group v-model="radio1" @change="onchangeTab"  style="display: flex;justify-content: flex-start;">
                 <el-radio-button label="离线次数"></el-radio-button>
                 <el-radio-button label="在线时长"></el-radio-button>
-                 <el-button style="margin-left:20px;" type="text" @click="toexportExcel">导出</el-button>
+                 <!-- <el-button style="margin-left:20px;" type="text" @click="toexportExcel">导出</el-button> -->
             </el-radio-group>
            
         </div>
@@ -98,7 +98,7 @@
                         <tableBarActive2 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData1" :clomnSelection="clomnSelection" :rowHeader="rowHeader1" :tableOption="tableOption1" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
                     </el-col>
                 </el-row>
-                <el-row type="flex" style="   display: flex;justify-content: flex-end;margin-top:10px;">
+                <el-row type="flex" style="display: flex;justify-content: flex-end;margin-top:10px;">
                     <el-col :span="6">
                         <pageNation :pager="pager1" @handleSizeChange1="handleSizeChange1" @handleCurrentChange1="handleCurrentChange1"></pageNation>
                     </el-col>

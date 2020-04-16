@@ -60,10 +60,10 @@
         </el-row>
 
     </div>
-       <el-dialog :visible.sync="dialogVisibleGroup" width="30%" :before-close="handleClose">
+       <el-dialog :visible.sync="dialogVisibleGroup" width="25%" :before-close="handleClose">
         <el-form ref="form">
-             <el-form-item label="分组名称:">
-                  <el-input v-model="groupvalue"></el-input>
+             <el-form-item label="分组名称:"  style="display: flex;justify-content: center;">
+                  <el-input v-model="groupvalue"  style="width:350px;"></el-input>
             </el-form-item>
            
             <div style="text-align: center;">
@@ -72,10 +72,10 @@
             </div>
         </el-form>
     </el-dialog>
-      <el-dialog :visible.sync="dialogVisibleGroupEdit" width="30%" :before-close="handleClose">
+      <el-dialog :visible.sync="dialogVisibleGroupEdit" width="25%" :before-close="handleClose">
         <el-form ref="form">
-             <el-form-item label="分组名称:">
-                  <el-input v-model="groupEditvalue"></el-input>
+             <el-form-item label="分组名称:" style="display: flex;justify-content: center;">
+                  <el-input v-model="groupEditvalue" style="width:350px;"></el-input>
             </el-form-item>
            
             <div style="text-align: center;">
@@ -97,24 +97,24 @@ import {
   create_help_cat_info,
   query_help_cat_info,
   modify_help_cat_info,
-  delete_help_cat_info
+  delete_help_cat_info,
 } from "../../api/api";
 import common from "../../common/js/util.js";
 
 export default {
   data() {
     return {
-        groupvalue:"",
-        groupEditvalue:"",
-        dialogVisibleGroup:false,
-        dialogVisibleGroupEdit:false,
+      groupvalue: "",
+      groupEditvalue: "",
+      dialogVisibleGroup: false,
+      dialogVisibleGroupEdit: false,
       dialogVisible: false,
       dialogVisible2: false,
       searchText: "",
       operatingStatus: true,
       clomnSelection: false,
       reserveselection: true,
-        rotate: false,
+      rotate: false,
       value1: "",
       value2: "",
       valueTime: "",
@@ -123,7 +123,7 @@ export default {
         user_id: "",
         user_name: "",
         tel_num: "",
-           order: 0,
+        order: 0,
         sex: "全部",
         account_status: 0,
         statusText: "全部",
@@ -132,28 +132,26 @@ export default {
         reg_start_time: 0,
         reg_end_time: 0,
         bind_start_time: 0,
-        bind_end_time: 0
+        bind_end_time: 0,
       },
       user_form: {
         normal_num: "",
         active_num: "",
-        total_num: ""
+        total_num: "",
       },
       rowHeader: [
         {
           prop: "cat_name",
-          label: "分组名称"
+          label: "分组名称",
         },
         {
           prop: "cat_owner",
-          label: "修改人"
+          label: "修改人",
         },
         {
           prop: "cat_tm",
-          label: "修改时间"
+          label: "修改时间",
         },
-    
-
       ],
       tableData: [],
       tableOption: {
@@ -162,19 +160,19 @@ export default {
           {
             label: "修改",
             type: "primary",
-            methods: "freeze"
+            methods: "freeze",
           },
           {
             label: "删除",
             type: "delete",
-            methods: "clickOff"
-          }
-        ]
+            methods: "clickOff",
+          },
+        ],
       },
       pager: {
         count: 0,
         page: 1,
-        rows: 100
+        rows: 100,
       },
 
       showState: false,
@@ -187,136 +185,189 @@ export default {
       tableData2: [],
       pageActive: 0,
       pageActives: 1,
-      nodegrade:0,
-      user_nick_name:"",
-      uname:"",
-      cat_name:"",
-      cat_id:"",
-      cat_owner:""
-
-
+      nodegrade: 0,
+      user_nick_name: "",
+      uname: "",
+      cat_name: "",
+      cat_id: "",
+      cat_owner: "",
     };
   },
   mounted: function() {
     //this.queryUsersTotal();
     this.queryUserList();
-    let tempInfo =JSON.parse(this.get('userInfo'))
-        this.uname=tempInfo.username;
-          this.uid =tempInfo.id;
+    let tempInfo = JSON.parse(this.get("userInfo"));
+    this.uname = tempInfo.username;
+    this.uid = tempInfo.id;
     //this.queryInfoUser();
   },
   methods: {
-      onSubmitGroupEdit(){
-          let param=new Object()
-          param.cat_id=this.cat_id
-          param.cat_owner=this.cat_owner
-            param.cat_name=this.groupEditvalue
-              modify_help_cat_info(param).then(res=>{
-            if(res.status==0){
-                   this.$message({
-              message: "修改成功",
-              type: "success"
-            });
-            this.dialogVisibleGroupEdit=false
-
-            }else{
-                   this.$message({
-              message: "修改失败",
-              type: "success"
-            });
-            this.dialogVisibleGroupEdit=false
-
-            }
-            this.queryUserList()
-        })
-      },
-      //修改和删除
-      handleButton(val,row){
-          console.log(val)
-          if(val.methods=="freeze"){
-              this.dialogVisibleGroupEdit=true
-              this.groupEditvalue=val.row.cat_name
-              this.cat_id=val.row.cat_id,
-             this.cat_owner=this.uname
-    
-
-          }else{
-              let param=new Object()
-              param.cat_id=val.row.cat_id
-              delete_help_cat_info(param).then(res=>{
-                  if(res.status==0){
-                               this.$message({
-              message: "删除成功",
-              type: "success"
-            });
-
-                  }else{
-            this.$message({
-              message: "删除失败",
-              type: "success"
-            });
-                  }
-                    this.queryUserList()
-
-              }).catch(error=>{
-
-              })
-
-          }
-
-      },
-           get: function (name) {
-        var v = window.document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-          return v ? v[2] : null;
-
+    //字符长度限制
+    getStringWidth(val) {
+      let len = 0;
+      for (let i = 0; i < val.length; i++) {
+        let length = val.charCodeAt(i);
+        if (length >= 0 && length <= 128) {
+          len += 1;
+        } else {
+          len += 2;
+        }
+      }
+      return len;
     },
-      onSubmitGroup(){
-          let param= new Object()
-          param.cat_name=this.groupvalue,
-        param.cat_owner=this.uname
-        create_help_cat_info(param).then(res=>{
-           
+    onSubmitGroupEdit() {
+      if (this.getStringWidth(this.groupEditvalue) >= 30) {
+        this.$message({
+          message: "分组名称字符长度30个字符以内",
+          type: "error",
+        });
+        return false;
+      }
 
-            if(res.status==0){
-                   this.$message({
-              message: "创建成功",
-              type: "success"
-            });
-            this.dialogVisibleGroup=false
+      if (this.groupEditvalue == "") {
+        this.$message({
+          message: "分组名称不能为空",
+          type: "error",
+        });
+        return false;
+      }
+      var fsdusername = /^[a-zA-Z\u4e00-\u9fa5]+$/;
+      if (fsdusername.test(this.groupEditvalue) === false) {
+        this.$message({
+          message: "分组名称英文和汉字组成",
+          type: "error",
+        });
+        return false;
+      }
 
-            }
-            else{
-                   this.$message({
-              message: "创建失败",
-              type: "error"
-            });
-            this.dialogVisibleGroup=false
-            }
-             this.queryUserList()
-
-        }).catch(error=>{
-
+      let param = new Object();
+      param.cat_id = this.cat_id;
+      param.cat_owner = this.cat_owner;
+      param.cat_name = this.groupEditvalue;
+      modify_help_cat_info(param).then(res => {
+        if (res.status == 0) {
+          this.$message({
+            message: "修改成功",
+            type: "success",
+          });
+          this.dialogVisibleGroupEdit = false;
+        } else if (res.status == -1) {
+          this.$message({
+            message: "分组名称不能重复",
+            type: "error",
+          });
+        } else {
+          this.$message({
+            message: "修改失败",
+            type: "success",
+          });
+          this.dialogVisibleGroupEdit = false;
+        }
+        this.queryUserList();
+      });
+    },
+    //修改和删除
+    handleButton(val, row) {
+      console.log(val);
+      if (val.methods == "freeze") {
+        this.dialogVisibleGroupEdit = true;
+        this.groupEditvalue = val.row.cat_name;
+        (this.cat_id = val.row.cat_id), (this.cat_owner = this.uname);
+      } else {
+        this.$confirm("确定要批量删除角色吗?", "提示", {
+          type: "warning",
         })
+          .then(() => {
+            let param = new Object();
+            param.cat_id = val.row.cat_id;
+            delete_help_cat_info(param)
+              .then(res => {
+                if (res.status == 0) {
+                  this.$message({
+                    message: "删除成功",
+                    type: "success",
+                  });
+                } else {
+                  this.$message({
+                    message: "删除失败",
+                    type: "success",
+                  });
+                }
+                this.queryUserList();
+              })
+              .catch(error => {});
+          })
+          .catch(() => {});
+      }
+    },
+    get: function(name) {
+      var v = window.document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)");
+      return v ? v[2] : null;
+    },
+    onSubmitGroup() {
+      if (this.getStringWidth(this.groupvalue) >= 30) {
+        this.$message({
+          message: "分组名称字符长度30个字符以内",
+          type: "error",
+        });
+        return false;
+      }
 
-
-
-      },
+      if (this.groupvalue == "") {
+        this.$message({
+          message: "分组名称不能为空",
+          type: "error",
+        });
+        return false;
+      }
+      var fsdusername = /^[a-zA-Z\u4e00-\u9fa5]+$/;
+      if (fsdusername.test(this.groupvalue) === false) {
+        this.$message({
+          message: "分组名称由英文和汉字组成",
+          type: "error",
+        });
+        return false;
+      }
+      let param = new Object();
+      (param.cat_name = this.groupvalue), (param.cat_owner = this.uname);
+      create_help_cat_info(param)
+        .then(res => {
+          if (res.status == 0) {
+            this.$message({
+              message: "创建成功",
+              type: "success",
+            });
+            this.dialogVisibleGroup = false;
+          } else if (res.status == -1) {
+            this.$message({
+              message: "分组名称不能重复",
+              type: "error",
+            });
+          } else {
+            this.$message({
+              message: "创建失败",
+              type: "error",
+            });
+            this.dialogVisibleGroup = false;
+          }
+          this.queryUserList();
+        })
+        .catch(error => {});
+    },
     //新建
-    onImport(){
-        this.dialogVisibleGroup=true
-        this.groupvalue=""
-
+    onImport() {
+      this.dialogVisibleGroup = true;
+      this.groupvalue = "";
     },
     //排序
     tableSortChange(column, prop, order) {
-        this.pager.page = 1;
+      this.pager.page = 1;
       if (column.order == "descending") {
         this.order = 0;
       } else {
         this.order = 1;
       }
 
-     
       // if (column.order == "descending") {
       //     this.order = 0
       // } else {
@@ -351,45 +402,7 @@ export default {
       this.showState = !this.showState;
       this.rotate = !this.rotate;
     },
-    //导出的方法
 
-    exportExcel() {
-      require.ensure([], () => {
-        const { export_json_to_excel } = require("../../excel/Export2Excel");
-        const tHeader = [
-          "用户ID",
-          "用户昵称",
-          "手机号",
-          "性别",
-          "总积分",
-          "平均算力",
-          "设备总数",
-          "注册时间",
-          "首次绑定时间",
-          "状态"
-        ];
-        // 上面设置Excel的表格第一行的标题
-        const filterVal = [
-          "user_id",
-          "user_name",
-          "user_tel",
-          "sex",
-          "sum_profit",
-          "average_store",
-          "dev_num",
-          "first_login_time",
-          "first_bind_time",
-          "account_status"
-        ];
-        // 上面的index、nickName、name是tableData里对象的属性
-        const list = this.tableData2; //把data里的tableData存到list
-        const data = this.formatJson(filterVal, list);
-        export_json_to_excel(tHeader, data, "用户注册信息");
-      });
-    },
-    formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => v[j]));
-    },
     //跳转至详情
     toDetails(val) {
       console.log(val);
@@ -399,63 +412,16 @@ export default {
         query: {
           user_id: val.user_id,
           reg_time: val.first_login_time,
-          reg_time1: val.first_bind_time
-        }
+          reg_time1: val.first_bind_time,
+        },
       });
     },
-    //冻结，解冻
-    disable(val) {
-      console.log(val);
-      let param = new Object();
-      if (val.account_status == "正常") {
-        param.forbid_status = 1;
-      } else {
-        param.forbid_status = 0;
-      }
-
-      let usr_id_list = [];
-      usr_id_list[0] = val.user_id;
-      param.usr_id_list = usr_id_list;
-
-      ptfs_forbid_users(param).then(res => {
-        if ((param.forbid_status == 1)) {
-          if (res.status == 0) {
-            this.$message({
-              message: "冻结成功",
-              type: "success"
-            });
-            this.queryUserList();
-            this.common.monitoringLogs("修改", "冻结账户", 1);
-          } else {
-            this.$message({
-              message: `${res.err_msg}`,
-              type: "error"
-            });
-            this.common.monitoringLogs("修改", "冻结账户", 0);
-          }
-        } else {
-          if (res.status == 0) {
-            this.$message({
-              message: "解冻成功",
-              type: "success"
-            });
-            this.queryUserList();
-            this.common.monitoringLogs("修改", "解冻账户", 1);
-          } else {
-            this.$message({
-              message: `${res.err_msg}`,
-              type: "error"
-            });
-            this.common.monitoringLogs("修改", "解冻账户", 0);
-          }
-        }
-      });
-    },
+ 
 
     addAccout() {
       this.dialogVisible = true;
     },
-   
+
     //回车键绑定事件
     onSubmitKey() {
       this.queryUserList();
@@ -463,212 +429,68 @@ export default {
     //重置
     resetInfo() {
       this.pager.page = 1;
-       this.nodegrade=0,
-       this.user_nick_name=""
+      (this.nodegrade = 0), (this.user_nick_name = "");
       this.queryUserList();
     },
 
     //获取用户列表
     queryUserList() {
-      let param = new Object();
-      let phoneNumber = /^1(3|4|5|7|8)\d{9}$/;
-      let user_id = /^\d{7}$/;
-      // if (this.searchText != "") {
-      //   if (phoneNumber.test(this.searchText) == true) {
-      //     param.user_id = 0;
-      //     param.user_tel = this.searchText;
-      //     param.user_name = "";
-      //   } else if (user_id.test(this.searchText) == true) {
-      //     param.user_id = parseInt(this.searchText);
-      //     param.user_tel = "";
-      //     param.user_name = "";
-      //   } else {
-      //     param.user_id = 0;
-      //     param.user_tel = "";
-      //     param.user_name = this.searchText;
-      //   }
-      // } else {
-      //   param.user_id = "";
-      //   param.user_tel = "";
-      //   param.user_name = "";
-      // }
+ 
 
-let paramactive=new Object()
-     {
-    paramactive.page_no=  this.pager.page - 1,
-    paramactive.page_size=10
-    
-                  paramactive.cat_name=this.cat_name,
-           paramactive.cat_order=0
+      let paramactive = new Object();
+      {
+        (paramactive.page_no = this.pager.page - 1),
+          (paramactive.page_size = 10);
 
+        (paramactive.cat_name = this.cat_name), (paramactive.cat_order = 0);
+      }
 
-
-    }
-    
-
-        query_help_cat_info(paramactive)
+      query_help_cat_info(paramactive)
         .then(res => {
-          console.log(res)
+          console.log(res);
           if (res.status == 0) {
-        
-                  if(res.data.cat_list){
-         
-            this.pager.count = res.data.total_num;
-            let tempArr = [];
+            if (res.data.cat_list) {
+              this.pager.count = res.data.total_num;
+              let tempArr = [];
 
-            tempArr = res.data.cat_list;
-            for (var i = 0; i < tempArr.length; i++) {
-  
-              if (tempArr[i].cat_tm == 0) {
-                tempArr[i].cat_tm = 0;
-              } else {
-                tempArr[i].cat_tm = this.common.getTimes(
-                  tempArr[i].cat_tm * 1000
-                );
+              tempArr = res.data.cat_list;
+              for (var i = 0; i < tempArr.length; i++) {
+                if (tempArr[i].cat_tm == 0) {
+                  tempArr[i].cat_tm = 0;
+                } else {
+                  tempArr[i].cat_tm = this.common.getTimes(
+                    tempArr[i].cat_tm * 1000
+                  );
+                }
               }
-            }
-                this.tableData = tempArr;
-        }
-        
-          } else {
-            this.$message({
-              message: "后台服务无响应",
-              type: "error"
-            });
-          }
-        })
-        .catch(error => {
-          this.$message({
-             message: "后台服务无响应",
-            type: "error"
-          });
-        });
-    },
-    //导出
-    toexportExcel() {
-      let param = new Object();
-      let phoneNumber = /^1(3|4|5|7|8)\d{9}$/;
-      let user_id = /^\d{7}$/;
-      if (this.searchText != "") {
-        if (phoneNumber.test(this.searchText) == true) {
-          param.user_id = 0;
-          param.user_tel = this.searchText;
-          param.user_name = "";
-        } else if (user_id.test(this.searchText) == true) {
-          param.user_id = parseInt(this.searchText);
-          param.user_tel = "";
-          param.user_name = "";
-        } else {
-          param.user_id = 0;
-          param.user_tel = "";
-          param.user_name = this.searchText;
-        }
-      } else {
-        param.user_id = "";
-        param.user_tel = "";
-        param.user_name = "";
-      }
-      param.user_status = this.user_status;
-      param.user_sex = this.user_sex;
-      param.cur_page = this.pageActives - 1;
-      param.order = this.order;
-
-      if (!this.value1) {
-        param.reg_start_time = 0;
-        param.reg_end_time = 0;
-      } else {
-        if (this.value1[0] == undefined) {
-          param.reg_start_time = 0;
-        } else {
-          param.reg_start_time = this.value1[0].getTime() / 1000;
-        }
-        if (this.value1[1] == undefined) {
-          param.reg_end_time = 0;
-        } else {
-          param.reg_end_time = this.value1[1].getTime() / 1000;
-        }
-      }
-      if (!this.value2) {
-        param.bind_start_time = 0;
-        param.bind_end_time = 0;
-      } else {
-        if (this.value2[0] == undefined) {
-          param.bind_start_time = 0;
-        } else {
-          param.bind_start_time = this.value2[0].getTime() / 1000;
-        }
-        if (this.value2[1] == undefined) {
-          param.bind_end_time = 0;
-        } else {
-          param.bind_end_time = this.value2[1].getTime() / 1000;
-        }
-      }
-      ptfs_query_list_user_store_list(param)
-        .then(res => {
-          if (res.status == 0 && res.err_code == 0) {
-            let tempArr = [];
-            tempArr = res.data.store_list;
-            for (var i = 0; i < tempArr.length; i++) {
-              tempArr[i].average_store = tempArr[i].average_store / 1000000;
-              tempArr[i].sum_profit = tempArr[i].sum_profit / 1000000;
-              if (tempArr[i].first_bind_time == 0) {
-                tempArr[i].first_bind_time = 0;
-              } else {
-                tempArr[i].first_bind_time = this.common.getTimes(
-                  tempArr[i].first_bind_time * 1000
-                );
-              }
-              if (tempArr[i].first_login_time == 0) {
-                tempArr[i].first_login_time = 0;
-              } else {
-                tempArr[i].first_login_time = this.common.getTimes(
-                  tempArr[i].first_login_time * 1000
-                );
-              }
-              if (tempArr[i].account_status == 0) {
-                tempArr[i].account_status = "正常";
-              } else {
-                tempArr[i].account_status = "冻结";
-              }
-            }
-
-            this.tableData2 = this.tableData2.concat(tempArr);
-
-            if (this.pageActives >= res.data.total_page) {
-              console.log(this.pageActives);
-              this.common.monitoringLogs("导出", "导出注册用户信息表", 1);
-              this.exportExcel();
-            } else {
-              this.pageActives++;
-              this.toexportExcel();
+              this.tableData = tempArr;
             }
           } else {
             this.$message({
               message: "后台服务无响应",
-              type: "error"
+              type: "error",
             });
-            this.common.monitoringLogs("导出", "导出注册用户信息表", 0);
           }
         })
         .catch(error => {
-          console.log(error);
           this.$message({
             message: "后台服务无响应",
-            type: "error"
+            type: "error",
           });
         });
     },
+ 
     //分页
     handleCurrentChange(val) {
       this.pager.page = val.val;
       this.queryUserList();
-    }
+    },
   },
   components: {
     pageNation: pageNation,
     tableBar: tableBar,
-    mySearch: mySearch
-  }
+    mySearch: mySearch,
+  },
 };
 </script>
 
@@ -701,7 +523,6 @@ let paramactive=new Object()
     text-align: center;
   }
 
-  
   .devide_title {
     width: 100%;
     height: auto;
@@ -717,7 +538,6 @@ let paramactive=new Object()
   }
 
   .device_form {
-
     box-sizing: border-box;
 
     .el-form-item__label {

@@ -83,7 +83,7 @@
 import tableBarActive2 from "../../components/tableBarActive2";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
-import {ptfs_query_cp_value_list } from "../../api/api";
+import { ptfs_query_cp_value_list } from "../../api/api";
 import common from "../../common/js/util.js";
 
 export default {
@@ -97,17 +97,18 @@ export default {
       tableData: [],
       ruleForm2: {
         ip_radio: "",
-        store_radio: ""
+        store_radio: "",
       },
       pager: {
         count: 0,
         page: 1,
-        rows: 100
+        rows: 100,
       },
       showState: false,
       order: 0,
       tableData2: [],
-      pageActive: 0
+      pageActive: 0,
+      exportLinks: "",
     };
   },
   mounted() {
@@ -119,8 +120,8 @@ export default {
       this.pager.page = 1;
       this.start_time = "";
       this.end_time = "";
-      this.searchText=""
-      this.getInfo()
+      this.searchText = "";
+      this.getInfo();
     },
     //排序
     tableSortChange(column) {
@@ -132,9 +133,8 @@ export default {
       }
       this.getInfo();
     },
-    searchInfo(){
-         this.getInfo();
-
+    searchInfo() {
+      this.getInfo();
     },
     formatTime(row) {
       return this.common.getTimes(row.time_stamp * 1000);
@@ -154,7 +154,7 @@ export default {
             ? ""
             : Number(this.ruleForm2.store_radio),
         ip_radio:
-          this.ruleForm2.ip_radio === "" ? "" : Number(this.ruleForm2.ip_radio)
+          this.ruleForm2.ip_radio === "" ? "" : Number(this.ruleForm2.ip_radio),
       };
       set_earn_param(param)
         .then(res => {
@@ -162,7 +162,7 @@ export default {
             if (val === 0) {
               this.$message({
                 type: "success",
-                message: res.err_msg
+                message: res.err_msg,
               });
               this.dialogVisible = false;
             }
@@ -179,56 +179,33 @@ export default {
         });
     },
     getInfo() {
-      // var data = {
-      //   cur_page: this.pager.page - 1,
-      //   order: this.order,
-      //   start_time:
-      //     this.start_time === "" ? 0 : new Date(this.start_time).getTime(),
-      //   end_time: this.end_time === "" ? 0 : new Date(this.end_time).getTime()
-      // };
-      // if (this.judgeString(this.searchText)) {
-      //   var arr = Object.keys(this.judgeString(this.searchText));
-      //   data.query_type = arr.length === 0 ? 0 : 1;
-      //   var param = Object.assign(this.judgeString(this.searchText), data);
-      // } else {
-      //   this.$message.error("请输入正确的设备SN、用户ID");
-      //   return;
-      // }
-      let param =new Object()
-   
-          param.user_id= 0,
-         param.dev_sn=this.searchText
-         param.order=this.order,
-        param.cur_page=this.pager.page - 1
-
-      ptfs_query_cp_value_list(param)
+      let paramactive = new Object();
+      let phoneNumber = /^[0-9]*[1-9][0-9]*$/;
+      if (this.searchText != "") {
+        if (phoneNumber.test(this.searchText) == true) {
+          paramactive.dev_sn = "";
+          paramactive.user_id = parseInt(this.searchText);
+        } else {
+          paramactive.dev_sn = this.searchText;
+          paramactive.user_id = 0;
+        }
+      } else {
+        paramactive.dev_sn = "";
+        paramactive.user_id = 0;
+      }
+      (paramactive.order = this.order),
+        (paramactive.cur_page = this.pager.page - 1);
+      ptfs_query_cp_value_list(paramactive)
         .then(res => {
           if (res.status === 0) {
-            console.log(res)
+            this.exportLinks = res.data.filename;
             this.pager.count = res.data.total_num;
             this.pager.rows = res.data.total_page;
             //this.tableData = res.data.total_profit_list;
             let teamarr = [];
             if (res.data.com_power_list) {
               teamarr = res.data.com_power_list;
-              for (var i = 0; i < teamarr.length; i++) {
-                // teamarr[i].active1 =
-                //   (teamarr[i].free_cap / 1024 / 1024 / 1024).toFixed(2) +
-                //   "GB" +
-                //   "/" +
-                //   (teamarr[i].total_cap / 1024 / 1024 / 1024).toFixed(2) +
-                //   "GB";
-                // teamarr[i].active2 =
-                //   (teamarr[i].up_bandwidth / 1024 / 1024 / 1024).toFixed(2) +
-                //   "GB" +
-                //   "/" +
-                //   (teamarr[i].down_bandwidth / 1024 / 1024 / 1024).toFixed(2) +
-                //   "GB";
-
-                // teamarr[i].time_stamp = this.common.getTimess(
-                //   teamarr[i].time_stamp * 1000
-                // );
-              }
+              for (var i = 0; i < teamarr.length; i++) {}
             } else {
               let teamarr = [];
             }
@@ -242,94 +219,7 @@ export default {
     },
     //导出
     toexportExcel() {
-      var data = {
-        cur_page: this.pageActive,
-        order: this.order,
-        start_time:
-          this.start_time === "" ? 0 : new Date(this.start_time).getTime(),
-        end_time: this.end_time === "" ? 0 : new Date(this.end_time).getTime()
-      };
-      if (this.judgeString(this.searchText)) {
-        var arr = Object.keys(this.judgeString(this.searchText));
-        data.query_type = arr.length === 0 ? 0 : 1;
-        var param = Object.assign(this.judgeString(this.searchText), data);
-      } else {
-        this.$message.error("请输入正确的设备SN、用户ID");
-        return;
-      }
-
-      getDevicePower(param)
-        .then(res => {
-          if (res.status === 0) {
-            this.pageActive = res.data.cur_page;
-            let teamarr = res.data.profit_detail_list;
-            for (var i = 0; i < teamarr.length; i++) {
-              if (teamarr[i].free_cap == 0) {
-                teamarr[i].active1 = 0;
-              } else {
-                teamarr[i].active1 =
-                  (teamarr[i].free_cap / 1024 / 1024 / 1024).toFixed(2) +
-                  "MB" +
-                  "/" +
-                  (teamarr[i].total_cap / 1024 / 1024 / 1024).toFixed(2) +
-                  "MB";
-              }
-              if (teamarr[i].up_bandwidth == 0) {
-                teamarr[i].active2 = 0;
-              } else {
-                teamarr[i].active2 =
-                  (teamarr[i].up_bandwidth / 1024 / 1024 / 1024).toFixed(2) +
-                  "MB" +
-                  "/" +
-                  (teamarr[i].down_bandwidth / 1024 / 1024 / 1024).toFixed(2) +
-                  "MB";
-              }
-              if (teamarr[i].time_stamp == 0) {
-                teamarr[i].time_stamp = 0;
-              } else {
-                teamarr[i].time_stamp = this.common.getTimess(
-                  teamarr[i].time_stamp * 1000
-                );
-              }
-
-              teamarr[i].time_stamp = this.common.getTimess(
-                teamarr[i].time_stamp * 1000
-              );
-            }
-            this.tableData2 = this.tableData2.concat(teamarr);
-
-            if (res.data.cur_page >= res.data.total_page) {
-              this.exportExcel();
-              this.common.monitoringLogs("导出", "导出算力系数表", 1);
-            } else {
-              this.pageActive++;
-              this.toexportExcel();
-            }
-
-            // this.pager.count = res.data.total_num;
-            // this.pager.rows = res.data.total_page;
-            // //this.tableData = res.data.total_profit_list;
-            // let teamarr = res.data.profit_detail_list;
-            // for (var i = 0; i < teamarr.length; i++) {
-            //     teamarr[i].active1 = (teamarr[i].free_cap / 1024 / 1024/1024).toFixed(2) + "MB" + "/" + (teamarr[i].total_cap / 1024 / 1024 / 1024).toFixed(2) + "MB"
-            //     teamarr[i].active2 = (teamarr[i].up_bandwidth / 1024 / 1024/1024).toFixed(2) + "MB" + "/" + (teamarr[i].down_bandwidth / 1024 / 1024 / 1024).toFixed(2) + "MB"
-
-            //     teamarr[i].time_stamp = this.common.getTimess(teamarr[i].time_stamp * 1000)
-
-            // }
-            // this.tableData = teamarr
-          } else {
-            this.$message({
-              message: "导出失败",
-              type: "error"
-            });
-            this.common.monitoringLogs("导出", "导出算力系数表", 0);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-          this.common.monitoringLogs("导出", "导出算力系数表", 0);
-        });
+      window.location.href = this.exportLinks;
     },
     getShow() {
       this.showState = !this.showState;
@@ -370,13 +260,13 @@ export default {
         return {
           dev_sn: "",
           nick_name: "",
-          user_id: Number(str)
+          user_id: Number(str),
         };
       } else if (reg3.test(str)) {
         return {
           user_id: 0,
           nick_name: "",
-          dev_sn: str
+          dev_sn: str,
         };
       } else if (str === "") {
         return {};
@@ -404,48 +294,12 @@ export default {
         return "0." + zero + arr[1];
       }
     },
-    //导出的方法
-    exportExcel() {
-      require.ensure([], () => {
-        const { export_json_to_excel } = require("../../excel/Export2Excel");
-        const tHeader = [
-          "设备SN",
-          "绑定用户ID",
-          "当日在线时长",
-          "当日剩余空间/总空间",
-          "当日平均上下行宽带",
-          "当日IP",
-          "当日存储值",
-          "当日算力",
-          "时间"
-        ];
-        // 上面设置Excel的表格第一行的标题
-        const filterVal = [
-          "dev_sn",
-          "user_id",
-          "online_time",
-          "active1",
-          "active2",
-          "ip_value",
-          "store_value",
-          "store",
-          "time_stamp"
-        ];
-        // 上面的index、nickName、name是tableData里对象的属性
-        const list = this.tableData2; //把data里的tableData存到list
-        const data = this.formatJson(filterVal, list);
-        export_json_to_excel(tHeader, data, "算力系数表");
-      });
-    },
-    formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => v[j]));
-    }
   },
   components: {
     pageNation: pageNation,
     tableBarActive2: tableBarActive2,
-    mySearch: mySearch
-  }
+    mySearch: mySearch,
+  },
 };
 </script>
 

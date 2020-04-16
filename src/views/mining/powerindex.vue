@@ -4,7 +4,7 @@
         <div>贡献值增长</div>
         <el-row type="flex" class="row_active">
             <el-col :span="24">
-                <tableBar id="rebateSetTable2" ref="table2" tooltip-effect="dark" :tableData="tableActive" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption1" @handleButton="handleButtonAdd" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBar>
+                <tableBarIndex id="rebateSetTable2" ref="table2" tooltip-effect="dark" :tableData="tableActive" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption1" @handleButton="handleButtonAdd" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarIndex>
             </el-col>
         </el-row>
     </div>
@@ -15,7 +15,7 @@
         <div>贡献值扣除</div>
         <el-row type="flex" class="row_active">
             <el-col :span="24">
-                <tableBar id="rebateSetTable2" ref="table2" tooltip-effect="dark" :tableData="tableActive1" :clomnSelection="clomnSelection" :rowHeader="rowHeader2" :tableOption="tableOption2" @handleButton="handleButtonDes" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBar>
+                <tableBarIndex id="rebateSetTable2" ref="table2" tooltip-effect="dark" :tableData="tableActive1" :clomnSelection="clomnSelection" :rowHeader="rowHeader2" :tableOption="tableOption2" @handleButton="handleButtonDes" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarIndex>
             </el-col>
         </el-row>
     </div>
@@ -31,7 +31,7 @@
     <el-dialog :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
         <el-form ref="form">
              <el-form-item label="新增贡献值修改:">
-                  <el-input v-model="addvalue"></el-input>
+                  <el-input v-model="addvalue"  type='number'></el-input>
             </el-form-item>
            
             <div style="text-align: center;">
@@ -72,8 +72,7 @@ import {
   ptfs_set_con_param_add,
   ptfs_set_con_param_dec
 } from "../../api/api.js";
-import tableBarActive2 from "../../components/tableBarActive2";
-import tableBar from "../../components/tableBar";
+import tableBarIndex from "../../components/tableBarIndex";
 
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
@@ -194,12 +193,7 @@ export default {
         {
           behavior: "用户矿机设备每日离线累计>=1小时",
         },
-         {
-          behavior: "用户的矿机节点网络宽带被调用1次",
-        },
-         {
-          behavior: "用户的矿机节点储存空间每日被调用>=8小时",
-        },
+       
       ],
       tableOption: {
         label: "操作",
@@ -258,7 +252,9 @@ export default {
       pagePublic: 0,
       pubUser: [],
       tableActive:[],
-            tableActive1:[]
+            tableActive1:[],
+            addindex:0,
+            desindex:0
 
     };
   },
@@ -274,11 +270,17 @@ export default {
   },
 
   methods: {
+    keydownhandle(event) {
+      const { key } = event;
+      // 或者根据键码判断, 下面过滤掉除数字和退格外的所有输入
+      if (new RegExp(/[0-9]/).test(key) || key === 'Backspace') return;
+      event.preventDefault();
+    },
     //增长设置
     onSubmitAdd(){
     
       let param=new Object()
-      param.con_param_add_type=0,
+      param.con_param_add_type=this.addindex,
       param.con_param_add_value=parseInt(this.addvalue) 
       ptfs_set_con_param_add(param).then(res=>{
         if(res.status==0){
@@ -305,7 +307,7 @@ export default {
      onSubmitDes(){
        
       let param=new Object()
-      param.con_param_add_type=0,
+      param.con_param_add_type=this.desindex,
       param.con_param_dec_value= this.desvalue
        param.con_param_dec_limit=6
 
@@ -411,15 +413,17 @@ export default {
       this.pubUser = [];
     },
     //新增贡献值修改
-    handleButtonAdd(val, row) {
+    handleButtonAdd(val) {
+        this.addindex=val.row
+        this.addvalue=val.methods.earn_pensent 
       this.dialogVisible = true;
-      this.addvalue=val.row.earn_pensent
   
 
     },
     //扣除贡献值修改
-       handleButtonDes(val, row) {
-             this.desvalue=val.row.earn_pensent
+       handleButtonDes(val) {
+         this.desindex=val.row
+             this.desvalue=val.methods.earn_pensent
          this.dialogVisible1=true
                 },
 
@@ -489,9 +493,8 @@ export default {
   },
   components: {
     pageNation: pageNation,
-    tableBarActive2: tableBarActive2,
     mySearch: mySearch,
-    tableBar: tableBar
+    tableBarIndex: tableBarIndex
   }
 };
 </script>
