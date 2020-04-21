@@ -11,9 +11,11 @@
     <div class="device_form">
       <el-form ref="form">
         <el-form-item label>
-          收益公式介绍
-          <br />收益=P-(P1+P2)/2*P=((B+S)*V1*T/24-[(B1*V1+B2*V1+B3*V1*45%)+B4*V1*T/24+(F1*V2+F2*V2+F3*V2*45%)*T2*2*R]
-          <br />p1每日节点理论收益宽带(b)，存储(s),单位宽带价值，日累计在线时常 P2每日节点贡献产生收益流量F,单位流量价值，日累计在线时长(t)
+          
+          <p>收益公式介绍</p>
+         <p>收益=P-(P1+P2)/2*R={{B1*V1*(T1/24）+B2*V1*(T2/24）+B3*V1*(T3/24）*45%}*（1+1/4）+F1*V2+F2*V2+F3*V2*45%}/2*R</p>
+        <p>P1每日节点理论收益，B1/B2/B3：节点日平均带宽（单位：Mbps）  ，T：日累计在线时长[ T1、T2 电信联通网络在线时长,T3 移动网络在线时长]（单位：小时），V1：日单位带宽的价值（单位：元）
+P2每日节点贡献产生收益，F：节点当日实际贡献的流量（单位：GB），V2：单位流量的价值（单位：元）</p>
         </el-form-item>
         <el-form-item label="单位宽带价值=" style="margin-top:10px;">
           <el-input v-model="param_v1"></el-input>
@@ -74,15 +76,58 @@ export default {
   },
   mounted() {
     this.getInfo();
+    this.queryInfo()
   },
   methods: {
+     //参数查询
+    queryInfo() {
+      let param = new Object();
+      param.param_type = 1;
+      param.param_v1 = this.param_v1;
+      param.param_v2 = this.param_v2;
+      ptfs_set_earn_param(param)
+        .then(res => {
+          console.log(res)
+          if (res.status == 0) {
+          this.param_v1=res.data.param_v1
+          this.param_v2=res.data.param_v2
+      
+          } else {
+            this.$message({
+              message: "后台服务出错",
+              type: "error"
+            });
+          }
+          
+        })
+        .catch(error => {
+          this.$message({
+            message: "后台服务出错",
+            type: "error"
+          });
+        });
+    },
    
     //参数设置
     onSubmitparam() {
       let param = new Object();
       param.param_type = 0;
-      param.param_v1 = this.param_v1;
-      param.param_v2 = this.param_v2;
+      if(parseFloat(this.param_v1)<0.01 || parseFloat(this.param_v1)>1.00 || (this.param_v1.toString().split(".")[1].length)>2){
+          this.$message({
+              message: "单位宽带价值应为0.01≦V1≦1.00",
+              type: "error"
+            });
+            return false
+        }
+       if(parseFloat(this.param_v2)<0.01 || parseFloat(this.param_v2)>5.00 || (this.param_v2.toString().split(".")[1].length)>2){
+          this.$message({
+              message: "单位流量价值应为0.01≦V1≦1.00",
+              type: "error"
+            });
+            return false
+        }  
+      param.param_v1 = parseFloat(this.param_v1) ;
+      param.param_v2 = parseFloat(this.param_v2);
       ptfs_set_earn_param(param)
         .then(res => {
           if (res.status == 0) {

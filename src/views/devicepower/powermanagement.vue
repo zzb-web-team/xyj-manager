@@ -96,6 +96,8 @@ import tableBarIndex from "../../components/tableBarIndex";
 
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
+import common from "../../common/js/util.js";
+
 export default {
   data() {
     return {
@@ -201,7 +203,7 @@ export default {
           behavior: "用户矿机节点等级升级为铂金等级",
         },
         {
-          behavior: "用户矿机节点等级升级为专钻石等级",
+          behavior: "用户矿机节点等级升级为钻石等级",
         },
       ],
       tableDatanew2: [
@@ -267,9 +269,9 @@ export default {
       tableActive: [],
       tableActiveAdd: [],
       tableActiveDes: [],
-      scaleindex:0,
-      addindex:0,
-      desindex:0,
+      scaleindex: 0,
+      addindex: 0,
+      desindex: 0,
     };
   },
   mounted: function() {
@@ -298,7 +300,7 @@ export default {
               tempArr.push(obj[i]);
             }
             for (var i = 0; i < tempArr.length; i++) {
-              this.tableDatanew[i].earn_pensent = tempArr[i];
+              this.tableDatanew[i].earn_pensent = tempArr[i] + "%";
             }
             this.tableActive = this.tableDatanew;
           } else {
@@ -325,7 +327,12 @@ export default {
               tempArr.push(obj[i]);
             }
             for (var i = 0; i < tempArr.length; i++) {
-              this.tableDatanew1[i].earn_pensent = tempArr[i];
+              if(i>2){
+  this.tableDatanew1[i].earn_pensent = tempArr[i]+"%";
+              }else{
+                  this.tableDatanew1[i].earn_pensent = tempArr[i];
+              }
+            
             }
             this.tableActiveAdd = this.tableDatanew1;
           } else {
@@ -365,20 +372,21 @@ export default {
     },
     //修改收益占比
     handleButtonscale(val) {
-          this.scaleindex=val.row
-      this.scalevalue = val.methods.earn_pensent;
+      this.scaleindex = val.row;
+      this.scalevalue = val.methods.earn_pensent.replace("%", "");
+      console.log(this.scalevalue);
 
       this.dialogVisible = true;
     },
     ////增长设置
     handleButtonAdd(val) {
-      this.addindex=val.row
+      this.addindex = val.row;
       this.addvalue = val.methods.earn_pensent;
       this.dialogVisible1 = true;
     },
     //扣除设置
     handleButtonDes(val) {
-      this.desindex=val.row
+      this.desindex = val.row;
       this.desvalue = val.methods.earn_pensent;
       this.dialogVisible2 = true;
     },
@@ -386,7 +394,10 @@ export default {
     onSubmitAdd() {
       this.dialogVisible1 = false;
       let param = new Object();
-      (param.cp_param_set_type =this.addindex),
+      if(this.addindex>2){
+        this.addvalue=  this.addvalue.replace("%", "");
+      }
+      (param.cp_param_set_type = this.addindex),
         (param.cp_param_set_value = parseInt(this.addvalue));
       ptfs_set_com_power_add(param)
         .then(res => {
@@ -395,12 +406,14 @@ export default {
               message: "修改成功",
               type: "success",
             });
+            this.common.monitoringLogs("修改", "修改贡献值增长", 1);
           } else {
             this.$message({
               message: "修改失败",
               type: "error",
             });
           }
+          this.common.monitoringLogs("修改", "修改贡献值增长", 0);
           this.queryaddInfo();
         })
         .catch(error => {});
@@ -409,8 +422,43 @@ export default {
     onSubmitScale() {
       this.dialogVisible = false;
       let param = new Object();
+      if (this.scaleindex == 0) {
+        if (
+          parseInt(this.scalevalue) <=
+            this.tableActive[this.scaleindex].earn_pensent ||
+          parseInt(this.scalevalue) <= 0 ||
+          parseInt(this.scalevalue) > 100
+        ) {
+          this.$message({
+            message: "设置有问题，后值不能大于前值且小于100，请重新设置",
+            type: "error",
+          });
+          return false;
+        }
+      } else {
+        if (
+          parseInt(this.scalevalue) <=
+            this.tableActive[this.scaleindex - 1].earn_pensent ||
+          parseInt(this.scalevalue) <= 0 ||
+          parseInt(this.scalevalue) > 100
+        ) {
+          this.$message({
+            message: "设置有问题，后值不能大于前值且小于100，请重新设置",
+            type: "error",
+          });
+          return false;
+        }
+      }
+
       (param.cp_param_set_type = this.scaleindex),
         (param.cp_param_set_value = parseInt(this.scalevalue));
+      if (parseInt(this.scalevalue) <= 0 || parseInt(this.scalevalue) > 100) {
+        this.$message({
+          message: "设置有问题，设置值应该在0~100之间，请重新设置",
+          type: "error",
+        });
+        return false;
+      }
       ptfs_set_com_power_scale(param)
         .then(res => {
           if (res.status == 0) {
@@ -418,11 +466,13 @@ export default {
               message: "修改成功",
               type: "success",
             });
+            this.common.monitoringLogs("修改", "修改算力值收益占比", 1);
           } else {
             this.$message({
-              message: "修改失败",
+              message: "设置有问题，请重新设置",
               type: "error",
             });
+            this.common.monitoringLogs("修改", "修改算力值收益占比", 0);
           }
           this.queryscaleInfo();
         })
@@ -441,11 +491,13 @@ export default {
               message: "修改成功",
               type: "success",
             });
+             this.common.monitoringLogs("修改", "修改算力值扣除", 1);
           } else {
             this.$message({
               message: "修改失败",
               type: "error",
             });
+             this.common.monitoringLogs("修改", "修改算力值扣除", 1);
           }
 
           this.querydesInfo();
@@ -461,7 +513,7 @@ export default {
       this.dialogVisible5 = false;
       this.pubUser = [];
     },
-  
+
     //分页
     handleCurrentChange(val) {
       this.pager.page = val.val;
@@ -530,8 +582,6 @@ export default {
       this.message = [];
       this.title = "";
       if (res.status == 0) {
-        console.log(res);
-
         this.tableType = true;
         var resID = /^1[34578]\d{9}$/;
         this.errorcount = 0;
@@ -556,7 +606,6 @@ export default {
         }
 
         this.tableList = res.data;
-        console.log(this.tableList);
       } else {
         this.$message({
           showClose: true,

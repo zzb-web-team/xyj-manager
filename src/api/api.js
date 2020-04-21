@@ -509,6 +509,8 @@ export const create_help_item_info = params => { return axios.post(`${ownbase}/m
 export const delete_help_item_info = params => { return axios.post(`${ownbase}/miner_ctrl/delete_help_item_info `, params).then(res => res.data); };
 //修改
 export const modify_help_item_info = params => { return axios.post(`${ownbase}/miner_ctrl/modify_help_item_info `, params).then(res => res.data); };
+//移动分组
+export const move_help_item = params => { return axios.post(`${ownbase}/miner_ctrl/move_help_item`, params).then(res => res.data); };
 
  
 //应用市场
@@ -542,6 +544,10 @@ export const saveimagemore = params => { return axios.post(`${ownbase}/cloud/sav
 
 //更新应用分组
 export const update_group = params => { return axios.post(`${ownbase}/appmarket/update_group`, params).then(res => res.data); };
+
+//删除应用
+export const del_app = params => { return axios.post(`${ownbase}/appmarket/del_app`, params).then(res => res.data); };
+
 
 
 

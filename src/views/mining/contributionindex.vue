@@ -44,7 +44,7 @@
     <div class="devide_table">
         <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
             <el-col style="display: flex;justify-content: flex-end;">
-                <el-button type="primary" @click="toexportExcel">导出</el-button>
+                <el-button type="primary" :disabled="exportStatus" @click="toexportExcel">导出</el-button>
             </el-col>
         </el-row>
         <el-row type="flex" class="row_active">
@@ -216,7 +216,8 @@ export default {
       order: 0,
       ad_type: 0,
       tableDataActive: [],
-      exportLinks:""
+      exportLinks:"",
+      exportStatus :true
       
     };
   },
@@ -409,6 +410,12 @@ export default {
       ptfs_query_con_value_list(paramactive)
         .then(res => {
           if (res.status == 0) {
+              if ((res.data.con_list.length == 0)) {
+                this.exportStatus = true;
+              } else {
+                this.exportStatus = false;
+              }
+            
            
             let tempArr = [];
             tempArr = res.data.con_list;
@@ -471,6 +478,7 @@ export default {
     },
     //导出
     toexportExcel() {
+       this.common.monitoringLogs("导出", "节点等级表", 1);
        window.location.href = this.exportLinks
     
     },

@@ -76,6 +76,8 @@ import tableBarIndex from "../../components/tableBarIndex";
 
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
+import common from "../../common/js/util.js";
+
 export default {
   data() {
     return {
@@ -288,6 +290,7 @@ export default {
             message: "修改成功",
             type: "success"
           });
+           this.common.monitoringLogs("修改", "修改贡献值增长", 1);
          this.queryaddInfo()
     this.dialogVisible=false
         }
@@ -297,6 +300,7 @@ export default {
             type: "error"
           });
         }
+         this.common.monitoringLogs("修改", "修改贡献值增长", 0);
 
       }).catch(error=>{
 
@@ -307,8 +311,8 @@ export default {
      onSubmitDes(){
        
       let param=new Object()
-      param.con_param_add_type=this.desindex,
-      param.con_param_dec_value= this.desvalue
+      param.con_param_dec_type=this.desindex,
+      param.con_param_dec_value=parseFloat(this.desvalue) 
        param.con_param_dec_limit=6
 
       ptfs_set_con_param_dec(param).then(res=>{
@@ -317,6 +321,7 @@ export default {
             message: "修改成功",
             type: "success"
           });
+          this.common.monitoringLogs("修改", "修改贡献值扣除", 1);
           this.querydesInfo()
           this.dialogVisible1=false
 
@@ -327,6 +332,7 @@ export default {
             type: "error"
           });
         }
+        this.common.monitoringLogs("修改", "修改贡献值扣除", 0);
 
       }).catch(error=>{
 

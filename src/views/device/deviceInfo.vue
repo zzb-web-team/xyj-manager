@@ -92,9 +92,10 @@
                         <template slot-scope="scope" >
                             <el-button @click="shut(scope.row)" type="text" size="small">关机</el-button>
                             <el-button type="text" @click="restart(scope.row)" size="small">重启</el-button>
-                            <el-button v-show="scope.row.bind_flag===1" @click="untied(scope.row)" type="text" size="small">强制解绑</el-button>
+                            <el-button v-if="scope.row.bind_flag===1" @click="untied(scope.row)" type="text" size="small">强制解绑</el-button>
+                            <el-button v-else :disabled="true" type="text" size="small">强制解绑</el-button>
                             <!-- <el-button v-show="scope.row.bind_flag===0" type="text" @click="tie(scope.row)" size="small">绑定</el-button> -->
-                            <el-button v-show="scope.row.bind_flag===0" type="text" @click="tieactive(scope.row)" size="small">绑定</el-button>
+                            <!-- <el-button v-show="scope.row.bind_flag===0" type="text" @click="tieactive(scope.row)" size="small">绑定</el-button> -->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -113,6 +114,9 @@
         <el-form ref="form">
              <el-form-item label="请输入需要绑定ID:">
                   <el-input v-model="user_id_active"></el-input>
+            </el-form-item>
+              <el-form-item label="请输入需要绑定的手机号">
+                  <el-input v-model="bind_user_tel_num"></el-input>
             </el-form-item>
            
             <div style="text-align: center;">
@@ -133,13 +137,14 @@ import {
   device_cnt_overview, //查询title
   change_device_bind_state, //强制解绑
   ctrl_node_state, //关机重启
-  web_change_device_state
+  web_change_device_state,
 } from "../../api/api";
 import common from "../../common/js/util.js";
 export default {
   data() {
     return {
-      IDvalue:"",
+      bind_user_tel_num: "",
+      IDvalue: "",
       dialogVisible: false,
       dialogVisible2: false,
       searchText: "",
@@ -148,7 +153,7 @@ export default {
       rotate: false,
       operatingStatus: true,
       clomnSelection: false,
-      dialogVisibleactive:false,
+      dialogVisibleactive: false,
       reserveselection: true,
       rom_version: "",
       dev_type: "",
@@ -159,118 +164,106 @@ export default {
       dev_types: [
         {
           value: "-1",
-          label: "全部"
+          label: "全部",
         },
         {
           value: "RK3328",
-          label: "RK3328"
+          label: "RK3328",
         },
         {
           value: "AMS805",
-          label: "AMS805"
-        }
+          label: "AMS805",
+        },
       ],
       onlineStates: [
         {
           value: "-1",
-          label: "全部"
+          label: "全部",
         },
         {
           value: "0",
-          label: "离线"
+          label: "离线",
         },
         {
           value: "1",
-          label: "在线"
+          label: "在线",
         },
         {
           value: "2",
-          label: "鉴权失败"
+          label: "非法设备",
         },
-        {
-          value: "3",
-          label: "鉴权成功"
-        },
-        {
-          value: "100",
-          label: "未激活"
-        },
-        {
-          value: "101",
-          label: "已激活"
-        }
       ],
       bindFlags: [
         {
           value: "-1",
-          label: "全部"
+          label: "全部",
         },
         {
           value: "0",
-          label: "否"
+          label: "否",
         },
         {
           value: "1",
-          label: "是"
-        }
+          label: "是",
+        },
       ],
       roms: [
         {
           value: "",
-          label: "全部"
+          label: "全部",
         },
         {
           value: "1.2.21",
-          label: "1.2.21"
+          label: "1.2.21",
         },
         {
           value: "1.2.20",
-          label: "1.2.20"
+          label: "1.2.20",
         },
         {
           value: "1.2.19",
-          label: "1.2.19"
+          label: "1.2.19",
         },
         {
           value: "1.2.18",
-          label: "1.2.18"
+          label: "1.2.18",
         },
         {
           value: "1.2.17",
-          label: "1.2.17"
+          label: "1.2.17",
         },
         {
           value: "1.2.16",
-          label: "1.2.16"
+          label: "1.2.16",
         },
         {
           value: "1.2.11",
-          label: "1.2.11"
+          label: "1.2.11",
         },
         {
           value: "1.2.10",
-          label: "1.2.10"
+          label: "1.2.10",
         },
         {
           value: "1.1.9",
-          label: "1.1.9"
+          label: "1.1.9",
         },
         {
           value: "1.0.56",
-          label: "1.0.56"
+          label: "1.0.56",
         },
         {
           value: "1.0.5",
-          label: "1.0.5"
+          label: "1.0.5",
         },
         {
           value: "1.0.3",
-          label: "1.0.3"
+          label: "1.0.3",
         },
         {
           value: "1.0.1",
-          label: "1.0.1"
-        }
+          label: "1.0.1",
+        },
       ],
       tableData: [],
       tableOption: {
@@ -279,31 +272,31 @@ export default {
           {
             label: "关机",
             type: "primary",
-            methods: "shutdown"
+            methods: "shutdown",
           },
           {
             label: "重启",
             type: "danger",
-            methods: "restart"
+            methods: "restart",
           },
           {
             label: "解绑",
             type: "danger",
-            methods: "untied"
-          }
-        ]
+            methods: "untied",
+          },
+        ],
       },
       pager: {
         count: 0,
         page: 1,
-        rows: 100
+        rows: 100,
       },
       showState: false,
       tableData2: [],
       pageActive: 0,
-      user_id_active:"",
-      dev_sn_active:"",
-      bind_user_tel_num:""
+      user_id_active: "",
+      dev_sn_active: "",
+      bind_user_tel_num: "",
     };
   },
   mounted() {
@@ -311,44 +304,39 @@ export default {
     this.getInfo();
   },
   methods: {
-    tieactive(val){
-      this.dev_sn_active=val.dev_sn
-      this.dialogVisibleactive=true
-
+    tieactive(val) {
+      this.dev_sn_active = val.dev_sn;
+      this.dialogVisibleactive = true;
     },
-     //增长设置
-    onSubmitBind(){
-    
-      let param=new Object()
-      param.bind_type=1,
-      param.user_id=parseInt(this.user_id_active) ,
-      param.dev_sn=this.dev_sn_active,
-      param.bind_user_tel_num="",
-
-      web_change_device_state(param).then(res=>{
-        if(res.status==0){
-           this.$message({
-            message: "绑定成功",
-            type: "success"
+    //增长设置
+    onSubmitBind() {
+      let param = new Object();
+      (param.bind_type = 1),
+        (param.user_id = parseInt(this.user_id_active)),
+        (param.dev_sn = this.dev_sn_active),
+        (param.bind_user_tel_num = parseInt(this.bind_user_tel_num)),
+        web_change_device_state(param)
+          .then(res => {
+            if (res.status == 0 && res.err_code == 0) {
+              this.$message({
+                message: "绑定成功",
+                type: "success",
+              });
+            } else {
+              this.$message({
+                message: "用户ID不存在，绑定失败",
+                type: "error",
+              });
+            }
+            this.dialogVisibleactive = false;
+            this.getInfo();
+          })
+          .catch(error => {
+            this.$message({
+              message: "后台服务出错",
+              type: "error",
+            });
           });
-
-        }
-        else{
-           this.$message({
-            message: "绑定失败",
-            type: "error"
-          });
-        }
-   this.dialogVisibleactive=false
-    this.getInfo();
-      }).catch(error=>{
-         this.$message({
-            message: "后台服务出错",
-            type: "error"
-          });
-
-      })
-
     },
     //回车键搜索
     onSubmitKey() {
@@ -372,7 +360,7 @@ export default {
           "是否绑定",
           "绑定时间",
           "节点ID",
-          "绑定用户ID"
+          "绑定用户ID",
         ];
         // 上面设置Excel的表格第一行的标题
         const filterVal = [
@@ -388,7 +376,7 @@ export default {
           "bind_flag",
           "bind_timestamp",
           "ipfs_id",
-          "bind_user_id"
+          "bind_user_id",
         ];
 
         // 上面的index、nickName、name是tableData里对象的属性
@@ -409,14 +397,22 @@ export default {
       this.bind_start_ts = "";
       this.dev_type = "";
       this.online_state = "";
-      this.rom_version="";
+      this.rom_version = "";
       this.getInfo();
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => v[j]));
     },
     formatDevCap(row) {
-      return (row.total_cap / 1024 / 1024 / 1024).toFixed(2) + "G";
+      if (row.total_cap == 0) {
+        return 0 + "GB";
+      } else {
+        if (row.total_cap >= 1024) {
+          return (row.total_cap / 1024).toFixed(2) + "TB";
+        } else {
+          return (row.total_cap).toFixed(2) + "GB";
+        }
+      }
     },
     formatDevType(row) {
       if (row.dev_type === 1) {
@@ -434,15 +430,15 @@ export default {
       } else if (row.online_state === 1) {
         return "在线";
       } else if (row.online_state === 2) {
-        return " 鉴权失败";
+        return " 非法设备";
       } else if (row.online_state === 3) {
-        return "鉴权成功";
+        return "非法设备";
       } else if (row.online_state === 100) {
-        return "未激活";
+        return "非法设备";
       } else if (row.online_state === 101) {
-        return "已激活";
-      }else if (row.online_state === 99) {
-        return "新建";
+        return "非法设备";
+      } else if (row.online_state === 99) {
+        return "非法设备";
       }
     },
     formatBind(row) {
@@ -473,7 +469,7 @@ export default {
             ? -1
             : this.bind_end_ts == null
               ? -1
-              : new Date(this.bind_end_ts).getTime() / 1000
+              : new Date(this.bind_end_ts).getTime() / 1000,
       };
       if (this.judgeString(this.searchText)) {
         var param = Object.assign(this.judgeString(this.searchText), data);
@@ -492,14 +488,14 @@ export default {
           } else {
             this.$message({
               message: `${res.err_msg}`,
-              type: "error"
+              type: "error",
             });
           }
         })
         .catch(error => {
           this.$message({
             message: "网络出错，请重新请求",
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -524,7 +520,7 @@ export default {
             ? -1
             : this.bind_end_ts == null
               ? -1
-              : new Date(this.bind_end_ts).getTime() / 1000
+              : new Date(this.bind_end_ts).getTime() / 1000,
       };
       if (this.judgeString(this.searchText)) {
         var param = Object.assign(this.judgeString(this.searchText), data);
@@ -541,6 +537,54 @@ export default {
             // this.pager.count = res.data.total_num;
             // this.pager.rows = res.data.total_page;
             this.pageActive = res.data.cur_page;
+            let tempArr = [];
+            tempArr = res.data.dev_list;
+            for (var i = 0; i < tempArr.length; i++) {
+              switch (tempArr[i].online_state) {
+                case 0:
+                  tempArr[i].online_state = "离线";
+                  break;
+                case 1:
+                  tempArr[i].online_state = "在线";
+                  break;
+                default:
+                  tempArr[i].online_state = "=非法设备";
+              }
+              switch (tempArr[i].bind_flag) {
+                case 0:
+                  tempArr[i].bind_flag = "是";
+                  break;
+                case 1:
+                  tempArr[i].bind_flag = "否";
+                  break;
+              }
+
+              switch (tempArr[i].total_cap) {
+                case 0:
+                  tempArr[i].total_cap = "0GB";
+                  break;
+                default:
+                  tempArr[i].total_cap =
+                    (tempArr[i].total_cap / 1024 / 1024 / 1024).toFixed(2) +
+                    "GB";
+              }
+              switch (tempArr[i].bind_timestamp) {
+                case 0:
+                  tempArr[i].bind_timestamp = "暂无";
+                  break;
+                default:
+                  tempArr[i].bind_timestamp = this.common.getTimes(
+                    tempArr[i].bind_timestamp * 1000
+                  );
+              }
+              switch (tempArr[i].dev_type) {
+                case 2:
+                  tempArr[i].dev_type = "AMS805";
+                  break;
+                default:
+                  tempArr[i].dev_type = "RRK328";
+              }
+            }
             if (res.data.cur_page >= res.data.total_page) {
               this.exportExcel();
               this.common.monitoringLogs("导出", "导出设备信息表", 1);
@@ -552,7 +596,7 @@ export default {
           } else {
             this.$message({
               message: `${res.err_msg}`,
-              type: "error"
+              type: "error",
             });
             this.common.monitoringLogs("导出", "导出设备信息表", 0);
           }
@@ -578,7 +622,7 @@ export default {
         .catch(error => {
           this.$message({
             message: "网络出错，请重新请求",
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -588,27 +632,27 @@ export default {
         bind_user_tel_num: "",
         dev_sn: sn,
         ctrl_token: "8vAmfX19fX3gkqggfX19fQ++",
-        bind_type: type // 0 表示解绑； 1 表示绑定
+        bind_type: type, // 0 表示解绑； 1 表示绑定
       };
       change_device_bind_state(obj)
         .then(res => {
           if (res.status === 0) {
             this.$message({
               message: type === 0 ? "解绑成功" : "绑定成功",
-              type: "success"
+              type: "success",
             });
             this.getInfo();
           } else {
             this.$message({
               message: `${res.err_msg}`,
-              type: "error"
+              type: "error",
             });
           }
         })
         .catch(error => {
           this.$message({
             message: "网络出错，请重新请求",
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -617,40 +661,40 @@ export default {
         login_token: "8vAmfX19fX1NeaggfX19fQ==",
         dev_sn: sn, // 需要重启的设备sn
         extra_info: {
-          ctrl_type: type // 1 表示重启(已实现)；2 表示 关机(当前西柚机客户端还未实现此功能)
-        }
+          ctrl_type: type, // 1 表示重启(已实现)；2 表示 关机(当前西柚机客户端还未实现此功能)
+        },
       };
       ctrl_node_state(obj)
         .then(res => {
           if (res.status === 0) {
             this.$message({
               message: type === 1 ? "重启成功" : "关机成功",
-              type: "success"
+              type: "success",
             });
             this.getInfo();
           } else {
             this.$message({
               message: `${res.err_msg}`,
-              type: "error"
+              type: "error",
             });
           }
         })
         .catch(error => {
           this.$message({
             message: "网络出错，请重新请求",
-            type: "error"
+            type: "error",
           });
         });
     },
     getShow() {
       this.showState = !this.showState;
-        this.rotate = !this.rotate;
+      this.rotate = !this.rotate;
     },
     untied(rows) {
       this.$confirm("确定解绑?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           this.comfirmUntied(0, rows.dev_sn);
@@ -658,7 +702,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消解绑"
+            message: "已取消解绑",
           });
         });
     },
@@ -666,7 +710,7 @@ export default {
       this.$confirm("确定绑定?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           this.comfirmUntied(1, rows.dev_sn);
@@ -674,7 +718,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消绑定"
+            message: "已取消绑定",
           });
         });
     },
@@ -683,7 +727,7 @@ export default {
       this.$confirm("确定关机?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           this.closeRestore(2, rows.dev_sn);
@@ -691,7 +735,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消关机"
+            message: "已取消关机",
           });
         });
     },
@@ -700,7 +744,7 @@ export default {
       this.$confirm("确定重启?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           this.closeRestore(1, rows.dev_sn);
@@ -708,7 +752,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消重启"
+            message: "已取消重启",
           });
         });
     },
@@ -729,28 +773,28 @@ export default {
       const reg7 = /^\d+$/;
       if (reg3.test(str)) {
         return {
-          dev_sn: str
+          dev_sn: str,
         };
       } else if (reg5.test(str) && !reg7.test(str) && !reg3.test(str)) {
         return {
-          dev_name: str
+          dev_name: str,
         };
       } else if (str === "") {
         return {};
       } else {
         return false;
       }
-    }
+    },
   },
   components: {
     pageNation: pageNation,
     tableBarActive2: tableBarActive2,
-    mySearch: mySearch
-  }
+    mySearch: mySearch,
+  },
 };
 </script>
 
-<style lang="less"> 
+<style lang="less">
 .user-title {
   margin-top: 30px;
 
@@ -795,8 +839,6 @@ export default {
   }
 
   .device_form {
-  
-
     .el-form-item__label {
       white-space: nowrap;
     }
@@ -891,10 +933,9 @@ export default {
     }
   }
 }
-.deviceinfo{
-    .el-button{
+.deviceinfo {
+  .el-button {
     padding: 8px 8px !important;
-
-}
+  }
 }
 </style>

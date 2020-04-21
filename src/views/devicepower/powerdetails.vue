@@ -44,7 +44,7 @@
     <div class="devide_table">
         <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
             <el-col style="display: flex;justify-content: flex-end;">
-                <el-button type="primary" @click="toexportExcel">导出</el-button>
+                <el-button type="primary" :disabled="exportStatus" @click="toexportExcel">导出</el-button>
             </el-col>
         </el-row>
         <el-row type="flex" class="row_active">
@@ -207,7 +207,8 @@ export default {
       pageActives: 1,
       ad_type:0,
       order:0,
-      exportLinks:''
+      exportLinks:'',
+      exportStatus:true
     };
   },
   mounted: function() {
@@ -400,6 +401,11 @@ export default {
           if (res.status == 0) {
             let tempArr = [];
            this.exportLinks=res.data.filename
+              if ((res.data.cp_list.length == 0)) {
+                this.exportStatus = true;
+              } else {
+                this.exportStatus = false;
+              }
 
             tempArr = res.data.cp_list;
             for (var i = 0; i < tempArr.length; i++) {
@@ -449,6 +455,7 @@ export default {
     },
       //导出
     toexportExcel() {
+           this.common.monitoringLogs("导出", "算力信息表", 1);
        window.location.href = this.exportLinks
     
     },

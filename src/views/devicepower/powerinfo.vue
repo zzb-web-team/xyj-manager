@@ -7,14 +7,14 @@
             <i class="el-icon-search" style="color:#606266"></i>
             <el-input class="search-input" v-model="searchText" placeholder="设备SN、用户ID" @keyup.enter.native="searchInfo"></el-input>
           </div>
-          <div @click="getShow()" class="div_show" style="color:#606266">筛选
+          <!-- <div @click="getShow()" class="div_show" style="color:#606266">筛选
                       <i
                 class="el-icon-caret-bottom"
                 :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
               ></i>
-          </div>
+          </div> -->
         </el-row>
-        <el-row type="flex" class="row_activess" v-show="showState">
+        <!-- <el-row type="flex" class="row_activess" v-show="showState">
       
           <el-form-item>
             <el-button type="primary" @click="search">确定</el-button>
@@ -22,13 +22,13 @@
           <el-form-item>
             <el-button type="primary" @click="resetInfo">重置</el-button>
           </el-form-item>
-        </el-row>
+        </el-row> -->
       </el-form>
     </div>
     <div class="devide_table">
       <el-row type="flex" class="row_active">
         <el-col :span="24" style="display: flex;justify-content: flex-end">
-          <el-button type="primary" @click="toexportExcel">导出</el-button>
+          <el-button type="primary" @click="toexportExcel" :disabled="exportStatus">导出</el-button>
         </el-col>
       </el-row>
       <el-row type="flex" class="row_active">
@@ -38,7 +38,6 @@
             <el-table-column prop="dev_name" label="设备名称"></el-table-column>
             <el-table-column prop="user_id" label="绑定用户ID"></el-table-column>
             <el-table-column prop="total_value"  sortable="custom" label="算力值"></el-table-column>
-
           </el-table>
         </el-col>
       </el-row>
@@ -89,6 +88,7 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
+      exportStatus:true,
       rotate: false,
       dialogVisible: false,
       searchText: "",
@@ -198,6 +198,11 @@ export default {
       ptfs_query_cp_value_list(paramactive)
         .then(res => {
           if (res.status === 0) {
+               if ((res.data.com_power_list.length == 0)) {
+                this.exportStatus = true;
+              } else {
+                this.exportStatus = false;
+              }
             this.exportLinks = res.data.filename;
             this.pager.count = res.data.total_num;
             this.pager.rows = res.data.total_page;
@@ -219,6 +224,7 @@ export default {
     },
     //导出
     toexportExcel() {
+        this.common.monitoringLogs("导出", "算力信息表", 1);
       window.location.href = this.exportLinks;
     },
     getShow() {

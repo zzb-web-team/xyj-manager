@@ -23,21 +23,21 @@
                     </el-col>
                 </el-row>
                 <el-row type="flex" class="row_active row_active1">
-                    <el-form-item label="用户ID">
-                        <el-input v-model="form.inputText" placeholder="请输入用户ID"></el-input>
+                    <el-form-item label="用户ID" style="display:block;word-break:keep-all;white-space:nowrap;">
+                        <el-input v-model="form.inputText" placeholder="请输入用户ID" style="width:60%;"></el-input>
                     </el-form-item>
-                    <el-form-item label="设备SN区间">
-                        <textarea placeholder="请输入SN号" v-model="form.inputText1"></textarea>
+                    <el-form-item label="设备SN区间" style="display:block;word-break:keep-all;white-space:nowrap;">
+                        <textarea placeholder="请输入SN号" v-model="form.inputText1" style="width:65%;"></textarea>
                     </el-form-item>
 
-                    <el-form-item label="设备型号">
-                        <el-select v-model="form.selectedValue">
+                    <el-form-item label="设备型号" style="display:block;word-break:keep-all;white-space:nowrap;">
+                        <el-select v-model="form.selectedValue" style="width:80%;">
                             <el-option v-for="item in form.optionArr" :key="item" :label="item.type_info" :value="item.type"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="设备状态">
+                    <el-form-item label="设备状态" style="display:block;word-break:keep-all;white-space:nowrap;">
 
-                        <el-select v-model="form.selectedValue2" placeholder="请选择" @change="changeArr">
+                        <el-select v-model="form.selectedValue2" placeholder="请选择" @change="changeArr" style="width:80%;">
                             <el-option v-for="item in form.optionArractive2" :key="item" :label="item.label" :value="item.value">
 
                             </el-option>
@@ -367,6 +367,8 @@ export default {
                                             break;
 
                                     }
+                           
+                                    
 
                                 }
 
@@ -603,17 +605,30 @@ export default {
                                     break;
                             }
                             switch (nowarr[i].status) {
-                                case 0:
-                                    nowarr[i].status = "离线"
-                                    break;
-                                case 1:
-                                    nowarr[i].status = "在线"
-                                    break;
-                                       case 99:
-                                    nowarr[i].status = "新建"
-                                    break;
+                                        case 0:
+                                            nowarr[i].status = "离线"
+                                            break;
+                                        case 1:
+                                            nowarr[i].status = "在线"
+                                            break;
+                                        case 2:
+                                            nowarr[i].status= "非法设备"
+                                            break;
+                                        case 3:
+                                            nowarr[i].status = "非法设备"
+                                            break;
+                                        case 99:
+                                            nowarr[i].status = "非法设备"
+                                            break;
+                                        case 100:
+                                            nowarr[i].status = "非法设备"
+                                            break;
+                                        case 101:
+                                            nowarr[i].status = "非法设备"
+                                            break;
+                                      
 
-                            }
+                                    }
                              switch (nowarr[i].app_status) {
                                  case 0:
                                             nowarr[i].app_status = "未安装"

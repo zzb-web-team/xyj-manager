@@ -272,13 +272,13 @@ if (user) {
                 component: 'Home',
                 name: "西柚机APP",
                 titleActive:"应用",
-                icon: 'iconfont icon-shebeiguanli1',
+                icon: 'iconfont icon-APPkaifa',
                 children: [
                     {
                         path: "/miningmiddle",
                         name: "挖矿节点",
                         component: 'miningmiddle',
-                        icon: 'iconfont icon-shebeiguanli1',
+                        icon: 'iconfont icon-wakuang',
                         children: [
                             {
                                 path: "/miningindex",
@@ -318,7 +318,7 @@ if (user) {
                         path: "/devicepower",
                         name: "设备算力",
                         component: 'devicepower',
-                        icon: 'iconfont icon-shebeiguanli1',
+                        icon: 'iconfont icon-shebei',
                         children: [
                             {
                             path: "/powerinfo",
@@ -399,7 +399,7 @@ if (user) {
                         path: "/helpmiddle",
                         name: "帮助中心",
                         component: 'helpmiddle',
-                        icon: 'iconfont icon-jifenguanli',
+                        icon: 'iconfont icon-bangzhu',
                         children: [
                             {
                             path: "/groupindex",
@@ -434,7 +434,7 @@ if (user) {
                 component: 'Home',
                 name: "TV盒子应用",
                 // titleActive:"系统版本",
-                icon: 'iconfont icon-xitong',
+                icon: 'iconfont icon-hezi',
                 
                 children: [
                     {
@@ -470,7 +470,7 @@ if (user) {
                         component: 'marketmiddle',
                         name: "应用市场",
                         titleActive:false,
-                        icon: 'iconfont icon-dianbozhibov1213',
+                        icon: 'iconfont icon-shichang',
                         children: [
                             {
                     path: "/marketindex",
@@ -627,12 +627,12 @@ if (user) {
                 component: 'Home',
                 name: "数据分析",
                 titleActive:"数据分析",
-                icon: 'iconfont icon-xitong',
+                icon: 'iconfont icon-shuju',
                 children: [{
                         path: "/Analysismiddle",
                         name: "西柚机APP",
                         component: 'Analysismiddle',
-                        icon: 'iconfont icon-banbenguanli',
+                        icon: 'iconfont icon-APPkaifa',
                         children: [
                             {
                                 path: "/UserAnalysis",
@@ -662,7 +662,7 @@ if (user) {
                         path: "/Analysismiddle1",
                         name: "西柚机设备",
                         component: 'Analysismiddle1',
-                        icon: 'iconfont icon-banbenguanli',
+                        icon: 'iconfont icon-shebei',
                         children: [
                             {
                                 path: "/DeviceAnalysis",

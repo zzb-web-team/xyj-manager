@@ -42,8 +42,8 @@
         <el-col :span="6">
           <pageNation
             :pager="pager"
-            @handleSizeChange="handleSizeChange"
-            @handleCurrentChange="handleCurrentChange"
+            @handleSizeChange="handleSizeChange1"
+            @handleCurrentChange="handleCurrentChange1"
           ></pageNation>
         </el-col>
       </el-row>
@@ -84,7 +84,7 @@
     text-align: center;"
         >编辑应用分组</h3>
         <el-form-item label="分组名称:">
-          <el-input v-model="groupform.group_name"></el-input>
+          <el-input v-model="groupformupdate.group_name"></el-input>
         </el-form-item>
         <el-form-item label="关联应用">
           <el-button type="primary" @click="addrelate">添加</el-button>
@@ -93,7 +93,7 @@
           <el-input type="textarea" v-model="app_arrayname" style="width:240px;" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="分组说明:">
-          <el-input v-model="groupform.group_describe"></el-input>
+          <el-input v-model="groupformupdate.group_describe"></el-input>
         </el-form-item>
 
         <div style="text-align: center;">
@@ -147,7 +147,7 @@
         <el-row type="flex">
           <el-col :span="6">
             <pageNation
-              :pager="pager"
+              :pager="pager1"
               @handleSizeChange="handleSizeChange"
               @handleCurrentChange="handleCurrentChange"
             ></pageNation>
@@ -172,7 +172,7 @@ import {
   add_group,
   get_app,
   del_group,
-  update_group
+  update_group,
 } from "../../api/api";
 import common from "../../common/js/util.js";
 
@@ -207,7 +207,7 @@ export default {
         reg_start_time: 0,
         reg_end_time: 0,
         bind_start_time: 0,
-        bind_end_time: 0
+        bind_end_time: 0,
       },
 
       app_arrayname: "",
@@ -215,43 +215,43 @@ export default {
         group_name: "",
         group_describe: "",
         app_array: [],
-        create_time:0
+        create_time: 0,
       },
-        groupformupdate: {
+      groupformupdate: {
         group_name: "",
         group_describe: "",
         app_array: [],
-        create_time:0
+        create_time: 0,
       },
 
       rowHeader: [
         {
           prop: "group_name",
-          label: "分组名称"
+          label: "分组名称",
         },
         {
           prop: "group_app_count",
-          label: "应用数目"
+          label: "应用数目",
         },
         {
           prop: "create_time",
-          label: "创建时间"
+          label: "创建时间",
         },
         {
           prop: "group_describe",
-          label: "分组说明"
-        }
+          label: "分组说明",
+        },
       ],
       rowHeader1: [
         {
           prop: "app_name",
-          label: "应用名称"
+          label: "应用名称",
         },
 
         {
           prop: "create_time",
-          label: "创建时间"
-        }
+          label: "创建时间",
+        },
       ],
       tableData: [],
       tableOption: {
@@ -261,19 +261,24 @@ export default {
           {
             label: "编辑",
             type: "danger",
-            methods: "edit"
+            methods: "edit",
           },
           {
             label: "删除",
             type: "danger",
-            methods: "delete"
-          }
-        ]
+            methods: "delete",
+          },
+        ],
       },
       pager: {
         count: 0,
         page: 1,
-        rows: 100
+        rows: 100,
+      },
+         pager1: {
+        count: 0,
+        page: 1,
+        rows: 100,
       },
 
       showState: false,
@@ -292,8 +297,8 @@ export default {
       tabcount: 0,
       tempid: [],
       tempidname: [],
-      dialogVisibleGroupEdit1:false,
-      group_ids:"",
+      dialogVisibleGroupEdit1: false,
+      group_ids: "",
     };
   },
   mounted: function() {
@@ -301,35 +306,72 @@ export default {
     this.queryApp();
   },
   methods: {
-    onSubmitgroupupadte(){
-         this.dialogVisibleGroupEdit1 = false;
-      //this.groupform.create_time=parseInt(Date.now()) 
+    //字符长度限制
+    getStringWidth(val) {
+      let len = 0;
+      for (let i = 0; i < val.length; i++) {
+        let length = val.charCodeAt(i);
+        if (length >= 0 && length <= 128) {
+          len += 1;
+        } else {
+          len += 2;
+        }
+      }
+      return len;
+    },
+    onSubmitgroupupadte() {
+      if (
+        this.getStringWidth(this.groupformupdate.group_name) < 1 ||
+        this.getStringWidth(this.groupformupdate.group_name) > 16
+      ) {
+        this.$message({
+          message: "分组名称为1~16个字符",
+          type: "error",
+        });
+        return false;
+      }
+      // if (this.app_arrayname == "") {
+      //   this.$message({
+      //     message: "请先关联应用",
+      //     type: "error",
+      //   });
+      //   return false;
+      // }
+      if (this.getStringWidth(this.groupformupdate.group_describe) > 20) {
+        this.$message({
+          message: "分组说明不能超过20个字符",
+          type: "error",
+        });
+        return false;
+      }
+      this.dialogVisibleGroupEdit1 = false;
+      //this.groupform.create_time=parseInt(Date.now())
       // this.groupform.create_time=0
       //this.groupform.group_id=this.group_ids
-      debugger
-      let param = {
 
-      }
-      console.log(this.group_ids)
-      param.group_id=this.group_ids
-     param.group_name=this.groupform.group_name,
-     param.group_describe=this.groupform.group_describe,
-      param.app_array=[]
-     param.app_array=this.groupform.app_array
-  
+      let param = {};
+
+      param.group_id = this.group_ids;
+      (param.group_name = this.groupformupdate.group_name),
+        (param.group_describe = this.groupformupdate.group_describe),
+        (param.app_array = []);
+      param.app_array = this.groupform.app_array;
+
       update_group(param)
         .then(res => {
           if (res.status == 0) {
             this.$message({
               message: "更新成功",
-              type: "success"
+              type: "success",
             });
+        this.common.monitoringLogs("修改", "修改分组管理", 1);
             this.queryUserList();
           } else {
             this.$message({
               message: "更新失败",
-              type: "error"
+              type: "error",
             });
+            this.common.monitoringLogs("修改", "修改分组管理", 0);
           }
           this.queryUserList();
         })
@@ -368,23 +410,51 @@ export default {
     },
     //新增分组
     onSubmitaddgroup() {
+      if (
+        this.getStringWidth(this.groupform.group_name) < 1 ||
+        this.getStringWidth(this.groupform.group_name) > 16
+      ) {
+        this.$message({
+          message: "分组名称为1~16个字符",
+          type: "error",
+        });
+        return false;
+      }
+      // if (this.app_arrayname == "") {
+      //   this.$message({
+      //     message: "请先关联应用",
+      //     type: "error",
+      //   });
+      //   return false;
+      // }
+      if (this.getStringWidth(this.groupform.group_describe) > 20) {
+        this.$message({
+          message: "分组说明不能超过20个字符",
+          type: "error",
+        });
+        return false;
+      }
       this.dialogVisibleGroupEdit = false;
-      //this.groupform.create_time=parseInt(Date.now()) 
-      this.groupform.create_time=0
+      this.groupform.create_time = parseInt(Date.now() / 1000);
+      //this.groupform.create_time = 0;
       let param = this.groupform;
       add_group(param)
         .then(res => {
           if (res.status == 0) {
             this.$message({
               message: "新增成功",
-              type: "success"
+              type: "success",
             });
+                    this.common.monitoringLogs("新增", "新增分组管理", 1);
+
             this.queryUserList();
           } else {
             this.$message({
               message: "新增失败",
-              type: "error"
+              type: "error",
             });
+                    this.common.monitoringLogs("新增", "新增分组管理", 1);
+
           }
           this.queryUserList();
         })
@@ -392,37 +462,56 @@ export default {
     },
     //操作
     handleButton(val, row) {
-      console.log(val);
-      this.groupform=val.row
-      this.group_ids=val.row.group_id
+      console.log(val)
+      this.groupform = val.row;
+      this.group_ids = val.row.group_id;
       if (val.methods == "edit") {
+        this.groupformupdate.group_name=val.row.group_name
+        this.groupformupdate.group_describe=val.row.group_describe
         this.dialogVisibleGroupEdit1 = true;
       } else {
-        let group_ids = [];
-        group_ids.push(val.row.group_id);
-        let param = new Object();
-        param.group_id = group_ids;
-        del_group(param).then(res => {
-          if (res.status == 0) {
-            this.$message({
-              message: "删除成功",
-              type: "success"
-            });
-            this.queryUserList();
-          } else {
-            this.$message({
-              message: "删除失败",
-              type: "error"
-            });
-          }
-          this.queryUserList();
-        });
+        this.$confirm("确定要删除吗?", "提示", {
+          type: "warning",
+        })
+          .then(() => {
+            let group_ids = [];
+            group_ids.push(val.row.group_id);
+            let param = new Object();
+            param.group_id = group_ids;
+            del_group(param)
+              .then(res => {
+                if (res.status == 0) {
+                  this.$message({
+                    message: "删除成功",
+                    type: "success",
+                  });
+                                      this.common.monitoringLogs("删除", "删除分组管理", 1);
+
+                  this.queryUserList();
+                } else {
+                  this.$message({
+                    message: "删除失败",
+                    type: "error",
+                  });
+                                                        this.common.monitoringLogs("删除", "删除分组管理", 0);
+
+                }
+                this.queryUserList();
+              })
+              .catch(error => {
+                this.$message({
+                  message: "后台服务出错",
+                  type: "error",
+                });
+              });
+          })
+          .catch(() => {});
       }
     },
     queryApp() {
       let paramactive = new Object();
       {
-        paramactive.page = this.pager.page - 1;
+        paramactive.page = this.pager1.page - 1;
         paramactive.app_name = this.group_app_name;
       }
 
@@ -434,7 +523,7 @@ export default {
             if (res.data.appinfo) {
               //
 
-              this.pager.count = res.data.total;
+              this.pager1.count = res.data.total;
               let tempArr = [];
 
               tempArr = res.data.appinfo;
@@ -454,19 +543,22 @@ export default {
           } else {
             this.$message({
               message: "后台服务无响应",
-              type: "error"
+              type: "error",
             });
           }
         })
         .catch(error => {
           this.$message({
             message: "后台服务无响应",
-            type: "error"
+            type: "error",
           });
         });
     },
     addmarket() {
       this.dialogVisibleGroupEdit = true;
+      this.groupform.group_name = "";
+      this.app_arrayname = "";
+      this.groupform.group_describe = "";
     },
     addrelate() {
       this.dialogVisiblereleta = true;
@@ -525,133 +617,23 @@ export default {
         query: {
           user_id: val.user_id,
           reg_time: val.first_login_time,
-          reg_time1: val.first_bind_time
-        }
-      });
-    },
-    //冻结，解冻
-    disable(val) {
-      console.log(val);
-      let param = new Object();
-      if (val.account_status == "正常") {
-        param.forbid_status = 1;
-      } else {
-        param.forbid_status = 0;
-      }
-
-      let usr_id_list = [];
-      usr_id_list[0] = val.user_id;
-      param.usr_id_list = usr_id_list;
-
-      ptfs_forbid_users(param).then(res => {
-        if (param.forbid_status == 1) {
-          if (res.status == 0) {
-            this.$message({
-              message: "冻结成功",
-              type: "success"
-            });
-            this.queryUserList();
-            this.common.monitoringLogs("修改", "冻结账户", 1);
-          } else {
-            this.$message({
-              message: `${res.err_msg}`,
-              type: "error"
-            });
-            this.common.monitoringLogs("修改", "冻结账户", 0);
-          }
-        } else {
-          if (res.status == 0) {
-            this.$message({
-              message: "解冻成功",
-              type: "success"
-            });
-            this.queryUserList();
-            this.common.monitoringLogs("修改", "解冻账户", 1);
-          } else {
-            this.$message({
-              message: `${res.err_msg}`,
-              type: "error"
-            });
-            this.common.monitoringLogs("修改", "解冻账户", 0);
-          }
-        }
+          reg_time1: val.first_bind_time,
+        },
       });
     },
 
     addAccout() {
       this.dialogVisible = true;
     },
-    //获取注册用户和绑定用户
-    queryUsersTotal() {
-      let param = new Object();
-      ptfs_query_total_users(param)
-        .then(res => {
-          if (res.status == 0 && res.err_code == 0) {
-            if (res.data) {
-              this.user_form.active_num = res.data.active_num;
-              this.user_form.total_num = res.data.total_num;
-            } else {
-            }
-          } else {
-            this.$message({
-              message: `${res.err_msg}`,
-              type: "error"
-            });
-          }
-        })
-        .catch(error => {
-          this.$message({
-            message: "后台服务无响应",
-            type: "error"
-          });
-        });
-    },
+
     onChange(item) {
       console.log(item);
       this.nodegrade = item;
       this.queryUserList();
     },
-    onChange1(item) {
-      this.form.active_status = parseInt(item);
-      if (item == 0) {
-        this.form.statusActiveText = "全部";
-      } else if (item == 1) {
-        this.form.statusActiveText = "否";
-      } else if (item == 2) {
-        this.form.statusActiveText = "是";
-      }
-    },
-    onChange2(item) {
-      console.log(item);
-      if (item == 0) {
-        this.form.sex = "全部";
-        this.user_sex = "";
-      } else if (item == 1) {
-        this.form.sex = "男";
-        this.user_sex = "男";
-      } else if (item == 2) {
-        this.form.sex = "女";
-        this.user_sex = "女";
-      }
-    },
+
     //回车键绑定事件
     onSubmitKey() {
-      this.queryUserList();
-    },
-    //重置
-    resetInfo() {
-      this.pager.page = 1;
-      this.searchText = "";
-      this.value = "";
-      this.form.sex = "全部";
-      this.form.statusText = "全部";
-      this.form.account_status = 0;
-      this.form.active_status = 0;
-      this.value2 = "";
-      this.value1 = "";
-      this.user_sex = "";
-      this.user_status = -1;
-      (this.nodegrade = 0), (this.user_nick_name = "");
       this.queryUserList();
     },
 
@@ -675,7 +657,6 @@ export default {
 
               tempArr = res.data.result;
               for (var i = 0; i < tempArr.length; i++) {
-             
                 if (tempArr[i].create_time == 0) {
                   tempArr[i].create_time = 0;
                 } else {
@@ -683,36 +664,40 @@ export default {
                     tempArr[i].create_time * 1000
                   );
                 }
-            
               }
               this.tableData = tempArr;
             }
           } else {
             this.$message({
               message: "后台服务无响应",
-              type: "error"
+              type: "error",
             });
           }
         })
         .catch(error => {
           this.$message({
             message: "后台服务无响应",
-            type: "error"
+            type: "error",
           });
         });
     },
 
     //分页
-    handleCurrentChange(val) {
+    handleCurrentChange1(val) {
       this.pager.page = val.val;
       this.queryUserList();
-    }
+    },
+      //分页
+    handleCurrentChange(val) {
+      this.pager1.page = val.val;
+      this.queryApp();
+    },
   },
   components: {
     pageNation: pageNation,
     tableBar: tableBar,
-    mySearch: mySearch
-  }
+    mySearch: mySearch,
+  },
 };
 </script>
 

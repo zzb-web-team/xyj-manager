@@ -40,7 +40,7 @@
     <div class="devide_table">
         <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
             <el-col style="display: flex;justify-content: flex-end;">
-                <el-button type="primary" @click="toexportExcel">导出</el-button>
+                <el-button type="primary" :disabled="exportStatus" @click="toexportExcel">导出</el-button>
             </el-col>
         </el-row>
         <el-row type="flex" class="row_active">
@@ -74,6 +74,7 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
+      exportStatus: true,
       dialogVisible: false,
       dialogVisible2: false,
       searchText: "",
@@ -204,7 +205,7 @@ export default {
       pageActives: 1,
       nodegrade: 0,
       user_nick_name: "",
-      exportLinks:''
+      exportLinks: "",
     };
   },
   mounted: function() {
@@ -256,7 +257,7 @@ export default {
       this.showState = !this.showState;
       this.rotate = !this.rotate;
     },
-   
+
     //跳转至详情
     toDetails(val) {
       console.log(val);
@@ -398,8 +399,6 @@ export default {
 
     //获取用户列表
     queryUserList() {
-     
-
       let paramactive = new Object();
       let phoneNumber = /^[0-9]*[1-9][0-9]*$/;
       if (this.searchText != "") {
@@ -426,10 +425,16 @@ export default {
           if (res.status == 0) {
             console.log(res);
             if (res.data.con_value_list) {
-              this.exportLinks=res.data.filename
+              if ((res.data.con_value_list.length == 0)) {
+                this.exportStatus = true;
+              } else {
+                this.exportStatus = false;
+              }
+
+              this.exportLinks = res.data.filename;
 
               this.pager.count = res.data.total_num;
-               this.tableData=[] 
+              this.tableData = [];
               let tempArr = [];
 
               tempArr = res.data.con_value_list;
@@ -470,10 +475,10 @@ export default {
           });
         });
     },
-      //导出
+    //导出
     toexportExcel() {
-       window.location.href = this.exportLinks
-    
+      this.common.monitoringLogs("导出", "贡献值明细", 1);
+      window.location.href = this.exportLinks;
     },
     //分页
     handleCurrentChange(val) {

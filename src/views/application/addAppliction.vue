@@ -30,7 +30,7 @@
             </el-row>
         </div>
     </div>
-    <el-dialog :visible.sync="dialogFormState" class="my_dialogForm" width="30%" :show-close="false" :close-on-click-modal="false">
+    <el-dialog :visible.sync="dialogFormState" class="my_dialogForm" width="20%" :show-close="false" :close-on-click-modal="false">
         <div class="dialog_div" v-loading="loading2" element-loading-text="上传中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
             <div class="dialog_div_con">
                 <div class="dialog_div_title" style="margin-bottom:10px;">新增应用</div>
@@ -54,21 +54,21 @@
                 </div>
             </div>
             <div class="dialog_item">
-                <div class="dialog_item_l">应用名称：</div>
+                <div class="dialog_item_l" style="display:block;word-break:keep-all;white-space:nowrap;">应用名称：</div>
                 <div class="dialog_item_r">
-                    <el-input v-model="newFrom.app_version" placeholder="请输入内容" :disabled="true"></el-input>
+                    <el-input v-model="newFrom.app_version" placeholder="请输入内容" :disabled="true" style="width:90%;"></el-input>
                 </div>
             </div>
             <div class="dialog_item">
-                <div class="dialog_item_l">应用版本：</div>
+                <div class="dialog_item_l" style="display:block;word-break:keep-all;white-space:nowrap;">应用版本：</div>
                 <div class="dialog_item_r">
-                    <el-input v-model="newFrom.app_name" placeholder="请输入内容" :disabled="true"></el-input>
+                    <el-input v-model="newFrom.app_name" placeholder="请输入内容" :disabled="true" style="width:90%;">></el-input>
                 </div>
             </div>
             <div class="dialog_item dialog_div_desc">
-                <div class="dialog_item_l">添加描述：</div>
+                <div class="dialog_item_l" style="display:block;word-break:keep-all;white-space:nowrap;">添加描述：</div>
                 <div class="dialog_item_r">
-                    <textarea placeholder="请输入文字描述" v-model="newFrom.app_info"></textarea>
+                    <textarea placeholder="请输入文字描述" v-model="newFrom.app_info" style="width:90%;">></textarea>
                 </div>
             </div>
             <div slot="footer" class="dialog-footer" style="">
@@ -749,7 +749,7 @@ export default {
   }
 
   .dialog_div .dialog_div_upload .el-upload-dragger {
-    width: 335px;
+    width: 90%;
   }
 
   .dialog_div .dialog_div_desc {
@@ -772,7 +772,7 @@ export default {
       margin-bottom: 10px;
 
       .dialog_item_l {
-        width: 90px;
+        width: 90%;
         height: 35px;
         line-height: 35px;
         text-align: left;
@@ -780,7 +780,7 @@ export default {
       }
 
       .dialog_item_r {
-        width: 350px;
+        width: 90%;
       }
     }
   }

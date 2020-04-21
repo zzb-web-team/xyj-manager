@@ -68,7 +68,7 @@
           <el-button type="primary" @click="setparam">调整收益参数</el-button>
         </el-col>
         <el-col style="display: flex;justify-content: flex-end;">
-          <el-button type="primary" @click="toexportExcel">导出</el-button>
+          <el-button type="primary" @click="toexportExcelactive">导出</el-button>
         </el-col>
       </el-row>
       <el-row type="flex" class="row_active">
@@ -159,7 +159,8 @@ export default {
       showState: false,
       order: 0,
       tableData2: [],
-      pageActive: 0
+      pageActive: 0,
+      exportLinks:'' 
     };
   },
   mounted() {
@@ -185,36 +186,10 @@ export default {
       this.getInfo();
     },
     //导出的方法
-    exportExcel() {
-      require.ensure([], () => {
-        const { export_json_to_excel } = require("../../excel/Export2Excel");
-        const tHeader = [
-          "用户ID",
-          "用户昵称",
-          "收益金额",
-          "当日IP值",
-          "当日存储值",
-          "当日算力",
-          "时间"
-        ];
-        // 上面设置Excel的表格第一行的标题
-        const filterVal = [
-          "user_id",
-          "user_nick_name",
-          "profit",
-          "ip_value",
-          "store_value",
-          "store",
-          "time_stamp"
-        ];
-        // 上面的index、nickName、name是tableData里对象的属性
-        const list = this.tableData2; //把data里的tableData存到list
-        const data = this.formatJson(filterVal, list);
-        export_json_to_excel(tHeader, data, "用户收益明细表");
-      });
-    },
-    formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => v[j]));
+    toexportExcelactive() {
+         this.common.monitoringLogs("导出", "导出收益明细", 1);
+       window.location.href = this.exportLinks
+    
     },
     //重置
     //重置
@@ -236,17 +211,17 @@ export default {
     },
     formatUp(row, column) {
       if (row.up_bandwidth == 0) {
-        return 0 + "Mbps";
+        return 0 
       } else {
-      return   row.up_bandwidth + "Mbps";
+       return this.common.formatByteActive(row.up_bandwidth)  
       }
       //return (row[property] / 1000000).toFixed(6)
     },
     formatDown(row, column) {
       if (row.down_bandwidth == 0) {
-        return 0 + "Mbps";
+        return 0 
       } else {
-       return row.down_bandwidth + "Mbps";
+       return this.common.formatByteActive(row.down_bandwidth)  
       }
       //return (row[property] / 1000000).toFixed(6)
     },
@@ -290,6 +265,7 @@ export default {
         .then(res => {
           if (res.status === 0) {
             // this.tableData = res.data.profit_detail_list;
+                  this.exportLinks=res.data.filename
             this.yes_total_num = res.data.yes_total_num;
             this.yes_total_profit = res.data.yes_total_profit;
             this.pager.count = res.data.total_num;
@@ -307,57 +283,57 @@ export default {
           console.log(error);
         });
     },
-    toexportExcel() {
-      var data = {
-        order: this.order,
-        cur_page: this.pageActive,
-        start_time:
-          this.start_time === ""
-            ? 0
-            : new Date(this.start_time).getTime() / 1000,
-        end_time:
-          this.end_time === "" ? 0 : new Date(this.end_time).getTime() / 1000
-      };
-      if (this.judgeString(this.searchText)) {
-        var arr = Object.keys(this.judgeString(this.searchText));
-        data.query_type = arr.length === 0 ? 0 : 1;
-        var param = Object.assign(this.judgeString(this.searchText), data);
-      } else {
-        this.$message.error("请输入正确的用户ID、用户昵称");
-        return;
-      }
+    // toexportExcel() {
+    //   var data = {
+    //     order: this.order,
+    //     cur_page: this.pageActive,
+    //     start_time:
+    //       this.start_time === ""
+    //         ? 0
+    //         : new Date(this.start_time).getTime() / 1000,
+    //     end_time:
+    //       this.end_time === "" ? 0 : new Date(this.end_time).getTime() / 1000
+    //   };
+    //   if (this.judgeString(this.searchText)) {
+    //     var arr = Object.keys(this.judgeString(this.searchText));
+    //     data.query_type = arr.length === 0 ? 0 : 1;
+    //     var param = Object.assign(this.judgeString(this.searchText), data);
+    //   } else {
+    //     this.$message.error("请输入正确的用户ID、用户昵称");
+    //     return;
+    //   }
 
-      query_node_info_list(param)
-        .then(res => {
-          if (res.status === 0) {
-            this.pageActive = res.data.cur_page;
-            if (res.data.cur_page >= res.data.total_page) {
-              console.log(this.tableData2);
-              this.exportExcel();
-              this.common.monitoringLogs("导出", "导出收益明细", 1);
-            } else {
-              this.yes_total_num = res.data.yes_total_num;
-              this.yes_total_profit = res.data.yes_total_profit;
-              this.pager.count = res.data.total_num;
-              this.pager.rows = res.data.total_page;
-              let teamarr = res.data.profit_detail_list;
-              for (var i = 0; i < teamarr.length; i++) {
-                teamarr[i].time_stamp = this.common.getTimess(
-                  teamarr[i].time_stamp * 1000
-                );
-              }
-              this.tableData2 = this.tableData2.concat(teamarr);
-              this.pageActive++;
-              this.toexportExcel();
-            }
-          } else {
-            this.common.monitoringLogs("导出", "导出收益明细", 0);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    },
+    //   query_node_info_list(param)
+    //     .then(res => {
+    //       if (res.status === 0) {
+    //         this.pageActive = res.data.cur_page;
+    //         if (res.data.cur_page >= res.data.total_page) {
+    //           console.log(this.tableData2);
+    //           this.exportExcel();
+    //           this.common.monitoringLogs("导出", "导出收益明细", 1);
+    //         } else {
+    //           this.yes_total_num = res.data.yes_total_num;
+    //           this.yes_total_profit = res.data.yes_total_profit;
+    //           this.pager.count = res.data.total_num;
+    //           this.pager.rows = res.data.total_page;
+    //           let teamarr = res.data.profit_detail_list;
+    //           for (var i = 0; i < teamarr.length; i++) {
+    //             teamarr[i].time_stamp = this.common.getTimess(
+    //               teamarr[i].time_stamp * 1000
+    //             );
+    //           }
+    //           this.tableData2 = this.tableData2.concat(teamarr);
+    //           this.pageActive++;
+    //           this.toexportExcel();
+    //         }
+    //       } else {
+    //         this.common.monitoringLogs("导出", "导出收益明细", 0);
+    //       }
+    //     })
+    //     .catch(error => {
+    //       console.log(error);
+    //     });
+    // },
     getShow() {
       this.showState = !this.showState;
       this.rotate = !this.rotate;

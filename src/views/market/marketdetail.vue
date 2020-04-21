@@ -43,7 +43,7 @@
       <div class="detail_right">
         <div>
                 <el-button type="primary" size="small" @click="goEdit">编辑</el-button>
-                <el-button type="primary" size="small" @click="godelete">删除</el-button>
+                <el-button type="primary" size="small" @click="godelete" v-show="pub_status">删除</el-button>
         </div>
         <div class="block">
           <el-carousel trigger="click" height="250px">
@@ -63,7 +63,7 @@ import tableBar from "../../components/tableBar";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
 import { get_app_by_appid,
-del_group  } from "../../api/api";
+del_app  } from "../../api/api";
 import common from "../../common/js/util.js";
 
 export default {
@@ -107,7 +107,8 @@ export default {
        
 
     },
-  linkappid:""
+  linkappid:"",
+  pub_status:false
 
     }
    
@@ -117,28 +118,36 @@ export default {
     // this.queryUserList();
     this.queryAppInfo()
     this.linkappid=this.$route.query.linkappid
+
+  if(this.$route.query.pub_status==1){
+ this.pub_status=false
+  }else{
+     this.pub_status=true
+  }
   },
   methods: {
   //删除
   godelete(){
     let param= new Object
-    param.group_id=[]
-    param.group_id.push(this.linkappid)
-    del_group(param).then(res=>{
+    param.app_id=(this.linkappid)
+    del_app(param).then(res=>{
       if(res.status==0){
           this.$message({
             message: "删除成功",
             type: "success"
           });
+                     this.common.monitoringLogs("删除", "删除应用管理", 1);
       }
       else{
           this.$message({
             message: "删除失败",
             type: "error"
           });
+                               this.common.monitoringLogs("删除", "删除应用管理", 0);
+
       }
         this.$router.push({
-          path: "/editmarket",
+          path: "/marketindex",
           query: {
             linkappid: this.linkappid
           }
@@ -149,6 +158,8 @@ export default {
             message: "后台服务出错",
             type: "error"
           });
+                               this.common.monitoringLogs("删除", "删除应用管理", 0);
+
 
     })
 
@@ -160,9 +171,87 @@ export default {
       get_app_by_appid(param).then(res=>{
         console.log(res)
         if(res.status==0){
+          
            this.cropImg = res.data.app_icon
            this.imgs=res.data.app_pic
           this.ruleForm=res.data
+          console.log(this.ruleForm)
+            console.log(this.ruleForm.app_type1)
+             if (this.ruleForm.app_type1 == 1) {
+                switch (this.ruleForm.app_type2) {
+                  case 1:
+                  this.ruleForm.app_type2 = "电视直播";
+                    break;
+                  case 2:
+                    this.ruleForm.app_type2 = "视频点播";
+                    break;
+                  case 3:
+                   this.ruleForm.app_type2 = "音乐娱乐";
+                    break;
+                }
+              } else if (this.ruleForm.app_type1 == 2) {
+                switch (this.ruleForm.app_type2) {
+                  case 1:
+                   this.ruleForm.app_type2 = "幼儿教育";
+                    break;
+                  case 2:
+                    this.ruleForm.app_type2 = "中小学教育";
+                    break;
+                  case 3:
+                    this.ruleForm.app_type2 = "职业教育";
+                    break;
+                }
+              } else if (this.ruleForm.app_type1 == 3) {
+                switch (this.ruleForm.app_type2) {
+                  case 1:
+                    this.ruleForm.app_type2 = "棋牌桌游";
+                    break;
+                  case 2:
+                    this.ruleForm.app_type2 = "竞速体育";
+                    break;
+                  case 3:
+                  this.ruleForm.app_type2 = "休闲益智";
+                    break;
+                  case 4:
+                    this.ruleForm.app_type2 = "战争策略";
+                    break;
+                  case 5:
+                    this.ruleForm.app_type2 = "飞行射击";
+                    break;
+                  case 6:
+                    this.ruleForm.app_type2 = "动作冒险";
+                    break;
+                  case 7:
+                   this.ruleForm.app_type2 = "模拟经营";
+                    break;
+                }
+              } else if (this.ruleForm.app_type1 == 4) {
+                switch (this.ruleForm.app_type2) {
+                  case 1:
+                    this.ruleForm.app_type2 = "运动健康";
+                    break;
+                  case 2:
+                   this.ruleForm.app_type2 = "便捷生活";
+                    break;
+                  case 3:
+                    this.ruleForm.app_type2 = "实用工具";
+                    break;
+                }
+              }
+            switch (this.ruleForm.app_type1) {
+                case 1:
+                  this.ruleForm.app_type1= "影音";
+                  break;
+                case 2:
+                  this.ruleForm.app_type1= "教育";
+                  break;
+                case 3:
+                  this.ruleForm.app_type1= "教育";
+                  break;
+                case 4:
+                 this.ruleForm.app_type1 = "工具";
+                  break;
+              }
           console.log(this.ruleForm.app_name)
         }
 

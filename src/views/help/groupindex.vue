@@ -250,17 +250,23 @@ export default {
             message: "修改成功",
             type: "success",
           });
+                  this.common.monitoringLogs("修改", "修改分组管理", 1);
+
           this.dialogVisibleGroupEdit = false;
         } else if (res.status == -1) {
           this.$message({
             message: "分组名称不能重复",
             type: "error",
           });
+                  this.common.monitoringLogs("修改", "修改分组管理", 0);
+
         } else {
           this.$message({
             message: "修改失败",
             type: "success",
           });
+                  this.common.monitoringLogs("修改", "修改分组管理", 0);
+
           this.dialogVisibleGroupEdit = false;
         }
         this.queryUserList();
@@ -268,13 +274,12 @@ export default {
     },
     //修改和删除
     handleButton(val, row) {
-      console.log(val);
       if (val.methods == "freeze") {
         this.dialogVisibleGroupEdit = true;
         this.groupEditvalue = val.row.cat_name;
         (this.cat_id = val.row.cat_id), (this.cat_owner = this.uname);
       } else {
-        this.$confirm("确定要批量删除角色吗?", "提示", {
+        this.$confirm("确定要删除吗?", "提示", {
           type: "warning",
         })
           .then(() => {
@@ -287,11 +292,15 @@ export default {
                     message: "删除成功",
                     type: "success",
                   });
+                          this.common.monitoringLogs("删除", "删除分组管理", 1);
+
                 } else {
                   this.$message({
                     message: "删除失败",
                     type: "success",
                   });
+                          this.common.monitoringLogs("删除", "删除分组管理", 0);
+
                 }
                 this.queryUserList();
               })
@@ -337,17 +346,21 @@ export default {
               message: "创建成功",
               type: "success",
             });
+                                      this.common.monitoringLogs("新增", "新增分组管理", 1);
+
             this.dialogVisibleGroup = false;
           } else if (res.status == -1) {
             this.$message({
               message: "分组名称不能重复",
               type: "error",
             });
+            this.common.monitoringLogs("新增", "新增分组管理", 0);
           } else {
             this.$message({
               message: "创建失败",
               type: "error",
             });
+            this.common.monitoringLogs("新增", "新增分组管理", 0);
             this.dialogVisibleGroup = false;
           }
           this.queryUserList();

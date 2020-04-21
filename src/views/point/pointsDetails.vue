@@ -39,7 +39,7 @@
     <div class="devide_table">
         <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
             <el-col style="display: flex;justify-content: flex-end;">
-                <el-button type="primary" @click="toexportExcel">导出</el-button>
+                <el-button type="primary" @click="toexportExcelactive">导出</el-button>
             </el-col>
         </el-row>
         <el-row type="flex" class="row_active">
@@ -117,7 +117,8 @@ export default {
             showState: false,
             order: 0,
             tableData2: [],
-            pageActive: 0
+            pageActive: 0,
+             exportLinks:''
         };
     },
     mounted() {
@@ -135,42 +136,48 @@ export default {
             this.getInfo()
 
         },
-        //导出的方法
-        exportExcel() {
-            require.ensure([], () => {
-                const {
-                    export_json_to_excel
-                } = require("../../excel/Export2Excel");
-                const tHeader = [
+          //导出的方法
+    toexportExcelactive() {
+         this.common.monitoringLogs("导出", "导出收益明细", 1);
+       window.location.href = this.exportLinks
+    
+    },
+        // //导出的方法
+        // exportExcel() {
+        //     require.ensure([], () => {
+        //         const {
+        //             export_json_to_excel
+        //         } = require("../../excel/Export2Excel");
+        //         const tHeader = [
 
-                    "用户ID",
-                    "用户昵称",
-                    "收支类型",
-                    "金额",
-                    "账户余额",
-                    "时间",
+        //             "用户ID",
+        //             "用户昵称",
+        //             "收支类型",
+        //             "金额",
+        //             "账户余额",
+        //             "时间",
 
-                ];
-                // 上面设置Excel的表格第一行的标题
-                const filterVal = [
+        //         ];
+        //         // 上面设置Excel的表格第一行的标题
+        //         const filterVal = [
 
-                    "user_id",
-                    "user_nick_name",
-                    "profit_type",
-                    "profit_typeActive",
-                    "total_profit",
-                    "time_stamp",
+        //             "user_id",
+        //             "user_nick_name",
+        //             "profit_type",
+        //             "profit_typeActive",
+        //             "total_profit",
+        //             "time_stamp",
 
-                ];
-                // 上面的index、nickName、name是tableData里对象的属性
-                const list = this.tableData2; //把data里的tableData存到list
-                const data = this.formatJson(filterVal, list);
-                export_json_to_excel(tHeader, data, "积分明细表");
-            });
-        },
-        formatJson(filterVal, jsonData) {
-            return jsonData.map(v => filterVal.map(j => v[j]));
-        },
+        //         ];
+        //         // 上面的index、nickName、name是tableData里对象的属性
+        //         const list = this.tableData2; //把data里的tableData存到list
+        //         const data = this.formatJson(filterVal, list);
+        //         export_json_to_excel(tHeader, data, "积分明细表");
+        //     });
+        // },
+        // formatJson(filterVal, jsonData) {
+        //     return jsonData.map(v => filterVal.map(j => v[j]));
+        // },
         //重置
         onReset() {
             this.pager.page = 1
@@ -221,7 +228,7 @@ export default {
             query_user_total_profit_everyday(param)
                 .then(res => {
                     if (res.status === 0) {
-
+                        this.exportLinks=res.data.filename
                         let teamarr = res.data.total_profit_list;
                         for (var i = 0; i < teamarr.length; i++) {
                             if (teamarr[i].profit_type === 1) {
@@ -230,18 +237,14 @@ export default {
                             } else {
                                 teamarr[i].profit_type = "兑换"
                                 teamarr[i].profit_typeActive = ((teamarr[i].cur_amount) / 100).toFixed(2)
-
                             }
                             teamarr[i].time_stamp = this.common.getTimess(teamarr[i].time_stamp * 1000)
 
                         }
-
                         this.tableData = teamarr
-                        console.log(this.tableData)
                         this.pager.count = res.data.total_num;
                         this.pager.rows = res.data.total_page;
                     }
-
                 })
                 .catch(error => {
                     console.log(error);

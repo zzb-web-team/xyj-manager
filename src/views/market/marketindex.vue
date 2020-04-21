@@ -23,7 +23,7 @@
         <div v-show="showState">
           <el-row type="flex" class="row_activess">
             <el-form-item label="一级分类" style="display: flex;">
-              <el-select v-model="form.statusText" placeholder="请选择" @change="onChange">
+              <el-select v-model="app_type1" placeholder="请选择" @change="onChangeOne">
                 <el-option
                   v-for="item in options"
                   :key="item.value"
@@ -33,7 +33,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="二级分类" style="display: flex;">
-              <el-select v-model="form.statusText" placeholder="请选择" @change="onChange">
+              <el-select v-model="app_type2" placeholder="请选择" @change="onChangeTwo">
                 <el-option
                   v-for="item in options1"
                   :key="item.value"
@@ -43,7 +43,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="状态" style="display: flex;">
-              <el-select v-model="form.statusText" placeholder="请选择" @change="onChange">
+              <el-select v-model="pub_status" placeholder="请选择" @change="onChangeStatus">
                 <el-option
                   v-for="item in options2"
                   :key="item.value"
@@ -72,7 +72,7 @@
       </el-row>
       <el-row type="flex" class="row_active">
         <el-col :span="24">
-          <tableBar
+          <tableBarMarketindex
             id="rebateSetTable"
             ref="table1"
             tooltip-effect="dark"
@@ -88,8 +88,10 @@
             @toDetails="toDetails"
             @changePassword="changePassword"
             @toDelete="toDelete"
-          ></tableBar>
-          <!-- <tableBar id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBar> -->
+            @toEdit="toEdit"
+            @toOperating="toOperating"
+          ></tableBarMarketindex>
+          <!-- <tableBarMarketindex id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBarMarketindex> -->
         </el-col>
       </el-row>
     </div>
@@ -114,14 +116,14 @@
 </template>
 
 <script>
-import tableBar from "../../components/tableBar";
+import tableBarMarketindex from "../../components/tableBarMarketindex";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
 import {
   ptfs_query_node_grade,
   get_all_app,
   app_on,
-  app_off
+  app_off,
 } from "../../api/api";
 import common from "../../common/js/util.js";
 
@@ -153,124 +155,123 @@ export default {
         reg_start_time: 0,
         reg_end_time: 0,
         bind_start_time: 0,
-        bind_end_time: 0
+        bind_end_time: 0,
       },
       user_form: {
         normal_num: "",
         active_num: "",
-        total_num: ""
+        total_num: "",
       },
       options: [
         {
-          value: "-1",
-          label: "全部"
-        },
-        {
           value: "0",
-          label: "分类1"
+          label: "全部",
         },
         {
           value: "1",
-          label: "分类2"
-        }
-      ],
-      options1: [
-        {
-          value: "-1",
-          label: "全部"
-        },
-        {
-          value: "0",
-          label: "分类1"
-        },
-        {
-          value: "1",
-          label: "分类2"
-        }
-      ],
-      options2: [
-        {
-          value: "0",
-          label: "全部"
-        },
-        {
-          value: "1",
-          label: "在线"
+          label: "影音",
         },
         {
           value: "2",
-          label: "离线"
-        }
+          label: "教育",
+        },
+        {
+          value: "3",
+          label: "游戏",
+        },
+        {
+          value: "4",
+          label: "工具",
+        },
+      ],
+      options1: [],
+      options2: [
+        {
+          value: "-1",
+          label: "全部",
+        },
+        {
+          value: "1",
+          label: "已发布",
+        },
+        {
+          value: "0",
+          label: "未发布",
+        },
       ],
 
       rowHeader: [
-        {
-          prop: "app_icon",
-          label: "LOGO"
-        },
+        // {
+        //   prop: "app_icon",
+        //   label: "LOGO",
+        // },
         {
           prop: "app_name",
-          label: "应用名称"
+          label: "应用名称",
         },
         {
           prop: "app_type1",
-          label: "一级分类"
+          label: "一级分类",
         },
         {
           prop: "app_type2",
-          label: "二级标签"
+          label: "二级标签",
         },
 
         {
           prop: "app_version",
-          label: "应用版本"
+          label: "应用版本",
         },
         {
           prop: "pkg_name",
-          label: "包名"
+          label: "包名",
+        },
+        {
+          prop: "stateactive",
+          label: "应用状态",
         },
         {
           prop: "create_time",
           label: "创建时间",
-          sortable: "custom"
+          sortable: "custom",
         },
         {
           prop: "publish_time",
-          label: "发布时间",
-          sortable: "custom"
-        }
+          label: "修改时间",
+          sortable: "custom",
+        },
       ],
       tableData: [],
       tableOption: {
         label: "操作",
-        width: 200,
+        width: 300,
         options: [
           {
             label: "发布",
             type: "primary",
-            methods: "onapp"
+            methods: "onapp",
           },
           {
             label: "下架",
             type: "danger",
-            methods: "offapp"
+            methods: "offapp",
           },
           {
             label: "编辑",
             type: "danger",
-            methods: "edit"
+            methods: "edit",
           },
           {
             label: "详情",
             type: "danger",
-            methods: "goddetail"
-          }
-        ]
+            methods: "goddetail",
+          },
+        ],
       },
       pager: {
         count: 0,
         page: 1,
-        rows: 100
+        rows: 100,
       },
 
       showState: false,
@@ -286,7 +287,10 @@ export default {
       nodegrade: 0,
       user_nick_name: "",
       appIds: [],
-      linkappid: 0
+      linkappid: 0,
+      pub_status: "-1",
+      app_type1: "0",
+      app_type2: "",
     };
   },
   mounted: function() {
@@ -295,23 +299,39 @@ export default {
     //this.queryInfoUser();
   },
   methods: {
-    //编辑
-    handleButton(val) {
+    //详情
+    toDetails(val) {
       console.log(val);
-      let linkappid = val.row.app_id;
+      let linkappid = val.app_id;
+      let pub_status = val.state;
 
-      if (val.methods == "edit") {
-        this.$router.push({
-          path: "/editmarket",
-          query: {
-            linkappid: linkappid
-          }
-        });
-      } else if (val.methods == "onapp") {
+      this.$router.push({
+        path: "/marketdetail",
+        query: {
+          linkappid: linkappid,
+          pub_status: pub_status,
+        },
+      });
+    },
+    //编辑
+    toEdit(val) {
+      let linkappid = val.row.app_id;
+      let pub_status = val.row.state;
+      this.$router.push({
+        path: "/editmarket",
+        query: {
+          linkappid: linkappid,
+        },
+      });
+    },
+    //发布下架
+    toOperating(val) {
+      let linkappid = val.row.app_id;
+      if (val.row.state == 0) {
         let param = new Object();
         param.app_array = [];
         param.app_array.push(linkappid);
-             param.publish_time =  parseInt(Date.now() / 1000);;
+        param.publish_time = parseInt(Date.now() / 1000);
         // param.data_count = 1;
 
         app_on(param)
@@ -319,64 +339,73 @@ export default {
             if (res.status == 0) {
               this.$message({
                 message: "发布成功",
-                type: "success"
+                type: "success",
               });
+               this.common.monitoringLogs("发布", "发布应用管理", 1);
             } else {
               this.$message({
                 message: "发布失败",
-                type: "error"
+                type: "error",
               });
+                this.common.monitoringLogs("发布", "发布应用管理", 0);
             }
+            this.queryUserList();
           })
           .catch(error => {
-             this.$message({
-                message: "后台服务出错",
-                type: "error"
-              });
+            this.$message({
+              message: "后台服务出错",
+              type: "error",
+            });
+              this.common.monitoringLogs("发布", "发布应用管理", 0);
           });
-      }
-      else if(val.methods=='offapp'){
-         let param = new Object();
-        param.app_array= [];
+      } else {
+        let param = new Object();
+        param.app_array = [];
         param.app_array.push(linkappid);
-   
-        
-       
 
         app_off(param)
           .then(res => {
             if (res.status == 0) {
               this.$message({
                 message: "下架成功",
-                type: "success"
+                type: "success",
               });
+                                    this.common.monitoringLogs("下架", "下架应用管理", 1);
+
             } else {
               this.$message({
                 message: "下架失败",
-                type: "error"
+                type: "error",
               });
+                                                  this.common.monitoringLogs("下架", "下架应用管理", 0);
+
             }
+            this.queryUserList();
           })
           .catch(error => {
-             this.$message({
-                message: "后台服务出错",
-                type: "error"
-              });
+            this.$message({
+              message: "后台服务出错",
+              type: "error",
+            });
+                                                this.common.monitoringLogs("下架", "下架应用管理", 0);
+
           });
       }
-      else if(val.methods=="goddetail"){
-            this.$router.push({
-          path: "/marketdetail",
-          query: {
-            linkappid: linkappid
-          }
-        });
+    },
+    //编辑
+    handleButton(val) {
+      console.log(val);
+
+      if (val.methods == "edit") {
+      } else if (val.methods == "onapp") {
+      } else if (val.methods == "offapp") {
+      } else if (val.methods == "goddetail") {
       }
     },
     //新增
     addmarket() {
       this.$router.push({
-        path: "/addmarket"
+        path: "/addmarket",
       });
     },
     //批量上架选择ID
@@ -393,60 +422,78 @@ export default {
       if (this.appIds.length == 0) {
         this.$message({
           message: "请至少勾选一项",
-          type: "error"
+          type: "error",
         });
-        return false
+        return false;
       }
 
       let param = new Object();
-      param.data_array = this.appIds;
+      param.publish_time=parseInt((new Date()).getTime()/1000)
+      param.app_array = this.appIds;
       param.data_count = this.appIds.length;
 
       app_on(param)
         .then(res => {
           if (res.status == 0) {
             this.$message({
-              message: "发布成功",
-              type: "success"
+              message: "批量发布成功",
+              type: "success",
             });
+                                                this.common.monitoringLogs("发布", "批量发布应用管理", 1);
+
           } else {
             this.$message({
-              message: "发布失败",
-              type: "error"
+              message: "批量发布失败",
+              type: "error",
             });
+                                                            this.common.monitoringLogs("发布", "批量发布应用管理", 0);
+
           }
+          this.queryUserList();
         })
-        .catch(error => {});
+
+        .catch(error => {
+                                                          this.common.monitoringLogs("发布", "批量发布应用管理", 1);
+
+        });
     },
     //下架
     clickAppoff() {
       if (this.appIds.length == 0) {
         this.$message({
           message: "请至少勾选一项",
-          type: "error"
+          type: "error",
         });
-         return false
+        return false;
       }
 
       let param = new Object();
-      param.data_array = this.appIds;
+      param.app_array= this.appIds;
       param.data_count = this.appIds.length;
 
       app_off(param)
         .then(res => {
           if (res.status == 0) {
             this.$message({
-              message: "下架成功",
-              type: "success"
+              message: "批量下架成功",
+              type: "success",
             });
+                                                            this.common.monitoringLogs("下架", "批量下架应用管理", 1);
+
           } else {
             this.$message({
-              message: "下架成功",
-              type: "error"
+              message: "批量下架失败",
+              type: "error",
             });
+                                                            this.common.monitoringLogs("下架", "批量下架应用管理", 0);
+
           }
+          this.queryUserList();
         })
-        .catch(error => {});
+        .catch(error => {
+                                                                      this.common.monitoringLogs("下架", "批量下架应用管理", 1);
+
+        });
     },
     //排序
     tableSortChange(column, prop, order) {
@@ -493,100 +540,130 @@ export default {
     },
     //导出的方法
 
-    //跳转至详情
-    toDetails(val) {
-      console.log(val);
-
-      this.$router.push({
-        path: "/userInfo",
-        query: {
-          user_id: val.user_id,
-          reg_time: val.first_login_time,
-          reg_time1: val.first_bind_time
-        }
-      });
-    },
-    //冻结，解冻
-    disable(val) {
-      console.log(val);
-      let param = new Object();
-      if (val.account_status == "正常") {
-        param.forbid_status = 1;
-      } else {
-        param.forbid_status = 0;
-      }
-
-      let usr_id_list = [];
-      usr_id_list[0] = val.user_id;
-      param.usr_id_list = usr_id_list;
-
-      ptfs_forbid_users(param).then(res => {
-        if (param.forbid_status == 1) {
-          if (res.status == 0) {
-            this.$message({
-              message: "冻结成功",
-              type: "success"
-            });
-            this.queryUserList();
-            this.common.monitoringLogs("修改", "冻结账户", 1);
-          } else {
-            this.$message({
-              message: `${res.err_msg}`,
-              type: "error"
-            });
-            this.common.monitoringLogs("修改", "冻结账户", 0);
-          }
-        } else {
-          if (res.status == 0) {
-            this.$message({
-              message: "解冻成功",
-              type: "success"
-            });
-            this.queryUserList();
-            this.common.monitoringLogs("修改", "解冻账户", 1);
-          } else {
-            this.$message({
-              message: `${res.err_msg}`,
-              type: "error"
-            });
-            this.common.monitoringLogs("修改", "解冻账户", 0);
-          }
-        }
-      });
-    },
-
     addAccout() {
       this.dialogVisible = true;
     },
-
-    onChange(item) {
-      console.log(item);
-      this.nodegrade = item;
+    onChangeStatus(val) {
+      this.pub_status = val;
       this.queryUserList();
     },
-    onChange1(item) {
-      this.form.active_status = parseInt(item);
-      if (item == 0) {
-        this.form.statusActiveText = "全部";
-      } else if (item == 1) {
-        this.form.statusActiveText = "否";
-      } else if (item == 2) {
-        this.form.statusActiveText = "是";
-      }
-    },
-    onChange2(item) {
+
+    onChangeOne(item) {
+      this.app_type1 = item;
       console.log(item);
-      if (item == 0) {
-        this.form.sex = "全部";
-        this.user_sex = "";
-      } else if (item == 1) {
-        this.form.sex = "男";
-        this.user_sex = "男";
-      } else if (item == 2) {
-        this.form.sex = "女";
-        this.user_sex = "女";
+      if (item == "1") {
+        this.options1 = [
+          {
+            value: "0",
+            label: "全部",
+          },
+          {
+            value: "1",
+            label: "电视直播",
+          },
+          {
+            value: "2",
+            label: "视频点播",
+          },
+          {
+            value: "3",
+            label: "音乐娱乐",
+          },
+        ];
+      } else if (item == "2") {
+        this.options1 = [
+          {
+            value: "0",
+            label: "全部",
+          },
+          {
+            value: "1",
+            label: "幼儿教育",
+          },
+          {
+            value: "2",
+            label: "中小学教育",
+          },
+          {
+            value: "3",
+            label: "职业教育",
+          },
+        ];
+      } else if (item == "3") {
+        this.options1 = [
+          {
+            value: "0",
+            label: "全部",
+          },
+          {
+            value: "1",
+            label: "棋牌桌游",
+          },
+          {
+            value: "2",
+            label: "竞速体育",
+          },
+          {
+            value: "3",
+            label: "休闲益智",
+          },
+          {
+            value: "4",
+            label: "战争策略",
+          },
+          {
+            value: "5",
+            label: "飞行射击",
+          },
+          {
+            value: "6",
+            label: "动作冒险",
+          },
+          {
+            value: "7",
+            label: "模拟经营",
+          },
+        ];
+      } else if (item == "4") {
+        this.options1 = [
+          {
+            value: "0",
+            label: "全部",
+          },
+          {
+            value: "1",
+            label: "运动健康",
+          },
+          {
+            value: "2",
+            label: "便捷生活",
+          },
+          {
+            value: "3",
+            label: "实用工具",
+          },
+        ];
       }
+      this.app_type1 = item;
+      this.queryUserList();
     },
+    onChangeTwo(item) {
+      this.app_type2 = item;
+      this.queryUserList();
+    },
+    // onChange2(item) {
+    //   console.log(item);
+    //   if (item == 0) {
+    //     this.form.sex = "全部";
+    //     this.user_sex = "";
+    //   } else if (item == 1) {
+    //     this.form.sex = "男";
+    //     this.user_sex = "男";
+    //   } else if (item == 2) {
+    //     this.form.sex = "女";
+    //     this.user_sex = "女";
+    //   }
+    // },
     //回车键绑定事件
     onSubmitKey() {
       this.queryUserList();
@@ -596,16 +673,15 @@ export default {
       this.pager.page = 1;
       this.searchText = "";
       this.value = "";
-      this.form.sex = "全部";
-      this.form.statusText = "全部";
-      this.form.account_status = 0;
-      this.form.active_status = 0;
+      this.app_type1 = "0";
+      this.app_type2 = "0";
       this.value2 = "";
       this.value1 = "";
       this.user_sex = "";
       this.user_status = -1;
       (this.nodegrade = 0), (this.user_nick_name = "");
       this.app_name = "";
+      this.pub_status="-1"
       this.queryUserList();
     },
 
@@ -614,32 +690,20 @@ export default {
       let param = new Object();
       let phoneNumber = /^1(3|4|5|7|8)\d{9}$/;
       let user_id = /^\d{7}$/;
-      // if (this.searchText != "") {
-      //   if (phoneNumber.test(this.searchText) == true) {
-      //     param.user_id = 0;
-      //     param.user_tel = this.searchText;
-      //     param.user_name = "";
-      //   } else if (user_id.test(this.searchText) == true) {
-      //     param.user_id = parseInt(this.searchText);
-      //     param.user_tel = "";
-      //     param.user_name = "";
-      //   } else {
-      //     param.user_id = 0;
-      //     param.user_tel = "";
-      //     param.user_name = this.searchText;
-      //   }
-      // } else {
-      //   param.user_id = "";
-      //   param.user_tel = "";
-      //   param.user_name = "";
-      // }
-
+      let app_type2s = 0;
+      if (this.app_type2 == "") {
+        app_type2s = 0;
+      } else {
+        app_type2s = this.app_type2;
+      }
       let paramactive = new Object();
       {
         (paramactive.app_name = this.app_name),
           (paramactive.page = this.pager.page - 1),
-          (paramactive.app_type1 = 0);
-        paramactive.app_type2 = 0;
+          (paramactive.app_type1 = parseInt(this.app_type1));
+        paramactive.app_type2 = parseInt(app_type2s);
+        paramactive.state=parseFloat(this.pub_status)
+        
       }
 
       get_all_app(paramactive)
@@ -651,171 +715,145 @@ export default {
             //    this.tableData = res.data.appinfo;
             // }
 
-            this.pager.count = res.data.total_num;
+            this.pager.count = res.data.total;
             let tempArr = [];
 
             tempArr = res.data.appinfo;
             for (var i = 0; i < tempArr.length; i++) {
+              if(tempArr[i].state==0){
+                tempArr[i].stateactive="未发布"
+              }else{
+                tempArr[i].stateactive="已发布"
+              }
               if (tempArr[i].publish_time == 0) {
-                tempArr[i].publish_time = 0;
+                tempArr[i].publish_time = "--";
               } else {
                 tempArr[i].publish_time = this.common.getTimes(
                   tempArr[i].publish_time * 1000
                 );
               }
               if (tempArr[i].create_time == 0) {
-                tempArr[i].create_time = 0;
+                tempArr[i].create_time = "--";
               } else {
                 tempArr[i].create_time = this.common.getTimes(
                   tempArr[i].create_time * 1000
                 );
               }
-              // if (tempArr[i].account_status == 0) {
-              //   tempArr[i].account_status = "正常";
-              // } else {
-              //   tempArr[i].account_status = "冻结";
-              // }
+              if (tempArr[i].app_type1 == 1) {
+                switch (tempArr[i].app_type2) {
+                   case 0:
+                     tempArr[i].app_type2 = "全部";
+                    break;
+                  case 1:
+                    tempArr[i].app_type2 = "电视直播";
+                    break;
+                  case 2:
+                    tempArr[i].app_type2 = "视频点播";
+                    break;
+                  case 3:
+                    tempArr[i].app_type2 = "音乐娱乐";
+                    break;
+                }
+              } else if (tempArr[i].app_type1 == 2) {
+                switch (tempArr[i].app_type2) {
+                      case 0:
+                    tempArr[i].app_type2 = "全部";
+                    break;
+                  case 1:
+                    tempArr[i].app_type2 = "幼儿教育";
+                    break;
+                  case 2:
+                    tempArr[i].app_type2 = "中小学教育";
+                    break;
+                  case 3:
+                    tempArr[i].app_type2 = "职业教育";
+                    break;
+                }
+              } else if (tempArr[i].app_type1 == 3) {
+                switch (tempArr[i].app_type2) {
+                      case 0:
+                  tempArr[i].app_type2 = "全部";
+                    break;
+                  case 1:
+                    tempArr[i].app_type2 = "棋牌桌游";
+                    break;
+                  case 2:
+                    tempArr[i].app_type2 = "竞速体育";
+                    break;
+                  case 3:
+                    tempArr[i].app_type2 = "休闲益智";
+                    break;
+                  case 4:
+                    tempArr[i].app_type2 = "战争策略";
+                    break;
+                  case 5:
+                    tempArr[i].app_type2 = "飞行射击";
+                    break;
+                  case 6:
+                    tempArr[i].app_type2 = "动作冒险";
+                    break;
+                  case 7:
+                    tempArr[i].app_type2 = "模拟经营";
+                    break;
+                }
+              } else if (tempArr[i].app_type1 == 4) {
+                switch (tempArr[i].app_type2) {
+                      case 0:
+                    tempArr[i].app_type2 = "全部";
+                    break;
+                  case 1:
+                    tempArr[i].app_type2 = "运动健康";
+                    break;
+                  case 2:
+                    tempArr[i].app_type2 = "便捷生活";
+                    break;
+                  case 3:
+                    tempArr[i].app_type2 = "实用工具";
+                    break;
+                }
+              }
+              switch (tempArr[i].app_type1) {
+                case 1:
+                  tempArr[i].app_type1 = "影音";
+                  break;
+                case 2:
+                  tempArr[i].app_type1 = "教育";
+                  break;
+                case 3:
+                  tempArr[i].app_type1 = "教育";
+                  break;
+                case 4:
+                  tempArr[i].app_type1 = "工具";
+                  break;
+              }
             }
             this.tableData = tempArr;
           } else {
             this.$message({
               message: "后台服务无响应",
-              type: "error"
+              type: "error",
             });
           }
         })
         .catch(error => {
           this.$message({
             message: "后台服务无响应",
-            type: "error"
+            type: "error",
           });
         });
     },
-    //导出
-    toexportExcel() {
-      let param = new Object();
-      let phoneNumber = /^1(3|4|5|7|8)\d{9}$/;
-      let user_id = /^\d{7}$/;
-      if (this.searchText != "") {
-        if (phoneNumber.test(this.searchText) == true) {
-          param.user_id = 0;
-          param.user_tel = this.searchText;
-          param.user_name = "";
-        } else if (user_id.test(this.searchText) == true) {
-          param.user_id = parseInt(this.searchText);
-          param.user_tel = "";
-          param.user_name = "";
-        } else {
-          param.user_id = 0;
-          param.user_tel = "";
-          param.user_name = this.searchText;
-        }
-      } else {
-        param.user_id = "";
-        param.user_tel = "";
-        param.user_name = "";
-      }
-      param.user_status = this.user_status;
-      param.user_sex = this.user_sex;
-      param.cur_page = this.pageActives - 1;
-      param.order = this.order;
 
-      if (!this.value1) {
-        param.reg_start_time = 0;
-        param.reg_end_time = 0;
-      } else {
-        if (this.value1[0] == undefined) {
-          param.reg_start_time = 0;
-        } else {
-          param.reg_start_time = this.value1[0].getTime() / 1000;
-        }
-        if (this.value1[1] == undefined) {
-          param.reg_end_time = 0;
-        } else {
-          param.reg_end_time = this.value1[1].getTime() / 1000;
-        }
-      }
-      if (!this.value2) {
-        param.bind_start_time = 0;
-        param.bind_end_time = 0;
-      } else {
-        if (this.value2[0] == undefined) {
-          param.bind_start_time = 0;
-        } else {
-          param.bind_start_time = this.value2[0].getTime() / 1000;
-        }
-        if (this.value2[1] == undefined) {
-          param.bind_end_time = 0;
-        } else {
-          param.bind_end_time = this.value2[1].getTime() / 1000;
-        }
-      }
-      ptfs_query_list_user_store_list(param)
-        .then(res => {
-          if (res.status == 0 && res.err_code == 0) {
-            let tempArr = [];
-            tempArr = res.data.store_list;
-            for (var i = 0; i < tempArr.length; i++) {
-              tempArr[i].average_store = tempArr[i].average_store / 1000000;
-              tempArr[i].sum_profit = tempArr[i].sum_profit / 1000000;
-              if (tempArr[i].first_bind_time == 0) {
-                tempArr[i].first_bind_time = 0;
-              } else {
-                tempArr[i].first_bind_time = this.common.getTimes(
-                  tempArr[i].first_bind_time * 1000
-                );
-              }
-              if (tempArr[i].first_login_time == 0) {
-                tempArr[i].first_login_time = 0;
-              } else {
-                tempArr[i].first_login_time = this.common.getTimes(
-                  tempArr[i].first_login_time * 1000
-                );
-              }
-              if (tempArr[i].account_status == 0) {
-                tempArr[i].account_status = "正常";
-              } else {
-                tempArr[i].account_status = "冻结";
-              }
-            }
-
-            this.tableData2 = this.tableData2.concat(tempArr);
-
-            if (this.pageActives >= res.data.total_page) {
-              console.log(this.pageActives);
-              this.common.monitoringLogs("导出", "导出注册用户信息表", 1);
-              this.exportExcel();
-            } else {
-              this.pageActives++;
-              this.toexportExcel();
-            }
-          } else {
-            this.$message({
-              message: "后台服务无响应",
-              type: "error"
-            });
-            this.common.monitoringLogs("导出", "导出注册用户信息表", 0);
-          }
-        })
-        .catch(error => {
-          console.log(error);
-          this.$message({
-            message: "后台服务无响应",
-            type: "error"
-          });
-        });
-    },
     //分页
     handleCurrentChange(val) {
       this.pager.page = val.val;
       this.queryUserList();
-    }
+    },
   },
   components: {
     pageNation: pageNation,
-    tableBar: tableBar,
-    mySearch: mySearch
-  }
+    tableBarMarketindex: tableBarMarketindex,
+    mySearch: mySearch,
+  },
 };
 </script>
 

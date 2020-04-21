@@ -560,13 +560,16 @@ export default {
                            nowarr[i].up_bandwidth==0 
                         }
                         else{
-                            nowarr[i].up_bandwidth=((nowarr[i].up_bandwidth/1024/1024).toFixed(2))+"Mbps"
+                            // nowarr[i].up_bandwidth=((nowarr[i].up_bandwidth/1024/1024).toFixed(2))+"Mbps"
+                            nowarr[i].up_bandwidth=this.common.formatByteActive(nowarr[i].up_bandwidth)
                         }
                            if( nowarr[i].down_bandwidth==0 ){
                            nowarr[i].down_bandwidth==0 
                         }
                         else{
-                            nowarr[i].down_bandwidth=((nowarr[i].down_bandwidth/1024/1024).toFixed(2))+"Mbps"
+                            // nowarr[i].down_bandwidth=((nowarr[i].down_bandwidth/1024/1024).toFixed(2))+"Mbps"
+                                                        nowarr[i].down_bandwidth=this.common.formatByteActive(nowarr[i].down_bandwidth)
+
                         }
                          if( nowarr[i].total_cap==0 ){
                            nowarr[i].total_cap==0 
