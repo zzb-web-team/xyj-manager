@@ -549,6 +549,10 @@ export const update_group = params => { return axios.post(`${ownbase}/appmarket/
 export const del_app = params => { return axios.post(`${ownbase}/appmarket/del_app`, params).then(res => res.data); };
 
 
+//批量上传
+export const add_url = params => { return axios.post(`${ownbase}/url_mgmt/add_url`, params).then(res => res.data); };
+//
+export const batch_import_devices = params => { return axios.post(`${ownbase}/miner_ctrl/batch_import_devices`, params).then(res => res.data); };
 
 
 

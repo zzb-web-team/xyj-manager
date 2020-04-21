@@ -481,7 +481,10 @@ export default {
     //上传弹层
 
     importDev() {
-      this.dialogVisible3 = true;
+      // this.dialogVisible3 = true;
+      this.$router.push({
+        path:"/deviceupload"
+      })
     },
     getInfo() {
       var data = {
@@ -698,13 +701,16 @@ export default {
       } else {
         this.ruleForm2.dev_type = 2;
       }
-      if((this.ruleForm2.total_capss.toString().split(".")[1].length)>2){
+      if(this.ruleForm2.total_capss.toString().split(".")[1]){
+ if((this.ruleForm2.total_capss.toString().split(".")[1].length)>2){
             this.$message({
               message: "总容量最多两位小数",
               type: "error"
             });
             return false
         }  
+      }
+     
 
       
       // this.ruleForm2.dev_type = this.ruleForm2.dev_type === "RK3328" ? 1 : 2;

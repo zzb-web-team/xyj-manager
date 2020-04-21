@@ -25,6 +25,7 @@ import deviceInfo from './views/device/deviceInfo.vue'
 import middle from './views/device/middle.vue'
 import devicePower from './views/device/devicePower.vue'
 import deviceActivation from './views/device/deviceActivation.vue'
+import deviceupload from './views/device/upload.vue'
 import pointsmiddle from './views/point/middle.vue'
 import pointsDetails from './views/point/pointsDetails.vue'
 import income from './views/point/income.vue'
@@ -114,6 +115,7 @@ if (user) {
             'middle': middle,
             'devicePower': devicePower,
             'deviceActivation': deviceActivation,
+            'deviceupload':deviceupload,
             'income': income,
             'setparam':setparam,
             'pointsmiddle':pointsmiddle,
@@ -264,6 +266,18 @@ if (user) {
                         }
 
                     },
+                    {
+                        path: "/deviceupload",
+                        name: "批量导入",
+                        component: 'deviceupload',
+                        icon: 'iconfont icon-dian',
+                        hidden: true,
+                        meta: {
+                            requireAuth: true
+                        }
+
+                    },
+                     
 
                 ]
             },
