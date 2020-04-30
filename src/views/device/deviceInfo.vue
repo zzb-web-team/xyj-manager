@@ -1,131 +1,131 @@
 <template>
-<section class="myself-container deviceinfo">
+  <section class="myself-container deviceinfo">
     <div class="user-title">
-        <el-row>
-            <el-col :span="5">
-                <div class="user-item">
-                    <div class="item-count">{{bound_dev_cnt}}</div>
-                    <div class="item-text">已绑定设备</div>
-                </div>
-            </el-col>
-            <el-col :span="5" style="margin-left:30px;">
-                <div class="user-item">
-                    <div class="item-count">{{online_dev_cnt}}</div>
-                    <div class="item-text">在线设备</div>
-                </div>
-            </el-col>
-        </el-row>
+      <el-row>
+        <el-col :span="5">
+          <div class="user-item">
+            <div class="item-count">{{bound_dev_cnt}}</div>
+            <div class="item-text">已绑定设备</div>
+          </div>
+        </el-col>
+        <el-col :span="5" style="margin-left:30px;">
+          <div class="user-item">
+            <div class="item-count">{{online_dev_cnt}}</div>
+            <div class="item-text">在线设备</div>
+          </div>
+        </el-col>
+      </el-row>
     </div>
     <div class="device_form">
-        <el-form ref="form" :model="form">
-            <el-row type="flex">
-                <div class="search-con">
-                    <i class="el-icon-search" style="color:#606266"></i>
-                    <el-input class="search-input" v-model="searchText" placeholder="设备SN、设备名称、MAC地址、设备IP、节点ID" @keyup.enter.native="onSubmitKey"></el-input>
-                </div>
-                <div @click="getShow()" class="div_show" style="color:#606266">筛选
-                          <i
-                class="el-icon-caret-bottom"
-                :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
-              ></i>
-                </div>
-            </el-row>
-            <div v-show="showState">
-                <el-row type="flex" class="row_activess">
-                    <el-form-item label="设备类型" style="display: flex;width:170px;">
-                        <el-select v-model="dev_type" placeholder="请选择">
-                            <el-option v-for="item in dev_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="ROM" style="display: flex; width:130px;">
-                        <el-select v-model="rom_version" placeholder="请选择">
-                            <el-option v-for="item in roms" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="设备状态" style="display: flex;width:170px;">
-                        <el-select v-model="online_state" placeholder="请选择">
-                            <el-option v-for="item in onlineStates" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="绑定" style="display: flex;width:130px;">
-                        <el-select v-model="bind_flag" placeholder="请选择" @change="onChange2">
-                            <el-option v-for="item in bindFlags" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="注册时间" style="display: flex;">
-                        <el-date-picker v-model="bind_start_ts" style="width:110px;" type="datetime" placeholder="选择开始日期时间"></el-date-picker>-
-                        <el-date-picker v-model="bind_end_ts" style="width:110px;" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" style="" @click="search">确定</el-button>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="resetInfo">重置</el-button>
-                    </el-form-item>
-                </el-row>
-            </div>
-        </el-form>
+      <el-form ref="form" :model="form">
+        <el-row type="flex">
+          <div class="search-con">
+            <i class="el-icon-search" style="color:#606266"></i>
+            <el-input class="search-input" v-model="searchText" placeholder="设备SN、设备名称、MAC地址、设备IP、节点ID" @keyup.enter.native="onSubmitKey"></el-input>
+          </div>
+          <div @click="getShow()" class="div_show" style="color:#606266">筛选
+            <i class="el-icon-caret-bottom" :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"></i>
+          </div>
+        </el-row>
+        <div v-show="showState">
+          <el-row type="flex" class="row_activess">
+            <el-form-item label="设备类型" style="display: flex;width:170px;">
+              <el-select v-model="dev_type" placeholder="请选择">
+                <el-option v-for="item in dev_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="ROM" style="display: flex; width:130px;">
+              <el-select v-model="rom_version" placeholder="请选择">
+                <el-option v-for="item in roms" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="设备状态" style="display: flex;width:170px;">
+              <el-select v-model="online_state" placeholder="请选择">
+                <el-option v-for="item in onlineStates" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="绑定" style="display: flex;width:130px;">
+              <el-select v-model="bind_flag" placeholder="请选择" @change="onChange2">
+                <el-option v-for="item in bindFlags" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="注册时间" style="display: flex;">
+              <el-date-picker v-model="bind_start_ts" style="width:110px;" type="datetime" placeholder="选择开始日期时间"></el-date-picker>-
+              <el-date-picker v-model="bind_end_ts" style="width:110px;" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" style="" @click="search">确定</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="resetInfo">重置</el-button>
+            </el-form-item>
+          </el-row>
+        </div>
+      </el-form>
     </div>
     <div class="devide_table">
-        <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
-            <el-col style="display: flex;justify-content: flex-end;">
-                <el-button type="primary" @click="toexportExcel">导出</el-button>
-            </el-col>
-        </el-row>
-        <el-row type="flex" class="row_active">
-            <el-col>
-                <el-table :data="tableData" border width="100%" >
-                    <el-table-column prop="dev_sn" label="设备SN" ></el-table-column>
-                    <el-table-column :formatter="formatDevType" prop="dev_type" label="设备类型" ></el-table-column>
-                    <el-table-column prop="rom_version" label="ROM" ></el-table-column>
-                    <el-table-column prop="dev_name" label="设备名称" ></el-table-column>
-                    <el-table-column prop="dev_mac" label="MAC地址" ></el-table-column>
-                    <el-table-column prop="cpu_id" label="CPU-ID" ></el-table-column>
-                    <el-table-column prop="total_cap" :formatter="formatDevCap" label="总容量"></el-table-column>
-                    <el-table-column prop="dev_ip" label="设备IP" ></el-table-column>
-                    <el-table-column prop="online_state" :formatter="formatState" label="设备状态" ></el-table-column>
-                    <el-table-column prop="bind_flag" :formatter="formatBind" label="是否绑定" ></el-table-column>
-                    <el-table-column prop="bind_timestamp" :formatter="formatDevTime" width="150" label="绑定时间" sortable ></el-table-column>
-                    <el-table-column prop="ipfs_id" label="节点ID"></el-table-column>
-                    <el-table-column prop="bind_user_id" label="绑定用户ID" ></el-table-column>
-                    <el-table-column label="操作" fixed="right" width="200px">
-                        <template slot-scope="scope" >
-                            <el-button @click="shut(scope.row)" type="text" size="small">关机</el-button>
-                            <el-button type="text" @click="restart(scope.row)" size="small">重启</el-button>
-                            <el-button v-if="scope.row.bind_flag===1" @click="untied(scope.row)" type="text" size="small">强制解绑</el-button>
-                            <el-button v-else :disabled="true" type="text" size="small">强制解绑</el-button>
-                            <!-- <el-button v-show="scope.row.bind_flag===0" type="text" @click="tie(scope.row)" size="small">绑定</el-button> -->
-                            <!-- <el-button v-show="scope.row.bind_flag===0" type="text" @click="tieactive(scope.row)" size="small">绑定</el-button> -->
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </el-col>
-        </el-row>
+      <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
+        <el-col style="display: flex;justify-content: flex-end;">
+          <el-button type="primary" @click="toexportExcel">导出</el-button>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row_active">
+        <el-col>
+          <el-table :data="tableData" border width="100%" @sort-change="changeTableSort">
+            <el-table-column prop="dev_sn" label="设备SN" width="150px"></el-table-column>
+            <el-table-column :formatter="formatDevType" prop="dev_type" label="设备类型"></el-table-column>
+            <el-table-column prop="rom_version" label="ROM"></el-table-column>
+            <el-table-column prop="dev_name" label="设备名称"></el-table-column>
+            <el-table-column prop="dev_mac" label="MAC地址"></el-table-column>
+            <el-table-column prop="cpu_id" label="CPU-ID"></el-table-column>
+            <el-table-column prop="total_cap" :formatter="formatDevCap" label="总容量"></el-table-column>
+            <el-table-column prop="dev_ip" label="设备IP"></el-table-column>
+            <el-table-column prop="online_state" :formatter="formatState" label="设备状态"></el-table-column>
+            <el-table-column prop="bind_flag" :formatter="formatBind" label="是否绑定" width="80px"></el-table-column>
+            <el-table-column prop="bind_timestamp" :formatter="formatDevTime" width="150" label="绑定时间" :sortable="'custom'"></el-table-column>
+            <el-table-column prop="ipfs_id" label="节点ID" width="200px"></el-table-column>
+            <el-table-column prop="bind_user_id" label="绑定用户ID"></el-table-column>
+            <el-table-column label="操作" fixed="right" width="250px">
+              <template slot-scope="scope">
+                <div style="    display: flex;justify-content: flex-start;">
+                  <el-button @click="shut(scope.row)" type="text" size="small">关机</el-button>
+                  <el-button type="text" @click="restart(scope.row)" size="small">重启</el-button>
+                  <!-- <el-button v-else :disabled="true" type="text" size="small">强制解绑</el-button> -->
+                  <!-- <el-button v-show="scope.row.bind_flag===0" type="text" @click="tie(scope.row)" size="small">绑定</el-button> -->
+                  <el-button v-if="scope.row.bind_flag===0 || scope.row.bind_flag===102" type="text" @click="tieactive(scope.row)" size="small">绑定</el-button>
+                  <el-button v-else @click="untied(scope.row)" type="text" size="small">强制解绑</el-button>
+
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
     </div>
     <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
-        <el-row type="flex"></el-row>
-        <el-row type="flex">
-            <el-col :span="6">
-                <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
-            </el-col>
-        </el-row>
+      <el-row type="flex"></el-row>
+      <el-row type="flex">
+        <el-col :span="6">
+          <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
+        </el-col>
+      </el-row>
     </div>
-      <el-dialog :visible.sync="dialogVisibleactive" width="30%" :before-close="handleClose">
-        <el-form ref="form">
-             <el-form-item label="请输入需要绑定ID:">
-                  <el-input v-model="user_id_active"></el-input>
-            </el-form-item>
-              <el-form-item label="请输入需要绑定的手机号">
+    <el-dialog :visible.sync="dialogVisibleactive" width="20%" :before-close="handleClose">
+      <el-form ref="form">
+        <el-form-item label="请输入需要绑定ID:" style="dispaly:flex;justify-content:center;">
+          <el-input v-model="user_id_active" style=""></el-input>
+        </el-form-item>
+        <!-- <el-form-item label="请输入需要绑定的手机号">
                   <el-input v-model="bind_user_tel_num"></el-input>
-            </el-form-item>
-           
-            <div style="text-align: center;">
-                <el-button type="primary" @click="onSubmitBind">确定</el-button>
-                <el-button @click="dialogVisible=false">取消</el-button>
-            </div>
-        </el-form>
+            </el-form-item> -->
+
+        <div style="text-align: center;">
+          <el-button type="primary" @click="onSubmitBind">确定</el-button>
+          <el-button @click="dialogVisibleactive=false">取消</el-button>
+        </div>
+      </el-form>
     </el-dialog>
-</section>
+  </section>
 </template>
 
 <script>
@@ -297,6 +297,7 @@ export default {
       user_id_active: "",
       dev_sn_active: "",
       bind_user_tel_num: "",
+      order_type: 1,
     };
   },
   mounted() {
@@ -304,17 +305,30 @@ export default {
     this.getInfo();
   },
   methods: {
+    //排序
+    changeTableSort(column) {
+      if (column.prop == "bind_timestamp") {
+        if (column.order == "descending") {
+          this.order_type = 1;
+        } else {
+          this.order_type = 2;
+        }
+        this.pager.page = 1;
+        this.getInfo();
+      }
+    },
     tieactive(val) {
       this.dev_sn_active = val.dev_sn;
       this.dialogVisibleactive = true;
     },
-    //增长设置
+
+    //绑定
     onSubmitBind() {
       let param = new Object();
       (param.bind_type = 1),
         (param.user_id = parseInt(this.user_id_active)),
         (param.dev_sn = this.dev_sn_active),
-        (param.bind_user_tel_num = parseInt(this.bind_user_tel_num)),
+        (param.bind_user_tel_num = this.bind_user_tel_num),
         web_change_device_state(param)
           .then(res => {
             if (res.status == 0 && res.err_code == 0) {
@@ -322,13 +336,14 @@ export default {
                 message: "绑定成功",
                 type: "success",
               });
+              this.dialogVisibleactive = false;
             } else {
               this.$message({
                 message: "用户ID不存在，绑定失败",
                 type: "error",
               });
             }
-            this.dialogVisibleactive = false;
+
             this.getInfo();
           })
           .catch(error => {
@@ -410,7 +425,7 @@ export default {
         if (row.total_cap >= 1024) {
           return (row.total_cap / 1024).toFixed(2) + "TB";
         } else {
-          return (row.total_cap).toFixed(2) + "GB";
+          return row.total_cap.toFixed(2) + "GB";
         }
       }
     },
@@ -442,7 +457,7 @@ export default {
       }
     },
     formatBind(row) {
-      if (row.bind_flag === 0) {
+      if (row.bind_flag === 0 || row.bind_flag === 102) {
         return "否";
       } else if (row.bind_flag === 1) {
         return "是";
@@ -450,6 +465,9 @@ export default {
     },
     getInfo() {
       var data = {
+        ipfs_id: "",
+        bind_user_id: 0,
+        order_type: this.order_type,
         page_no: this.pager.page - 1,
         page_size: 10,
         dev_type:
@@ -471,15 +489,48 @@ export default {
               ? -1
               : new Date(this.bind_end_ts).getTime() / 1000,
       };
-      if (this.judgeString(this.searchText)) {
-        var param = Object.assign(this.judgeString(this.searchText), data);
+      let SME = /^SME[0-9a-zA-Z]{1}[0-9]{4}[0-9a-zA-Z]{7}$/;
+      // let cpuid = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{9}$/;
+      let macaddress = /^([0-9a-f]{2}:){5}[0-9a-f]{2}$/;
+      let devip = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/;
+      if (this.searchText != "") {
+        if (SME.test(this.searchText) == true) {
+          data.dev_sn = this.searchText;
+          data.dev_name = "";
+          data.dev_ip = "";
+          data.dev_mac = "";
+        } else if (macaddress.test(this.searchText) == true) {
+          data.dev_sn = "";
+          data.dev_name = "";
+          data.dev_ip = "";
+          data.dev_mac = this.searchText;
+        } else if (devip.test(this.searchText) == true) {
+          data.dev_sn = "";
+          data.dev_name = "";
+          data.dev_ip = this.searchText;
+          data.dev_mac = "";
+        } else {
+          data.dev_sn = "";
+          data.dev_name = this.searchText;
+          data.dev_ip = "";
+          data.dev_mac = "";
+        }
       } else {
-        this.$message.error(
-          "请输入正确的设备SN、设备名称、MAC地址、设备IP、节点ID"
-        );
-        return;
+        data.dev_sn = "";
+        data.dev_name = "";
+        data.dev_ip = "";
+        data.dev_mac = "";
       }
-      devicelist(param)
+
+      // if (this.judgeString(this.searchText)) {
+      //   var param = Object.assign(this.judgeString(this.searchText), data);
+      // } else {
+      //   this.$message.error(
+      //     "请输入正确的设备SN、设备名称、MAC地址、设备IP、节点ID"
+      //   );
+      //   return;
+      // }
+      devicelist(data)
         .then(res => {
           if (res.status === 0) {
             this.tableData = res.data.dev_list;
@@ -501,6 +552,12 @@ export default {
     },
     toexportExcel() {
       var data = {
+        dev_ip: "",
+        dev_mac: "",
+        dev_name: "",
+        dev_sn: "",
+        ipfs_id: "",
+        bind_user_id: 0,
         page_no: this.pageActive,
         page_size: 10,
         dev_type:
@@ -626,6 +683,36 @@ export default {
           });
         });
     },
+    comfirmUntiedactive() {
+      let obj = {
+        // login_token: "8vAmfX19fX3gkqggfX19fQ++",
+        bind_user_tel_num: "",
+        dev_sn: this.dev_sn_active,
+        user_id: this.user_id_active,
+        bind_type: 0, // 0 表示解绑； 1 表示绑定
+      };
+      web_change_device_state(obj)
+        .then(res => {
+          if (res.status === 0) {
+            this.$message({
+              message: "解绑成功",
+              type: "success",
+            });
+            this.getInfo();
+          } else {
+            this.$message({
+              message: `${res.err_msg}`,
+              type: "error",
+            });
+          }
+        })
+        .catch(error => {
+          this.$message({
+            message: "网络出错，请重新请求",
+            type: "error",
+          });
+        });
+    },
     comfirmUntied(type, sn) {
       let obj = {
         login_token: "8vAmfX19fX3gkqggfX19fQ++",
@@ -691,15 +778,18 @@ export default {
       this.rotate = !this.rotate;
     },
     untied(rows) {
+      this.user_id_active = rows.bind_user_id;
+      this.dev_sn_active = rows.dev_sn;
       this.$confirm("确定解绑?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then(() => {
-          this.comfirmUntied(0, rows.dev_sn);
+          this.comfirmUntiedactive();
         })
-        .catch(() => {
+        .catch(error => {
+          console.log(error);
           this.$message({
             type: "info",
             message: "已取消解绑",

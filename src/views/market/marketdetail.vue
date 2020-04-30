@@ -16,11 +16,11 @@
         </div>
         <div class="item">
           <div class="item-l">应用状态：{{ruleForm.app_name}}</div>
-          <div class="item-r">一级分类：{{ruleForm.app_type1}}</div>
+          <div class="item-r">一级分类：{{oneType}}</div>
         </div>
         <div class="item">
           <div class="item-l">版本号{{ruleForm.app_version}}</div>
-          <div class="item-r">二级分类：{{ruleForm.app_type2}}</div>
+          <div class="item-r">二级分类：{{twoType}}</div>
         </div>
         <div class="item">
           <div class="item-l">应用包名：{{ruleForm.pkg_name}}</div>
@@ -32,7 +32,7 @@
         </div>
         <div class="item">
           <div class="item-l">开发者：{{ruleForm.developer}}</div>
-          <div class="item-r">应用评分：{{ruleForm.app_score}}</div>
+          <div class="item-r">应用评分：{{(ruleForm.app_score)/10}}</div>
         </div>
         <div class="item itemactive">
           <div
@@ -63,7 +63,7 @@ import tableBar from "../../components/tableBar";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
 import { get_app_by_appid,
-del_app  } from "../../api/api";
+del_app,get_apptype  } from "../../api/api";
 import common from "../../common/js/util.js";
 
 export default {
@@ -107,6 +107,11 @@ export default {
        
 
     },
+    optionsAll:[],
+    first:{},
+    oneType:"",
+    twoType:"",
+
   linkappid:"",
   pub_status:false
 
@@ -116,7 +121,8 @@ export default {
   mounted: function() {
     //this.queryUsersTotal();
     // this.queryUserList();
-    this.queryAppInfo()
+     this.getpptypeInfo()
+   // this.queryAppInfo()
     this.linkappid=this.$route.query.linkappid
 
   if(this.$route.query.pub_status==1){
@@ -126,6 +132,35 @@ export default {
   }
   },
   methods: {
+        //获取一级分类
+    getpptypeInfo(){
+      let param={
+
+      }
+      get_apptype(param).then(res=>{
+        if(res.status==0){
+        this.optionsAll=res.data
+        var second = {};
+        let _this=this
+        var data= this.optionsAll.filter(function(item){
+     
+          _this.first[item.type] = {};
+          _this.first[item.type].name = item.name
+          console.log(item.sub.length)
+          _this.first[item.type].sub = {};
+          for(var i=0;i<item.sub.length;i++) {
+            _this.first[item.type].sub[item.sub[i].sub_type]=item.sub[i].sub_name
+          }
+        })
+      
+        this.queryAppInfo()
+
+        }
+      }).catch(error=>{
+        console.log(error)
+        
+      })
+    },
   //删除
   godelete(){
     let param= new Object
@@ -175,83 +210,15 @@ export default {
            this.cropImg = res.data.app_icon
            this.imgs=res.data.app_pic
           this.ruleForm=res.data
-          console.log(this.ruleForm)
-            console.log(this.ruleForm.app_type1)
-             if (this.ruleForm.app_type1 == 1) {
-                switch (this.ruleForm.app_type2) {
-                  case 1:
-                  this.ruleForm.app_type2 = "电视直播";
-                    break;
-                  case 2:
-                    this.ruleForm.app_type2 = "视频点播";
-                    break;
-                  case 3:
-                   this.ruleForm.app_type2 = "音乐娱乐";
-                    break;
-                }
-              } else if (this.ruleForm.app_type1 == 2) {
-                switch (this.ruleForm.app_type2) {
-                  case 1:
-                   this.ruleForm.app_type2 = "幼儿教育";
-                    break;
-                  case 2:
-                    this.ruleForm.app_type2 = "中小学教育";
-                    break;
-                  case 3:
-                    this.ruleForm.app_type2 = "职业教育";
-                    break;
-                }
-              } else if (this.ruleForm.app_type1 == 3) {
-                switch (this.ruleForm.app_type2) {
-                  case 1:
-                    this.ruleForm.app_type2 = "棋牌桌游";
-                    break;
-                  case 2:
-                    this.ruleForm.app_type2 = "竞速体育";
-                    break;
-                  case 3:
-                  this.ruleForm.app_type2 = "休闲益智";
-                    break;
-                  case 4:
-                    this.ruleForm.app_type2 = "战争策略";
-                    break;
-                  case 5:
-                    this.ruleForm.app_type2 = "飞行射击";
-                    break;
-                  case 6:
-                    this.ruleForm.app_type2 = "动作冒险";
-                    break;
-                  case 7:
-                   this.ruleForm.app_type2 = "模拟经营";
-                    break;
-                }
-              } else if (this.ruleForm.app_type1 == 4) {
-                switch (this.ruleForm.app_type2) {
-                  case 1:
-                    this.ruleForm.app_type2 = "运动健康";
-                    break;
-                  case 2:
-                   this.ruleForm.app_type2 = "便捷生活";
-                    break;
-                  case 3:
-                    this.ruleForm.app_type2 = "实用工具";
-                    break;
-                }
+                 if(this.first[this.ruleForm.app_type1].name){
+                 this.oneType=this.first[this.ruleForm.app_type1].name
+
               }
-            switch (this.ruleForm.app_type1) {
-                case 1:
-                  this.ruleForm.app_type1= "影音";
-                  break;
-                case 2:
-                  this.ruleForm.app_type1= "教育";
-                  break;
-                case 3:
-                  this.ruleForm.app_type1= "教育";
-                  break;
-                case 4:
-                 this.ruleForm.app_type1 = "工具";
-                  break;
+              if((this.first[this.ruleForm.app_type1].sub[this.ruleForm.app_type2])){
+                                    this.twoType=this.first[this.ruleForm.app_type1].sub[this.ruleForm.app_type2]
+
               }
+          
           console.log(this.ruleForm.app_name)
         }
 

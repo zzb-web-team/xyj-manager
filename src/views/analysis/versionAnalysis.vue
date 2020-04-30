@@ -134,7 +134,7 @@ export default {
         },
         {
           prop: "upgradeCnt",
-          label: "截至今日版本累计用户"
+          label: "截至今日版本累计用户(%)"
         },
         {
           prop: "registerCnt",
@@ -154,7 +154,7 @@ export default {
         },
         {
           prop: "userCnt",
-          label: "启动用户(分布)"
+          label: "启动用户(%)"
         }
       ],
       tableData: [],

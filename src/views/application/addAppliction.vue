@@ -30,9 +30,9 @@
             </el-row>
         </div>
     </div>
-    <el-dialog :visible.sync="dialogFormState" class="my_dialogForm" width="20%" :show-close="false" :close-on-click-modal="false">
+    <el-dialog :visible.sync="dialogFormState" class="my_dialogForm" width="30%" :show-close="false" :close-on-click-modal="false">
         <div class="dialog_div" v-loading="loading2" element-loading-text="上传中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
-            <div class="dialog_div_con">
+            <!-- <div class="dialog_div_con">
                 <div class="dialog_div_title" style="margin-bottom:10px;">新增应用</div>
                 <div class="dialog_div_upload">
                     <el-upload id="1" class="upload-demo" ref="upload1" :limit="1" drag name="configFile" :before-upload="beforeAvatarUpload" action="" :file-list="fileList" :http-request="uploadSectionFile1" :auto-upload="false">
@@ -51,6 +51,19 @@
                         <div><span>md5：</span>{{this.uploadinfo1.md5}}</div>
                         <div><span>hashid:</span>{{this.uploadinfo1.hashid}}</div>
                     </div>
+                </div>
+            </div> -->
+              <div class="item dialog_div_con" style=" align-items: flex-start; display: flex;justify-content: center;">
+                <div class="item_l" style="white-space: nowrap;  text-overflow:ellipsis;line-height:30px;">应用包：</div>
+                <div class="item-r" style="position: relative;">
+                    <el-button class="choose-file" size="mini">请选择要上传的文件</el-button>
+                    <input id="f" class="choose-input" type="file" name="file">
+                    <el-button type="primary" class="onchoose-file" @click="upFile()" :disabled="disableStatus">确定</el-button>
+                    进度条 <span id="per">{{perNum}}</span>%
+                    <div style="width: 95%;height: 16px;background-color: #999;margin-top:10px;">
+                        <div style="height: 16px;background-color: #67c23a" id="loading" v-bind:style="{'width': widthData+'%'}"></div>
+                    </div>
+                    <div id="result" style="margin-top:10px;"></div>
                 </div>
             </div>
             <div class="dialog_item">
@@ -105,7 +118,8 @@ import {
   saveapp,
   applist,
   uploadapk,
-  getappstatistics
+  getappstatistics,
+  hostUrl
 } from "../../api/api.js";
 import common from "../../common/js/util.js";
 import echarts from "echarts";
@@ -116,6 +130,8 @@ import echarts from "echarts";
 export default {
   data() {
     return {
+            perNum: 0,
+      widthData: 0,
       clickStatus: false,
       lengthStatus: true,
 
@@ -235,6 +251,7 @@ export default {
       app_nameActive: "",
       app_version: "",
       app_info: "",
+      size:0,
       item_echarslength: 0,
       titleactive: [],
       titlectivess: "测试数据1",
@@ -524,17 +541,12 @@ export default {
       let list = document.getElementsByClassName(
         "el-upload-list__item is-ready"
       );
-      if (list.length == 0) {
-        this.$message({
-          type: "warning",
-          message: "请选择需要导入的模板！"
-        });
-        return;
-      }
+  
       this.onUpload();
     },
 
     uploadSectionFile(param) {
+      this.size=parseInt(this.size)
       var fileObj = param.file;
       // FormData 对象
       var form = new FormData();
@@ -543,6 +555,7 @@ export default {
       form.append("app_version", this.app_version);
       form.append("app_name", this.app_nameActive);
       form.append("app_info", this.app_info);
+       form.append("size", this.size);
       saveapp(form)
         .then(res => {
           if (res.status == 0) {
@@ -573,6 +586,8 @@ export default {
 
     dialogFormVisible() {
       this.dialogFormState = true;
+           this.perNum=0
+      this.widthData=0
     },
     //确定发布
     determine() {
@@ -671,19 +686,26 @@ export default {
       this.dialogUpdate = false;
       saveapp(param)
         .then(res => {
-          if (res.status == -7) {
+          if(res.status==0){
+      this.$message({
+              type: "success",
+              message: "上传成功!"
+            });
+            this.getinfo();
+            this.common.monitoringLogs("新增", "新增盒子应用", 1);
+          }
+         else if (res.status == -7) {
             this.$message({
               message: "上传包重复，请仔细检阅后重新上传",
               type: "error"
             });
             this.common.monitoringLogs("新增", "新增盒子应用", 0);
           } else {
-            this.$message({
-              type: "success",
-              message: "上传成功!"
+         this.$message({
+              message: "上传失败",
+              type: "error"
             });
-            this.getinfo();
-            this.common.monitoringLogs("新增", "新增盒子应用", 1);
+            this.common.monitoringLogs("新增", "新增盒子应用", 0);
           }
         })
         .catch(error => {
@@ -693,7 +715,113 @@ export default {
           });
           this.common.monitoringLogs("新增", "新增盒子应用", 0);
         });
-    }
+    },
+    //分片上传
+    upFile() {
+      let _this = this;
+
+      var file = document.getElementById("f");
+      var f = file.files[0];
+      if (f == undefined) {
+        this.$message({
+          type: "warning",
+          message: "请选择要上传的文件"
+        });
+        return false;
+      }
+      this.disableStatus = true;
+      var totalSize = f.size;
+      if (totalSize == 0) {
+        this.$message({
+          message: "请选择文件SIZE大于0文件",
+          type: "success"
+        });
+        return false;
+      }
+      var len = 2 * 1024 * 1024;
+      var tota_temp = Math.ceil(totalSize / len);
+      var start = 0;
+      var end = start + len;
+      var index = 1;
+
+      var blobSlice =
+        File.prototype.mozSlice ||
+        File.prototype.webkitSlice ||
+        File.prototype.slice;
+
+      var fileReader = new FileReader();
+
+      function sliceandpost() {
+        //if (start >= totalSize)return;
+        //if (index >= tota_temp)return;
+
+        var temp = f.slice(start, end);
+        var formData = new FormData();
+        formData.append("file", temp);
+        formData.append("fileName", f.name);
+        formData.append("num", index);
+        formData.append("start", start);
+        formData.append("end", end);
+        formData.append("totalSize", totalSize);
+        formData.append("total", tota_temp);
+        var url = hostUrl+ "/admin/uploadapk2";
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = onchange;
+        xhr.open("POST", url);
+        xhr.send(formData);
+
+        function onchange() {
+          // 4 = "loaded"
+          if (xhr.readyState == 4) {
+            // 200 = "OK"
+            if (xhr.status == 200) {
+              //var headers =  JSON.parse(xhr.responseText);
+              var headers = JSON.parse(xhr.response);
+              console.log(headers);
+              //分片上传成功
+              if (headers.status == 0) {
+                index = index + 1;
+                // 改变下一次截取的位置
+                start = end;
+                end = start + len;
+                // 因为截取可能超过totalSize，判断最后一次截取是否大于totalSize如果大于就直接让end等于totalSize
+                if (end > totalSize) {
+                  end = totalSize;
+                }
+                _this.widthData = Math.floor(index / tota_temp * 100);
+                _this.perNum = Math.floor(index / tota_temp * 100);
+                // document.getElementById("loading").style.width = Math.floor(index / tota_temp * 100) + "%";
+                // document.getElementById('per').innerHTML = Math.floor(index / tota_temp * 100)
+                sliceandpost();
+              } else if (headers.status == 1) {
+                _this.widthData = 100;
+                _this.perNum = 100;
+                document.getElementById("result").innerHTML =
+                  "上传成功:" + headers.msg;
+                _this.sdkUrl = headers.url;
+                //_this.dialog = false
+                // _this.queryInfo()
+                _this.uploadForm = headers;
+                _this.uploadType = true;
+
+                  _this.newFrom.app_version = headers.version;
+            _this.newFrom.app_name = headers.name;
+           _this.newFrom.app_download_url = headers.url;
+            _this.newFrom.size = headers.size;
+              } else if (headers.status == -900) {
+                _this.$message({
+                  message: `${headers.msg}`,
+                  type: "error"
+                });
+              }
+            } else {
+              alert("Problem retrieving XML data:" + xhr.statusText);
+            }
+          }
+        }
+      }
+      sliceandpost();
+    },
   },
 
   components: {
@@ -907,5 +1035,13 @@ export default {
 }
 
 #four_flash .but_right:hover {
+}
+.myself-container.myself-container-add .my_dialogForm .dialog_item {
+    width: 90%;
+    height: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+   
 }
 </style>

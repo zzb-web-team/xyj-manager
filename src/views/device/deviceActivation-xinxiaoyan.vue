@@ -125,14 +125,14 @@
               <template slot-scope="scope">
                 <el-button
                   v-show="scope.row.is_activated!==100"
-                  @click="open(scope.row)"
+                  @click="shut(scope.row)"
                   type="text"
                   size="small"
                 >关机</el-button>
                 <el-button
                   v-show="scope.row.is_activated!==100"
                   type="text"
-                  @click="open(scope.row)"
+                  @click="restart(scope.row)"
                   size="small"
                 >重启</el-button>
                 <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
@@ -333,7 +333,8 @@ import {
   import_node_basicinfo, //新建设备
   edit_device_basicinfo, //编辑
   delete_device_basicinfo, //删除
-  hostUrl
+  hostUrl,
+  ctrl_node_state
 } from "../../api/api";
 import { log } from "util";
 export default {
@@ -464,11 +465,11 @@ export default {
       ],
       dev_types: [
         {
-          value: "RK3328",
+          value: "1",
           label: "RK3328"
         },
         {
-          value: "AMS805",
+          value: "2",
           label: "AMS805"
         }
       ],
@@ -535,7 +536,7 @@ export default {
       showState: false,
       ruleForm2: {
         dev_sn: "",
-        dev_type: "",
+        dev_type: "1",
         rom_version: "",
         dev_mac: "",
         cpu_id: "",
@@ -543,7 +544,7 @@ export default {
       },
       ruleForm1: {
         new_dev_sn: "",
-        dev_type: "",
+        dev_type: "1",
         rom_version: "",
         dev_mac: "",
         cpu_id: "",
@@ -881,33 +882,33 @@ export default {
           console.log(error);
         });
     },
-    closeRestore(type, sn) {
+       closeRestore(type, sn) {
       let obj = {
         login_token: "8vAmfX19fX1NeaggfX19fQ==",
         dev_sn: sn, // 需要重启的设备sn
         extra_info: {
-          ctrl_type: type // 1 表示重启(已实现)；2 表示 关机(当前西柚机客户端还未实现此功能)
-        }
+          ctrl_type: type, // 1 表示重启(已实现)；2 表示 关机(当前西柚机客户端还未实现此功能)
+        },
       };
       ctrl_node_state(obj)
         .then(res => {
           if (res.status === 0) {
             this.$message({
               message: type === 1 ? "重启成功" : "关机成功",
-              type: "success"
+              type: "success",
             });
             this.getInfo();
           } else {
             this.$message({
               message: `${res.err_msg}`,
-              type: "error"
+              type: "error",
             });
           }
         })
         .catch(error => {
           this.$message({
             message: "网络出错，请重新请求",
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -943,8 +944,8 @@ export default {
     formatterImport(row) {
       return this.common.getTimes(row.import_ts * 1000);
     },
-    open(rows) {},
-    restart(rows) {},
+    // open(rows) {},
+    // restart(rows) {},
     edit(rows) {
       console.log(rows);
       this.dialogVisible2 = true;
@@ -959,6 +960,7 @@ export default {
         : (this.ruleForm1.is_activated = "已激活");
     },
     del(rows) {
+
       this.$confirm("确定删除?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -974,12 +976,12 @@ export default {
           });
         });
     },
-    shut(rows) {
+     shut(rows) {
       //关机
       this.$confirm("确定关机?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           this.closeRestore(2, rows.dev_sn);
@@ -987,7 +989,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消关机"
+            message: "已取消关机",
           });
         });
     },

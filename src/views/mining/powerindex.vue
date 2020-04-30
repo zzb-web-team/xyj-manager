@@ -299,8 +299,9 @@ export default {
             message: "修改失败",
             type: "error"
           });
+                   this.common.monitoringLogs("修改", "修改贡献值增长", 0);
+
         }
-         this.common.monitoringLogs("修改", "修改贡献值增长", 0);
 
       }).catch(error=>{
 
@@ -331,8 +332,9 @@ export default {
             message: "修改失败",
             type: "error"
           });
+                  this.common.monitoringLogs("修改", "修改贡献值扣除", 0);
+
         }
-        this.common.monitoringLogs("修改", "修改贡献值扣除", 0);
 
       }).catch(error=>{
 

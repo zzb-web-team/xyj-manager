@@ -24,7 +24,7 @@
                         </el-select>
                     </el-form-item>
                         <el-form-item label="时间" style="display: flex;">
-                        <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                        <el-date-picker v-model="value1" type="daterange"  :picker-options="pickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                         </el-date-picker>
                     </el-form-item>
                  
@@ -80,6 +80,14 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
+       pickerOptions: {
+        disabledDate(time) {
+          // let beiginTime = parseInt(Date.now()) - 86400 * 92 * 1000;
+          return (
+         time.getTime() > Date.now() - 8.64e6
+          ); //如果没有后面的-8.64e6就是不可以选择今天的
+        },
+      },
        rotate: false,
       dialogVisible: false,
       dialogVisible2: false,
@@ -379,22 +387,29 @@ export default {
      paramactive.order= this.order,
      paramactive.ad_type= parseInt(this.ad_type),
      paramactive.cur_page= this.pager.page - 1,
-     paramactive.start_time= 0,
-     paramactive.end_time= 2493043200
+     paramactive.start_time=parseInt(new Date().getTime() / 1000) - 86400 * 90,
+     paramactive.end_time=   parseInt(new Date().getTime() / 1000);
        if (!this.value1) {
-        paramactive.start_time = 0;
-        paramactive.end_time = 2493043200;
+        paramactive.start_time = parseInt(new Date().getTime() / 1000) - 86400 * 90;
+        paramactive.end_time = parseInt(new Date().getTime() / 1000);
       } else {
         if (this.value1[0] == undefined) {
-          paramactive.start_time = 0;
+          paramactive.start_time = parseInt(new Date().getTime() / 1000) - 86400 * 90;;
         } else {
           paramactive.start_time = this.value1[0].getTime() / 1000;
         }
         if (this.value1[1] == undefined) {
-          paramactive.end_time = 2493043200;
+          paramactive.end_time = parseInt(new Date().getTime() / 1000);;
         } else {
           paramactive.end_time = this.value1[1].getTime() / 1000;
         }
+      }
+          if((paramactive.end_time-paramactive.start_time)>7948801){
+            this.$message({
+              message: "只能查询任意当前结束时间往前的90天以内的数据",
+              type: "error"
+            });
+            return false
       }
       ptfs_query_node_info_list(paramactive)
         .then(res => {
@@ -437,6 +452,7 @@ export default {
                 tempArr[i].opt_active = "扣除";
               }
             }
+            this.tableData=[]
             this.tableData = tempArr;
             this.pager.count = res.data.total_num;
           } else {
@@ -456,7 +472,7 @@ export default {
       //导出
     toexportExcel() {
            this.common.monitoringLogs("导出", "算力信息表", 1);
-       window.location.href = this.exportLinks
+      window.open(this.exportLinks);
     
     },
     //分页

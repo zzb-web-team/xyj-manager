@@ -406,14 +406,15 @@ export default {
               message: "修改成功",
               type: "success",
             });
-            this.common.monitoringLogs("修改", "修改贡献值增长", 1);
+            this.common.monitoringLogs("修改", "修改算力值增长", 1);
           } else {
             this.$message({
               message: "修改失败",
               type: "error",
             });
+                      this.common.monitoringLogs("修改", "修改算力值增长", 0);
+
           }
-          this.common.monitoringLogs("修改", "修改贡献值增长", 0);
           this.queryaddInfo();
         })
         .catch(error => {});
@@ -421,11 +422,14 @@ export default {
     //增长设置
     onSubmitScale() {
       this.dialogVisible = false;
+ 
       let param = new Object();
+      this.scalevalue=this.scalevalue.replace("%", "");
       if (this.scaleindex == 0) {
+        this.tableActive[this.scaleindex].earn_pensent=this.tableActive[this.scaleindex].earn_pensent.replace("%", "");
         if (
-          parseInt(this.scalevalue) <=
-            this.tableActive[this.scaleindex].earn_pensent ||
+          // parseInt(this.scalevalue) <=
+          //  parseInt(this.tableActive[this.scaleindex].earn_pensent ) ||
           parseInt(this.scalevalue) <= 0 ||
           parseInt(this.scalevalue) > 100
         ) {
@@ -436,9 +440,10 @@ export default {
           return false;
         }
       } else {
+               this.tableActive[this.scaleindex - 1].earn_pensent=this.tableActive[this.scaleindex - 1].earn_pensent.replace("%", "");
+
         if (
-          parseInt(this.scalevalue) <=
-            this.tableActive[this.scaleindex - 1].earn_pensent ||
+          parseInt(this.scalevalue) <=parseInt(this.tableActive[this.scaleindex - 1].earn_pensent) ||
           parseInt(this.scalevalue) <= 0 ||
           parseInt(this.scalevalue) > 100
         ) {
@@ -472,7 +477,8 @@ export default {
               message: "设置有问题，请重新设置",
               type: "error",
             });
-            this.common.monitoringLogs("修改", "修改算力值收益占比", 0);
+                        this.common.monitoringLogs("修改", "修改算力值收益占比", 0);
+
           }
           this.queryscaleInfo();
         })

@@ -12,6 +12,7 @@ if (href.indexOf('xyj.grapefruitcloud.com') >= 0) {
 }
 
 
+
 // export default {
 //     customData: function() {
 //         return ownbase;
@@ -329,7 +330,7 @@ export const device_cnt_overview = params => { return axios.post(`${ownbase}/min
 //西柚机设备激活   table查询
 export const query_devinfo_by_conditions = params => { return axios.post(`${ownbase}/miner_ctrl/query_devinfo_by_conditions`, params).then(res => res.data); };
 //西柚机设备激活   解绑
-export const change_device_bind_state = params => { return axios.post(`${ownbase}/miner_ctrl/change_device_bind_state2`, params).then(res => res.data); };
+export const change_device_bind_state = params => { return axios.post(`${ownbase}/miner_ctrl/change_device_bind_state`, params).then(res => res.data); };
 //西柚机设备激活   新建设备
 export const import_node_basicinfo = params => { return axios.post(`${ownbase}/miner_ctrl/import_node_basicinfo`, params).then(res => res.data); };
 //西柚机设备激活   删除
@@ -548,13 +549,23 @@ export const update_group = params => { return axios.post(`${ownbase}/appmarket/
 //删除应用
 export const del_app = params => { return axios.post(`${ownbase}/appmarket/del_app`, params).then(res => res.data); };
 
+// 应用分类查询
+export const get_apptype = params => { return axios.post(`${ownbase}/appmarket/get_apptype`, params).then(res => res.data); };
+
+
+
+
+
 
 //批量上传
 export const add_url = params => { return axios.post(`${ownbase}/url_mgmt/add_url`, params).then(res => res.data); };
 //
 export const batch_import_devices = params => { return axios.post(`${ownbase}/miner_ctrl/batch_import_devices`, params).then(res => res.data); };
 
+//获取HTML内容
+export const back_data= params => { return axios.post(`${ownbase}/cloud/back_data `, params).then(res => res.data); };
 
+ 
 
  
 

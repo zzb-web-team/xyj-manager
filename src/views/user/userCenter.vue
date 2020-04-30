@@ -574,8 +574,8 @@ export default {
 
             tempArr = res.data.store_list;
             for (var i = 0; i < tempArr.length; i++) {
-              tempArr[i].average_store = tempArr[i].average_store / 1000000;
-              tempArr[i].sum_profit = tempArr[i].sum_profit / 1000000;
+              // tempArr[i].average_store = (tempArr[i].average_store / 100).toFixed(2);
+              tempArr[i].sum_profit = (tempArr[i].sum_profit / 100).toFixed(2);
               if (tempArr[i].first_bind_time == 0) {
                 tempArr[i].first_bind_time = 0;
               } else {
@@ -677,8 +677,8 @@ export default {
             let tempArr = [];
             tempArr = res.data.store_list;
             for (var i = 0; i < tempArr.length; i++) {
-              tempArr[i].average_store = tempArr[i].average_store / 1000000;
-              tempArr[i].sum_profit = tempArr[i].sum_profit / 1000000;
+              tempArr[i].average_store = (tempArr[i].average_store / 100).toFixed(2);
+              tempArr[i].sum_profit = (tempArr[i].sum_profit / 100).toFixed(2)
               if (tempArr[i].first_bind_time == 0) {
                 tempArr[i].first_bind_time = 0;
               } else {

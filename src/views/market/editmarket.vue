@@ -15,7 +15,7 @@
       class="demo-ruleForm"
     >
       <h3>一、上传软件应包</h3>
-      <el-form-item label="上传APK;" prop="name">
+      <!-- <el-form-item label="上传APK;" prop="name">
         <el-upload
           id="1"
           class="upload-demo"
@@ -39,6 +39,20 @@
             <el-button type="primary" class="el-upload__tip" @click="submitUpload1">上传</el-button>
           </div>
         </el-upload>
+      </el-form-item> -->
+        <el-form-item label="上传APK;" prop="name">
+         <div class="item" style=" align-items: flex-start; display: flex;justify-content: center;">
+                <div class="item-r" style="position: relative;">
+                    <el-button class="choose-file" size="mini">请选择要上传的文件</el-button>
+                    <input id="f" class="choose-input" type="file" name="file">
+                    <el-button type="primary" class="onchoose-file" @click="upFile()" >确定</el-button>
+                    进度条 <span id="per">{{perNum}}</span>%
+                    <div style="width: 350px;height: 16px;background-color: #999;margin-top:10px;">
+                        <div style="height: 16px;background-color: #67c23a" id="loading" v-bind:style="{'width': widthData+'%'}"></div>
+                    </div>
+                    <div id="result" style="margin-top:10px;"></div>
+                </div>
+            </div>
       </el-form-item>
       <el-form-item label="应用包名:" prop="pkg_name">
         <el-input v-model="ruleForm.pkg_name" placeholder :disabled="true" style="width:300px;"></el-input>
@@ -185,7 +199,7 @@
                 </div>
             </div>
       </el-form-item>
-      <el-form-item>
+      <el-form-item style="display: flex; justify-content: center; align-items: center;">
         <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
         <!-- <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button> -->
         <el-button  @click="$router.go(-1)">返回</el-button>
@@ -211,6 +225,7 @@ import {
   get_app_by_appid,
   update_app,
   saveimagemore,
+  hostUrl,
 } from "../../api/api.js";
 
 export default {
@@ -219,7 +234,7 @@ export default {
            options: [
         {
           value: "0",
-          label: "全部",
+          label: "请选择",
         },
         {
           value: "1",
@@ -238,6 +253,8 @@ export default {
           label: "工具",
         },
       ],
+          perNum: 0,
+      widthData: 0,
       dialogVisible: false,
       cropImg: "",
       fileList: [],
@@ -339,7 +356,7 @@ export default {
         this.options1 = [
           {
             value: "0",
-            label: "全部",
+            label: "请选择",
           },
           {
             value: "1",
@@ -358,7 +375,7 @@ export default {
         this.options1 = [
           {
             value: "0",
-            label: "全部",
+            label: "请选择",
           },
           {
             value: "1",
@@ -377,7 +394,7 @@ export default {
         this.options1 = [
           {
             value: "0",
-            label: "全部",
+            label: "请选择",
           },
           {
             value: "1",
@@ -412,7 +429,7 @@ export default {
         this.options1 = [
           {
             value: "0",
-            label: "全部",
+            label: "请选择",
           },
           {
             value: "1",
@@ -438,9 +455,11 @@ export default {
         .then(res => {
           console.log(res);
           if (res.status == 0) {
+       
             this.cropImg = res.data.app_icon;
             this.ruleForm = res.data;
-            this.ruleForm.app_score=res.data.app_score
+                 this.ruleForm.app_pic=[]
+            this.ruleForm.app_score=(res.data.app_score)/10
              if (this.ruleForm.app_type1 == 1) {
                 switch (this.ruleForm.app_type2) {
                      case 0:
@@ -532,7 +551,7 @@ export default {
       saveimage(param)
         .then(res => {
           if (res.status == 0) {
-            this.ruleForm.app_pic.push(res.data);
+            // this.ruleForm.app_pic.push(res.data);
             this.ruleForm.app_icon = res.data;
             console.log(this.ruleForm);
           }
@@ -638,7 +657,7 @@ export default {
     },
     //应用评分
     onchangeScore(val) {
-      this.ruleForm.app_score = parseInt(val);
+      this.ruleForm.app_score = val;
     },
     onchangeappType1(val) {
       this.ruleForm.app_type1 =val+"";
@@ -647,6 +666,13 @@ export default {
       this.ruleForm.app_type2 = val+"";
     },
     submitForm(formName) {
+      if(this.ruleForm.app_type1==0 ){
+          this.$message({
+          message: "请选择一级分类",
+          type: "error",
+        });
+        return false;
+      }
         if (
         this.getStringWidth(this.ruleForm.app_name) > 16 ||
         this.getStringWidth(this.ruleForm.app_name) < 1
@@ -657,7 +683,7 @@ export default {
         });
         return false;
       }
- 
+
       if (this.getStringWidth(this.ruleForm.developer) > 50 || this.getStringWidth(this.ruleForm.developer) < 1
       ) {
         this.$message({
@@ -686,12 +712,19 @@ export default {
         });
         return false;
       }
+         if (this.ruleForm.app_pic.length < 4) {
+        this.$message({
+          message: "请至少上传4张图片",
+          type: "error",
+        });
+        return false;
+      }
       this.$refs[formName].validate(valid => {
         if (valid) {
           console.log(this.ruleForm);
           this.ruleForm.create_time = parseInt(Date.now() / 1000);
           this.ruleForm.dl_count = parseInt(this.ruleForm.dl_count);
-          this.ruleForm.app_score = parseFloat(this.ruleForm.app_score);
+          this.ruleForm.app_score = parseFloat(this.ruleForm.app_score)*10;
           this.ruleForm.app_type1 = parseInt(this.ruleForm.app_type1);
           this.ruleForm.app_type2 = parseInt(this.ruleForm.app_type2);
           let param = this.ruleForm;
@@ -932,8 +965,6 @@ export default {
     //图片上传
     imgupload() {
       let that = this;
-      this.imgdata=[]
-      console.log(this.imgdata);
       let param = {};
       param.data = this.imgdata;
       saveimagemore(param).then(function(res) {
@@ -945,8 +976,19 @@ export default {
             tempArr.push(temp[i].data);
             that.ruleForm.app_pic.push(temp[i].data);
           }
-          console.log(that.ruleForm.app_pic);
+             that.$message({
+            message: "图片上传成功",
+            type: "success",
+          });
         }
+        else{
+             that.$message({
+            message: "图片上传失败",
+            type: "error",
+          });
+        }
+        
+        
         //  axios.post('/api/uploads/add',{file:imgcode}).then(function(res){
         //  if(res.data.code == 0){
         //      that.entity.cardid_photo.push(res.data.data.url);
@@ -954,6 +996,114 @@ export default {
         //      that.$toast(res.data.message);
         //  }
       });
+    },
+     //分偏上传
+    upFile() {
+      let _this = this;
+
+      var file = document.getElementById("f");
+      var f = file.files[0];
+      if (f == undefined) {
+        this.$message({
+          type: "warning",
+          message: "请选择要上传的文件",
+        });
+        return false;
+      }
+      this.disableStatus = true;
+      var totalSize = f.size;
+      if (totalSize == 0) {
+        this.$message({
+          message: "请选择文件SIZE大于0文件",
+          type: "success",
+        });
+        return false;
+      }
+      var len = 2 * 1024 * 1024;
+      var tota_temp = Math.ceil(totalSize / len);
+      console.log(tota_temp);
+
+      var start = 0;
+      var end = start + len;
+      var index = 1;
+
+      var blobSlice =
+        File.prototype.mozSlice ||
+        File.prototype.webkitSlice ||
+        File.prototype.slice;
+
+      var fileReader = new FileReader();
+      console.log(index);
+      //  return false
+      function sliceandpost() {
+        //if (start >= totalSize)return;
+        //if (index >= tota_temp)return;
+
+        var temp = f.slice(start, end);
+        var formData = new FormData();
+        formData.append("file", temp);
+        formData.append("fileName", f.name);
+        formData.append("num", index);
+        formData.append("start", start);
+        formData.append("end", end);
+        formData.append("totalSize", totalSize);
+        formData.append("total", tota_temp);
+        var url = hostUrl + "/admin/uploadapk2";
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = onchange;
+        xhr.open("POST", url);
+        xhr.send(formData);
+
+        function onchange() {
+          // 4 = "loaded"
+          if (xhr.readyState == 4) {
+            // 200 = "OK"
+            if (xhr.status == 200) {
+              //var headers =  JSON.parse(xhr.responseText);
+              var headers = JSON.parse(xhr.response);
+              console.log(headers);
+              //分片上传成功
+              if (headers.status == 0) {
+                index = index + 1;
+                // 改变下一次截取的位置
+                start = end;
+                end = start + len;
+                // 因为截取可能超过totalSize，判断最后一次截取是否大于totalSize如果大于就直接让end等于totalSize
+                if (end > totalSize) {
+                  end = totalSize;
+                }
+                _this.widthData = Math.floor(index / tota_temp * 100);
+                _this.perNum = Math.floor(index / tota_temp * 100);
+                // document.getElementById("loading").style.width = Math.floor(index / tota_temp * 100) + "%";
+                // document.getElementById('per').innerHTML = Math.floor(index / tota_temp * 100)
+                sliceandpost();
+              } else if (headers.status == 1) {
+                _this.widthData = 100;
+                _this.perNum = 100;
+                document.getElementById("result").innerHTML =
+                  "上传成功:" + headers.msg;
+                _this.sdkUrl = headers.url;
+                //_this.dialog = false
+                // _this.queryInfo()
+                _this.uploadForm = headers;
+                _this.uploadType = true;
+                _this.ruleForm.app_version = headers.version;
+                _this.ruleForm.pkg_name = headers.name;
+                _this.ruleForm.dl_url = headers.url;
+                _this.ruleForm.app_size = headers.size;
+              } else if (headers.status == -900) {
+                _this.$message({
+                  message: `${headers.msg}`,
+                  type: "error",
+                });
+              }
+            } else {
+              alert("Problem retrieving XML data:" + xhr.statusText);
+            }
+          }
+        }
+      }
+      sliceandpost();
     },
   },
   components: {

@@ -1,5 +1,12 @@
 <template>
 <section class="myself-container">
+    <div class="goback" style="width: 100%;line-height: 50px;">
+      <div style="margin-top:20px;">
+        
+        <el-button type="primary" class="el-upload__tip" @click="$router.go(-1)">返回</el-button>
+      </div>
+      
+    </div>
     <div class="user-title">
         <el-row>
             <el-col :span="5">

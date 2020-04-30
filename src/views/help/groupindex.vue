@@ -61,9 +61,9 @@
 
     </div>
        <el-dialog :visible.sync="dialogVisibleGroup" width="25%" :before-close="handleClose">
-        <el-form ref="form">
-             <el-form-item label="分组名称:"  style="display: flex;justify-content: center;">
-                  <el-input v-model="groupvalue"  style="width:350px;"></el-input>
+        <el-form ref="form" >
+             <el-form-item label="分组名称:"  style=":display: flex;justify-content: center; white-space: nowrap;  text-overflow:ellipsis">
+                  <el-input v-model="groupvalue"  style="width:300px"></el-input>
             </el-form-item>
            
             <div style="text-align: center;">

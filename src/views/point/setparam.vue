@@ -18,15 +18,26 @@
 P2每日节点贡献产生收益，F：节点当日实际贡献的流量（单位：GB），V2：单位流量的价值（单位：元）</p>
         </el-form-item>
         <el-form-item label="单位宽带价值=" style="margin-top:10px;">
-          <el-input v-model="param_v1"></el-input>
+             <div style="display: flex; justify-content: flex-start;">
+          <el-input v-model="param_v1" :disabled="toeditone"></el-input>
+             <div style="margin-left:20px;">
+                 <el-button type="primary" @click="onSubmitparam1" style="padding:11px 20px" >{{toedittext}}</el-button>
+               </div>
+          </div>
         </el-form-item>
         <el-form-item label="单位流量价值="  style="margin-top:10px;">
-          <el-input v-model="param_v2"></el-input>
+                       <div style="display: flex; justify-content: flex-start;">
+
+          <el-input v-model="param_v2" :disabled="toedittwo" ></el-input>
+            <div style="margin-left:20px;">
+                 <el-button type="primary" @click="onSubmitparam2" style="padding:11px 20px" >{{toedittext1}}</el-button>
+               </div>
+          </div>
         </el-form-item>
-        <div style="text-align: center;">
+        <!-- <div style="text-align: center;">
           <el-button type="primary" @click="onSubmitparam">确定</el-button>
           <el-button @click="$router.go(-1)">取消</el-button>
-        </div>
+        </div> -->
       </el-form>
    
     </div>
@@ -45,13 +56,17 @@ import pageNation from "../../components/pageNation";
 import {
   query_node_info_list,
   ptfs_query_user_profit_list,
-  ptfs_set_earn_param
+  ptfs_set_earn_param,
 } from "../../api/api";
-import common from "../../common/js/util.js"
+import common from "../../common/js/util.js";
 
 export default {
   data() {
     return {
+      toeditone: true,
+      toedittext: "修改",
+      toedittext1: "修改",
+      toedittwo: true,
       param_v1: 0,
       param_v2: 0,
       dialogVisibleparam: false,
@@ -66,20 +81,38 @@ export default {
       pager: {
         count: 0,
         page: 1,
-        rows: 100
+        rows: 100,
       },
       showState: false,
       order: 0,
       tableData2: [],
-      pageActive: 0
+      pageActive: 0,
     };
   },
   mounted() {
     this.getInfo();
-    this.queryInfo()
+    this.queryInfo();
   },
   methods: {
-     //参数查询
+    onSubmitparam1() {
+      this.toeditone = !this.toeditone;
+      if (this.toeditone == false) {
+        this.toedittext = "保存";
+      } else {
+        this.toedittext = "修改";
+        this.onSubmitparam();
+      }
+    },
+    onSubmitparam2() {
+      this.toedittwo = !this.toedittwo;
+      if (this.toedittwo == false) {
+        this.toedittext1 = "保存";
+      } else {
+        this.toedittext1 = "修改";
+        this.onSubmitparam();
+      }
+    },
+    //参数查询
     queryInfo() {
       let param = new Object();
       param.param_type = 1;
@@ -87,70 +120,77 @@ export default {
       param.param_v2 = this.param_v2;
       ptfs_set_earn_param(param)
         .then(res => {
-          console.log(res)
+          console.log(res);
           if (res.status == 0) {
-          this.param_v1=res.data.param_v1
-          this.param_v2=res.data.param_v2
-      
+            this.param_v1 = res.data.param_v1;
+            this.param_v2 = res.data.param_v2;
           } else {
             this.$message({
               message: "后台服务出错",
-              type: "error"
+              type: "error",
             });
           }
-          
         })
         .catch(error => {
           this.$message({
             message: "后台服务出错",
-            type: "error"
+            type: "error",
           });
         });
     },
-   
+
     //参数设置
     onSubmitparam() {
       let param = new Object();
       param.param_type = 0;
-      if(parseFloat(this.param_v1)<0.01 || parseFloat(this.param_v1)>1.00 || (this.param_v1.toString().split(".")[1].length)>2){
-          this.$message({
-              message: "单位宽带价值应为0.01≦V1≦1.00",
-              type: "error"
-            });
-            return false
-        }
-       if(parseFloat(this.param_v2)<0.01 || parseFloat(this.param_v2)>5.00 || (this.param_v2.toString().split(".")[1].length)>2){
-          this.$message({
-              message: "单位流量价值应为0.01≦V1≦1.00",
-              type: "error"
-            });
-            return false
-        }  
-      param.param_v1 = parseFloat(this.param_v1) ;
+      if (
+        parseFloat(this.param_v1) < 0.01 ||
+        parseFloat(this.param_v1) > 1.0 ||
+        this.param_v1.toString().split(".")[1].length > 2
+      ) {
+        this.$message({
+          message: "单位宽带价值应为0.01≦V1≦1.00",
+          type: "error",
+        });
+        return false;
+      }
+      if (
+        parseFloat(this.param_v2) < 0.01 ||
+        parseFloat(this.param_v2) > 5.0 ||
+        this.param_v2.toString().split(".")[1].length > 2
+      ) {
+        this.$message({
+          message: "单位流量价值应为0.01≦V1≦1.00",
+          type: "error",
+        });
+        return false;
+      }
+      param.param_v1 = parseFloat(this.param_v1);
       param.param_v2 = parseFloat(this.param_v2);
       ptfs_set_earn_param(param)
         .then(res => {
           if (res.status == 0) {
             this.$message({
               message: "修改成功",
-              type: "success"
+              type: "success",
             });
-               this.$router.push({
-          path:"/income"
-        })
+         this.common.monitoringLogs("修改", "修改收益参数", 1);
           } else {
             this.$message({
               message: "设置失败",
-              type: "error"
+              type: "error",
             });
+                     this.common.monitoringLogs("修改", "修改收益参数", 0);
+
           }
-          
         })
         .catch(error => {
           this.$message({
             message: "后台服务出错",
-            type: "error"
+            type: "error",
           });
+                   this.common.monitoringLogs("修改", "修改收益参数", 0);
+
         });
     },
     //排序
@@ -174,7 +214,7 @@ export default {
           "当日IP值",
           "当日存储值",
           "当日算力",
-          "时间"
+          "时间",
         ];
         // 上面设置Excel的表格第一行的标题
         const filterVal = [
@@ -184,7 +224,7 @@ export default {
           "ip_value",
           "store_value",
           "store",
-          "time_stamp"
+          "time_stamp",
         ];
         // 上面的index、nickName、name是tableData里对象的属性
         const list = this.tableData2; //把data里的tableData存到list
@@ -217,7 +257,7 @@ export default {
       if (row.up_bandwidth == 0) {
         return 0 + "Mbps";
       } else {
-      return   row.up_bandwidth + "Mbps";
+        return row.up_bandwidth + "Mbps";
       }
       //return (row[property] / 1000000).toFixed(6)
     },
@@ -225,19 +265,18 @@ export default {
       if (row.down_bandwidth == 0) {
         return 0 + "Mbps";
       } else {
-       return row.down_bandwidth + "Mbps";
+        return row.down_bandwidth + "Mbps";
       }
       //return (row[property] / 1000000).toFixed(6)
     },
-      formatCap(row, column) {
+    formatCap(row, column) {
       if (row.total_cap == 0) {
-        return 0
+        return 0;
       } else {
-      return  this.common.formatByteActive(row.total_cap)
+        return this.common.formatByteActive(row.total_cap);
       }
       //return (row[property] / 1000000).toFixed(6)
     },
-    
 
     formatTime(row) {
       return this.common.getTimess(row.time_stamp * 1000);
@@ -254,7 +293,7 @@ export default {
             ? 0
             : new Date(this.start_time).getTime() / 1000,
         end_time:
-          this.end_time === "" ? 0 : new Date(this.end_time).getTime() / 1000
+          this.end_time === "" ? 0 : new Date(this.end_time).getTime() / 1000,
       };
       if (this.judgeString(this.searchText)) {
         var arr = Object.keys(this.judgeString(this.searchText));
@@ -295,7 +334,7 @@ export default {
             ? 0
             : new Date(this.start_time).getTime() / 1000,
         end_time:
-          this.end_time === "" ? 0 : new Date(this.end_time).getTime() / 1000
+          this.end_time === "" ? 0 : new Date(this.end_time).getTime() / 1000,
       };
       if (this.judgeString(this.searchText)) {
         var arr = Object.keys(this.judgeString(this.searchText));
@@ -358,24 +397,24 @@ export default {
       const reg7 = /^\d+$/;
       if (reg1.test(str)) {
         return {
-          user_id: Number(str)
+          user_id: Number(str),
         };
       } else if (reg2.test(str) && !reg7.test(str)) {
         return {
-          nick_name: str
+          nick_name: str,
         };
       } else if (str === "") {
         return {};
       } else {
         return false;
       }
-    }
+    },
   },
   components: {
     pageNation: pageNation,
     tableBarActive2: tableBarActive2,
-    mySearch: mySearch
-  }
+    mySearch: mySearch,
+  },
 };
 </script>
 

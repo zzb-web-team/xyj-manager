@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="5">
           <div class="user-item">
-            <div class="item-count">{{yes_total_profit/1000000}} gfp</div>
+            <div class="item-count">{{(yes_total_profit/100).toFixed(2)}} gfm</div>
             <div class="item-text">昨日总发放积分</div>
           </div>
         </el-col>
@@ -44,12 +44,14 @@
                 style="width:200px;"
                 type="datetime"
                 placeholder="选择开始日期时间"
+                 :picker-options="pickerOptions1"
               ></el-date-picker>-
               <el-date-picker
                 v-model="end_time"
                 style="width:200px;"
                 type="datetime"
                 placeholder="选择结束日期时间"
+                 :picker-options="pickerOptions"
               ></el-date-picker>
             </el-form-item>
             <el-form-item>
@@ -133,13 +135,24 @@ import pageNation from "../../components/pageNation";
 import {
   query_node_info_list,
   ptfs_query_user_profit_list,
-  ptfs_set_earn_param
+  ptfs_set_earn_param,
 } from "../../api/api";
-import common from "../../common/js/util.js"
+import common from "../../common/js/util.js";
 
 export default {
   data() {
     return {
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now() - 8.64e6; //如果没有后面的-8.64e6就是不可以选择今天的
+        },
+      },
+      // pickerOptions1: {
+      //   disabledDate(time) {
+      //     let beiginTime = parseInt(Date.now()) - 86400 * 92 * 1000;
+      //     return time.getTime() < beiginTime; //如果没有后面的-8.64e6就是不可以选择今天的
+      //   },
+      // },
       param_v1: 0,
       param_v2: 0,
       dialogVisibleparam: false,
@@ -154,27 +167,25 @@ export default {
       pager: {
         count: 0,
         page: 1,
-        rows: 100
+        rows: 100,
       },
       showState: false,
       order: 0,
       tableData2: [],
       pageActive: 0,
-      exportLinks:'' 
+      exportLinks: "",
     };
   },
   mounted() {
     this.getInfo();
   },
   methods: {
-      setparam(){
-        this.$router.push({
-          path:"/setparam"
-        })
-        
+    setparam() {
+      this.$router.push({
+        path: "/setparam",
+      });
+    },
 
-      },
-    
     //排序
     tableSortChange(column) {
       this.pager.page = 1;
@@ -187,9 +198,8 @@ export default {
     },
     //导出的方法
     toexportExcelactive() {
-         this.common.monitoringLogs("导出", "导出收益明细", 1);
-       window.location.href = this.exportLinks
-    
+      this.common.monitoringLogs("导出", "导出收益明细", 1);
+      window.open(this.exportLinks);
     },
     //重置
     //重置
@@ -211,29 +221,28 @@ export default {
     },
     formatUp(row, column) {
       if (row.up_bandwidth == 0) {
-        return 0 
+        return 0;
       } else {
-       return this.common.formatByteActive(row.up_bandwidth)  
+        return this.common.formatByteActive(row.up_bandwidth);
       }
       //return (row[property] / 1000000).toFixed(6)
     },
     formatDown(row, column) {
       if (row.down_bandwidth == 0) {
-        return 0 
+        return 0;
       } else {
-       return this.common.formatByteActive(row.down_bandwidth)  
+        return this.common.formatByteActive(row.down_bandwidth);
       }
       //return (row[property] / 1000000).toFixed(6)
     },
-      formatCap(row, column) {
+    formatCap(row, column) {
       if (row.total_cap == 0) {
-        return 0
+        return 0;
       } else {
-      return  this.common.formatByteActive(row.total_cap)
+        return this.common.formatByteActive(row.total_cap);
       }
       //return (row[property] / 1000000).toFixed(6)
     },
-    
 
     formatTime(row) {
       return this.common.getTimess(row.time_stamp * 1000);
@@ -247,10 +256,12 @@ export default {
         cur_page: this.pager.page - 1,
         start_time:
           this.start_time === ""
-            ? 0
+            ? parseInt(new Date().getTime() / 1000) - 86400 * 90
             : new Date(this.start_time).getTime() / 1000,
         end_time:
-          this.end_time === "" ? 0 : new Date(this.end_time).getTime() / 1000
+          this.end_time === ""
+            ? parseInt(new Date().getTime() / 1000)
+            : new Date(this.end_time).getTime() / 1000,
       };
       if (this.judgeString(this.searchText)) {
         var arr = Object.keys(this.judgeString(this.searchText));
@@ -260,13 +271,20 @@ export default {
         this.$message.error("请输入正确的用户ID、用户昵称");
         return;
       }
+          if((data.end_time-data.start_time)>7948801){
+            this.$message({
+              message: "只能查询任意当前结束时间往前的90天以内的数据",
+              type: "error"
+            });
+            return false
+      }
 
       ptfs_query_user_profit_list(param)
         .then(res => {
           if (res.status === 0) {
             // this.tableData = res.data.profit_detail_list;
-                  this.exportLinks=res.data.filename
-            this.yes_total_num = res.data.yes_total_num;
+            this.exportLinks = res.data.filename;
+            this.yes_total_num = res.data.total_user_num;
             this.yes_total_profit = res.data.yes_total_profit;
             this.pager.count = res.data.total_num;
             this.pager.rows = res.data.total_page;
@@ -276,6 +294,7 @@ export default {
                 teamarr[i].time_stamp * 1000
               );
             }
+            this.tableData=[]
             this.tableData = teamarr;
           }
         })
@@ -355,24 +374,24 @@ export default {
       const reg7 = /^\d+$/;
       if (reg1.test(str)) {
         return {
-          user_id: Number(str)
+          user_id: Number(str),
         };
       } else if (reg2.test(str) && !reg7.test(str)) {
         return {
-          nick_name: str
+          nick_name: str,
         };
       } else if (str === "") {
         return {};
       } else {
         return false;
       }
-    }
+    },
   },
   components: {
     pageNation: pageNation,
     tableBarActive2: tableBarActive2,
-    mySearch: mySearch
-  }
+    mySearch: mySearch,
+  },
 };
 </script>
 

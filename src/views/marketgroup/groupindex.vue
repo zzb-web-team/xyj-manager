@@ -3,28 +3,12 @@
     <div class="devide_table">
       <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-start;">
         <el-col style="display: flex;justify-content: flex-start;">
-          <el-button type="primary" @click="addmarket">新增应用</el-button>
+          <el-button type="primary" @click="addmarket">新增应用分组</el-button>
         </el-col>
       </el-row>
       <el-row type="flex" class="row_active">
         <el-col :span="24">
-          <tableBar
-            id="rebateSetTable"
-            ref="table1"
-            tooltip-effect="dark"
-            :tableData="tableData"
-            :operatingStatus="operatingStatus"
-            @handleButton="handleButton"
-            @tableSortChange="tableSortChange"
-            @handleSelectionChange="handleSelectionChange"
-            :clomnSelection="clomnSelection"
-            :rowHeader="rowHeader"
-            :tableOption="tableOption"
-            @disable="disable"
-            @toDetails="toDetails"
-            @changePassword="changePassword"
-            @toDelete="toDelete"
-          ></tableBar>
+          <tableBar id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" :operatingStatus="operatingStatus" @handleButton="handleButton" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBar>
           <!-- <tableBar id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBar> -->
         </el-col>
       </el-row>
@@ -40,22 +24,16 @@
       </el-row>-->
       <el-row type="flex">
         <el-col :span="6">
-          <pageNation
-            :pager="pager"
-            @handleSizeChange="handleSizeChange1"
-            @handleCurrentChange="handleCurrentChange1"
-          ></pageNation>
+          <pageNation :pager="pager" @handleSizeChange="handleSizeChange1" @handleCurrentChange="handleCurrentChange1"></pageNation>
         </el-col>
       </el-row>
     </div>
-    <el-dialog :visible.sync="dialogVisibleGroupEdit" width="25%" :before-close="handleClose">
+    <el-dialog :visible.sync="dialogVisibleGroupEdit" width="20%" :before-close="handleClose">
       <el-form ref="form">
-        <h3
-          style="width: 100%;
+        <h3 style="width: 100%;
     border-bottom: 1px solid #999999;
     padding-bottom: 20px;
-    text-align: center;"
-        >新增应用分组</h3>
+    text-align: center;">新增应用分组</h3>
         <el-form-item label="分组名称:">
           <el-input v-model="groupform.group_name"></el-input>
         </el-form-item>
@@ -68,6 +46,14 @@
         <el-form-item label="分组说明:">
           <el-input v-model="groupform.group_describe"></el-input>
         </el-form-item>
+        <el-form-item label="是否推荐到首页:">
+          <el-select v-model="is_recommend" placeholder="请选择"  style="width:143px;">
+            <el-option label="推荐" value="1">
+            </el-option>
+            <el-option label="不推荐" value="0">
+            </el-option>
+          </el-select>
+        </el-form-item>
 
         <div style="text-align: center;">
           <el-button type="primary" @click="onSubmitaddgroup">保存</el-button>
@@ -77,12 +63,10 @@
     </el-dialog>
     <el-dialog :visible.sync="dialogVisibleGroupEdit1" width="25%" :before-close="handleClose">
       <el-form ref="form">
-        <h3
-          style="width: 100%;
+        <h3 style="width: 100%;
     border-bottom: 1px solid #999999;
     padding-bottom: 20px;
-    text-align: center;"
-        >编辑应用分组</h3>
+    text-align: center;">编辑应用分组</h3>
         <el-form-item label="分组名称:">
           <el-input v-model="groupformupdate.group_name"></el-input>
         </el-form-item>
@@ -94,6 +78,14 @@
         </el-form-item>
         <el-form-item label="分组说明:">
           <el-input v-model="groupformupdate.group_describe"></el-input>
+        </el-form-item>
+          <el-form-item label="是否推荐到首页:">
+          <el-select v-model="is_recommend" placeholder="请选择" style="width:143px;">
+            <el-option label="推荐" value="1">
+            </el-option>
+            <el-option label="不推荐" value="0">
+            </el-option>
+          </el-select>
         </el-form-item>
 
         <div style="text-align: center;">
@@ -108,12 +100,7 @@
           <el-row type="flex">
             <div class="search-con">
               <i class="el-icon-search" @click="searchInfo" style="color:#606266"></i>
-              <el-input
-                class="search-input"
-                v-model="group_app_name"
-                placeholder="  请输入你要搜索的应用"
-                @keyup.enter.native="onSubmitKey"
-              ></el-input>
+              <el-input class="search-input" v-model="group_app_name" placeholder="  请输入你要搜索的应用" @keyup.enter.native="onSubmitKey"></el-input>
             </div>
             <el-button type="primary" style="margin-left:68px;" @click="onSeach()">确定</el-button>
           </el-row>
@@ -121,23 +108,7 @@
       </div>
       <el-row type="flex" class="row_active">
         <el-col :span="24">
-          <tableBar
-            id="rebateSetTable"
-            ref="table1"
-            tooltip-effect="dark"
-            :tableData="tableData1"
-            :operatingStatus="operatingStatus1"
-            @handleButton="handleButton1"
-            @tableSortChange="tableSortChange"
-            @handleSelectionChange="handleSelectionChange1"
-            :clomnSelection="clomnSelection"
-            :rowHeader="rowHeader1"
-            :tableOption="tableOption"
-            @disable="disable"
-            @toDetails="toDetails"
-            @changePassword="changePassword"
-            @toDelete="toDelete"
-          ></tableBar>
+          <tableBar id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData1" :operatingStatus="operatingStatus1" @handleButton="handleButton1" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange1" :clomnSelection="clomnSelection" :rowHeader="rowHeader1" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBar>
           <!-- <tableBar id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBar> -->
         </el-col>
       </el-row>
@@ -146,11 +117,7 @@
         <el-row type="flex">已选择{{this.tabcount}}个应用</el-row>
         <el-row type="flex">
           <el-col :span="6">
-            <pageNation
-              :pager="pager1"
-              @handleSizeChange="handleSizeChange"
-              @handleCurrentChange="handleCurrentChange"
-            ></pageNation>
+            <pageNation :pager="pager1" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
           </el-col>
         </el-row>
       </div>
@@ -179,6 +146,7 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
+      is_recommend:"1",
       group_app_name: "",
       operatingStatus1: false,
       dialogVisiblereleta: false,
@@ -275,7 +243,7 @@ export default {
         page: 1,
         rows: 100,
       },
-         pager1: {
+      pager1: {
         count: 0,
         page: 1,
         rows: 100,
@@ -330,13 +298,7 @@ export default {
         });
         return false;
       }
-      // if (this.app_arrayname == "") {
-      //   this.$message({
-      //     message: "请先关联应用",
-      //     type: "error",
-      //   });
-      //   return false;
-      // }
+
       if (this.getStringWidth(this.groupformupdate.group_describe) > 20) {
         this.$message({
           message: "分组说明不能超过20个字符",
@@ -345,10 +307,6 @@ export default {
         return false;
       }
       this.dialogVisibleGroupEdit1 = false;
-      //this.groupform.create_time=parseInt(Date.now())
-      // this.groupform.create_time=0
-      //this.groupform.group_id=this.group_ids
-
       let param = {};
 
       param.group_id = this.group_ids;
@@ -356,6 +314,7 @@ export default {
         (param.group_describe = this.groupformupdate.group_describe),
         (param.app_array = []);
       param.app_array = this.groupform.app_array;
+      param.is_recommend= parseInt(this.is_recommend) 
 
       update_group(param)
         .then(res => {
@@ -364,7 +323,7 @@ export default {
               message: "更新成功",
               type: "success",
             });
-        this.common.monitoringLogs("修改", "修改分组管理", 1);
+            this.common.monitoringLogs("修改", "修改分组管理", 1);
             this.queryUserList();
           } else {
             this.$message({
@@ -372,8 +331,9 @@ export default {
               type: "error",
             });
             this.common.monitoringLogs("修改", "修改分组管理", 0);
+             this.queryUserList();
           }
-          this.queryUserList();
+         
         })
         .catch(error => {});
     },
@@ -438,6 +398,7 @@ export default {
       this.groupform.create_time = parseInt(Date.now() / 1000);
       //this.groupform.create_time = 0;
       let param = this.groupform;
+      param.is_recommend=parseInt(this.is_recommend) 
       add_group(param)
         .then(res => {
           if (res.status == 0) {
@@ -445,7 +406,7 @@ export default {
               message: "新增成功",
               type: "success",
             });
-                    this.common.monitoringLogs("新增", "新增分组管理", 1);
+            this.common.monitoringLogs("新增", "新增分组管理", 1);
 
             this.queryUserList();
           } else {
@@ -453,8 +414,7 @@ export default {
               message: "新增失败",
               type: "error",
             });
-                    this.common.monitoringLogs("新增", "新增分组管理", 1);
-
+            this.common.monitoringLogs("新增", "新增分组管理", 1);
           }
           this.queryUserList();
         })
@@ -462,13 +422,14 @@ export default {
     },
     //操作
     handleButton(val, row) {
-      console.log(val)
+      console.log(val.row.is_recommend)
       this.groupform = val.row;
       this.group_ids = val.row.group_id;
       if (val.methods == "edit") {
-        this.groupformupdate.group_name=val.row.group_name
-        this.groupformupdate.group_describe=val.row.group_describe
+        this.groupformupdate.group_name = val.row.group_name;
+        this.groupformupdate.group_describe = val.row.group_describe;
         this.dialogVisibleGroupEdit1 = true;
+        this.is_recommend=val.row.is_recommend+""
       } else {
         this.$confirm("确定要删除吗?", "提示", {
           type: "warning",
@@ -485,7 +446,7 @@ export default {
                     message: "删除成功",
                     type: "success",
                   });
-                                      this.common.monitoringLogs("删除", "删除分组管理", 1);
+                  this.common.monitoringLogs("删除", "删除分组管理", 1);
 
                   this.queryUserList();
                 } else {
@@ -493,8 +454,7 @@ export default {
                     message: "删除失败",
                     type: "error",
                   });
-                                                        this.common.monitoringLogs("删除", "删除分组管理", 0);
-
+                  this.common.monitoringLogs("删除", "删除分组管理", 0);
                 }
                 this.queryUserList();
               })
@@ -517,9 +477,7 @@ export default {
 
       get_app(paramactive)
         .then(res => {
-          console.log(res);
           if (res.status == 0) {
-            console.log(res);
             if (res.data.appinfo) {
               //
 
@@ -646,12 +604,9 @@ export default {
 
       query_all_group(paramactive)
         .then(res => {
-          console.log(res);
           if (res.status == 0) {
-            console.log(res);
             if (res.data.result) {
-              //
-
+            
               this.pager.count = res.data.total;
               let tempArr = [];
 
@@ -687,7 +642,7 @@ export default {
       this.pager.page = val.val;
       this.queryUserList();
     },
-      //分页
+    //分页
     handleCurrentChange(val) {
       this.pager1.page = val.val;
       this.queryApp();

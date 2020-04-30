@@ -1,235 +1,227 @@
 <template>
-<section class="myself-container deviceAvtive">
+  <section class="myself-container deviceAvtive">
     <div class="user-title">
-        <el-row>
-            <el-col :span="5">
-                <div class="user-item">
-                    <div class="item-count">{{total_dev_cnt}}</div>
-                    <div class="item-text">总设备</div>
-                </div>
-            </el-col>
-            <el-col :span="5" style="margin-left:30px;">
-                <div class="user-item">
-                    <div class="item-count">{{activated_dev_cnt}}</div>
-                    <div class="item-text">已激活设备</div>
-                </div>
-            </el-col>
-            <el-col :span="5" style="margin-left:30px;">
-                <div class="user-item">
-                    <div class="item-count">{{today_import_dev_cnt}}</div>
-                    <div class="item-text">今日新建</div>
-                </div>
-            </el-col>
-            <el-col :span="5" style="margin-left:30px;">
-                <div class="user-item">
-                    <div class="item-count">{{today_activated_dev_cnt}}</div>
-                    <div class="item-text">今日激活</div>
-                </div>
-            </el-col>
-        </el-row>
+      <el-row>
+        <el-col :span="5">
+          <div class="user-item">
+            <div class="item-count">{{total_dev_cnt}}</div>
+            <div class="item-text">总设备</div>
+          </div>
+        </el-col>
+        <el-col :span="5" style="margin-left:30px;">
+          <div class="user-item">
+            <div class="item-count">{{activated_dev_cnt}}</div>
+            <div class="item-text">已激活设备</div>
+          </div>
+        </el-col>
+        <el-col :span="5" style="margin-left:30px;">
+          <div class="user-item">
+            <div class="item-count">{{today_import_dev_cnt}}</div>
+            <div class="item-text">今日新建</div>
+          </div>
+        </el-col>
+        <el-col :span="5" style="margin-left:30px;">
+          <div class="user-item">
+            <div class="item-count">{{today_activated_dev_cnt}}</div>
+            <div class="item-text">今日激活</div>
+          </div>
+        </el-col>
+      </el-row>
     </div>
     <div class="device_form">
-        <el-form ref="form" :model="form">
-            <el-row type="flex">
-                <div class="search-con">
-                    <i class="el-icon-search" style="color:#606266"></i>
-                    <el-input class="search-input" v-model="searchText" placeholder="设备SN、CPU-ID"></el-input>
-                </div>
-                <div @click="getShow()" class="div_show" style="color:#606266">筛选
-                            <i
-                class="el-icon-caret-bottom"
-                :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
-              ></i>
-                </div>
-            </el-row>
-            <div v-show="showState">
-                <el-row type="flex" class="row_activess">
-                    <el-form-item label="设备激活：" style="display: flex;">
-                        <el-select v-model="is_activated" placeholder="请选择" style="width:180px;">
-                            <el-option v-for="item in actives" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                        </el-select>
-                    </el-form-item>
+      <el-form ref="form" :model="form">
+        <el-row type="flex">
+          <div class="search-con">
+            <i class="el-icon-search" style="color:#606266"></i>
+            <el-input class="search-input" v-model="searchText" placeholder="设备SN、CPU-ID" @keyup.enter.native="onSubmitKey"></el-input>
+          </div>
+          <div @click="getShow()" class="div_show" style="color:#606266">筛选
+            <i class="el-icon-caret-bottom" :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"></i>
+          </div>
+        </el-row>
+        <div v-show="showState">
+          <el-row type="flex" class="row_activess">
+            <el-form-item label="设备激活：" style="display: flex;">
+              <el-select v-model="is_activated" placeholder="请选择" style="width:180px;">
+                <el-option v-for="item in actives" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
 
-                    <el-form-item label="新建时间：" style="display: flex;">
-                        <el-date-picker style="width: 180px;" v-model="import_start_ts" type="datetime" placeholder="选择开始日期时间"></el-date-picker> -
-                        <el-date-picker style="width: 180px;" v-model="import_end_ts" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
-                    </el-form-item>
-                    <el-form-item label="激活时间：" style="display: flex;">
-                        <el-date-picker style="width: 180px;" v-model="activate_start_ts" type="datetime" placeholder="选择开始日期时间"></el-date-picker> -
-                        <el-date-picker style="width:180px;" v-model="activate_end_ts" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
-                    </el-form-item>
+            <el-form-item label="新建时间：" style="display: flex;">
+              <el-date-picker style="width: 160px;" v-model="import_start_ts" type="datetime" placeholder="选择开始日期时间"></el-date-picker> -
+              <el-date-picker style="width: 160px;" v-model="import_end_ts" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="激活时间：" style="display: flex;">
+              <el-date-picker style="width: 160px;" v-model="activate_start_ts" type="datetime" placeholder="选择开始日期时间"></el-date-picker> -
+              <el-date-picker style="width:160px;" v-model="activate_end_ts" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
+            </el-form-item>
 
-                    <el-form-item>
-                        <el-button type="primary" style="margin-left:10px;" @click="search">确定</el-button>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="resetInfo">重置</el-button>
-                    </el-form-item>
-                </el-row>
-            </div>
-        </el-form>
+            <el-form-item>
+              <el-button type="primary" style="margin-left:10px;" @click="search">确定</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="resetInfo">重置</el-button>
+            </el-form-item>
+          </el-row>
+        </div>
+      </el-form>
     </div>
     <div class="devide_table">
-        <el-row type="flex" class="row_active" style="display: flex;justify-content: space-between;">
-            <el-col :span="6">
-                <el-button type="primary" @click="addDev">新建设备</el-button>
-                <el-button type="primary" @click="importDev">批量导入设备</el-button>
-            </el-col>
-            <el-col :span="6" style="  display: flex; justify-content: flex-end">
-                <el-button type="primary" @click="toexportExcel">导出</el-button>
-            </el-col>
+      <el-row type="flex" class="row_active" style="display: flex;justify-content: space-between;">
+        <el-col :span="6">
+          <el-button type="primary" @click="addDev">新建设备</el-button>
+          <el-button type="primary" @click="importDev">批量导入设备</el-button>
+        </el-col>
+        <el-col :span="6" style="  display: flex; justify-content: flex-end">
+          <el-button type="primary" @click="toexportExcel">导出</el-button>
+        </el-col>
 
-        </el-row>
-        <el-row type="flex" class="row_active">
-            <el-col :span="24">
-                <el-table :data="tableData" border style="width: 100%">
-                    <el-table-column fixed prop="dev_sn" label="设备SN" width="300"></el-table-column>
-                    <el-table-column prop="dev_type" :formatter="formatDevType" label="设备类型" width="120"></el-table-column>
-                    <el-table-column prop="rom_version" label="ROM" width="120"></el-table-column>
-                    <el-table-column prop="dev_mac" label="MAC地址" ></el-table-column>
-                    <el-table-column prop="cpu_id" label="CPU-ID" width="300"></el-table-column>
-                    <el-table-column prop="total_cap" label="总容量" :formatter="formatDevCap" width="120"></el-table-column>
-                    <el-table-column prop="import_ts" label="新建时间" sortable :formatter="formatterImport" width="170" ></el-table-column>
-                    <el-table-column prop="is_activated" label="设备激活状态" :formatter="formatterType" width="120"></el-table-column>
-                    <el-table-column prop="activate_ts" label="激活时间" sortable width="150" :formatter="formatterActive"></el-table-column>
-                    <el-table-column  label="操作" width="300" >
-                        <template slot-scope="scope">
-                            <el-button v-show="scope.row.is_activated!==100" @click="open(scope.row)" type="text" size="small">关机</el-button>
-                            <el-button v-show="scope.row.is_activated!==100" type="text" @click="open(scope.row)" size="small">重启</el-button>
-                            <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
-                            <el-button type="text" @click="del(scope.row)" size="small">删除</el-button>
-                            <el-button v-if="scope.row.is_activated==99" type="text" @click="activationactive(scope.row)" size="small">激活</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </el-col>
-        </el-row>
+      </el-row>
+      <el-row type="flex" class="row_active">
+        <el-col :span="24">
+          <el-table :data="tableData" border style="width: 100%" @sort-change="changeTableSort">
+            <el-table-column fixed prop="dev_sn" label="设备SN" width="300"></el-table-column>
+            <el-table-column prop="dev_type" :formatter="formatDevType" label="设备类型" width="120"></el-table-column>
+            <el-table-column prop="rom_version" label="ROM"></el-table-column>
+            <el-table-column prop="dev_mac" label="MAC地址" width="200"></el-table-column>
+            <el-table-column prop="cpu_id" label="CPU-ID" width="300"></el-table-column>
+            <el-table-column prop="total_cap" label="总容量" :formatter="formatDevCap" width="120"></el-table-column>
+            <el-table-column prop="import_ts" label="新建时间" :sortable="'custom'" :formatter="formatterImport" width="170"></el-table-column>
+            <el-table-column prop="is_activated" label="设备激活状态" :formatter="formatterType" width="120"></el-table-column>
+            <el-table-column prop="activate_ts" label="激活时间" :sortable="'custom'" width="150" :formatter="formatterActive"></el-table-column>
+            <el-table-column label="操作" width="350">
+              <template slot-scope="scope">
+                <div style="    display: flex;justify-content: flex-start;">
+                  <el-button v-show="scope.row.is_activated!==100" @click="shut(scope.row)" type="text" size="small">关机</el-button>
+                  <el-button v-show="scope.row.is_activated!==100" type="text" @click="restart(scope.row)" size="small">重启</el-button>
+                  <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
+                  <el-button v-show="(scope.row.bind_flag==0 || scope.row.bind_flag==102) && scope.row.is_activated!=99" type="text" @click="tieactive(scope.row)" size="small">绑定</el-button>
+                  <el-button type="text" @click="del(scope.row)" :disabled="scope.row.is_activatedss==true" size="small">删除</el-button>
+                  <el-button v-if="scope.row.is_activated==99" type="text" @click="activationactive(scope.row)" size="small">激活</el-button>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
     </div>
     <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
-        <el-row type="flex"></el-row>
-        <el-row type="flex">
-            <el-col :span="6">
-                <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
-            </el-col>
-        </el-row>
+      <el-row type="flex"></el-row>
+      <el-row type="flex">
+        <el-col :span="6">
+          <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
+        </el-col>
+      </el-row>
     </div>
     <el-dialog :visible.sync="dialogVisible1" width="30%" :before-close="handleClose">
-        <div class="addaccout">
-            <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" class="demo-ruleForm">
-                <h3 class="title">新建设备</h3>
-                <el-form-item prop="username">
-                    <el-form-item label="设备SN:" :rules="[
-      {validator: jiousername, trigger: 'blur' }
-    ]">
-                        <el-input v-model="ruleForm2.dev_sn" placeholder="请输入设备SN" style="width:300px;"></el-input>
-                    </el-form-item>
-                </el-form-item>
-                <el-form-item label="设备型号：" style="display: flex;">
-                    <el-select v-model="ruleForm2.dev_typess" placeholder="请选择" @change="onChange2" style="width:300px;">
-                        <el-option v-for="item in dev_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="ROM：" style="display: flex;">
-                    <el-select v-model="ruleForm2.rom_version" placeholder="请选择" @change="onChange2" style="width:300px;">
-                        <el-option v-for="item in roms" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item prop="nickname">
-                    <el-form-item label="MAC地址:">
-                        <el-input v-model="ruleForm2.dev_mac" placeholder="请输入MAC地址" style="width:300px;"></el-input>
-                    </el-form-item>
-                </el-form-item>
-                <el-form-item prop="nickname">
-                    <el-form-item label="CPU-ID:">
-                        <el-input v-model="ruleForm2.cpu_id" placeholder="请输入CPU-ID" style="width:300px;"></el-input>
-                    </el-form-item>
-                </el-form-item>
-                <el-form-item prop="nickname">
-                    <el-form-item label="总容量:">
-                        <div style="display: flex; justify-content: flex-start; align-items: center;">
-                        <el-input v-model="ruleForm2.total_capss" placeholder="请输入总容量" style="width:300px;"></el-input>
-                          <div style="white-space:nowrap;margin-left:10px;">GB</div>
-                         </div>
-                    </el-form-item>
-                </el-form-item>
-                <el-form-item style="width:100%;display: flex;justify-content:center;">
-                    <el-button type="primary" @click="importDevice">确定</el-button>
-                    <el-button type="primary" @click.native.prevent="handleSubmit3">取消</el-button>
-                </el-form-item>
-            </el-form>
-        </div>
+      <div class="addaccout">
+        <el-form :model="ruleForm2" :rules="rules" ref="ruleForm2" label-width="100px" class="demo-valiForm">
+          <h3 class="title">新建设备</h3>
+          <el-form-item label="名称：" prop="dev_sn">
+            <el-input v-model="ruleForm2.dev_sn" placeholder="请输入设备SN" style="width:200px;"></el-input>
+          </el-form-item>
+          <el-form-item label="设备型号：">
+            <el-select v-model="ruleForm2.dev_type" placeholder="请选择" @change="onChange2Type1" style="width:200px;">
+              <el-option v-for="item in dev_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="ROM：">
+            <el-select v-model="ruleForm2.rom_version" placeholder="请选择" @change="onChange2" style="width:200px;">
+              <el-option v-for="item in roms" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="MAC地址:" prop="dev_mac">
+            <el-input v-model="ruleForm2.dev_mac" placeholder="请输入MAC地址" style="width:200px;"></el-input>
+          </el-form-item>
+          <el-form-item label="CPU-ID:" prop="cpu_id">
+            <el-input v-model="ruleForm2.cpu_id" placeholder="请输入CPU-ID" style="width:200px;"></el-input>
+          </el-form-item>
+          <el-form-item label="总容量:">
+            <div style="display: flex; justify-content: flex-start; align-items: center;">
+              <el-input v-model="ruleForm2.total_capss" placeholder="请输入总容量" style="width:200px;"></el-input>
+              <div style="white-space:nowrap;margin-left:10px;">GB</div>
+            </div>
+          </el-form-item>
+          <el-form-item style="width:100%;display: flex;justify-content:center;">
+            <el-button type="primary" @click="importDevice('ruleForm2')">确定</el-button>
+            <el-button type="primary" @click.native.prevent="handleSubmit3">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
     </el-dialog>
     <el-dialog :visible.sync="dialogVisible2" width="30%" :before-close="handleClose" v-model="rowsData">
-        <div class="addaccout">
-            <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm2" label-position="left" class="demo-ruleForm">
-                <h3 class="title">修改设备</h3>
-                <el-form-item prop="username">
-                    <el-form-item label="设备SN:">
-                        <el-input v-model="ruleForm1.new_dev_sn" placeholder="请输入设备SN" style="width:300px;"></el-input>
-                    </el-form-item>
-                </el-form-item>
-                <el-form-item label="设备型号：" style="display: flex;">
-                    <el-select v-model="ruleForm1.dev_type" placeholder="请选择" @change="onChange2" style="width:300px;">
-                        <el-option v-for="item in dev_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="ROM：" style="display: flex;">
-                    <el-select v-model="ruleForm1.rom_version" placeholder="请选择" @change="onChange2" style="width:300px;">
-                        <el-option v-for="item in roms" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item prop="nickname">
-                    <el-form-item label="MAC地址:">
-                        <el-input v-model="ruleForm1.dev_mac" placeholder="请输入MAC地址" style="width:300px;"></el-input>
-                    </el-form-item>
-                </el-form-item>
-                <el-form-item prop="nickname">
-                    <el-form-item label="CPU-ID:">
-                        <el-input v-model="ruleForm1.cpu_id" placeholder="请输入CPU-ID" style="width:300px;"></el-input>
-                    </el-form-item>
-                </el-form-item>
-                <el-form-item prop="nickname">
-                    <el-form-item label="总容量:">
-                         <div style="display: flex; justify-content: flex-start; align-items: center;">
-                        <el-input v-model="ruleForm1.total_cap" placeholder="请输入总容量" style="width:300px;"></el-input>
-                          <div style="white-space:nowrap;margin-left:10px;">GB</div>
-                         </div>
-                    </el-form-item>
-                </el-form-item>
-                <el-form-item label="设备激活：" style="display: flex;" >
-                    <el-select v-model="ruleForm1.is_activated" placeholder="请选择" style="width:300px;" :disabled="true">
-                        <el-option v-for="item in active" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item style="width:100%;display: flex;justify-content:center;">
-                    <el-button type="primary" @click="editBasicinfo">确定</el-button>
-                    <el-button type="primary" @click="dialogVisible2=false">取消</el-button>
-                </el-form-item>
-            </el-form>
-        </div>
-    </el-dialog>
-    <!-- <el-dialog :visible.sync="dialogVisible3" width="50%" :before-close="handleClose">
-      <div class="import">
-        <div class="import-t">
-          <el-button type="primary">上传Excel文件</el-button>
-        </div>
-        <div class="import-m">
-          <textarea></textarea>
-        </div>
-        <div class="import-m">
-          <el-button type="primary">导入</el-button>
-        </div>
+      <div class="addaccout">
+        <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm2" label-position="left" class="demo-ruleForm">
+          <h3 class="title">修改设备</h3>
+          <el-form-item prop="username">
+            <el-form-item label="设备SN:">
+              <el-input v-model="ruleForm1.new_dev_sn" placeholder="请输入设备SN" style="width:300px;"></el-input>
+            </el-form-item>
+          </el-form-item>
+          <el-form-item label="设备型号：" style="display: flex;">
+            <el-select v-model="ruleForm1.dev_type" placeholder="请选择" @change="onChange2Type" style="width:300px;">
+              <el-option v-for="item in dev_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="ROM：" style="display: flex;">
+            <el-select v-model="ruleForm1.rom_version" placeholder="请选择" @change="onChange2" style="width:300px;">
+              <el-option v-for="item in roms" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="nickname">
+            <el-form-item label="MAC地址:">
+              <el-input v-model="ruleForm1.dev_mac" placeholder="请输入MAC地址" style="width:300px;"></el-input>
+            </el-form-item>
+          </el-form-item>
+          <el-form-item prop="nickname">
+            <el-form-item label="CPU-ID:">
+              <el-input v-model="ruleForm1.cpu_id" placeholder="请输入CPU-ID" style="width:300px;"></el-input>
+            </el-form-item>
+          </el-form-item>
+          <el-form-item prop="nickname">
+            <el-form-item label="总容量:">
+              <div style="display: flex; justify-content: flex-start; align-items: center;">
+                <el-input v-model="ruleForm1.total_cap" placeholder="请输入总容量" style="width:300px;"></el-input>
+                <div style="white-space:nowrap;margin-left:10px;">GB</div>
+              </div>
+            </el-form-item>
+          </el-form-item>
+          <el-form-item label="设备激活：" style="display: flex;">
+            <el-select v-model="ruleForm1.is_activated" placeholder="请选择" style="width:300px;" :disabled="true">
+              <el-option v-for="item in active" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item style="width:100%;display: flex;justify-content:center;">
+            <el-button type="primary" @click="editBasicinfo">确定</el-button>
+            <el-button type="primary" @click="dialogVisible2=false">取消</el-button>
+          </el-form-item>
+        </el-form>
       </div>
-    </el-dialog> -->
+    </el-dialog>
+    <el-dialog :visible.sync="dialogVisibleactive" width="20%" :before-close="handleClose">
+      <el-form ref="form">
+        <el-form-item label="请输入需要绑定ID:" style="dispaly:flex;justify-content:center;">
+          <el-input v-model="user_id_active" style=""></el-input>
+        </el-form-item>
+        <!-- <el-form-item label="请输入需要绑定的手机号">
+                  <el-input v-model="bind_user_tel_num"></el-input>
+            </el-form-item> -->
+
+        <div style="text-align: center;">
+          <el-button type="primary" @click="onSubmitBind">确定</el-button>
+          <el-button @click="dialogVisibleactive=false">取消</el-button>
+        </div>
+      </el-form>
+    </el-dialog>
     <el-dialog :visible.sync="dialogVisible3" width="20%" :before-close="handleClose">
-        <el-upload style="text-align: center;margin：0 auto;" class="upload-demo" ref="upload" name="excel" :action="UploadUrl()"  :before-upload="beforeUpload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
-            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">确定上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传.XLS的文件！！！</div>
-        </el-upload>
+      <el-upload style="text-align: center;margin：0 auto;" class="upload-demo" ref="upload" name="excel" :action="UploadUrl()" :before-upload="beforeUpload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :auto-upload="false">
+        <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">确定上传</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传.XLS的文件！！！</div>
+      </el-upload>
     </el-dialog>
 
-</section>
+  </section>
 </template>
 
 <script>
@@ -244,12 +236,48 @@ import {
   edit_device_basicinfo, //编辑
   delete_device_basicinfo, //删除
   hostUrl,
+  web_change_device_state,
+  ctrl_node_state,
   chg_device_state, // 激活
 } from "../../api/api";
 import { log } from "util";
+import common from "../../common/js/util.js";
 export default {
   data() {
+    let nameRule1 = (rule, value, callback) => {
+      let regExp = new RegExp(/^SME[0-9a-zA-Z]{1}[0-9]{4}[0-9a-zA-Z]{7}$/);
+      if (regExp.test(value) === false) {
+        callback(new Error("请输入正确的SN号"));
+      } else {
+        callback();
+      }
+    };
+    let nameRule2 = (rule, value, callback) => {
+      let regExp = new RegExp(/^([0-9a-f]{2}:){5}[0-9a-f]{2}$/);
+      if (regExp.test(value) === false) {
+        callback(new Error("请输入正确的MAC号"));
+      } else {
+        callback();
+      }
+    };
+    let nameRule3 = (rule, value, callback) => {
+      let regExp = new RegExp(/^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{9}$/);
+      if (regExp.test(value) === false) {
+        callback(new Error("请输入正确的CPU-ID"));
+      } else {
+        callback();
+      }
+    };
+    let nameRule4 = (rule, value, callback) => {
+      let regExp = new RegExp(/^\d{3,7}(\.\d{0,2})?$/g);
+      if (regExp.test(value) === false) {
+        callback(new Error("请输入正确的容量"));
+      } else {
+        callback();
+      }
+    };
     return {
+      dialogVisibleactive: false,
       dialogVisible1: false,
       dialogVisible2: false,
       dialogVisible3: false,
@@ -291,11 +319,11 @@ export default {
       ],
       dev_types: [
         {
-          value: "RK3328",
+          value: "1",
           label: "RK3328",
         },
         {
-          value: "AMS805",
+          value: "0",
           label: "AMS805",
         },
       ],
@@ -362,7 +390,7 @@ export default {
       showState: false,
       ruleForm2: {
         dev_sn: "",
-        dev_type: "",
+        dev_type: "0",
         dev_typess: "",
         rom_version: "",
         dev_mac: "",
@@ -374,6 +402,7 @@ export default {
         new_dev_sn: "",
         dev_type: "",
         rom_version: "",
+        dev_typess: "",
         dev_mac: "",
         cpu_id: "",
         total_cap: "",
@@ -383,6 +412,52 @@ export default {
       pageActive: 0,
       todayBuilds: 0,
       todayactivaed: 0,
+      user_id_active: "",
+      dev_sn_active: "",
+      bind_user_tel_num: "",
+      order_item: 0,
+      order_type: 1,
+      rules: {
+        dev_sn: [
+          { required: true, message: "请输入名称", trigger: "blur" },
+          {
+            max: 15,
+            message: "长度最大15个字符",
+            trigger: "blur",
+          },
+          { validator: nameRule1, trigger: "blur" },
+        ],
+        dev_mac: [
+          { required: true, message: "请输入名称", trigger: "blur" },
+          {
+            max: 17,
+            message: "长度最大17个字符",
+            trigger: "blur",
+          },
+          { validator: nameRule2, trigger: "blur" },
+        ],
+        cpu_id: [
+          { required: true, message: "cpu_id", trigger: "blur" },
+          // {
+          //   max: 9,
+          //   message: "长度最大9个字符",
+          //   trigger: "blur",
+          // },
+          // { validator: nameRule3, trigger: "blur" },
+        ],
+        total_cap: [
+          { required: true, message: "请输入名称", trigger: "blur" },
+          {
+            // min: 3,
+            // max: 10,
+            message: "长度在 6到 10 个字符",
+            trigger: "blur",
+          },
+          { validator: nameRule4, trigger: "blur" },
+        ],
+      },
+      old_dev_sn: "",
+      dev_type_active: 1,
     };
   },
   mounted() {
@@ -390,12 +465,83 @@ export default {
     this.getInfo();
   },
   methods: {
+    onChange2Type(val) {
+      console.log(val);
+      this.dev_type_active = val;
+      // if (val == "RK3328") {
+      //   this.dev_type_active = val;
+      // } else {
+      //   this.dev_type_active = 2;
+      // }
+      //   alert(this.dev_type_active)
+    },
+    //排序
+    changeTableSort(column) {
+      if (column.prop == "import_ts") {
+        if (column.order == "descending") {
+          this.order_type = 1;
+          this.order_item = 0;
+        } else {
+          this.order_type = 2;
+          this.order_item = 0;
+        }
+      } else {
+        if (column.order == "descending") {
+          this.order_type = 1;
+          this.order_item = 1;
+        } else {
+          this.order_type = 2;
+          this.order_item = 1;
+        }
+      }
+      this.pager.page = 1;
+      this.getInfo();
+    },
+    //绑定
+    onSubmitBind() {
+      let param = new Object();
+      (param.bind_type = 1),
+        (param.user_id = parseInt(this.user_id_active)),
+        (param.dev_sn = this.dev_sn_active),
+        (param.bind_user_tel_num = this.bind_user_tel_num),
+        web_change_device_state(param)
+          .then(res => {
+            if (res.status == 0 && res.err_code == 0) {
+              this.$message({
+                message: "绑定成功",
+                type: "success",
+              });
+              this.dialogVisibleactive = false;
+            } else {
+              this.$message({
+                message: "用户ID不存在，绑定失败",
+                type: "error",
+              });
+            }
+
+            this.getInfo();
+          })
+          .catch(error => {
+            this.$message({
+              message: "后台服务出错",
+              type: "error",
+            });
+          });
+    },
+    tieactive(val) {
+      this.dev_sn_active = val.dev_sn;
+      this.dialogVisibleactive = true;
+    },
+    onSubmitKey() {
+      this.getInfo();
+    },
     //重置
     resetInfo() {
       this.import_start_ts = "";
       this.import_end_ts = "";
       this.activate_start_ts = "";
       this.activate_end_ts = "";
+      this.searchText = "";
       this.getInfo();
     },
     //导出地址变量
@@ -483,12 +629,15 @@ export default {
     importDev() {
       // this.dialogVisible3 = true;
       this.$router.push({
-        path:"/deviceupload"
-      })
+        path: "/deviceupload",
+      });
     },
     getInfo() {
       var data = {
+        order_item: this.order_item,
+
         page_no: this.pager.page - 1,
+        order_type: this.order_type,
         page_size: 10,
         login_token: "",
         is_activated: this.is_activated === "" ? -1 : Number(this.is_activated),
@@ -509,16 +658,49 @@ export default {
             ? -1
             : new Date(this.activate_end_ts).getTime() / 1000,
       };
-      if (this.judgeString(this.searchText)) {
-        var param = Object.assign(this.judgeString(this.searchText), data);
+      let SME = /^SME[0-9a-zA-Z]{1}[0-9]{4}[0-9a-zA-Z]{7}$/;
+      let cpuid = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{9}$/;
+      if (this.searchText != "") {
+        if (SME.test(this.searchText) == true) {
+          data.dev_sn = this.searchText;
+          data.cpu_id = "";
+        } else if (cpuid.test(this.searchText) == true) {
+          data.dev_sn = "";
+          data.cpu_id = this.searchText;
+        }
       } else {
-        this.$message.error("请输入正确的设备SN、CPU-ID");
-        return;
+        data.dev_sn = "";
+        data.cpu_id = "";
       }
-      query_devinfo_by_conditions(param)
+      // if (this.judgeString(this.searchText)) {
+      //   var param = Object.assign(this.judgeString(this.searchText), data);
+      // } else {
+      //   this.$message.error("请输入正确的设备SN、CPU-ID");
+      //   return;
+      // }
+      query_devinfo_by_conditions(data)
         .then(res => {
           if (res.status === 0) {
-            this.tableData = res.data.dev_list;
+            let tempArr = [];
+            tempArr = res.data.dev_list;
+            if (res.data.dev_list) {
+              for (var i = 0; i < tempArr.length; i++) {
+                switch (tempArr[i].is_activated) {
+                  case 99:
+                    tempArr[i].is_activatedss = false;
+                    break;
+                  case 101:
+                    tempArr[i].is_activatedss = false;
+                    break;
+
+                  default:
+                    tempArr[i].is_activatedss = true;
+                }
+              }
+            }
+            this.tableData = [];
+
+            this.tableData = tempArr;
             this.pager.count = res.data.total_num;
             this.pager.rows = res.data.total_page;
           }
@@ -531,6 +713,8 @@ export default {
     //导出
     toexportExcel() {
       var data = {
+        dev_sn: "",
+        cpu_id: "",
         page_no: this.pageActive,
         page_size: 10,
         login_token: "",
@@ -660,33 +844,56 @@ export default {
         });
     },
     editBasicinfo() {
-        if(this.ruleForm1.total_cap.toString().split(".")[1]){
- if((this.ruleForm1.total_cap.toString().split(".")[1].length)>2){
-            this.$message({
-              message: "总容量最多两位小数",
-              type: "error"
-            });
-            return false
-        }  
+      if (this.ruleForm1.total_cap.toString().split(".")[1]) {
+        if (this.ruleForm1.total_cap.toString().split(".")[1].length > 2) {
+          this.$message({
+            message: "总容量最多两位小数",
+            type: "error",
+          });
+          return false;
         }
-        
-      this.ruleForm1.dev_type = this.ruleForm1.dev_type === "RK3328" ? 1 : 2;
-      this.ruleForm1.is_activated =
-        this.ruleForm1.is_activated === "未激活" ? 100 : 101;
-      this.ruleForm1.total_cap = parseInt(this.ruleForm1.total_cap);
-      this.ruleForm1.login_token = "";
+      }
+
       let param = {
-        login_token: "",
-        dev_sn: this.rowsData.dev_sn,
-        info: this.ruleForm1,
+        login_token: "sad",
+        new_dev_sn: this.rowsData.dev_sn,
       };
-      console.log(param);
+      let dev_type = 1;
+      if (this.ruleForm1.dev_type == "3328") {
+        dev_type = 1;
+      } else {
+        dev_type = 2;
+      }
+      let nowactivated = 1;
+      if (this.ruleForm1.is_activated == "已激活") {
+        nowactivated = 0;
+      } else {
+        nowactivated = 1;
+      }
+      param.dev_sn = this.old_dev_sn;
+      param.info = {
+        new_dev_sn: this.ruleForm1.new_dev_sn,
+        dev_type: parseInt(this.dev_type_active),
+        rom_version: this.ruleForm1.rom_version,
+        dev_mac: this.ruleForm1.dev_mac,
+        cpu_id: this.ruleForm1.cpu_id,
+        total_cap: parseInt(this.ruleForm1.total_cap) * 1024 * 1024 * 1024,
+        is_activated: nowactivated,
+      };
       edit_device_basicinfo(param)
         .then(res => {
-          this.$message({
-            message: "修改成功",
-            type: "success",
-          });
+          if (res.status == 0) {
+            this.$message({
+              message: "修改成功",
+              type: "success",
+            });
+          } else {
+            this.$message({
+              message: "修改失败",
+              type: "error",
+            });
+          }
+
           this.getInfo();
           this.dialogVisible2 = false;
         })
@@ -694,48 +901,59 @@ export default {
           console.log(error);
         });
     },
-    importDevice() {
 
-      if (this.ruleForm2.dev_typess === "RK3328") {
-        this.ruleForm2.dev_type = 1;
-      } else {
-        this.ruleForm2.dev_type = 2;
-      }
-      if(this.ruleForm2.total_capss.toString().split(".")[1]){
- if((this.ruleForm2.total_capss.toString().split(".")[1].length)>2){
-            this.$message({
-              message: "总容量最多两位小数",
-              type: "error"
-            });
-            return false
-        }  
-      }
-     
-
-      
-      // this.ruleForm2.dev_type = this.ruleForm2.dev_type === "RK3328" ? 1 : 2;
-      this.ruleForm2.total_cap = parseInt(
-        this.ruleForm2.total_capss
-      );
-
-      this.ruleForm2.login_token = "";
-      console.log(this.ruleForm2);
-      import_node_basicinfo(this.ruleForm2)
-        .then(res => {
-          if (res.status === 0) {
-            this.$message({
-              message: "新建设备成功",
-              type: "success",
-            });
-
-            this.getInfo();
-            this.getOverview();
-            this.dialogVisible1 = false;
+    importDevice(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          // if (this.ruleForm2.dev_typess === "RK3328") {
+          //   this.ruleForm2.dev_type = 1;
+          // } else {
+          //   this.ruleForm2.dev_type = 2;
+          // }
+          if (this.ruleForm2.total_capss.toString().split(".")[1]) {
+            if (
+              this.ruleForm2.total_capss.toString().split(".")[1].length > 2
+            ) {
+              this.$message({
+                message: "总容量最多两位小数",
+                type: "error",
+              });
+              return false;
+            }
           }
-        })
-        .catch(error => {
-          console.log(error);
-        });
+          //通过验证执行
+          this.ruleForm2.dev_type = parseInt(  this.ruleForm2.dev_type)
+           
+          this.ruleForm2.total_cap =
+            parseInt(this.ruleForm2.total_capss) * 1024 * 1024 * 1024;
+          this.ruleForm2.login_token = "";
+          console.log(this.ruleForm2);
+          import_node_basicinfo(this.ruleForm2)
+            .then(res => {
+              if (res.status === 0 && res.err_code == 0) {
+                this.$message({
+                  message: "新建设备成功",
+                  type: "success",
+                });
+                this.getInfo();
+                this.getOverview();
+                this.dialogVisible1 = false;
+              } else if (res.status === 0 && res.err_code == 290) {
+                this.$message({
+                  message: "设备已存在，请勿重复上传",
+                  type: "error",
+                });
+              }
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        } else {
+          //验证失败执行
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     search() {
       this.pager.page = 1;
@@ -836,11 +1054,7 @@ export default {
       if (row.total_cap == 0) {
         return 0 + "GB";
       } else {
-        if (row.total_cap >= 1024) {
-          return (row.total_cap / 1024).toFixed(2) + "TB";
-        } else {
-          return (row.total_cap).toFixed(2) + "GB";
-        }
+        return this.common.formatByteActive(row.total_cap);
       }
     },
     formatFileSize(size) {
@@ -878,17 +1092,49 @@ export default {
     formatterImport(row) {
       return this.common.getTimes(row.import_ts * 1000);
     },
-    open(rows) {},
-    restart(rows) {},
+    open(rows) {
+      this.$confirm("确定关机？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          let param = new object();
+          param.dev_sn = rows.dev_sn;
+          let extra_info = {
+            ctrl_type: 2,
+            login_token: "",
+          };
+          param.extra_info = extra_info;
+          ctrl_node_state(param)
+            .then(res => {
+              if (res.status == 0) {
+                this.$message({
+                  type: "success",
+                  message: "关机成功",
+                });
+              } else {
+                this.$message({
+                  type: "error",
+                  message: "关机失败",
+                });
+              }
+            })
+            .catch(error => {});
+        })
+        .catch(() => {});
+    },
     edit(rows) {
-      console.log(rows);
+      this.old_dev_sn = rows.dev_sn;
       this.dialogVisible2 = true;
-      this.ruleForm1 = rows;
+      this.ruleForm1.new_dev_sn = rows.dev_sn;
+      this.ruleForm1.total_cap = rows.total_cap / 1024 / 1024 / 1024;
+      this.ruleForm1.dev_mac = rows.dev_mac;
+      this.ruleForm1.cpu_id = rows.cpu_id;
+      this.ruleForm1.dev_type = rows.dev_type + "";
+      this.ruleForm1.rom_version = rows.rom_version;
       this.rowsData = rows;
       this.ruleForm1.new_dev_sn = rows.dev_sn;
-      rows.dev_type === "RK3328"
-        ? (this.ruleForm1.dev_type = "RK3328")
-        : (this.ruleForm1.dev_type = "AMS805");
       rows.is_activated === 100
         ? (this.ruleForm1.is_activated = "未激活")
         : (this.ruleForm1.is_activated = "已激活");
@@ -986,7 +1232,6 @@ export default {
     },
     handleClick() {},
     judgeString(str) {
-       
       const reg3 = /^(SMM)[0-9]{9}$/;
       if (reg3.test(str)) {
         return {

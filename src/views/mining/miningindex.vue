@@ -477,8 +477,8 @@ export default {
     },
     //导出
     toexportExcel() {
-      this.common.monitoringLogs("导出", "贡献值明细", 1);
-      window.location.href = this.exportLinks;
+      this.common.monitoringLogs("导出", "节点等级表", 1);
+      window.open(this.exportLinks);
     },
     //分页
     handleCurrentChange(val) {

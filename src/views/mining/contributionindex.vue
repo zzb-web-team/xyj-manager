@@ -24,7 +24,7 @@
                         </el-select>
                     </el-form-item>
                         <el-form-item label="时间" style="display: flex;">
-                        <el-date-picker v-model="value1" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                        <el-date-picker v-model="value1" type="daterange" :picker-options="pickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                         </el-date-picker>
                     </el-form-item>
                  
@@ -78,6 +78,16 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
+      pickerOptions: {
+        disabledDate(time) {
+          let beiginTime = parseInt(Date.now()) - 86400 * 92 * 1000;
+          
+          return (
+         
+            time.getTime() > Date.now() - 8.64e6
+          ); //如果没有后面的-8.64e6就是不可以选择今天的
+        },
+      },
       orderActive: "",
       user_nick_name: "",
       dialogVisible: false,
@@ -216,9 +226,8 @@ export default {
       order: 0,
       ad_type: 0,
       tableDataActive: [],
-      exportLinks:"",
-      exportStatus :true
-      
+      exportLinks: "",
+      exportStatus: true,
     };
   },
   mounted: function() {
@@ -392,8 +401,11 @@ export default {
       }
 
       if (!this.value1) {
-        paramactive.start_time = 0;
-        paramactive.end_time = 2493043200;
+        // console.log(parseInt(new Date().getTime()/1000) )
+        // console.log(parseInt(new Date().getTime()/1000)-86400*7)
+        paramactive.start_time =
+          parseInt(new Date().getTime() / 1000) - 86400 * 90;
+        paramactive.end_time = parseInt(new Date().getTime() / 1000);
       } else {
         if (this.value1[0] == undefined) {
           paramactive.start_time = 0;
@@ -401,25 +413,31 @@ export default {
           paramactive.start_time = this.value1[0].getTime() / 1000;
         }
         if (this.value1[1] == undefined) {
-          paramactive.end_time = 2493043200;
+          paramactive.end_time = parseInt(new Date().getTime() / 1000);
         } else {
           paramactive.end_time = this.value1[1].getTime() / 1000;
         }
+      }
+      if((paramactive.end_time-paramactive.start_time)>7948801){
+            this.$message({
+              message: "只能查询任意当前结束时间往前的90天以内的数据",
+              type: "error"
+            });
+            return false
       }
 
       ptfs_query_con_value_list(paramactive)
         .then(res => {
           if (res.status == 0) {
-              if ((res.data.con_list.length == 0)) {
-                this.exportStatus = true;
-              } else {
-                this.exportStatus = false;
-              }
-            
-           
+            if (res.data.con_list.length == 0) {
+              this.exportStatus = true;
+            } else {
+              this.exportStatus = false;
+            }
+
             let tempArr = [];
             tempArr = res.data.con_list;
-            this.exportLinks=res.data.filename
+            this.exportLinks = res.data.filename;
             for (var i = 0; i < tempArr.length; i++) {
               if (tempArr[i].opt_value >= 0) {
                 tempArr[i].opt_active = "新增";
@@ -438,10 +456,10 @@ export default {
                   tempArr[i].type = "解绑";
                   break;
                 case 103:
-                  tempArr[i].type = "在线"+tempArr[i].time_hour+"小时";
+                  tempArr[i].type = "在线" + tempArr[i].time_hour + "小时";
                   break;
                 case 104:
-                  tempArr[i].type = "离线"+tempArr[i].time_hour+"小时";
+                  tempArr[i].type = "离线" + tempArr[i].time_hour + "小时";
                   break;
                 case 105:
                   tempArr[i].type = "宽带利用";
@@ -459,6 +477,7 @@ export default {
                   break;
               }
             }
+             this.tableData=[]
             this.tableData = tempArr;
             // this.tableDataActive
             this.pager.count = res.data.total_num;
@@ -478,9 +497,8 @@ export default {
     },
     //导出
     toexportExcel() {
-       this.common.monitoringLogs("导出", "节点等级表", 1);
-       window.location.href = this.exportLinks
-    
+      this.common.monitoringLogs("导出", "导出贡献值明细", 1);
+      window.open(this.exportLinks);
     },
     //分页
     handleCurrentChange(val) {

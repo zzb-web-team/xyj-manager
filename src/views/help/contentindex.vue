@@ -155,11 +155,12 @@
     <el-dialog :visible.sync="dialogVisibleDetail2" width="50%" :before-close="handleClose" >
       <div class="addaccout">
         <div class="title" style="font-weight: bold;">
-          {{contentTitle2}}
+          {{contentTitle}}
           <br>
            <div style="margin-top:10px;font-weight:100">{{contentTime2}}</div>
           <div class="act-form" style="margin-top:30px;">
-            <iframe :src="src" width="90%" height="500" border="0"></iframe>
+            <!-- {{handbookedit}} -->
+            <iframe :src="src1" width="90%" height="500" border="0"></iframe>
           </div>
         </div>
       </div>
@@ -183,7 +184,7 @@
           <div id="editor">
             <mavon-editor
               style="height: 100%"
-              v-model="handbook"
+              v-model="handbookedit"
               @save="saveClick"
               @htmlCode="htmlCode"
             ></mavon-editor>
@@ -241,12 +242,14 @@ import {
   delete_help_item_info,
   modify_help_item_info,
   move_help_item,
+  back_data,
 } from "../../api/api";
 import common from "../../common/js/util.js";
 
 export default {
   data() {
     return {
+      handbookedit: "",
       dialogVisibleDetail1: false,
       dialogVisibleDetail2: false,
       dialogVisiblecontentmove: false,
@@ -379,7 +382,7 @@ export default {
       releaseActive: false,
       temp_name: "",
       new_cat_id: 0,
-      editname1:"",
+      editname1: "",
     };
   },
   mounted: function() {
@@ -441,25 +444,22 @@ export default {
               message: "移动分组成功",
               type: "success",
             });
-                              this.common.monitoringLogs("修改", "移动分组管理", 1);
-
+            this.common.monitoringLogs("修改", "移动分组管理", 1);
           } else {
             this.$message({
               message: "移动分组失败",
               type: "error",
             });
-                                          this.common.monitoringLogs("修改", "移动分组管理", 0);
-
+            this.common.monitoringLogs("修改", "移动分组管理", 0);
           }
-           this.queryUserList();
+          this.queryUserList();
         })
         .catch(error => {
           this.$message({
             message: "后台服务出错",
             type: "error",
           });
-                                        this.common.monitoringLogs("修改", "移动分组管理", 0);
-
+          this.common.monitoringLogs("修改", "移动分组管理", 0);
         });
     },
     //字符长度限制
@@ -489,7 +489,7 @@ export default {
               message: "修改成功",
               type: "success",
             });
-                                          this.common.monitoringLogs("修改", "修改内容管理", 1);
+            this.common.monitoringLogs("修改", "修改内容管理", 1);
 
             this.dialogVisiblecontentedit = false;
           } else {
@@ -497,7 +497,7 @@ export default {
               message: "修改失败",
               type: "success",
             });
-                                                      this.common.monitoringLogs("修改", "修改内容管理",0);
+            this.common.monitoringLogs("修改", "修改内容管理", 0);
 
             this.dialogVisiblecontentedit = false;
           }
@@ -542,17 +542,9 @@ export default {
       this.htmlText = render;
       let tempHtml = "";
       tempHtml =
-        "<!DOCTYPE html>" +
-        "<html>" +
-        "<head>" +
-        "<meta charset='utf-8'>" +
-        "<body>" +
-        "<div>" +
+        "<!DOCTYPE html><html><head><meta charset='utf-8'></head><body>" +
         this.htmlText +
-        "</div>" +
-        "</body" +
-        "</head>" +
-        "</html>";
+        "</body></html>";
 
       let param = {
         data: tempHtml,
@@ -629,7 +621,7 @@ export default {
             message: "发布成功",
             type: "success",
           });
-                                                    this.common.monitoringLogs("发布", "发布内容管理", 1);
+          this.common.monitoringLogs("发布", "发布内容管理", 1);
 
           this.dialogVisiblecontent = false;
         } else {
@@ -637,7 +629,7 @@ export default {
             message: "发布失败",
             type: "error",
           });
-                                                              this.common.monitoringLogs("发布", "发布内容管理", 0);
+          this.common.monitoringLogs("发布", "发布内容管理", 0);
 
           this.dialogVisiblecontent = false;
         }
@@ -656,17 +648,38 @@ export default {
 
         this.contentTime = this.common.getTimes(val.row.item_pub_tm);
       } else if (val.methods == "edit") {
+        let nowUrl = val.row.item_url;
+        let param = {
+          data: nowUrl,
+        };
+        back_data(param)
+          .then(res => {
+            let nowcontent = "";
+
+            nowcontent = res.replace(
+              "<!DOCTYPE html><html><head><meta charset='utf-8'></head><body>",
+              ""
+            );
+            nowcontent = nowcontent.replace("</body></html>", "");
+            nowcontent = nowcontent.replace("<p>", "");
+            nowcontent = nowcontent.replace("</p>", "");
+            this.handbookedit = nowcontent;
+          })
+          .catch(error => {
+            console.log(error);
+          });
         this.dialogVisiblecontentedit = true;
         this.editname = val.row.cat_name;
         this.item_id = val.row.item_id;
         this.contentTitleEdit = val.row.item_title;
         this.contentTitle2 = val.row.item_title;
+        this.contentTitle=val.row.item_title
         this.contentTime2 = val.row.item_pub_tm;
         this.edit_id = val.row.cat_id;
       } else if (val.methods == "move") {
         this.dialogVisiblecontentmove = true;
         this.item_id = val.row.item_id;
-        this.editname1=val.row.cat_name
+        this.editname1 = val.row.cat_name;
       } else if (val.methods == "delete") {
         this.$confirm("确定要删除吗?", "提示", {
           type: "warning",
@@ -676,20 +689,18 @@ export default {
             param.item_id = val.row.item_id;
             delete_help_item_info(param)
               .then(res => {
-                if (res.status == 0 &&res.err_code == 0) {
+                if (res.status == 0 && res.err_code == 0) {
                   this.$message({
                     message: "删除成功",
                     type: "success",
                   });
-                                                                             this.common.monitoringLogs("删除", "删除内容管理", 1);
-
+                  this.common.monitoringLogs("删除", "删除内容管理", 1);
                 } else {
                   this.$message({
                     message: "删除失败",
                     type: "error",
                   });
-                                                                                               this.common.monitoringLogs("删除", "删除内容管理", 1);
-
+                  this.common.monitoringLogs("删除", "删除内容管理", 1);
                 }
                 this.queryUserList();
               })

@@ -1,5 +1,14 @@
 <template>
 <section class="myself-container">
+       <div class="switch_tab">
+            <el-radio-group v-model="radio1" @change="onchangeTab"  style="display: flex;justify-content: flex-start;margin-top:50px;">
+                <el-radio-button label="在线时长"></el-radio-button>
+                <el-radio-button label="离线次数"></el-radio-button>
+              
+                 <!-- <el-button style="margin-left:20px;" type="text" @click="toexportExcel">导出</el-button> -->
+            </el-radio-group>
+           
+        </div>
     <div class="user-title" style="margin-bottom:20px;">
         <el-button-group>
             <!-- <el-button v-show="!shoudzyx" @click="today()">今天</el-button> -->
@@ -9,10 +18,19 @@
             <el-button @click="showzdyx">自定义<i class="el-icon-date"></i></el-button>
         </el-button-group>
         <el-date-picker v-show="shoudzyx" style="margin-left:10px;" v-model="val2" type="datetimerange" :picker-options="pickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left" @change="gettimes"></el-date-picker>
-    <el-select v-model="versointime" placeholder="请选择" @change="onChange">
+    <el-select v-model="versointime" placeholder="请选择" @change="onChange" v-if="timeArr">
                             <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
-            </el-select>   
+            </el-select> 
+             <el-date-picker style="margin-left:10px;"
+      v-model="valueele"
+      type="datetime"
+      placeholder="时间对比">
+    </el-date-picker>
+                <el-select v-model="versointime" placeholder="请选择" @change="onChange">
+                            <el-option v-for="item in options11" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+            </el-select>     
   <el-select v-model="versointype" placeholder="请选择" @change="onChange">
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
@@ -23,37 +41,15 @@
     <div class="devive_tab">
       
         <div class="device_tab_on" v-if="showType">
-            <!-- <div class="user-title">
-                <el-row style="margin-top:20px;">
-                    <el-col :span="12">
-                        <div class="user-item">
-                            <div class="item-count">{{onlinePer}}</div>
-                            <div class="item-text">设备在线率</div>
-                        </div>
-                    </el-col>
-                    <el-col :span="12" style="">
-                        <div class="user-item">
-                            <div class="item-count">{{avgOnlineTimeInSec}}</div>
-                            <div class="item-text">设备平均在线时长</div>
-                        </div>
-                    </el-col>
-                </el-row>
-            </div> -->
-            <div class="device_form" >
-            <div class="switch_tab">
-            <el-radio-group v-model="radio1" @change="onchangeTab"  style="display: flex;justify-content: flex-start;">
-                <el-radio-button label="离线次数"></el-radio-button>
-                <el-radio-button label="在线时长"></el-radio-button>
-                 <!-- <el-button style="margin-left:20px;" type="text" @click="toexportExcel">导出</el-button> -->
-            </el-radio-group>
            
-        </div>
-                <div id="myEchart" style="width: 100%; height: 300px;margin-top:50px;"></div>
+            <div class="device_form" style="display: flex;space-between" >
+                <div id="myEchart" style="width: 90%; height: 300px;margin-top:50px;"></div>
+                <div style="height:300px;display: flex;align-items: flex-end; justify-content: flex-start;white-space:nowrap">日累计在线时长(h)</div>
             </div>
             <div class="devide_table">
                 <el-row type="flex" class="row_active">
                     <el-col :span="24">
-                        <tableBarActive2 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
+                        <tableBarActive2 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableDatanew11" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
                     </el-col>
                 </el-row>
                 <el-row type="flex" style="   display: flex;justify-content: flex-end;margin-top:10px;">
@@ -64,38 +60,15 @@
             </div>
         </div>
         <div class="device_tab_on" v-if="!showType">
-            <!-- <div class="user-title">
-                <el-row style="margin-top:20px;">
-                    <el-col :span="12">
-                        <div class="user-item">
-                            <div class="item-count">{{offlinePer}}</div>
-                            <div class="item-text">设备离线率</div>
-                        </div>
-                    </el-col>
-                    <el-col :span="12">
-                        <div class="user-item">
-                            <div class="item-count">{{avgofflineTimeInSec}}</div>
-                            <div class="item-text">设备平均离线时长</div>
-                        </div>
-                    </el-col>
-                </el-row>
-            </div> -->
-            <div class="device_form device_form_active">
-                <div class="switch_tab">
-            <el-radio-group v-model="radio1" @change="onchangeTab"  style="display: flex;justify-content: flex-start;">
-              
-                <el-radio-button label="离线次数"></el-radio-button>
-                  <el-radio-button label="在线时长"></el-radio-button>
-                 <!-- <el-button style="margin-left:20px;" type="text" @click="toexportExcel">导出</el-button> -->
-            </el-radio-group>
-           
-        </div>
-                <div id="myEchart1" style="width: 100%; height: 300px;margin-top:50px;"></div>
+            <div class="device_form device_form_active" style="display: flex;space-between">
+                <div id="myEchart1" style="width: 90%; height: 300px;margin-top:50px;"></div>
+                                <div style="height:300px;display: flex;align-items: flex-end; justify-content: flex-start;white-space:nowrap">日累计离线次数(h)</div>
+
             </div>
             <div class="devide_table">
                 <el-row type="flex" class="row_active">
                     <el-col :span="24">
-                        <tableBarActive2 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData1" :clomnSelection="clomnSelection" :rowHeader="rowHeader1" :tableOption="tableOption1" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
+                        <tableBarActive2 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableDatanew22" :clomnSelection="clomnSelection" :rowHeader="rowHeader1" :tableOption="tableOption1" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
                     </el-col>
                 </el-row>
                 <el-row type="flex" style="display: flex;justify-content: flex-end;margin-top:10px;">
@@ -116,7 +89,7 @@ import tableBarActive2 from "../../components/tableBarActive2";
 import {
   device_online_curve,
   device_online_table,
-  query_playdata_table
+  query_playdata_table,
 } from "../../api/api";
 import pageNation from "../../components/pageNation";
 import common from "../../common/js/util.js";
@@ -124,45 +97,62 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
-      versointype:"0",
-      versointime:"0",
-       options: [
+      timeArr:false,
+      valueele: "",
+      versointype: "0",
+      versointime: "0",
+      versointime1: "0",
+      options: [
         {
           value: "0",
-          label: "全部版本"
+          label: "全部版本",
         },
         {
           value: "1",
-          label: "3.2.2"
+          label: "3.2.2",
         },
-         {
-          value: "2",
-          label: "3.2.3"
-        }],
-         options1: [
         {
-          value:"0" ,
-          label: "时段对比"
+          value: "2",
+          label: "3.2.3",
+        },
+      ],
+      options11: [
+        {
+          value: "0",
+          label: "全部类型",
         },
         {
           value: "1",
-          label: "00:00:00-05:59:59"
+          label: "RK3328",
         },
-         {
+        {
           value: "2",
-          label: "06:00:00-11:59:59"
+          label: "AMS805",
         },
-          {
+      ],
+      options1: [
+        {
+          value: "0",
+          label: "时段对比",
+        },
+        {
+          value: "1",
+          label: "00:00:00-05:59:59",
+        },
+        {
           value: "2",
-          label: "12:00:00-17:59:59"
+          label: "06:00:00-11:59:59",
         },
-          {
+        {
           value: "2",
-          label: "18:00:00-23:59:59"
+          label: "12:00:00-17:59:59",
         },
-       
-        ],
-      radio1: "离线次数",
+        {
+          value: "2",
+          label: "18:00:00-23:59:59",
+        },
+      ],
+      radio1: "在线时长",
       showType: true,
       shoudzyx: false,
       showzdyz: false,
@@ -178,7 +168,7 @@ export default {
                 new Date(new Date(new Date().toLocaleDateString()).getTime()) -
                 3600 * 1000 * 24 * 1;
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "今天",
@@ -188,7 +178,7 @@ export default {
                 new Date(new Date().toLocaleDateString()).getTime()
               );
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近一周",
@@ -199,7 +189,7 @@ export default {
               );
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 6);
               picker.$emit("pick", [start, end]);
-            }
+            },
           },
           {
             text: "最近一个月",
@@ -210,12 +200,12 @@ export default {
               );
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 29);
               picker.$emit("pick", [start, end]);
-            }
-          }
+            },
+          },
         ],
         disabledDate(time) {
           return time.getTime() > Date.now();
-        }
+        },
       },
       valueTime4: "",
       activeName: "first",
@@ -224,38 +214,29 @@ export default {
       rowHeader: [
         {
           prop: "timeStamp",
-          label: "离线次数区间"
+          label: "在线时长区间",
         },
         {
           prop: "totalDevCnt",
-          label: "设备数"
+          label: "设备数",
         },
         {
           prop: "onlineDevCnt",
-          label: "占比"
+          label: "占比(%)",
         },
-        // {
-        //   prop: "percent",
-        //   label: "设备在线率"
-        // },
-
-        // {
-        //   prop: "avgTime",
-        //   label: "平均在线时长"
-        // }
       ],
       rowHeader1: [
         {
           prop: "timeStamp",
-          label: "离线次数区间"
+          label: "离线次数区间",
         },
         {
           prop: "totalDevCnt",
-          label: "设备数"
+          label: "设备数",
         },
         {
           prop: "onlineDevCnt",
-          label: "占比"
+          label: "占比",
         },
         // {
         //   prop: "percent",
@@ -265,6 +246,67 @@ export default {
         //   prop: "avgTime",
         //   label: "平均离线时长"
         // }
+      ],
+
+      tableDatanew11: [
+        {
+          timeStamp: "21-24h",
+          totalDevCnt: "23",
+          onlineDevCnt: "5",
+        },
+        {
+          timeStamp: "16-20h",
+          totalDevCnt: "234",
+          onlineDevCnt: "55",
+        },
+        {
+          timeStamp: "11-15h",
+          totalDevCnt: "233",
+          onlineDevCnt: "15",
+        },
+        {
+          timeStamp: "6-10h",
+          totalDevCnt: "232",
+          onlineDevCnt: "25",
+        },
+        {
+          timeStamp: "1-5h",
+          totalDevCnt: "231",
+          onlineDevCnt: "5",
+        },
+        {
+          timeStamp: "<1h",
+          totalDevCnt: "23",
+          onlineDevCnt: "35",
+        },
+      ],
+      data: ["0次", "1-3次", "4-6次", "6-10次", ">10次"],
+      tableDatanew22: [
+        {
+          timeStamp: "0次",
+          totalDevCnt: "23",
+          onlineDevCnt: "5",
+        },
+        {
+          timeStamp: "1-3次",
+          totalDevCnt: "234",
+          onlineDevCnt: "55",
+        },
+        {
+          timeStamp: "4-6次",
+          totalDevCnt: "233",
+          onlineDevCnt: "15",
+        },
+        {
+          timeStamp: "6-10次",
+          totalDevCnt: "232",
+          onlineDevCnt: "25",
+        },
+        {
+          timeStamp: ">10次",
+          totalDevCnt: "231",
+          onlineDevCnt: "5",
+        },
       ],
       tableData: [],
       tableData1: [],
@@ -278,19 +320,19 @@ export default {
       pager: {
         count: 0,
         page: 1,
-        rows: 100
+        rows: 100,
       },
       pager1: {
         count: 0,
         page: 1,
-        rows: 100
+        rows: 100,
       },
       onlinePer: 0,
       avgOnlineTimeInSec: 0,
       offlinePer: 0,
       avgofflineTimeInSec: 0,
       flag: 1,
-      pageActives: 1
+      pageActives: 1,
     };
   },
   mounted() {
@@ -310,12 +352,14 @@ export default {
     onchangeTab(val) {
       if (val == "在线时长") {
         this.showType = true;
+        this.timeArr=false
         this.queryOnlineinfo();
         this.queryOnlineTable();
         this.flag = 1;
       } else {
         this.flag = 0;
         this.showType = false;
+        this.timeArr=true
         this.queryOffinfo();
         this.queryOfflineTable();
       }
@@ -431,7 +475,6 @@ export default {
       this.queryOnlineTable();
     },
     handleClick(tab) {
-      console.log(tab.index);
       if (tab.index == 0) {
         this.queryOnlineinfo();
         this.queryOnlineTable();
@@ -461,12 +504,11 @@ export default {
         end_ts: this.endtime,
         flag: 1,
         pageNo: this.pager.page - 1,
-        pageSize: 10
+        pageSize: 10,
       };
       device_online_table(param)
         .then(res => {
           if (res.status == 0) {
-            console.log(res);
 
             let tempArr = res.data.list;
             for (var i = 0; i < tempArr.length; i++) {
@@ -491,7 +533,7 @@ export default {
           } else {
             this.$message({
               message: "服务出错",
-              type: "error"
+              type: "error",
             });
           }
         })
@@ -507,7 +549,7 @@ export default {
           "总设备",
           "设备在线",
           "设备在线率",
-          "平均在线时长"
+          "平均在线时长",
         ];
         // 上面设置Excel的表格第一行的标题
         const filterVal = [
@@ -515,7 +557,7 @@ export default {
           "totalDevCnt",
           "onlineDevCnt",
           "percent",
-          "avgTime"
+          "avgTime",
         ];
         // 上面的index、nickName、name是tableData里对象的属性
         const list = this.tableData2; //把data里的tableData存到list
@@ -546,12 +588,11 @@ export default {
         end_ts: this.endtime,
         flag: 1,
         pageNo: this.pageActives - 1,
-        pageSize: 10
+        pageSize: 10,
       };
       device_online_table(param)
         .then(res => {
           if (res.status == 0) {
-            console.log(res);
 
             let tempArr = res.data.list;
             for (var i = 0; i < tempArr.length; i++) {
@@ -560,7 +601,6 @@ export default {
             this.tableData2 = this.tableData2.concat(tempArr);
 
             if (this.pageActives >= res.data.totalPageCnt) {
-              console.log(this.pageActives);
               this.common.monitoringLogs("导出", "导出设备趋势图", 1);
               this.exportExcel();
             } else {
@@ -575,7 +615,7 @@ export default {
           console.log(error);
           this.$message({
             message: "服务出错",
-            type: "error"
+            type: "error",
           });
           this.common.monitoringLogs("导出", "导出设备趋势图", 0);
         });
@@ -601,12 +641,11 @@ export default {
         end_ts: this.endtime,
         flag: 0,
         pageNo: this.pager1.page - 1,
-        pageSize: 10
+        pageSize: 10,
       };
       device_online_table(param)
         .then(res => {
           if (res.status == 0) {
-            console.log(res);
             let tempArr = res.data.list;
             for (var i = 0; i < tempArr.length; i++) {
               tempArr[i].percent = (tempArr[i].percent * 100).toFixed(4) + "%";
@@ -651,11 +690,10 @@ export default {
       let param = {
         start_ts: this.starttime,
         end_ts: this.endtime,
-        flag: this.flag
+        flag: this.flag,
       };
       device_online_curve(param)
         .then(res => {
-          console.log(res);
           if (res.status == 0) {
             this.onlinePer = res.data.onlinePer * 100 + "%";
             if (res.data.avgOnlineTimeInSec == 0) {
@@ -701,11 +739,10 @@ export default {
       let param = {
         start_ts: this.starttime,
         end_ts: this.endtime,
-        flag: this.flag
+        flag: this.flag,
       };
       device_online_curve(param)
         .then(res => {
-          console.log(res);
           if (res.status == 0) {
             this.offlinePer = res.data.onlinePer;
             if (res.data.avgOnlineTimeInSec == 0) {
@@ -748,24 +785,66 @@ export default {
       let myChart = echarts.init(document.getElementById("myEchart")); //这里是为了获得容器所在位置
       // let myChart1 = echarts.init(document.getElementById('myEchart1'));
       window.onresize = myChart.resize;
+      // let options = {
+      //   title: {
+      //     text: "在线时长趋势图",
+      //     left: "left",
+      //   },
+      //   xAxis: {
+      //     type: "category",
+      //     data: arry,
+      //   },
+      //   yAxis: {
+      //     type: "value",
+      //   },
+      //   series: [
+      //     {
+      //       data: arrx,
+      //       type: "line",
+      //     },
+      //   ],
+      // };
       let options = {
         title: {
-          text: "在线时长趋势图",
-          left: "left"
+          text: "设备数（台）",
+          left: "left",
         },
-        xAxis: {
-          type: "category",
-          data: arry
+        color: ["#3398DB"],
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: "shadow", // 默认为直线，可选为：'line' | 'shadow'
+          },
         },
-        yAxis: {
-          type: "value"
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
         },
+        xAxis: [
+          {
+            type: "category",
+            data: ["21-24h", "16-20h", "11-15h", "6-10h", "1-5h", "<1h"],
+            axisTick: {
+              alignWithLabel: true,
+            },
+          },
+        ],
+        yAxis: [
+          {
+            type: "value",
+          },
+        ],
         series: [
           {
-            data: arrx,
-            type: "line"
-          }
-        ]
+            name: "新增设备",
+            type: "bar",
+            barWidth: "10%",
+            data: [52, 200, 300, 20, 300, 20],
+          },
+        ],
       };
       myChart.setOption(options);
       //myChart1.setOption(options);
@@ -787,31 +866,54 @@ export default {
       window.onresize = myChart.resize;
       let options = {
         title: {
-          text: "离线次数趋势图",
-          left: "left"
+          text: "设备数（台）",
+          left: "left",
         },
-        xAxis: {
-          type: "category",
-          data: arry
+        color: ["#3398DB"],
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: "shadow", // 默认为直线，可选为：'line' | 'shadow'
+          },
         },
-        yAxis: {
-          type: "value"
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
         },
+        xAxis: [
+          {
+            type: "category",
+            data: ["0次", "1-3次", "4-6次", "6-10次", ">10次"],
+            axisTick: {
+              alignWithLabel: true,
+            },
+          },
+        ],
+        yAxis: [
+          {
+            type: "value",
+          },
+        ],
         series: [
           {
-            data: arrx,
-            type: "line"
-          }
-        ]
+            name: "新增设备",
+            type: "bar",
+            barWidth: "10%",
+            data: [52, 200, 300, 20, 300, 20],
+          },
+        ],
       };
       myChart.setOption(options);
       //myChart1.setOption(options);
-    }
+    },
   },
   components: {
     tableBarActive2,
-    pageNation
-  }
+    pageNation,
+  },
 };
 </script>
 
@@ -822,10 +924,9 @@ export default {
     height: auto;
 
     .switch_tab {
-      
       right: 9%;
       height: 40px;
-      float:right;
+      float: right;
       // background: red;
     }
 
