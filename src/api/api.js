@@ -9,6 +9,7 @@ if (href.indexOf('xyj.grapefruitcloud.com') >= 0) {
     var ownbase = 'http://xyj.grapefruitcloud.com' //PHP服务域名
 } else {
     var ownbase = 'http://zzb.onezen.net' //PHP服务域名
+    var ownbase2 = 'http://10.0.0.156:8090' //李锐测试
 }
 
 
@@ -445,7 +446,7 @@ export const modify_domain_list = params => { return axios.post(`${ownbase}/doma
 
 //PTFS节点管理
 //节点控制台
-export const send_ptfs_cmd = params => { return axios.post(`${ownbase2}/bg_manager_tool/send_ptfs_cmd`, params).then(res => res.data); };
+export const send_ptfs_cmd = params => { return axios.post(`${ownbase}/bg_manager_tool/send_ptfs_cmd`, params).then(res => res.data); };
 export const query_ptfs_cmd_result = params => { return axios.post(`${ownbase}/bg_manager_tool/query_ptfs_cmd_result`, params).then(res => res.data); };
 
 //20200416 设备绑定输入ID新增

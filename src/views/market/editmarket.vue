@@ -1,58 +1,33 @@
 <template>
   <div class="addmarket">
-       <div class="goback" style="width: 100%;line-height: 50px;">
+    <div class="goback" style="width: 100%;line-height: 50px;">
       <div style="margin-top:20px;">
-        
+
         <el-button type="primary" class="el-upload__tip" @click="$router.go(-1)">返回</el-button>
       </div>
-      
+
     </div>
-    <el-form
-      :model="ruleForm"
-      :rules="rules"
-      ref="ruleForm"
-      label-width="100px"
-      class="demo-ruleForm"
-    >
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <h3>一、上传软件应包</h3>
-      <!-- <el-form-item label="上传APK;" prop="name">
-        <el-upload
-          id="1"
-          class="upload-demo"
-          ref="upload1"
-          :limit="1"
-          drag
-          name="configFile"
-          :before-upload="beforeAvatarUpload"
-          action
-          :file-list="fileList"
-          :http-request="uploadSectionFile1"
-          :auto-upload="false"
-        >
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">
-            将文件拖到此处，或
-            <em>点击上传</em>
-          </div>
-          <div class="el-upload__tip" slot="tip">
-            <div>只能上传.APK文件.</div>
-            <el-button type="primary" class="el-upload__tip" @click="submitUpload1">上传</el-button>
-          </div>
-        </el-upload>
-      </el-form-item> -->
-        <el-form-item label="上传APK;" prop="name">
-         <div class="item" style=" align-items: flex-start; display: flex;justify-content: center;">
-                <div class="item-r" style="position: relative;">
-                    <el-button class="choose-file" size="mini">请选择要上传的文件</el-button>
-                    <input id="f" class="choose-input" type="file" name="file">
-                    <el-button type="primary" class="onchoose-file" @click="upFile()" >确定</el-button>
-                    进度条 <span id="per">{{perNum}}</span>%
-                    <div style="width: 350px;height: 16px;background-color: #999;margin-top:10px;">
-                        <div style="height: 16px;background-color: #67c23a" id="loading" v-bind:style="{'width': widthData+'%'}"></div>
-                    </div>
-                    <div id="result" style="margin-top:10px;"></div>
-                </div>
+
+      <el-form-item label="上传APK:" prop="name">
+        <div style="align-items: center; display: flex;justify-content: flex-start;" v-show="!uploadTab">
+          <div>已上传:{{ruleForm.pkg_name}}</div>
+          <el-button type="primary" style="margin-left:20px;" @click="reUpload">重新选择</el-button>
+        </div>
+        <div class="item" style=" align-items: flex-start; display: flex;justify-content: center;" v-show="uploadTab">
+          <div class="item-r" style="position: relative;">
+            <!-- <el-button class="choose-file" size="mini">请选择要上传的文件</el-button> -->
+            <input id="f" class="choose-input" type="file" name="file">
+            <el-button type="primary" class="onchoose-file" @click="upFile()">确定</el-button>
+            进度条
+            <span id="per">{{perNum}}</span>%
+            <div style="width: 350px;height: 16px;background-color: #999;margin-top:10px;">
+              <div style="height: 16px;background-color: #67c23a" id="loading" v-bind:style="{'width': widthData+'%'}"></div>
             </div>
+            <div id="result" style="margin-top:10px;"></div>
+          </div>
+        </div>
       </el-form-item>
       <el-form-item label="应用包名:" prop="pkg_name">
         <el-input v-model="ruleForm.pkg_name" placeholder :disabled="true" style="width:300px;"></el-input>
@@ -66,58 +41,30 @@
 
       <h3>二、选择应用分类</h3>
 
-      <el-form-item label="一级分类" prop="app_type1" @change="onchangeappType1">
-        <!-- <el-select v-model="ruleForm.app_type1" placeholder="请选择应用评分" style="width:300px;">
-          <el-option label="1" value="1"></el-option>
-          <el-option label="2" value="2"></el-option>
-        </el-select> -->
-          <el-select v-model="ruleForm.app_type1" placeholder="请选择" @change="onChangeOne" style="width:300px;">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
+      <el-form-item label="一级分类:" prop="app_type1">
+        <el-select v-model="ruleForm.app_type1" placeholder="请选择" @change="onchangeappType1" style="width:300px;">
+          <el-option v-for="item in options" :key="item.type" :label="item.name" :value="item.type">
+          </el-option>
+
+        </el-select>
       </el-form-item>
-      <el-form-item label="二级分类" prop="app_type2">
+      <el-form-item label="二级分类:" prop="app_type2">
         <el-select v-model="ruleForm.app_type2" placeholder="请选择应用评分" @change="onchangeappType2" style="width:300px;">
-            <el-option
-                  v-for="item in options1"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
+          <el-option v-for="item in options1" :key="item.type" :label="item.sub_name" :value="item.sub_type"></el-option>
         </el-select>
       </el-form-item>
       <h3>三、填写应用基本信息</h3>
       <el-form-item label="应用LOGO:" prop="name">
-     
+
         <div class="crop-demo">
-          <img :src="cropImg" class="pre-img" width="100" height="100" />
-          上传尺寸：144像素*144像素（建议）
+          <img :src="cropImg" class="pre-img" width="100" height="100" /> 上传尺寸：144像素*144像素（建议）
           <div class="crop-demo-btn">
             上传封面图
-            <input
-              class="crop-input"
-              type="file"
-              name="image"
-              accept="image/*"
-              @change="setImage"
-            />
+            <input class="crop-input" type="file" name="image" accept="image/*" @change="setImage" />
           </div>
         </div>
         <el-dialog title="裁剪图片" :visible.sync="dialogVisible" width="500px">
-          <vue-cropper
-            ref="cropper"
-            :src="imgSrc"
-            :ready="cropImage"
-            :zoom="cropImage"
-            :cropmove="cropImage"
-            preview=".preview"
-            style="width:100%;height:300px;"
-          ></vue-cropper>
+          <vue-cropper ref="cropper" :src="imgSrc" :ready="cropImage" :zoom="cropImage" :cropmove="cropImage" preview=".preview" style="width:100%;height:300px;"></vue-cropper>
           <span slot="footer" class="dialog-footer">
             <el-button @click="cancelCrop">取 消</el-button>
             <el-button type="primary" @click="onUpload">确 定</el-button>
@@ -125,35 +72,35 @@
         </el-dialog>
       </el-form-item>
       <el-form-item label="应用名称:" prop="app_name">
-         <div style="display: flex; justify-content: flex-start;">
-        <el-input v-model="ruleForm.app_name" placeholder="请输入应用名称" style="width:300px;"></el-input>
-           <div style="color:red;white-space:nowrap;margin-left:10px;">请输入1-16个字符</div>
+        <div style="display: flex; justify-content: flex-start;">
+          <el-input v-model="ruleForm.app_name" placeholder="请输入应用名称" style="width:300px;"></el-input>
+          <div style="color:#9999;white-space:nowrap;margin-left:10px;">请输入1-16个字符</div>
         </div>
       </el-form-item>
       <el-form-item label="开发者:" prop="developer">
-          <div style="display: flex; justify-content: flex-start;">
-        <el-input v-model="ruleForm.developer " placeholder="请输入开发者信息" style="width:300px;" ></el-input>
-            <div style="color:red;white-space:nowrap;margin-left:10px;">字数不得超过50个字符</div>
+        <div style="display: flex; justify-content: flex-start;">
+          <el-input v-model="ruleForm.developer " placeholder="请输入开发者信息" style="width:300px;"></el-input>
+          <div style="color:#9999;white-space:nowrap;margin-left:10px;">字数不得超过50个字符</div>
         </div>
       </el-form-item>
       <el-form-item label="应用简述:" prop="snapshot">
-         <div style="display: flex; justify-content: flex-start;">
-        <el-input v-model="ruleForm.snapshot" placeholder="一句话描述该商品的广告词" style="width:300px;"></el-input>
-           <div style="color:red;white-space:nowrap;margin-left:10px;">请输入2-20个字符</div>
+        <div style="display: flex; justify-content: flex-start;">
+          <el-input v-model="ruleForm.snapshot" placeholder="一句话描述该商品的广告词" style="width:300px;"></el-input>
+          <div style="color:#9999;white-space:nowrap;margin-left:10px;">请输入2-20个字符</div>
         </div>
       </el-form-item>
-      <el-form-item label="应用评分" prop="app_score">
+      <el-form-item label="应用评分:" prop="app_score">
         <el-select v-model="ruleForm.app_score" placeholder="请选择应用评分" @change="onchangeScore" style="width:300px;">
           <el-option label="0" value="0"></el-option>
           <el-option label="0.5" value="0.5"></el-option>
           <el-option label="1" value="1"></el-option>
-          <el-option label="1.5" value="1.5"></el-option>  
+          <el-option label="1.5" value="1.5"></el-option>
           <el-option label="2" value="2"></el-option>
-          <el-option label="2.5" value="2.5"></el-option>  
+          <el-option label="2.5" value="2.5"></el-option>
           <el-option label="3" value="3"></el-option>
-          <el-option label="3.5" value="3.5"></el-option>  
+          <el-option label="3.5" value="3.5"></el-option>
           <el-option label="4" value="4"></el-option>
-          <el-option label="4.5" value="4.5"></el-option>  
+          <el-option label="4.5" value="4.5"></el-option>
           <el-option label="5" value="5"></el-option>
         </el-select>
       </el-form-item>
@@ -161,10 +108,10 @@
         <el-input v-model="ruleForm.dl_count" placeholder="请输入下载次数" style="width:300px;"></el-input>
       </el-form-item>
 
-      <el-form-item label="应用介绍" prop="app_brief">
-         <div style="display: flex; justify-content: flex-start;">
-        <el-input type="textarea" v-model="ruleForm.app_brief" placeholder="请输入应用介绍" style="width:300px;"></el-input>
-           <div style="color:red;white-space:nowrap;margin-left:10px;">请输入2-500个字符</div>
+      <el-form-item label="应用介绍:" prop="app_brief">
+        <div style="display: flex; justify-content: flex-start;">
+          <el-input type="textarea" v-model="ruleForm.app_brief" placeholder="请输入应用介绍" style="width:300px;"></el-input>
+          <div style="color:#9999;white-space:nowrap;margin-left:10px;">请输入2-500个字符</div>
         </div>
       </el-form-item>
       <el-form-item label="应用图片:" prop="name">
@@ -172,37 +119,61 @@
       </el-form-item>
       <el-form-item label="    " prop="name">
         <div class="posrev bg-white applay-uploadimg">
-                <div class="weui-uploader__bd  plr-15">
+          <div class="weui-uploader__bd  plr-15">
 
-                    <div class="weui-uploader__input-box">
-                        <input id="fileid" class="weui-uploader__input" type="file" accept="image/*" @change="addImg"  ref="inputer" multiple>
-                    </div>
-                     <div class="weui-uploader__input-box">
-                        <input id="fileid1" class="weui-uploader__input" type="file" accept="image/*" @change="addImg1"  ref="inputer1" multiple>
-                    </div>
-                     <div class="weui-uploader__input-box">
-                        <input id="fileid2" class="weui-uploader__input" type="file" accept="image/*" @change="addImg2"  ref="inputer2" multiple>
-                    </div>
-                     <div class="weui-uploader__input-box">
-                        <input id="fileid3" class="weui-uploader__input" type="file" accept="image/*" @change="addImg3"  ref="inputer3" multiple>
-                    </div>
-                      <div class="weui-uploader__input-box">
-                        <input id="fileid3" class="weui-uploader__input" type="file" accept="image/*" @change="addImg4"  ref="inputer4" multiple>
-                    </div>
-                      <div class="weui-uploader__input-box">
-                        <input id="fileid3" class="weui-uploader__input" type="file" accept="image/*" @change="addImg5"  ref="inputer5" multiple>
-                    </div>
-                    <div>
-                        <el-button type="primary" @click="imgupload">确定上传</el-button>
-                    </div>
-                    
-                </div>
+            <div class="weui-uploader__input-box" style="display: flex;justify-content: flex-start;align-items: center;margin-top:10px;">
+              <div style="align-items: center; display: flex;justify-content: flex-start;" v-show="!imgupload1">
+                <div style="width:450px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ruleForm.app_pic[0]}}</div>
+                <el-button type="primary" style="margin-left:20px;margin-right:20px;" @click="reuploadImg(1)">重新选择</el-button>
+              </div>
+              <input id="fileid" class="weui-uploader__input" type="file" accept="image/*" @change="addImg" v-show="imgupload1" ref="inputer" multiple>
             </div>
+            <div class="weui-uploader__input-box" style="display: flex;justify-content: flex-start;align-items: center;margin-top:10px;">
+              <div style="align-items: center; display: flex;justify-content: flex-start;" v-show="!imgupload2">
+                <div style="width:450px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ruleForm.app_pic[1]}}</div>
+                <el-button type="primary" style="margin-left:20px;margin-right:20px;" @click="reuploadImg(2)">重新选择</el-button>
+              </div>
+              <input id="fileid1" class="weui-uploader__input" type="file" accept="image/*" @change="addImg1" v-show="imgupload2" ref="inputer1" multiple>
+            </div>
+            <div class="weui-uploader__input-box" style="display: flex;justify-content: flex-start;align-items: center;margin-top:10px;">
+              <div style="align-items: center; display: flex;justify-content: flex-start;" v-show="!imgupload3">
+                <div style="width:450px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ruleForm.app_pic[2]}}</div>
+                <el-button type="primary" style="margin-left:20px;margin-right:20px;" @click="reuploadImg(3)">重新选择</el-button>
+              </div>
+              <input id="fileid2" class="weui-uploader__input" type="file" accept="image/*" @change="addImg2" v-show="imgupload3" ref="inputer2" multiple>
+            </div>
+            <div class="weui-uploader__input-box" style="display: flex;justify-content: flex-start;align-items: center;margin-top:10px;">
+              <div style="align-items: center; display: flex;justify-content: flex-start;" v-show="!imgupload4">
+                <div style="width:450px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ruleForm.app_pic[3]}}</div>
+                <el-button type="primary" style="margin-left:20px;margin-right:20px;" @click="reuploadImg(4)">重新选择</el-button>
+              </div>
+              <input id="fileid3" class="weui-uploader__input" type="file" accept="image/*" @change="addImg3" v-show="imgupload4" ref="inputer3" multiple>
+            </div>
+            <div class="weui-uploader__input-box" style="display: flex;justify-content: flex-start;align-items: center;margin-top:10px;">
+              <div style="align-items: center; display: flex;justify-content: flex-start;" v-show="!imgupload5">
+                <div style="width:450px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ruleForm.app_pic[4]}}</div>
+                <el-button type="primary" style="margin-left:20px;margin-right:20px;" @click="reuploadImg(5)">重新选择</el-button>
+              </div>
+              <input id="fileid3" class="weui-uploader__input" type="file" accept="image/*" @change="addImg4"  v-show="imgupload5" ref="inputer4" multiple>
+            </div>
+            <div class="weui-uploader__input-box" style="display: flex;justify-content: flex-start;align-items: center;margin-top:10px;">
+              <div style="align-items: center; display: flex;justify-content: flex-start;" v-show="!imgupload6">
+                <div style="width:450px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ruleForm.app_pic[5]}}</div>
+                <el-button type="primary" style="margin-left:20px;margin-right:20px;" @click="reuploadImg(6)">重新选择</el-button>
+              </div>
+              <input id="fileid3" class="weui-uploader__input" type="file" accept="image/*" @change="addImg5" v-show="imgupload6" ref="inputer5" multiple>
+            </div>
+            <div style="margin-top:10px">
+              <el-button type="primary" @click="imgupload">确定上传</el-button>
+            </div>
+
+          </div>
+        </div>
       </el-form-item>
       <el-form-item style="display: flex; justify-content: center; align-items: center;">
         <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
         <!-- <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button> -->
-        <el-button  @click="$router.go(-1)">返回</el-button>
+        <el-button @click="$router.go(-1)">返回</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -226,34 +197,21 @@ import {
   update_app,
   saveimagemore,
   hostUrl,
+  get_apptype,
 } from "../../api/api.js";
 
 export default {
   data() {
     return {
-           options: [
-        {
-          value: "0",
-          label: "请选择",
-        },
-        {
-          value: "1",
-          label: "影音",
-        },
-        {
-          value: "2",
-          label: "教育",
-        },
-        {
-          value: "3",
-          label: "游戏",
-        },
-        {
-          value: "4",
-          label: "工具",
-        },
-      ],
-          perNum: 0,
+      imgupload1: false,
+      imgupload2: false,
+      imgupload3: false,
+      imgupload4: false,
+      imgupload5: false,
+      imgupload6: false,
+      uploadTab: false,
+      options: [],
+      perNum: 0,
       widthData: 0,
       dialogVisible: false,
       cropImg: "",
@@ -269,70 +227,74 @@ export default {
         app_score: 0,
         dl_count: 0,
         app_brief: "",
-        app_type1: "0",
-        app_type2: "0",
+        app_type1: 1,
+        app_type2: 1,
         pkg_name: "",
         app_version: "",
         app_size: "",
         dl_url: "",
         create_time: 0,
         app_icon: "",
-        // region: "",
-        // date1: "",
-        // date2: "",
-        // delivery: false,
-        // type: [],
-        // resource: "",
-        // desc: ""
       },
       imgdata: [],
-      rules: {
-        name: [
-          { required: false, message: "请输入活动名称", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
-        ],
-        region: [
-          { required: false, message: "请选择活动区域", trigger: "change" },
-        ],
-        date1: [
-          {
-            type: "date",
-            required: true,
-            message: "请选择日期",
-            trigger: "change",
-          },
-        ],
-        date2: [
-          {
-            type: "date",
-            required: true,
-            message: "请选择时间",
-            trigger: "change",
-          },
-        ],
-        type: [
-          {
-            type: "array",
-            required: true,
-            message: "请至少选择一个活动性质",
-            trigger: "change",
-          },
-        ],
-        resource: [
-          { required: true, message: "请选择活动资源", trigger: "change" },
-        ],
-        desc: [{ required: false, message: "请填写活动形式", trigger: "blur" }],
-      },
+      app_pic_active:[]
     };
   },
   created() {
     this.cropImg = this.defaultSrc;
   },
   mounted() {
+    this.getpptypeInfo();
     this.queryAppInfo();
   },
   methods: {
-      //字符长度限制
+    //图片选这上传
+    reuploadImg(index) {
+      switch (index) {
+        case 1:
+          this.imgupload1 = true;
+          break;
+        case 2:
+          this.imgupload2 = true;
+          break;
+        case 3:
+          this.imgupload3 = true;
+          break;
+        case 4:
+          this.imgupload4 = true;
+          break;
+        case 5:
+          this.imgupload5 = true;
+          break;
+        case 6:
+          this.imgupload6 = true;
+          break;
+      }
+    },
+    //选着重新{上传
+    reUpload() {
+      this.uploadTab = true;
+    },
+    //获取一级分类
+    getpptypeInfo() {
+      let param = {};
+      get_apptype(param)
+        .then(res => {
+          console.log(res);
+          if (res.status == 0) {
+            let temparr = [];
+            let templist = res.data;
+            this.optionsAll = res.data;
+            this.options = res.data;
+            this.options1 = this.optionsAll[0].sub;
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+
+    //字符长度限制
     getStringWidth(val) {
       let len = 0;
       for (let i = 0; i < val.length; i++) {
@@ -344,109 +306,9 @@ export default {
         }
       }
       return len;
-    },  //字符长度限制
-  //二级分类
-    onChangeTwo(item) {
-      this.ruleForm.app_type2 = item;
-    },
-    onChangeOne(item) {
-      this.ruleForm.app_type1 = item;
-      console.log(item);
-      if (item == "1") {
-        this.options1 = [
-          {
-            value: "0",
-            label: "请选择",
-          },
-          {
-            value: "1",
-            label: "电视直播",
-          },
-          {
-            value: "2",
-            label: "视频点播",
-          },
-          {
-            value: "3",
-            label: "音乐娱乐",
-          },
-        ];
-      } else if (item == "2") {
-        this.options1 = [
-          {
-            value: "0",
-            label: "请选择",
-          },
-          {
-            value: "1",
-            label: "幼儿教育",
-          },
-          {
-            value: "2",
-            label: "中小学教育",
-          },
-          {
-            value: "3",
-            label: "职业教育",
-          },
-        ];
-      } else if (item == "3") {
-        this.options1 = [
-          {
-            value: "0",
-            label: "请选择",
-          },
-          {
-            value: "1",
-            label: "棋牌桌游",
-          },
-          {
-            value: "2",
-            label: "竞速体育",
-          },
-          {
-            value: "3",
-            label: "休闲益智",
-          },
-          {
-            value: "4",
-            label: "战争策略",
-          },
-          {
-            value: "5",
-            label: "飞行射击",
-          },
-          {
-            value: "6",
-            label: "动作冒险",
-          },
-          {
-            value: "7",
-            label: "模拟经营",
-          },
-        ];
-      } else if (item == "4") {
-        this.options1 = [
-          {
-            value: "0",
-            label: "请选择",
-          },
-          {
-            value: "1",
-            label: "运动健康",
-          },
-          {
-            value: "2",
-            label: "便捷生活",
-          },
-          {
-            value: "3",
-            label: "实用工具",
-          },
-        ];
-      }
-   
-    },
+    }, //字符长度限制
+    //二级分类
+
     //查询APP信息
     queryAppInfo() {
       let param = new Object();
@@ -455,87 +317,25 @@ export default {
         .then(res => {
           console.log(res);
           if (res.status == 0) {
-       
             this.cropImg = res.data.app_icon;
             this.ruleForm = res.data;
-                 this.ruleForm.app_pic=[]
-            this.ruleForm.app_score=(res.data.app_score)/10
-             if (this.ruleForm.app_type1 == 1) {
-                switch (this.ruleForm.app_type2) {
-                     case 0:
-                  this.ruleForm.app_type2 = "全部";
-                    break;
-                  case 1:
-                  this.ruleForm.app_type2 = "电视直播";
-                    break;
-                  case 2:
-                    this.ruleForm.app_type2 = "视频点播";
-                    break;
-                  case 3:
-                   this.ruleForm.app_type2 = "音乐娱乐";
-                    break;
-                }
-              } else if (this.ruleForm.app_type1 == 2) {
-                switch (this.ruleForm.app_type2) {
-                       case 0:
-                  this.ruleForm.app_type2 = "全部";
-                    break;
-                  case 1:
-                   this.ruleForm.app_type2 = "幼儿教育";
-                    break;
-                  case 2:
-                    this.ruleForm.app_type2 = "中小学教育";
-                    break;
-                  case 3:
-                    this.ruleForm.app_type2 = "职业教育";
-                    break;
-                }
-              } else if (this.ruleForm.app_type1 == 3) {
-                switch (this.ruleForm.app_type2) {
-                       case 0:
-                  this.ruleForm.app_type2 = "全部";
-                    break;
-                  case 1:
-                    this.ruleForm.app_type2 = "棋牌桌游";
-                    break;
-                  case 2:
-                    this.ruleForm.app_type2 = "竞速体育";
-                    break;
-                  case 3:
-                  this.ruleForm.app_type2 = "休闲益智";
-                    break;
-                  case 4:
-                    this.ruleForm.app_type2 = "战争策略";
-                    break;
-                  case 5:
-                    this.ruleForm.app_type2 = "飞行射击";
-                    break;
-                  case 6:
-                    this.ruleForm.app_type2 = "动作冒险";
-                    break;
-                  case 7:
-                   this.ruleForm.app_type2 = "模拟经营";
-                    break;
-                }
-              } else if (this.ruleForm.app_type1 == 4) {
-                switch (this.ruleForm.app_type2) {
-                       case 0:
-                  this.ruleForm.app_type2 = "全部";
-                    break;
-                  case 1:
-                    this.ruleForm.app_type2 = "运动健康";
-                    break;
-                  case 2:
-                   this.ruleForm.app_type2 = "便捷生活";
-                    break;
-                  case 3:
-                    this.ruleForm.app_type2 = "实用工具";
-                    break;
-                }
-              }
-            this.ruleForm.app_type1=res.data.app_type1+""
-                 this.ruleForm.app_type2=res.data.app_type2+""
-                 
+            //this.ruleForm.app_pic=[]
+            console.log(this.ruleForm.app_pic[4]);
+            if (!this.ruleForm.app_pic[4]) {
+              this.imgupload5 = true;
+              this.ruleForm.app_pic[4] = "";
+            } else {
+              this.imgupload5 = false;
+            }
+            if (!this.ruleForm.app_pic[5]) {
+              this.imgupload6 = true;
+              this.ruleForm.app_pic[5] = "";
+            } else {
+              this.imgupload6 = false;
+            }
+            this.ruleForm.app_score = res.data.app_score / 10;
+            this.ruleForm.app_type1 = res.data.app_type1;
+            this.ruleForm.app_type2 = res.data.app_type2;
           }
         })
         .catch(error => {});
@@ -659,21 +459,30 @@ export default {
     onchangeScore(val) {
       this.ruleForm.app_score = val;
     },
-    onchangeappType1(val) {
-      this.ruleForm.app_type1 =val+"";
+    onchangeappType1(item) {
+      this.ruleForm.app_type1 = item;
+      console.log(item);
+      if (item == "1") {
+        this.options1 = this.optionsAll[0].sub;
+      } else if (item == "2") {
+        this.options1 = this.optionsAll[1].sub;
+      } else if (item == "3") {
+        this.options1 = this.optionsAll[2].sub;
+      } else if (item == "4") {
+      }
     },
     onchangeappType2(val) {
-      this.ruleForm.app_type2 = val+"";
+      this.ruleForm.app_type2 = val;
     },
     submitForm(formName) {
-      if(this.ruleForm.app_type1==0 ){
-          this.$message({
+      if (this.ruleForm.app_type1 == 0) {
+        this.$message({
           message: "请选择一级分类",
           type: "error",
         });
         return false;
       }
-        if (
+      if (
         this.getStringWidth(this.ruleForm.app_name) > 16 ||
         this.getStringWidth(this.ruleForm.app_name) < 1
       ) {
@@ -684,7 +493,9 @@ export default {
         return false;
       }
 
-      if (this.getStringWidth(this.ruleForm.developer) > 50 || this.getStringWidth(this.ruleForm.developer) < 1
+      if (
+        this.getStringWidth(this.ruleForm.developer) > 50 ||
+        this.getStringWidth(this.ruleForm.developer) < 1
       ) {
         this.$message({
           message: "开发者信息应为1~50个字符",
@@ -712,9 +523,9 @@ export default {
         });
         return false;
       }
-         if (this.ruleForm.app_pic.length < 4) {
+      if (this.app_pic_active.length < 4) {
         this.$message({
-          message: "请至少上传4张图片",
+          message: "请从新上传且至少上传4张图片",
           type: "error",
         });
         return false;
@@ -724,9 +535,10 @@ export default {
           console.log(this.ruleForm);
           this.ruleForm.create_time = parseInt(Date.now() / 1000);
           this.ruleForm.dl_count = parseInt(this.ruleForm.dl_count);
-          this.ruleForm.app_score = parseFloat(this.ruleForm.app_score)*10;
+          this.ruleForm.app_score = parseFloat(this.ruleForm.app_score) * 10;
           this.ruleForm.app_type1 = parseInt(this.ruleForm.app_type1);
           this.ruleForm.app_type2 = parseInt(this.ruleForm.app_type2);
+          this.ruleForm.app_pic=this.app_pic_active
           let param = this.ruleForm;
 
           update_app(param)
@@ -745,13 +557,13 @@ export default {
                   type: "error",
                   message: "不能添加重复的APK",
                 });
-               this.common.monitoringLogs("修改", "修改应用管理", 0);
+                this.common.monitoringLogs("修改", "修改应用管理", 0);
               } else {
                 this.$message({
                   type: "error",
                   message: "编辑失败",
                 });
-                   this.common.monitoringLogs("修改", "修改应用管理", 0);
+                this.common.monitoringLogs("修改", "修改应用管理", 0);
               }
             })
             .catch(error => {
@@ -759,7 +571,7 @@ export default {
                 type: "error",
                 message: "后台服务出错",
               });
-               this.common.monitoringLogs("修改", "修改应用管理", 0);
+              this.common.monitoringLogs("修改", "修改应用管理", 0);
             });
         }
       });
@@ -904,7 +716,7 @@ export default {
       }
       //  console.log(this.entity.cardid_photo)
     },
-       addImg4: function(event) {
+    addImg4: function(event) {
       var that = this;
       // that.$toast('图片上传中...');
       let inputDOM1 = this.$refs.inputer4;
@@ -933,7 +745,7 @@ export default {
       }
       //  console.log(this.entity.cardid_photo)
     },
-       addImg5: function(event) {
+    addImg5: function(event) {
       var that = this;
       // that.$toast('图片上传中...');
       let inputDOM1 = this.$refs.inputer5;
@@ -960,7 +772,6 @@ export default {
           that.imgdata.push(imgcode);
         };
       }
-      //  console.log(this.entity.cardid_photo)
     },
     //图片上传
     imgupload() {
@@ -972,32 +783,24 @@ export default {
         if (res.status == 0) {
           let temp = res.msg;
           let tempArr = [];
+          that.app_pic_active=[]
           for (var i = 0; i < temp.length; i++) {
             tempArr.push(temp[i].data);
-            that.ruleForm.app_pic.push(temp[i].data);
+            that.app_pic_active.push(temp[i].data);
           }
-             that.$message({
+          that.$message({
             message: "图片上传成功",
             type: "success",
           });
-        }
-        else{
-             that.$message({
+        } else {
+          that.$message({
             message: "图片上传失败",
             type: "error",
           });
         }
-        
-        
-        //  axios.post('/api/uploads/add',{file:imgcode}).then(function(res){
-        //  if(res.data.code == 0){
-        //      that.entity.cardid_photo.push(res.data.data.url);
-        //  }else{
-        //      that.$toast(res.data.message);
-        //  }
       });
     },
-     //分偏上传
+    //分偏上传
     upFile() {
       let _this = this;
 

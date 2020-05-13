@@ -37,7 +37,7 @@
         <div class="item itemactive">
           <div
             class="item-l"
-          >应用介绍：爱奇艺(iQIYI.COM)是拥有海量、优质、高清的网络视频的大型视频网站,专业的网络视频播放平台。爱奇艺影视内容丰富多元,涵盖电影、电视剧、动漫等各种内容</div>
+          >应用详情：{{ruleForm.app_brief}}</div>
         </div>
       </div>
       <div class="detail_right">

@@ -200,13 +200,14 @@
     </el-dialog>
     <el-dialog :visible.sync="dialogVisibleactive" width="20%" :before-close="handleClose">
       <el-form ref="form">
-        <el-form-item label="请输入需要绑定ID:" style="dispaly:flex;justify-content:center;">
-          <el-input v-model="user_id_active" style=""></el-input>
+        <el-form-item label="" style="dispaly:flex;justify-content:center;">
+          <div style="float:left;width:150px;text-align:right;">请输入需要绑定ID:</div>
+          <el-input v-model="user_id_active" style="float:left;width:200px;margin-left:10px;"></el-input>
         </el-form-item>
-        <!-- <el-form-item label="请输入需要绑定的手机号">
-                  <el-input v-model="bind_user_tel_num"></el-input>
-            </el-form-item> -->
-
+        <el-form-item label="">
+          <div style="float:left;width:150px;text-align:right;">请输入需要绑定昵称</div>
+          <el-input v-model="active_dev_name" style="float:left;width:200px;margin-left:10px;" maxlength="10"></el-input>
+        </el-form-item>
         <div style="text-align: center;">
           <el-button type="primary" @click="onSubmitBind">确定</el-button>
           <el-button @click="dialogVisibleactive=false">取消</el-button>
@@ -417,6 +418,7 @@ export default {
       bind_user_tel_num: "",
       order_item: 0,
       order_type: 1,
+      active_dev_name: "",
       rules: {
         dev_sn: [
           { required: true, message: "请输入名称", trigger: "blur" },
@@ -500,35 +502,65 @@ export default {
     //绑定
     onSubmitBind() {
       let param = new Object();
+      if (this.user_id_active.length == 0) {
+        this.$message({
+          message: "绑定ID不能为空",
+          type: "error",
+        });
+        return false;
+      }
+      if (this.active_dev_name.length == 0) {
+        this.$message({
+          message: "昵称不能为空",
+          type: "error",
+        });
+        return false;
+      }
+      if (!/^[\u4E00-\u9FA5A-Za-z0-9_]+$/.test(this.active_dev_name)) {
+        this.$message({
+          message: "昵称格式不对",
+          type: "error",
+        });
+        return false;
+      }
+
       (param.bind_type = 1),
         (param.user_id = parseInt(this.user_id_active)),
         (param.dev_sn = this.dev_sn_active),
         (param.bind_user_tel_num = this.bind_user_tel_num),
-        web_change_device_state(param)
-          .then(res => {
-            if (res.status == 0 && res.err_code == 0) {
-              this.$message({
-                message: "绑定成功",
-                type: "success",
-              });
-              this.dialogVisibleactive = false;
-            } else {
-              this.$message({
-                message: "用户ID不存在，绑定失败",
-                type: "error",
-              });
-            }
-
-            this.getInfo();
-          })
-          .catch(error => {
+        (param.dev_name = this.active_dev_name);
+      web_change_device_state(param)
+        .then(res => {
+          if (res.status == 0 && res.err_code == 0) {
             this.$message({
-              message: "后台服务出错",
+              message: "绑定成功",
+              type: "success",
+            });
+            this.dialogVisibleactive = false;
+          } else if (res.status == -4 && res.err_code == 236) {
+            this.$message({
+              message: "同一用户下绑定昵称不可以重复",
               type: "error",
             });
+          } else {
+            this.$message({
+              message: "用户ID不存在，绑定失败",
+              type: "error",
+            });
+          }
+
+          this.getInfo();
+        })
+        .catch(error => {
+          this.$message({
+            message: "后台服务出错",
+            type: "error",
           });
+        });
     },
     tieactive(val) {
+      this.user_id_active = "";
+      this.active_dev_name = "";
       this.dev_sn_active = val.dev_sn;
       this.dialogVisibleactive = true;
     },
@@ -922,8 +954,8 @@ export default {
             }
           }
           //通过验证执行
-          this.ruleForm2.dev_type = parseInt(  this.ruleForm2.dev_type)
-           
+          this.ruleForm2.dev_type = parseInt(this.ruleForm2.dev_type);
+
           this.ruleForm2.total_cap =
             parseInt(this.ruleForm2.total_capss) * 1024 * 1024 * 1024;
           this.ruleForm2.login_token = "";

@@ -146,7 +146,7 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
-      is_recommend:"1",
+      is_recommend:"0",
       group_app_name: "",
       operatingStatus1: false,
       dialogVisiblereleta: false,

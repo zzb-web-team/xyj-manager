@@ -202,7 +202,7 @@
     
       <el-dialog :visible.sync="dialogVisiblecontentmove" width="20%" title="移动分组" style="text-align:center;" :before-close="handleClose">
       <el-form ref="form">
-        <el-form-item label="分组名称:" style="display: flex;">
+        <el-form-item label="分组名称:" style="display: flex;justify-content: center;">
           <el-select v-model="editname1" placeholder="请选择" @change="onChangemove" style="width:300px;">
             <el-option
               v-for="item in tableData"

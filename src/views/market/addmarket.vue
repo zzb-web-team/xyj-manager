@@ -9,10 +9,10 @@
     </div>
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <h3>一、上传软件应包</h3>
-      <el-form-item label="上传APK;" prop="name">
+      <el-form-item label="上传APK:" prop="name">
         <div class="item" style=" align-items: flex-start; display: flex;justify-content: center;">
           <div class="item-r" style="position: relative;">
-            <el-button class="choose-file" size="mini">请选择要上传的文件</el-button>
+            <!-- <el-button class="choose-file" size="mini">请选择要上传的文件</el-button> -->
             <input id="f" class="choose-input" type="file" name="file">
             <!-- <el-button type="primary" class="onchoose-file" @click="upFile()" :disabled="disableStatus">确定</el-button> -->
             <el-button type="primary" class="onchoose-file" @click="upFile()">确定</el-button>
@@ -46,7 +46,7 @@
 
       <h3>二、选择应用分类</h3>
 
-      <el-form-item label="一级分类" prop="app_type1">
+      <el-form-item label="一级分类:" prop="app_type1">
         <div style="display: flex; justify-content: flex-start;">
           <el-select v-model="ruleForm.app_type1" placeholder="请选择" @change="onChangeOne" style="width:300px;">
             <el-option v-for="item in options" :key="item.type" :label="item.name" :value="item.type"></el-option>
@@ -54,7 +54,7 @@
           <div style="color:red;white-space:nowrap;margin-left:10px;">*</div>
         </div>
       </el-form-item>
-      <el-form-item label="二级分类" prop="app_type2">
+      <el-form-item label="二级分类:" prop="app_type2">
 
         <el-select v-model="ruleForm.app_type2" placeholder="请选择" @change="onChangeTwo" style="width:300px;">
           <el-option v-for="item in options1" :key="item.type" :label="item.sub_name" :value="item.sub_type"></el-option>
@@ -83,23 +83,23 @@
       <el-form-item label="应用名称:" prop="app_name">
         <div style="display: flex; justify-content: flex-start;">
           <el-input v-model="ruleForm.app_name" placeholder="请输入应用名称" style="width:300px;"></el-input>
-          <div style="color:red;white-space:nowrap;margin-left:10px;">请输入1-16个字符</div>
+          <div style="color:#9999;white-space:nowrap;margin-left:10px;">请输入1-16个字符</div>
         </div>
       </el-form-item>
       <el-form-item label="开发者:" prop="developer">
         <div style="display: flex; justify-content: flex-start;">
           <el-input v-model="ruleForm.developer " placeholder="请输入开发者信息" style="width:300px;"></el-input>
-          <div style="color:red;white-space:nowrap;margin-left:10px;">字数不得超过50个字符</div>
+          <div style="color:#9999;white-space:nowrap;margin-left:10px;">字数不得超过50个字符</div>
         </div>
       </el-form-item>
       <el-form-item label="应用简述:" prop="snapshot">
         <div style="display: flex; justify-content: flex-start;">
 
           <el-input v-model="ruleForm.snapshot" placeholder="一句话描述该商品的广告词" style="width:300px;"></el-input>
-          <div style="color:red;white-space:nowrap;margin-left:10px;">请输入2-20个字符</div>
+          <div style="color:#9999;white-space:nowrap;margin-left:10px;">请输入2-20个字符</div>
         </div>
       </el-form-item>
-      <el-form-item label="应用评分" prop="app_score">
+      <el-form-item label="应用评分:" prop="app_score">
         <div style="display: flex; justify-content: flex-start;">
           <el-select v-model="ruleForm.app_score" placeholder="请选择应用评分" @change="onchangeScore" style="width:300px;">
             <el-option label="0" value="0"></el-option>
@@ -122,10 +122,10 @@
         <el-input v-model="ruleForm.dl_count" placeholder="请输入下载次数" style="width:300px;"></el-input>
       </el-form-item>
 
-      <el-form-item label="应用介绍" prop="app_brief">
+      <el-form-item label="应用介绍:" prop="app_brief">
         <div style="display: flex; justify-content: flex-start;">
           <el-input type="textarea" v-model="ruleForm.app_brief" placeholder="请输入应用介绍" style="width:300px;"></el-input>
-          <div style="color:red;white-space:nowrap;margin-left:10px;">请输入2-500个字符</div>
+          <div style="color:#9999;white-space:nowrap;margin-left:10px;">请输入2-500个字符</div>
         </div>
       </el-form-item>
       <el-form-item label="应用图片:" prop="name">
@@ -195,46 +195,8 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
-      options1: [
-        // {
-        //   value:"0",
-        //   label:"请选择"
-        // },
-        // {
-        //   value: "1",
-        //   label: "电视直播",
-        // },
-        // {
-        //   value: "2",
-        //   label: "视频点播",
-        // },
-        // {
-        //   value: "3",
-        //   label: "音乐娱乐",
-        // },
-      ],
-      options: [
-        // {
-        //   value:"0",
-        //   label:"请选择"
-        // },
-        // {
-        //   value: "1",
-        //   label: "影音",
-        // },
-        // {
-        //   value: "2",
-        //   label: "教育",
-        // },
-        // {
-        //   value: "3",
-        //   label: "游戏",
-        // },
-        // {
-        //   value: "4",
-        //   label: "工具",
-        // },
-      ],
+      options1: [],
+      options: [],
       optionsAll: [],
       perNum: 0,
       widthData: 0,
@@ -260,53 +222,9 @@ export default {
         dl_url: "",
         create_time: 0,
         app_icon: "",
-
-        // region: "",
-        // date1: "",
-        // date2: "",
-        // delivery: false,
-        // type: [],
-        // resource: "",
-        // desc: ""
       },
       imgdata: [],
-      rules: {
-        name: [
-          { required: false, message: "请输入活动名称", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
-        ],
-        region: [
-          { required: false, message: "请选择活动区域", trigger: "change" },
-        ],
-        date1: [
-          {
-            type: "date",
-            required: true,
-            message: "请选择日期",
-            trigger: "change",
-          },
-        ],
-        date2: [
-          {
-            type: "date",
-            required: true,
-            message: "请选择时间",
-            trigger: "change",
-          },
-        ],
-        type: [
-          {
-            type: "array",
-            required: true,
-            message: "请至少选择一个活动性质",
-            trigger: "change",
-          },
-        ],
-        resource: [
-          { required: true, message: "请选择活动资源", trigger: "change" },
-        ],
-        desc: [{ required: false, message: "请填写活动形式", trigger: "blur" }],
-      },
+   
     };
   },
   created() {
@@ -620,7 +538,7 @@ export default {
               } else if (res.status == -7) {
                 this.$message({
                   type: "error",
-                  message: "不能添加重复的APK",
+                  message: "当前应用已存在最高版本",
                 });
                 this.common.monitoringLogs("新增", "新增应用管理", 0);
               } else {
