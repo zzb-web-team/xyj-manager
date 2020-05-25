@@ -114,7 +114,7 @@
       </el-row>
     </div>
     <el-dialog :visible.sync="dialogVisible1" width="30%" :before-close="handleClose">
-      <div class="addaccout">
+      <div class="addaccout addaccout_add">
         <el-form :model="ruleForm2" :rules="rules" ref="ruleForm2" label-width="100px" class="demo-valiForm">
           <h3 class="title">新建设备</h3>
           <el-form-item label="名称：" prop="dev_sn">
@@ -150,7 +150,7 @@
       </div>
     </el-dialog>
     <el-dialog :visible.sync="dialogVisible2" width="30%" :before-close="handleClose" v-model="rowsData">
-      <div class="addaccout">
+      <div class="addaccout addaccout_add">
         <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm2" label-position="left" class="demo-ruleForm">
           <h3 class="title">修改设备</h3>
           <el-form-item prop="username">
@@ -539,10 +539,16 @@ export default {
             this.dialogVisibleactive = false;
           } else if (res.status == -4 && res.err_code == 236) {
             this.$message({
-              message: "同一用户下绑定昵称不可以重复",
+              message: "同一用户下绑定昵称不可以重复！",
               type: "error",
             });
-          } else {
+          } 
+          else if (res.status == 0 && res.err_code == 225) {
+            this.$message({
+              message: "设备不存在,无法绑定！",
+              type: "error",
+            });
+          }else {
             this.$message({
               message: "用户ID不存在，绑定失败",
               type: "error",
@@ -1394,7 +1400,7 @@ export default {
   }
 }
 
-.addaccout {
+.addaccout.addaccout_add {
   .title {
     width: 100%;
     text-align: center;
@@ -1414,7 +1420,7 @@ export default {
   }
 
   .el-form-item__error {
-    margin-left: 80px;
+    margin-left: 0px;
   }
 
   .search-con {

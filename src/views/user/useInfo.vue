@@ -401,11 +401,11 @@ export default {
                 if (res.status == 0) {
                     if (res.data.store_list.length > 0) {
                        // this.dev_num = res.data.store_list[0].dev_num
-                        this.average_store = (res.data.store_list[0].average_store) / 1000000
+                        this.average_store = (res.data.store_list[0].average_store) / 100
                         this.user_id = res.data.store_list[0].user_id
                         this.user_name = res.data.store_list[0].user_name
                         this.user_tel = res.data.store_list[0].user_tel
-                        this.sum_profit = (res.data.store_list[0].sum_profit) / 1000000
+                        this.sum_profit = (res.data.store_list[0].sum_profit) / 100
 
                     } else {
                       //  this.dev_num = 0
@@ -439,7 +439,7 @@ export default {
                 ptfs_query_user_store_list(param).then(res => {
                     console.log(res)
                     if (res.data.store_list) {
-                        this.sum_profit1 = (res.data.store_list[0].sum_profit) / 1000000
+                        this.sum_profit1 = (res.data.store_list[0].sum_profit) / 100
 
                     } else {}
 
@@ -471,8 +471,8 @@ export default {
                     this.tableData1 = []
                     let nowarr = res.data.total_profit_list
                     for (var i = 0; i < nowarr.length; i++) {
-                        nowarr[i].cur_profit = nowarr[i].cur_profit / 1000000
-                        nowarr[i].total_profit = nowarr[i].total_profit / 1000000
+                        nowarr[i].cur_profit = nowarr[i].cur_profit / 100
+                        nowarr[i].total_profit = nowarr[i].total_profit / 100
                         if (nowarr[i].profit_type == 1) {
                             nowarr[i].profit_type = "收益"
                         } else {
@@ -537,7 +537,7 @@ export default {
 
 
             let param = new Object()
-            param.query_type = 0
+            param.query_type = 1
             if (this.$route.query.user_id) {
                 param.user_id = parseInt(this.$route.query.user_id)
             } else {
@@ -556,11 +556,11 @@ export default {
                     this.tableData = []
                     let nowarr = res.data.profit_detail_list
                     for (var i = 0; i < nowarr.length; i++) {
-                        nowarr[i].profit = nowarr[i].profit / 1000000
-                        nowarr[i].store = nowarr[i].store / 1000000
-                        nowarr[i].store_value = nowarr[i].store_value / 1000000
-                        nowarr[i].ip_value = nowarr[i].ip_value / 1000000
-                        nowarr[i].com_power = nowarr[i].com_power / 1000000
+                        nowarr[i].profit = nowarr[i].profit / 100
+                        nowarr[i].store = nowarr[i].store / 100
+                        nowarr[i].store_value = nowarr[i].store_value / 100
+                        nowarr[i].ip_value = nowarr[i].ip_value / 100
+                        nowarr[i].com_power = nowarr[i].com_power / 100
                         
                         nowarr[i].time_stamp = this.common.getTimes(nowarr[i].time_stamp * 1000)
                         if( nowarr[i].up_bandwidth==0 ){

@@ -427,6 +427,11 @@ export default {
                   tempArr[i].time_stamp = this.common.getTimes(
                   tempArr[i].time_stamp  * 1000
                 );
+                 if (tempArr[i].opt_value <= 0 || tempArr[i].type==203 || tempArr[i].type==206 ) {
+                tempArr[i].opt_active = "扣除";
+              } else {
+                tempArr[i].opt_active = "新增";
+              }
                   switch (tempArr[i].type){
                        case 201:
                  tempArr[i].type="等级升级"
@@ -443,14 +448,10 @@ export default {
                  tempArr[i].type="在线24个小时"
                    break;
                        case 206:
-                 tempArr[i].type="离线一次 扣除一分， 最多扣除3次 "
+                 tempArr[i].type="离线"
                    break;
                }
-              if (tempArr[i].opt_value >= 0) {
-                tempArr[i].opt_active = "新增";
-              } else {
-                tempArr[i].opt_active = "扣除";
-              }
+             
             }
             this.tableData=[]
             this.tableData = tempArr;

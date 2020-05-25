@@ -364,13 +364,18 @@ export default {
               type: "success",
             });
             this.dialogVisibleactive = false;
-          }else if(res.status==-4 && res.err_code==236){
-                 this.$message({
+          } else if (res.status == -4 && res.err_code == 236) {
+            this.$message({
               message: "同一用户下绑定昵称不可以",
               type: "error",
             });
-          }
-           else {
+          } 
+           else if (res.status == 0 && res.err_code == 225) {
+            this.$message({
+              message: "设备不存在,无法绑定！",
+              type: "error",
+            });
+          }else {
             this.$message({
               message: "用户ID不存在，绑定失败",
               type: "error",
@@ -476,11 +481,11 @@ export default {
       } else if (row.online_state === 2) {
         return " 非法设备";
       } else if (row.online_state === 3) {
-        return "非法设备";
+        return "在线";
       } else if (row.online_state === 100) {
         return "非法设备";
       } else if (row.online_state === 101) {
-        return "非法设备";
+        return "离线";
       } else if (row.online_state === 99) {
         return "非法设备";
       }

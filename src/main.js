@@ -79,10 +79,6 @@ import marketrelatedindex from './views/marketgroup/relatedindex.vue'
 import Home from './views/Home.vue'
 
 
-
-
-
-
 Vue.use(VCharts)
 import echarts from 'echarts'
 
@@ -115,19 +111,19 @@ if (user) {
             'middle': middle,
             'devicePower': devicePower,
             'deviceActivation': deviceActivation,
-            'deviceupload':deviceupload,
+            'deviceupload': deviceupload,
             'income': income,
-            'setparam':setparam,
-            'pointsmiddle':pointsmiddle,
+            'setparam': setparam,
+            'pointsmiddle': pointsmiddle,
             'pointsDetails': pointsDetails,
             'DeviceAnalysis': DeviceAnalysis,
-            'Analysismiddle':Analysismiddle,
-            'Analysismiddle1':Analysismiddle,
-            'deviceterminal':deviceterminal,
+            'Analysismiddle': Analysismiddle,
+            'Analysismiddle1': Analysismiddle,
+            'deviceterminal': deviceterminal,
             'RegionAnalysis': RegionAnalysis,
             'UserAnalysis': UserAnalysis,
             'VersionAnalysis': VersionAnalysis,
-            'Applictionmiddle':Applictionmiddle,
+            'Applictionmiddle': Applictionmiddle,
             'addAppliction': addAppliction,
             'releaseAppliction': releaseAppliction,
             'AppVersion': AppVersion,
@@ -141,59 +137,34 @@ if (user) {
             'SysManage': SysManage,
             'AppManage': AppManage,
             "Log": Log,
-             //新增
-             'miningmiddle': miningmiddle,
-             'miningindex':miningindex,
-             'contributionindex':contributionindex,
-             'powerindex':powerindex,
-             'powermanagement':powermanagement,
-             'devicepower':devicepower,
-            'powerinfo':powerinfo,
-            'powerdetails':powerdetails,
-            'helpmiddle':helpmiddle,
-            'contentindex':contentindex,
-            'groupindex':groupindex,
-            'marketmiddle':marketmiddle,
-            'marketindex':marketindex,
-            'addmarket':addmarket,
-            'marketdetail':marketdetail,
-            'editmarket':editmarket,
-            'marketgroupmiddle':marketgroupmiddle,
-            'marketgroupindex':marketgroupindex,
-            'marketrelatedindex':marketrelatedindex,
-
-         
-         
-            // 'userinformation': userinformation,
-            // 'storagepower': storagepower,
-            // 'deviceinformation': deviceinformation,
-            // 'monitor': monitor,
-            // 'detail': detail,
-            // 'application': application,
-            // 'releasemanagement': releasemanagement,
-            // 'storage': storage,
-            // 'system': system,
-            // 'systemset': systemset,
-            // 'recording': recording,
-            // 'income': income,
-            // 'managementmeun': managementmeun,
-            // 'managementuser': managementuser,
-            // 'managementauthority': managementauthority,
-            // 'middledevive': middledevive,
-            // 'applicationmiddle': applicationmiddle,
-            // 'systems': systems,
-            //'userinformation1':userinformation1, 
-
-
+            //新增
+            'miningmiddle': miningmiddle,
+            'miningindex': miningindex,
+            'contributionindex': contributionindex,
+            'powerindex': powerindex,
+            'powermanagement': powermanagement,
+            'devicepower': devicepower,
+            'powerinfo': powerinfo,
+            'powerdetails': powerdetails,
+            'helpmiddle': helpmiddle,
+            'contentindex': contentindex,
+            'groupindex': groupindex,
+            'marketmiddle': marketmiddle,
+            'marketindex': marketindex,
+            'addmarket': addmarket,
+            'marketdetail': marketdetail,
+            'editmarket': editmarket,
+            'marketgroupmiddle': marketgroupmiddle,
+            'marketgroupindex': marketgroupindex,
+            'marketrelatedindex': marketrelatedindex,
         }
         //var newRoutes = res.msg
-        var newRoutes = [
-            {
+        var newRoutes = [{
                 path: "/",
                 component: 'Home',
                 name: "后台管理",
                 icon: 'iconfont icon-houtaiguanli',
-                titleActive:"账户",
+                titleActive: "账户",
                 children: [{
                     path: "/",
                     name: "后台账户管理",
@@ -231,11 +202,11 @@ if (user) {
 
                 ]
             },
-             {
+            {
                 path: "/c1",
                 component: 'Home',
                 name: "设备管理",
-                titleActive:"设备",
+                titleActive: "设备",
                 icon: 'iconfont icon-shebeiguanli1',
                 children: [{
                         path: "/deviceInfo",
@@ -277,7 +248,7 @@ if (user) {
                         }
 
                     },
-                     
+
 
                 ]
             },
@@ -285,16 +256,14 @@ if (user) {
                 path: "/gg",
                 component: 'Home',
                 name: "西柚机APP",
-                titleActive:"应用",
+                titleActive: "应用",
                 icon: 'iconfont icon-APPkaifa',
-                children: [
-                    {
+                children: [{
                         path: "/miningmiddle",
                         name: "挖矿节点",
                         component: 'miningmiddle',
                         icon: 'iconfont icon-wakuang',
-                        children: [
-                            {
+                        children: [{
                                 path: "/miningindex",
                                 name: "节点等级",
                                 component: 'miningindex',
@@ -321,8 +290,8 @@ if (user) {
                                     requireAuth: true
                                 }
                             },
-                            
-        
+
+
                         ],
                         meta: {
                             requireAuth: true
@@ -333,36 +302,35 @@ if (user) {
                         name: "设备算力",
                         component: 'devicepower',
                         icon: 'iconfont icon-shebei',
-                        children: [
+                        children: [{
+                                path: "/powerinfo",
+                                name: "算力信息",
+                                component: 'powerinfo',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
                             {
-                            path: "/powerinfo",
-                            name: "算力信息",
-                            component: 'powerinfo',
-                            icon: 'iconfont icon-dian',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-                        {
-                            path: "/powerdetails",
-                            name: "算力值明细",
-                            component: 'powerdetails',
-                            icon: 'iconfont icon-dian',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-                        {
-                            path: "/powermanagement",
-                            name: "算力值管理",
-                            component: 'powermanagement',
-                            icon: 'iconfont icon-dian',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-        
-                    ],
+                                path: "/powerdetails",
+                                name: "算力值明细",
+                                component: 'powerdetails',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                            {
+                                path: "/powermanagement",
+                                name: "算力值管理",
+                                component: 'powermanagement',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+
+                        ],
                         meta: {
                             requireAuth: true
                         }
@@ -372,8 +340,7 @@ if (user) {
                         name: "积分",
                         component: 'pointsmiddle',
                         icon: 'iconfont icon-jifenguanli',
-                        children: [
-                            {
+                        children: [{
                                 path: "/pointsDetails",
                                 name: "积分明细",
                                 component: 'pointsDetails',
@@ -390,7 +357,7 @@ if (user) {
                                 meta: {
                                     requireAuth: true
                                 }
-        
+
                             },
                             {
                                 path: "/setparam",
@@ -401,9 +368,9 @@ if (user) {
                                 meta: {
                                     requireAuth: true
                                 }
-        
+
                             },
-        
+
                         ],
                         meta: {
                             requireAuth: true
@@ -414,48 +381,46 @@ if (user) {
                         name: "帮助中心",
                         component: 'helpmiddle',
                         icon: 'iconfont icon-bangzhu',
-                        children: [
+                        children: [{
+                                path: "/groupindex",
+                                name: "分组管理",
+                                component: 'groupindex',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
                             {
-                            path: "/groupindex",
-                            name: "分组管理",
-                            component: 'groupindex',
-                            icon: 'iconfont icon-dian',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-                        {
-                            path: "/contentindex",
-                            name: "内容管理",
-                            component: 'contentindex',
-                            icon: 'iconfont icon-dian',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-                  
-        
-                    ],
+                                path: "/contentindex",
+                                name: "内容管理",
+                                component: 'contentindex',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+
+
+                        ],
                         meta: {
                             requireAuth: true
                         }
                     },
                 ]
             },
-           
+
             {
                 path: "/g1",
                 component: 'Home',
                 name: "TV盒子应用",
                 // titleActive:"系统版本",
                 icon: 'iconfont icon-hezi',
-                
-                children: [
-                    {
+
+                children: [{
                         path: "/Applictionmiddle",
                         component: 'Applictionmiddle',
                         name: "内嵌应用",
-                        titleActive:false,
+                        titleActive: false,
                         icon: 'iconfont icon-dianbozhibov1213',
                         children: [{
                                 path: "/releaseAppliction",
@@ -474,79 +439,78 @@ if (user) {
                                 meta: {
                                     requireAuth: true
                                 }
-        
+
                             },
-        
+
                         ]
                     },
                     {
                         path: "/marketmiddle",
                         component: 'marketmiddle',
                         name: "应用市场",
-                        titleActive:false,
+                        titleActive: false,
                         icon: 'iconfont icon-shichang',
-                        children: [
+                        children: [{
+                                path: "/marketindex",
+                                name: "应用管理",
+                                component: 'marketindex',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
                             {
-                    path: "/marketindex",
-                            name: "应用管理",
-                            component: 'marketindex',
-                            icon: 'iconfont icon-dian',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-                        {
-                            path: "/addmarket",
-                            name: "新增应用",
-                            component: 'addmarket',
-                            icon: 'iconfont icon-dian',
-                            hidden: true,
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-                        {
-                            path: "/marketdetail",
-                            name: "应用详请",
-                            component: 'marketdetail',
-                            icon: 'iconfont icon-dian',
-                            hidden: true,
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-                        
-                        {
-                            path: "/editmarket",
-                            name: "编辑应用",
-                            component: 'editmarket',
-                            icon: 'iconfont icon-dian',
-                            hidden: true,
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-                                    {
-                    path: "/marketgroupindex",
-                            name: "分组管理",
-                            component: 'marketgroupindex',
-                            icon: 'iconfont icon-dian',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-                  
-                    ],
+                                path: "/addmarket",
+                                name: "新增应用",
+                                component: 'addmarket',
+                                icon: 'iconfont icon-dian',
+                                hidden: true,
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                            {
+                                path: "/marketdetail",
+                                name: "应用详请",
+                                component: 'marketdetail',
+                                icon: 'iconfont icon-dian',
+                                hidden: true,
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+
+                            {
+                                path: "/editmarket",
+                                name: "编辑应用",
+                                component: 'editmarket',
+                                icon: 'iconfont icon-dian',
+                                hidden: true,
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                            {
+                                path: "/marketgroupindex",
+                                name: "分组管理",
+                                component: 'marketgroupindex',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+
+                        ],
                     },
-               
-               
+
+
                 ]
             },
             {
                 path: "/g",
                 component: 'Home',
                 name: "版本管理",
-                titleActive:"系统版本",
+                titleActive: "系统版本",
                 icon: 'iconfont icon-xitong',
                 children: [{
                         path: "/SysManageMiddle",
@@ -608,12 +572,12 @@ if (user) {
                     },
                 ]
             },
-            
+
             {
                 path: "/b",
                 component: 'Home',
                 name: "推送设置",
-                titleActive:"内容推送",
+                titleActive: "内容推送",
                 icon: 'iconfont icon-tuisongguanli',
                 children: [
 
@@ -640,15 +604,14 @@ if (user) {
                 path: "/g2",
                 component: 'Home',
                 name: "数据分析",
-                titleActive:"数据分析",
+                titleActive: "数据分析",
                 icon: 'iconfont icon-shuju',
                 children: [{
                         path: "/Analysismiddle",
                         name: "西柚机APP",
                         component: 'Analysismiddle',
                         icon: 'iconfont icon-APPkaifa',
-                        children: [
-                            {
+                        children: [{
                                 path: "/UserAnalysis",
                                 name: "APP用户分析",
                                 component: 'UserAnalysis',
@@ -677,8 +640,7 @@ if (user) {
                         name: "西柚机设备",
                         component: 'Analysismiddle1',
                         icon: 'iconfont icon-shebei',
-                        children: [
-                            {
+                        children: [{
                                 path: "/DeviceAnalysis",
                                 name: "设备在线分析",
                                 component: 'DeviceAnalysis',
@@ -705,7 +667,7 @@ if (user) {
                                     requireAuth: true
                                 }
                             },
-                            
+
 
                         ],
                         meta: {
@@ -714,64 +676,12 @@ if (user) {
                     },
                 ]
             },
-            // {
-            //     path: "/e",
-            //     component: 'Home',
-            //     name: "数据分析",
-            //     titleActive:"数据分析",
-            //     icon: 'iconfont icon-shujufenxi',
-            //     children: [
-            //         // {
-            //         // path: "/UserAnalysis",
-            //         // name: "APP用户分析",
-            //         // icon: 'el-icon-menu',
-            //         // children: [
-            //         {
-            //             path: "/UserAnalysis",
-            //             name: "APP用户分析",
-            //             component: 'UserAnalysis',
-            //             icon: 'iconfont icon-dian',
-            //             meta: {
-            //                 requireAuth: true
-            //             }
-            //         },
-            //         {
-            //             path: "/RegionAnalysis",
-            //             name: "地域分析",
-            //             component: 'RegionAnalysis',
-            //             icon: 'iconfont icon-dian',
-            //             meta: {
-            //                 requireAuth: true
-            //             }
-            //         },
-            //         {
-            //             path: "/VersionAnalysis",
-            //             name: "版本分析",
-            //             component: 'VersionAnalysis',
-            //             icon: 'iconfont icon-dian',
-            //             meta: {
-            //                 requireAuth: true
-            //             }
-            //         },
-            //         // ]
-            //         // },
-            //         {
-            //             path: "/DeviceAnalysis",
-            //             name: "设备在线分析",
-            //             component: 'DeviceAnalysis',
-            //             icon: 'iconfont icon-dian',
-            //             meta: {
-            //                 requireAuth: true
-            //             }
-            //         }
-            //     ]
-            // },
-        
+
             {
                 path: "/h",
                 component: 'Home',
                 name: "操作管理",
-                titleActive:"后台操作",
+                titleActive: "后台操作",
                 icon: 'iconfont icon-rizhi',
                 children: [{
                     path: "/Log",
@@ -789,12 +699,17 @@ if (user) {
         var router = new VueRouter({
             routes: routes
         })
+        router.beforeEach((to, from, next) => {
+            var user = JSON.parse(common.get('userInfo'))
+            if (!user) {
+                window.location.href = '/'
+            }
+            next()
+
+        })
         new Vue({
-            //el: '#app',
-            //template: '<App/>',
             router,
             store,
-            //components: { App }
             render: h => h(App)
         }).$mount('#app')
     }).catch(error => {
@@ -803,11 +718,8 @@ if (user) {
 
 } else {
     new Vue({
-        //el: '#app',
-        //template: '<App/>',
         router,
         store,
-        //components: { App }
         render: h => h(App)
     }).$mount('#app')
 }

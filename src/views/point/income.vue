@@ -21,38 +21,18 @@
         <el-row type="flex">
           <div class="search-con">
             <i class="el-icon-search" style="color:#606266"></i>
-            <el-input
-              class="search-input"
-              v-model="searchText"
-              placeholder="用户ID，用户昵称，设备SN"
-              @keyup.enter.native="onSubmitKey"
-            ></el-input>
+            <el-input class="search-input" v-model="searchText" placeholder="用户ID，用户昵称，设备SN" @keyup.enter.native="onSubmitKey"></el-input>
           </div>
           <div @click="getShow()" class="div_show" style="color:#606266">
             筛选
-            <i
-              class="el-icon-caret-bottom"
-              :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
-            ></i>
+            <i class="el-icon-caret-bottom" :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"></i>
           </div>
         </el-row>
         <div v-show="showState">
           <el-row type="flex" class="row_activess">
             <el-form-item label="时间" style="display: flex;">
-              <el-date-picker
-                v-model="start_time"
-                style="width:200px;"
-                type="datetime"
-                placeholder="选择开始日期时间"
-                 :picker-options="pickerOptions1"
-              ></el-date-picker>-
-              <el-date-picker
-                v-model="end_time"
-                style="width:200px;"
-                type="datetime"
-                placeholder="选择结束日期时间"
-                 :picker-options="pickerOptions"
-              ></el-date-picker>
+              <el-date-picker v-model="start_time" style="width:200px;" type="datetime" placeholder="选择开始日期时间" :picker-options="pickerOptions1"></el-date-picker>-
+              <el-date-picker v-model="end_time" style="width:200px;" type="datetime" placeholder="选择结束日期时间" :picker-options="pickerOptions"></el-date-picker>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" style="margin-left:68px;" @click="search">确定</el-button>
@@ -98,11 +78,7 @@
       <el-row type="flex"></el-row>
       <el-row type="flex">
         <el-col :span="6">
-          <pageNation
-            :pager="pager"
-            @handleSizeChange="handleSizeChange"
-            @handleCurrentChange="handleCurrentChange"
-          ></pageNation>
+          <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
         </el-col>
       </el-row>
     </div>
@@ -248,10 +224,45 @@ export default {
       return this.common.getTimess(row.time_stamp * 1000);
     },
     getInfo() {
+      let reg1 = /^\d{7}$/;
+      let reg2 = /^SME[0-9a-zA-Z]{1}[0-9]{4}[0-9a-zA-Z]{7}$/;
+      let nick_names = "";
+      let user_ids = "";
+      let dev_sns = "";
+      let query_type = 0;
+
+      if (this.searchText != "") {
+        if (reg1.test(this.searchText) == true) {
+          nick_names = "";
+          user_ids = parseInt(this.searchText);
+          dev_sns = "";
+          query_type = 1;
+        } else if (reg2.test(this.searchText) == true) {
+          dev_sns = this.searchText;
+          nick_names = "";
+          user_ids = "";
+          query_type = 1;
+        } else {
+          dev_sns = "";
+          nick_names = this.searchText;
+          user_ids = "";
+          query_type = 1;
+        }
+      } else {
+        let nick_names = "";
+        let user_ids = "";
+        let dev_sns = "";
+        query_type = 0;
+      }
+
+      // if(this.searchText!=""){
+      //   if()
+      // }
       var data = {
-        dev_sn: "",
-        nick_name: "",
-        user_id: "",
+        query_type: query_type,
+        dev_sn: dev_sns,
+        nick_name: nick_names,
+        user_id: user_ids,
         order: this.order,
         cur_page: this.pager.page - 1,
         start_time:
@@ -263,23 +274,23 @@ export default {
             ? parseInt(new Date().getTime() / 1000)
             : new Date(this.end_time).getTime() / 1000,
       };
-      if (this.judgeString(this.searchText)) {
-        var arr = Object.keys(this.judgeString(this.searchText));
-        data.query_type = arr.length === 0 ? 0 : 1;
-        var param = Object.assign(this.judgeString(this.searchText), data);
-      } else {
-        this.$message.error("请输入正确的用户ID、用户昵称");
-        return;
-      }
-          if((data.end_time-data.start_time)>7948801){
-            this.$message({
-              message: "只能查询任意当前结束时间往前的90天以内的数据",
-              type: "error"
-            });
-            return false
+      // if (this.judgeString(this.searchText)) {
+      //   var arr = Object.keys(this.judgeString(this.searchText));
+      //   data.query_type = arr.length === 0 ? 0 : 1;
+      //   var param = Object.assign(this.judgeString(this.searchText), data);
+      // } else {
+      //   this.$message.error("请输入正确的用户ID、用户昵称");
+      //   return;
+      // }
+      if (data.end_time - data.start_time > 7948801) {
+        this.$message({
+          message: "只能查询任意当前结束时间往前的90天以内的数据",
+          type: "error",
+        });
+        return false;
       }
 
-      ptfs_query_user_profit_list(param)
+      ptfs_query_user_profit_list(data)
         .then(res => {
           if (res.status === 0) {
             // this.tableData = res.data.profit_detail_list;
@@ -294,7 +305,7 @@ export default {
                 teamarr[i].time_stamp * 1000
               );
             }
-            this.tableData=[]
+            this.tableData = [];
             this.tableData = teamarr;
           }
         })

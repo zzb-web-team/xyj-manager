@@ -439,10 +439,10 @@ export default {
             tempArr = res.data.con_list;
             this.exportLinks = res.data.filename;
             for (var i = 0; i < tempArr.length; i++) {
-              if (tempArr[i].opt_value >= 0) {
-                tempArr[i].opt_active = "新增";
-              } else {
+              if (tempArr[i].opt_value <= 0 || tempArr[i].type==102 || tempArr[i].type==104) {
                 tempArr[i].opt_active = "扣除";
+              } else {
+                tempArr[i].opt_active = "新增";
               }
               tempArr[i].time_stamp = this.common.getTimes(
                 tempArr[i].time_stamp * 1000

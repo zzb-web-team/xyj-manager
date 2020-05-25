@@ -9,7 +9,7 @@ if (href.indexOf('xyj.grapefruitcloud.com') >= 0) {
     var ownbase = 'http://xyj.grapefruitcloud.com' //PHP服务域名
 } else {
     var ownbase = 'http://zzb.onezen.net' //PHP服务域名
-    var ownbase2 = 'http://10.0.0.156:8090' //李锐测试
+    var ownbase2 = '39.100.131.247:8090' //李锐测试
 }
 
 
@@ -553,6 +553,9 @@ export const del_app = params => { return axios.post(`${ownbase}/appmarket/del_a
 // 应用分类查询
 export const get_apptype = params => { return axios.post(`${ownbase}/appmarket/get_apptype`, params).then(res => res.data); };
 
+//查询分组名称的应用数目
+export const query_group = params => { return axios.post(`${ownbase}/appmarket/query_group`, params).then(res => res.data); };
+
 
 
 
@@ -567,6 +570,24 @@ export const batch_import_devices = params => { return axios.post(`${ownbase}/mi
 export const back_data= params => { return axios.post(`${ownbase}/cloud/back_data `, params).then(res => res.data); };
 
  
+//吕子明数据分析
+
+//APP版本安装用户统计接口
+export const device_version= params => { return axios.post(`${ownbase}/grapefruit_analyse/app_version_user`, params).then(res => res.data); };
+//APP版本安装用户统计接口今日/昨日
+export const device_version_day= params => { return axios.post(`${ownbase}/grapefruit_analyse/app_version_user_day`, params).then(res => res.data); };
+//在线时长设备数量统计
+export const device_online= params => { return axios.post(`${ownbase}/grapefruit_analyse/device_online `, params).then(res => res.data); };
+//离线次数设备统计
+export const device_offline= params => { return axios.post(`${ownbase}/grapefruit_analyse/device_offline `, params).then(res => res.data); };
+//不同类型新增设备数量统计接口
+export const device_type= params => { return axios.post(`${ownbase}/grapefruit_analyse/device_type `, params).then(res => res.data); };
+//不同ROM版本新增设备数量统计
+export const device_rom= params => { return axios.post(`${ownbase}/grapefruit_analyse/device_rom `, params).then(res => res.data); };
+//查询APP所有版本
+export const app_version_all= params => { return axios.post(`${ownbase}/grapefruit_analyse/app_version_all `, params).then(res => res.data); };
+//查询西柚机所有版本
+export const device_typerom_all= params => { return axios.post(`${ownbase}/grapefruit_analyse/device_typerom_all `, params).then(res => res.data); };
 
  
 

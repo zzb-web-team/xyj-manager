@@ -94,6 +94,7 @@ export default {
                         //     });
                         //NProgress.done();
                         console.log(data)
+                        console.log(data.status)
                         let {
                             msg,
                             status,

@@ -1,41 +1,42 @@
 <template>
 
-    <div>
-        <div style="margin-top:30px;">
-            <el-date-picker v-model="valueTime" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left">
-            </el-date-picker>
-            <el-select v-model="versointype" placeholder="请选择" @change="onChange">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-            </el-select>
-            <el-button type="primary" @click="onQueryInfo" style="margin-left:20px;">确定</el-button>
-        </div>
-        <div class="rank_con" style="margin-top:30px;display: flex;justify-content: space-around">
-            <div style='width:800px;height:800px;' id="myEchart"></div>
-            <div class="rank">
-                <el-table border :data="tableData" style="width: 100%">
-                    <el-table-column label="省市">
-                        <template slot-scope="scope">
-                            <div>{{scope.row.indexActive}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{scope.row.region}}</div>
-
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="times" label="设备数">
-                    </el-table-column>
-                    <el-table-column label="占比">
-                        <template slot-scope="scope">
-                            <div>{{(scope.row.percent)*100}}%</div>
-
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </div>
-        </div>
+  <div>
+    <div style="margin-top:30px;">
+      <el-date-picker v-model="valueTime" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left">
+      </el-date-picker>
+      <el-select v-model="deviceType" placeholder="请选择" @change="onChange">
+        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+        </el-option>
+      </el-select>
+      <el-button type="primary" @click="onQueryInfo" style="margin-left:20px;">确定</el-button>
     </div>
+    <div class="rank_con" style="margin-top:30px;display: flex;justify-content: space-around">
+      <div style='width:800px;height:800px;' id="myEchart"></div>
+      <div class="rank">
+        <el-table border :data="tableData" style="width: 100%">
+          <el-table-column label="省市">
+            <template slot-scope="scope">
+              <div>{{scope.row.indexActive}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{scope.row.region}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="incNum" label="新增设备"> </el-table-column>
+          <el-table-column prop="num" label="累计设备数">
+
+          </el-table-column>
+          <el-table-column label="累计占比">
+            <template slot-scope="scope">
+              <div>{{((scope.row.percent)*100).toFixed(2)}}%</div>
+
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import { app_usage_region_dist } from "../../api/api";
+import { app_usage_region_dist, device_typerom_all } from "../../api/api";
 import echarts from "echarts";
 import "../../../node_modules/echarts/map/js/china.js"; // 引入中国地图数据
 export default {
@@ -43,15 +44,16 @@ export default {
   props: ["userJson"],
   data() {
     return {
+      valueTime: "",
       chart: null,
       tableData: [],
       echartsX: [],
       echartsY: [],
-      versointype: "0",
+      deviceType: "-1",
       options: [
         {
-          value: "0",
-          label: "设备类型",
+          value: "",
+          label: "全部类型",
         },
         {
           value: "1",
@@ -66,7 +68,8 @@ export default {
   },
   mounted() {
     this.queryInfo();
-    this.chinaConfigure();
+    this.queryTypeInfo();
+    // this.chinaConfigure();
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -76,31 +79,86 @@ export default {
     this.chart = null;
   },
   methods: {
+    //查询西柚机所有版本
+    queryTypeInfo() {
+      this.options = [];
+      let param = {};
+      this.options=[]
+      device_typerom_all(param)
+        .then(res => {
+          let tempArr = res.data;
+          let obj1={
+             value:"-1",
+            label:"全部类型"
+          }
+          this.options.push(obj1)
+          for (var i = 0; i < tempArr.length; i++) {
+            let obj = {};
+            if (tempArr[i].type == 0) {
+              (obj.value = tempArr[i].type), (obj.label = "测试设备1");
+            } else if (tempArr[i].type == 1) {
+              (obj.value = tempArr[i].type), (obj.label = "RK3328");
+            } else if (tempArr[i].type == 2) {
+              (obj.value = tempArr[i].type), (obj.label = "AMS805");
+            }
+            this.options.push(obj);
+          }
+      
+          console.log(this.options)
+        })
+        .catch(error => {});
+    },
+    //确定查询
+    onQueryInfo() {
+      this.queryInfo();
+    },
     //查询数据
     queryInfo() {
-      let endTime = new Date().getTime() / 1000;
-      let startTime = (new Date().getTime() - 60 * 60 * 24 * 30 * 1000) / 1000;
-      let param = {
-        start_ts: parseInt(startTime),
-        end_ts: parseInt(endTime),
-      };
-      app_usage_region_dist(param)
+      let startTime = 1531924885;
+      let endTime = 1596012943;
+      if (this.valueTime) {
+        if (this.valueTime == "") {
+          startTime = new Date().getTime() / 1000;
+          endTime = (new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
+        } else {
+          endTime = Math.floor(this.valueTime[1].getTime() / 1000);
+          startTime = Math.floor(this.valueTime[0].getTime() / 1000);
+        }
+      } else {
+        startTime = 1589385600;
+        endTime = 1589472000;
+      }
+      // let endTime = new Date().getTime() / 1000;
+      // let startTime = (new Date().getTime() - 60 * 60 * 24 * 30 * 1000) / 1000;
+      // let param = {
+      //   start_ts: parseInt(startTime),
+      //   end_ts: parseInt(endTime),
+      // };
+      let paramActive = {};
+      // paramActive.dayList = [];
+      paramActive.start_ts = startTime;
+      (paramActive.end_ts = endTime), (paramActive.type = this.deviceType);
+      app_usage_region_dist(paramActive)
         .then(res => {
-          console.log(res);
+          // console.log(res);
           if (res.status == 0) {
-            let tempArr = res.data.regionList;
+            let tempArr = res.data;
+        //             tempArr.forEach((element) => {
+        // element.percent=(element.percent*100).toFixed(2)
+        //     });
+       
             this.echartsX = [];
             for (var i = 0; i < tempArr.length; i++) {
               let obj = {
-                value: tempArr[i].times,
-                name: tempArr[i].region,
+                value: tempArr[i].num,
+                name: tempArr[i].region.replace("省", ""),
               };
-              tempArr[i].indexActive = i + 1;
+              // tempArr[i].indexActive = i + 1;
               this.echartsX.push(obj);
             }
-            this.tableData = tempArr;
 
-            this.chinaConfigure();
+            this.tableData = tempArr;
+            this.chinaConfigure(this.echartsX);
           } else {
             this.$message({
               message: "服务出错",
@@ -113,8 +171,8 @@ export default {
         });
     },
 
-    chinaConfigure() {
-      console.log(this.userJson);
+    chinaConfigure(a) {
+      console.log(a);
       let myChart = echarts.init(document.getElementById("myEchart")); //这里是为了获得容器所在位置
       window.onresize = myChart.resize;
       myChart.setOption({
@@ -201,7 +259,7 @@ export default {
             label: {
               show: true,
             },
-            data: this.echartsX,
+            data: a,
           },
         ],
       });

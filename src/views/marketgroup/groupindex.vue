@@ -9,19 +9,10 @@
       <el-row type="flex" class="row_active">
         <el-col :span="24">
           <tableBar id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" :operatingStatus="operatingStatus" @handleButton="handleButton" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBar>
-          <!-- <tableBar id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBar> -->
         </el-col>
       </el-row>
     </div>
     <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
-      <!-- <el-row type="flex">
-            <el-col :span="6" style="display: flex;justify-content: justify-content: flex-start;">
-                <el-button type="primary" size="small" @click="allOn">发布</el-button>
-                <el-button type="primary" size="small" @click="allOff">下架</el-button>
-            </el-col>
-     
-
-      </el-row>-->
       <el-row type="flex">
         <el-col :span="6">
           <pageNation :pager="pager" @handleSizeChange="handleSizeChange1" @handleCurrentChange="handleCurrentChange1"></pageNation>
@@ -47,7 +38,7 @@
           <el-input v-model="groupform.group_describe"></el-input>
         </el-form-item>
         <el-form-item label="是否推荐到首页:">
-          <el-select v-model="is_recommend" placeholder="请选择"  style="width:143px;">
+          <el-select v-model="is_recommend" placeholder="请选择" style="width:143px;">
             <el-option label="推荐" value="1">
             </el-option>
             <el-option label="不推荐" value="0">
@@ -79,7 +70,7 @@
         <el-form-item label="分组说明:">
           <el-input v-model="groupformupdate.group_describe"></el-input>
         </el-form-item>
-          <el-form-item label="是否推荐到首页:">
+        <el-form-item label="是否推荐到首页:">
           <el-select v-model="is_recommend" placeholder="请选择" style="width:143px;">
             <el-option label="推荐" value="1">
             </el-option>
@@ -108,8 +99,7 @@
       </div>
       <el-row type="flex" class="row_active">
         <el-col :span="24">
-          <tableBar id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData1" :operatingStatus="operatingStatus1" @handleButton="handleButton1" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange1" :clomnSelection="clomnSelection" :rowHeader="rowHeader1" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBar>
-          <!-- <tableBar id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBar> -->
+          <tableBar id="rebateSetTable" ref="table2" tooltip-effect="dark" :tableData="tableData1" :operatingStatus="operatingStatus1" @handleButton="handleButton1" @tableSortChange="tableSortChange" @handleSelectionChange="handleSelectionChange1" :clomnSelection="clomnSelection" :rowHeader="rowHeader1" :tableOption="tableOption" @disable="disable" @toDetails="toDetails" @changePassword="changePassword" @toDelete="toDelete"></tableBar>
         </el-col>
       </el-row>
 
@@ -123,7 +113,7 @@
       </div>
       <div style="text-align: center;margin-top:30px;">
         <el-button type="primary" @click="onSubmitreleta">确定</el-button>
-        <el-button @click="dialogVisiblereleta=false">取消</el-button>
+        <el-button @click="oncloseEdit">取消</el-button>
       </div>
     </el-dialog>
   </section>
@@ -140,13 +130,14 @@ import {
   get_app,
   del_group,
   update_group,
+  query_group,
 } from "../../api/api";
 import common from "../../common/js/util.js";
 
 export default {
   data() {
     return {
-      is_recommend:"0",
+      is_recommend: "0",
       group_app_name: "",
       operatingStatus1: false,
       dialogVisiblereleta: false,
@@ -274,6 +265,10 @@ export default {
     this.queryApp();
   },
   methods: {
+    //取消选择应用
+    oncloseEdit() {
+      this.dialogVisiblereleta = false;
+    },
     //字符长度限制
     getStringWidth(val) {
       let len = 0;
@@ -314,7 +309,7 @@ export default {
         (param.group_describe = this.groupformupdate.group_describe),
         (param.app_array = []);
       param.app_array = this.groupform.app_array;
-      param.is_recommend= parseInt(this.is_recommend) 
+      param.is_recommend = parseInt(this.is_recommend);
 
       update_group(param)
         .then(res => {
@@ -331,9 +326,8 @@ export default {
               type: "error",
             });
             this.common.monitoringLogs("修改", "修改分组管理", 0);
-             this.queryUserList();
+            this.queryUserList();
           }
-         
         })
         .catch(error => {});
     },
@@ -343,7 +337,6 @@ export default {
     //应用关联取消
     onSubmitreleta() {
       this.dialogVisiblereleta = false;
-      console.log(this.tempidname);
       if (this.tempidname.length > 0) {
         this.groupform.app_array = this.unique(this.tempid);
         this.app_arrayname = this.unique(this.tempidname).join(",");
@@ -351,19 +344,13 @@ export default {
         this.groupform.app_array = [];
         this.app_arrayname = "";
       }
-
-      console.log(this.groupform.app_array);
     },
     handleSelectionChange1(val) {
       this.tabcount = val.length;
-      console.log(val);
-
       for (var i = 0; i < val.length; i++) {
         this.tempid.push(val[i].app_id);
         this.tempidname.push(val[i].app_name);
       }
-
-      console.log(this.tempidname);
     },
     onSeach() {
       this.queryApp();
@@ -380,13 +367,13 @@ export default {
         });
         return false;
       }
-      // if (this.app_arrayname == "") {
-      //   this.$message({
-      //     message: "请先关联应用",
-      //     type: "error",
-      //   });
-      //   return false;
-      // }
+      if (this.app_arrayname == "") {
+        this.$message({
+          message: "请先关联应用",
+          type: "error",
+        });
+        return false;
+      }
       if (this.getStringWidth(this.groupform.group_describe) > 20) {
         this.$message({
           message: "分组说明不能超过20个字符",
@@ -398,7 +385,7 @@ export default {
       this.groupform.create_time = parseInt(Date.now() / 1000);
       //this.groupform.create_time = 0;
       let param = this.groupform;
-      param.is_recommend=parseInt(this.is_recommend) 
+      param.is_recommend = parseInt(this.is_recommend);
       add_group(param)
         .then(res => {
           if (res.status == 0) {
@@ -418,18 +405,42 @@ export default {
           }
           this.queryUserList();
         })
-        .catch(error => {});
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    //查询应用数目
+    queryInfoAcount(groupId) {
+      let param = {};
+      param.group_id = groupId;
+      param.page = 0;
+      query_group(param)
+        .then(res => {
+          console.log(res);
+          if (res.status == 0) {
+            let tempAppId = res.data.result;
+            let tempArrName = [];
+            for (var i = 0; i < tempAppId.length; i++) {
+              tempArrName.push(tempAppId[i].app_name);
+            }
+            console.log(tempArrName);
+            this.app_arrayname = tempArrName.join(",");
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     //操作
     handleButton(val, row) {
-      console.log(val.row.is_recommend)
       this.groupform = val.row;
       this.group_ids = val.row.group_id;
       if (val.methods == "edit") {
+        this.queryInfoAcount(this.group_ids);
         this.groupformupdate.group_name = val.row.group_name;
         this.groupformupdate.group_describe = val.row.group_describe;
         this.dialogVisibleGroupEdit1 = true;
-        this.is_recommend=val.row.is_recommend+""
+        this.is_recommend = val.row.is_recommend + "";
       } else {
         this.$confirm("确定要删除吗?", "提示", {
           type: "warning",
@@ -446,26 +457,27 @@ export default {
                     message: "删除成功",
                     type: "success",
                   });
-                  this.common.monitoringLogs("删除", "删除分组管理", 1);
-
                   this.queryUserList();
+
+                  this.common.monitoringLogs("删除", "删除分组管理", 1);
                 } else {
                   this.$message({
                     message: "删除失败",
                     type: "error",
                   });
+                  this.queryUserList();
+
                   this.common.monitoringLogs("删除", "删除分组管理", 0);
                 }
-                this.queryUserList();
               })
-              .catch(error => {
-                this.$message({
-                  message: "后台服务出错",
-                  type: "error",
-                });
-              });
+              .catch(error => {});
           })
-          .catch(() => {});
+          .catch(() => {
+            this.$message({
+              message: "后台服务出错",
+              type: "error",
+            });
+          });
       }
     },
     queryApp() {
@@ -496,7 +508,6 @@ export default {
               }
               this.tableData1 = [];
               this.tableData1 = tempArr;
-              console.log(this.tableData1);
             }
           } else {
             this.$message({
@@ -517,9 +528,11 @@ export default {
       this.groupform.group_name = "";
       this.app_arrayname = "";
       this.groupform.group_describe = "";
+      this.is_recommend = "0";
     },
     addrelate() {
       this.dialogVisiblereleta = true;
+      this.groupform.app_array = [];
     },
     onSubmitGroupEdit() {},
     //排序
@@ -568,8 +581,6 @@ export default {
 
     //跳转至详情
     toDetails(val) {
-      console.log(val);
-
       this.$router.push({
         path: "/userInfo",
         query: {
@@ -585,7 +596,6 @@ export default {
     },
 
     onChange(item) {
-      console.log(item);
       this.nodegrade = item;
       this.queryUserList();
     },
@@ -606,7 +616,6 @@ export default {
         .then(res => {
           if (res.status == 0) {
             if (res.data.result) {
-            
               this.pager.count = res.data.total;
               let tempArr = [];
 
