@@ -639,7 +639,7 @@ export default {
                   tempArr[i].online_state = "在线";
                   break;
                 default:
-                  tempArr[i].online_state = "=非法设备";
+                  tempArr[i].online_state = "非法设备";
               }
               switch (tempArr[i].bind_flag) {
                 case 0:

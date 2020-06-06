@@ -528,14 +528,6 @@ export default {
 
         // },
         getQueryInfo1() {
-
-
-
-
-
-
-
-
             let param = new Object()
             param.query_type = 1
             if (this.$route.query.user_id) {
@@ -602,7 +594,7 @@ export default {
         
         getQueryInfo2() {
             let data = {
-                page_no: this.pager.page - 1,
+                page_no: this.pager2.page - 1,
                 page_size: 10,
                 dev_type: this.dev_type === '' ? -1 : this.dev_type === 'RK3328' ? 1 : 2,
                 online_state: this.online_state === '' ? -1 : Number(this.online_state),

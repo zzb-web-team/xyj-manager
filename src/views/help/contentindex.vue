@@ -23,7 +23,7 @@
         <div v-show="showState">
           <el-row type="flex" class="row_activess">
             <el-form-item label="分组" style="display: flex;">
-              <el-select v-model="form.statusText" placeholder="请选择" @change="onChange">
+              <el-select v-model="form.statusText" placeholder="请选择" @change="onChangeGroup">
                 <el-option
                   v-for="item in tableData"
                   :key="item.value"
@@ -383,6 +383,7 @@ export default {
       temp_name: "",
       new_cat_id: 0,
       editname1: "",
+      groupId:0
     };
   },
   mounted: function() {
@@ -399,6 +400,12 @@ export default {
   },
 
   methods: {
+    //选择分组
+    onChangeGroup(val){
+      console.log(val)
+      this.groupId=val
+
+    },
     //移动分组
     onChangemove(val) {
       this.new_cat_id = val;
@@ -836,18 +843,22 @@ export default {
       this.pager.page = 1;
       (this.nodegrade = 0), (this.user_nick_name = "");
       this.searchText = "";
+         this.value1 = "";
+      this.form.statusText='全部'
+      this.groupId=0
       this.queryUserList();
-      this.value1 = "";
+   
     },
 
     //获取用户列表
     queryUserList() {
       let paramactive = new Object();
+      
       {
         paramactive.page_no = this.pager.page - 1;
 
         (paramactive.page_size = 10),
-          (paramactive.cat_id = 0),
+          (paramactive.cat_id =  parseInt(this.groupId)),
           (paramactive.item_name = this.searchText),
           (paramactive.begin_tm = 0),
           (paramactive.end_tm = 0),
@@ -928,6 +939,7 @@ export default {
           if (res.status == 0) {
             if (res.data.cat_list) {
               let tempArr = [];
+              this.tableData=[]
 
               tempArr = res.data.cat_list;
               for (var i = 0; i < tempArr.length; i++) {
@@ -936,6 +948,11 @@ export default {
               }
               console.log(this.optionsActive);
               this.tableData = tempArr;
+              let obj={
+                value:"0",
+                label:"全部"
+              }
+              this.tableData.unshift(obj)
             }
           } else {
             this.$message({

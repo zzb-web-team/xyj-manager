@@ -16,6 +16,7 @@
       <el-date-picker style="margin-left:10px;" v-model="valueele" type="dates" placeholder="时间对比" @change="timeChange">
       </el-date-picker>
       <el-select v-model="versointime1" placeholder="时段对比" @change="changePeriod" v-if="timeArr">
+
         <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
@@ -23,7 +24,9 @@
         <el-option v-for="item in options11" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-select v-model="versointype" placeholder="请选择">
+      <el-select v-model="versointype" placeholder="请选择" :disabled="disableTab">
+        <el-option label="全部版本" value="全部版本">
+        </el-option>
         <el-option v-for="item in options" :key="item" :label="item" :value="item">
         </el-option>
       </el-select>
@@ -36,7 +39,7 @@
 
         <div class="device_form" style="display: flex;space-between">
           <div id="myEchart" style="width: 100%; height: 500px;margin-top:50px;"></div>
-          <div style="height:500px;display: flex;align-items: flex-end; justify-content: flex-start;white-space:nowrap">日累计在线时长(h)</div>
+          <div style="height:500px;display: flex;align-items: flex-end; justify-content: flex-start;white-space:nowrap">日累计在线时长(OT)</div>
         </div>
         <div class="devide_table">
           <el-row type="flex" class="row_active">
@@ -54,7 +57,7 @@
       <div class="device_tab_on" v-if="!showType">
         <div class="device_form device_form_active" style="display: flex;space-between">
           <div id="myEchart1" style="width: 90%; height: 500px;margin-top:50px;"></div>
-          <div style="height:500px;display: flex;align-items: flex-end; justify-content: flex-start;white-space:nowrap">日累计离线次数(h)</div>
+          <div style="height:500px;display: flex;align-items: flex-end; justify-content: flex-start;white-space:nowrap">日累计离线次数</div>
 
         </div>
         <div class="devide_table">
@@ -92,12 +95,15 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
-      valueActive: "",
+      disableTab: true,
+      valueActive:
+        new Date(new Date().toLocaleDateString()).getTime() -
+        24 * 60 * 60 * 1000,
       timeArr: false,
       valueele: "",
-      versointype: "",
+      versointype: "全部版本",
       devicetype: "-1",
-      versointime1: "",
+      versointime1: "0",
       options: [
         // {
         //   value: "",
@@ -114,6 +120,10 @@ export default {
       ],
       options11: [],
       options1: [
+        {
+          value: "0",
+          label: "全部时段",
+        },
         {
           value: "1",
           label: "00:00:00-05:59:59",
@@ -143,7 +153,7 @@ export default {
       rowHeader: [
         {
           prop: "timeStamp",
-          label: "在线时长区间",
+          label: "日累计在线时长(OT)",
         },
         {
           prop: "num",
@@ -199,6 +209,8 @@ export default {
       pageActives: 1,
       compareArr: [],
       romArr: [],
+      timeCompared: false,
+      timeComparedArr: [],
     };
   },
   mounted() {
@@ -220,12 +232,28 @@ export default {
   methods: {
     //选这类型过滤版本
     changeType(val) {
+      this.versointype = "全部版本";
       console.log(val);
+      this.options = [];
+
       if (val == -1) {
-        this.options = [];
+        this.disableTab = true;
+        this.options = this.romArr[0].romSet.concat(this.romArr[1].romSet);
       } else {
-        this.options = this.romArr[val].romSet;
+        this.disableTab = false;
+        this.options = this.romArr[val - 1].romSet;
       }
+      let tempArr = [];
+      //tempArr[0]="全部版本"
+      // options.unshift("全部版本")
+      this.options = tempArr.concat(this.options);
+      // this.options.unshift("全部版本");
+      // this.options.forEach((item, index) => {
+      //   if (index != this.options.lastIndexOf(item)) {
+      //     this.options.splice(index, 1);
+      //   }
+      // });
+      console.log(this.options.length);
     },
     //查询西柚机所有版本
     queryTypeInfo() {
@@ -258,26 +286,30 @@ export default {
             }
             this.options11.push(obj);
           }
+
           console.log(this.options11);
         })
         .catch(error => {});
     },
     //时段选择
     changePeriod(val) {
+      this.timeCompared = true;
       let compareArrActive = [];
 
       for (var i = 0; i < this.compareArr.length; i++) {
-        if (val == 1) {
+        if (val == 0) {
           compareArrActive.push(this.compareArr[i]);
-        } else if (val == 2) {
+        } else if (val == 1) {
           compareArrActive.push(this.compareArr[i] + 3600 * 6);
-        } else if (val == 3) {
+        } else if (val == 2) {
           compareArrActive.push(this.compareArr[i] + 3600 * 12);
-        } else if (val == 4) {
+        } else if (val == 3) {
           compareArrActive.push(this.compareArr[i] + 3600 * 18);
+        } else if (val == 4) {
+          compareArrActive.push(this.compareArr[i] + 3600 * 24);
         }
       }
-      this.compareArr = compareArrActive;
+      this.timeComparedArr = compareArrActive;
     },
     //对比时间确认
     timeChange() {
@@ -292,16 +324,28 @@ export default {
       if (val == "在线时长") {
         this.showType = true;
         this.timeArr = false;
+        this.valueele = "";
 
-        (this.versointype = ""),
-          (this.devicetype = ""),
-          this.querydeviceOnline();
+        this.versointype = "全部版本";
+        this.devicetype = "-1";
+        this.timeComparedArr = [];
+        this.compareArr = [];
+        this.versointime1 = "0";
+        this.valueActive=new Date(new Date().toLocaleDateString()).getTime() -24 * 60 * 60 * 1000,
+        this.querydeviceOnline();
+
         //this.flag = 1;
       } else {
         //this.flag = 0;
         this.showType = false;
-        (this.versointype = ""), (this.devicetype = ""), (this.timeArr = true);
-
+        this.versointype = "全部版本";
+        this.devicetype = "-1";
+        this.timeArr = true;
+        this.valueele = "";
+        this.timeComparedArr = [];
+        this.compareArr = [];
+        this.versointime1 = "0";
+         this.valueActive=new Date(new Date().toLocaleDateString()).getTime() -24 * 60 * 60 * 1000,
         this.querydeviceOffline();
       }
     },
@@ -339,51 +383,50 @@ export default {
     },
 
     querydeviceOnline() {
-      let startTime = new Date().getTime() / 1000;
-      let endTime = (new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
-      if (this.valueTime4) {
-        if (this.valueTime4 == "") {
-          startTime = new Date().getTime() / 1000;
-          endTime = (new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
-        } else {
-          endTime = Math.floor(this.valueTime4[1].getTime() / 1000);
-          startTime = Math.floor(this.valueTime4[0].getTime() / 1000);
-        }
+      let nowtime = "";
+      if (this.valueActive == "" || this.valueActive == null) {
+        let tempTime = new Date(new Date().toLocaleDateString()).getTime();
+        nowtime = Math.floor(tempTime - 3600 * 24 * 1000) / 1000;
       } else {
-        startTime = new Date().getTime() / 1000;
-        endTime = (new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
-      }
-      let nowtime = 0;
-
-      if (this.valueActive == "") {
-        nowtime = Math.floor(new Date().getTime() / 1000);
-      } else {
-        nowtime = Math.floor(this.valueActive.getTime() / 1000);
+        nowtime = Math.floor(this.valueActive / 1000);
       }
       let paramActive = {};
       let dayList = [];
-      paramActive.dayList = this.compareArr;
-      paramActive.dayList[0] = nowtime;
-      (paramActive.type = this.devicetype),
-        (paramActive.version = this.versointype);
+      let tempArrfirst = [];
+      tempArrfirst[0] = nowtime;
+
+      paramActive.dayList = tempArrfirst.concat(this.compareArr);
+      paramActive.dayList = Array.from(new Set(paramActive.dayList));
+
+      if (this.devicetype == "-1") {
+        paramActive.type = "*";
+      } else {
+        paramActive.type = this.devicetype;
+      }
+      if (this.versointype == "全部版本") {
+        paramActive.version = "*";
+      } else {
+        paramActive.version = this.versointype;
+      }
+      // (paramActive.version = this.versointype);
       device_online(paramActive)
         .then(res => {
           if (res.status == 0) {
             this.tableDatanew11 = [];
-            let tempArr = res.data[0].devNumList;
+            let tempArr = res.data.dayList[0].devNumList;
             tempArr.forEach(element => {
               element.percent = (element.percent * 100).toFixed(2);
             });
-
-            let tempArrActive = res.data;
+            let tempArrActive = [];
+            tempArrActive = res.data.dayList;
             let nowArr = [];
             var list = {
-              1: { timeStamp: "<1h", num: 0, percent: 0 },
-              2: { timeStamp: "1-5h", num: 0, percent: 0 },
-              3: { timeStamp: "6-10h", num: 0, percent: 0 },
-              4: { timeStamp: "11-15h", num: 0, percent: 0 },
-              5: { timeStamp: "16-20h", num: 0, percent: 0 },
-              6: { timeStamp: "21-24h", num: 0, percent: 0 },
+              1: { timeStamp: "OT<=1h", num: 0, percent: 0 },
+              2: { timeStamp: "1h<OT<=5h", num: 0, percent: 0 },
+              3: { timeStamp: "5h<OT<=10h", num: 0, percent: 0 },
+              4: { timeStamp: "10h<OT<=15h", num: 0, percent: 0 },
+              5: { timeStamp: "15h<OT<=20h", num: 0, percent: 0 },
+              6: { timeStamp: "20h<OT<=24h", num: 0, percent: 0 },
             };
             for (var i = 0; i < tempArr.length; i++) {
               list[tempArr[i].type].num = tempArr[i].num;
@@ -401,6 +444,8 @@ export default {
               }
             }
             let echarsArr = [];
+
+            console.log(list1.length);
             for (var i = 0; i < list1.length; i++) {
               let obj = {
                 type: "bar",
@@ -408,6 +453,7 @@ export default {
               };
               echarsArr.push(obj);
             }
+            console.log(echarsArr);
             this.drawLine(echarsArr);
           }
         })
@@ -416,57 +462,65 @@ export default {
         });
     },
     querydeviceOffline() {
-      let startTime = new Date().getTime() / 1000;
-      let endTime = (new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
-      if (this.valueTime4) {
-        if (this.valueTime4 == "") {
-          startTime = new Date().getTime() / 1000;
-          endTime = (new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
-        } else {
-          endTime = Math.floor(this.valueTime4[1].getTime() / 1000);
-          startTime = Math.floor(this.valueTime4[0].getTime() / 1000);
-        }
+      let tempTime = new Date(new Date().toLocaleDateString()).getTime();
+      let nowtime = Math.floor(tempTime - 3600 * 24 * 1000) / 1000;
+      if (this.valueActive == "" || this.valueActive == null) {
+        let tempTime = new Date(new Date().toLocaleDateString()).getTime();
+        nowtime = Math.floor(tempTime - 3600 * 24 * 1000) / 1000;
       } else {
-        startTime = new Date().getTime() / 1000;
-        endTime = (new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
-      }
-      let nowtime = 0;
-      if (this.valueActive == "") {
-        nowtime = Math.floor(new Date().getTime() / 1000);
-      } else {
-        if (this.versointime1 == 1) {
-          nowtime = this.valueActive.getTime() / 1000;
+        if (this.versointime1 == 0) {
+          nowtime = this.valueActive / 1000;
+        } else if (this.versointime1 == 1) {
+          nowtime = this.valueActive / 1000 + 3600 * 6;
         } else if (this.versointime1 == 2) {
-          nowtime = this.valueActive.getTime() / 1000 + 3600 * 6;
+          nowtime = this.valueActive / 1000 + 3600 * 12;
         } else if (this.versointime1 == 3) {
-          nowtime = this.valueActive.getTime() / 1000 + 3600 * 12;
+          nowtime = this.valueActive / 1000 + 3600 * 18;
         } else if (this.versointime1 == 4) {
-          nowtime = this.valueActive.getTime() / 1000 + 3600 * 18;
+          nowtime = this.valueActive / 1000 + 3600 * 24;
         }
-        nowtime = Math.floor(nowtime);
       }
       let paramActive = {};
       let dayList = [];
-      paramActive.dayList = this.compareArr;
-      paramActive.dayList[0] = nowtime;
-      (paramActive.type = this.devicetype),
-        (paramActive.version = this.versointype);
+      let arrActive = [];
+      if (this.timeCompared == false) {
+        arrActive = this.compareArr;
+      } else {
+        arrActive = this.timeComparedArr;
+      }
+      let tempArrfirst = [];
+      tempArrfirst[0] = nowtime;
+
+      paramActive.dayList = tempArrfirst.concat(arrActive);
+      paramActive.dayList = Array.from(new Set(paramActive.dayList));
+
+      if (this.devicetype == "-1") {
+        paramActive.type = "*";
+      } else {
+        paramActive.type = this.devicetype;
+      }
+
+      if (this.versointype == "全部版本") {
+        paramActive.version = "";
+      } else {
+        paramActive.version = this.versointype;
+      }
       device_offline(paramActive)
         .then(res => {
           if (res.status == 0) {
             this.tableDatanew22 = [];
-            let tempArr = res.data[0].devNumList;
+            let tempArr = res.data.dayList[0].devNumList;
             tempArr.forEach(element => {
               element.percent = (element.percent * 100).toFixed(2);
             });
-            let tempArrActive = res.data;
+            let tempArrActive = res.data.dayList;
 
             let nowArr = [];
             var list = {
               1: { timeStamp: "0次", num: 0, percent: 0 },
               2: { timeStamp: "1-3次", num: 0, percent: 0 },
               3: { timeStamp: "4-6次", num: 0, percent: 0 },
-              4: { timeStamp: "6-10次", num: 0, percent: 0 },
+              4: { timeStamp: "7-10次", num: 0, percent: 0 },
               5: { timeStamp: ">10次", num: 0, percent: 0 },
             };
             for (var i = 0; i < tempArr.length; i++) {
@@ -501,7 +555,6 @@ export default {
     },
 
     drawLine(list) {
-      console.log(list);
       let myChart = echarts.init(document.getElementById("myEchart")); //这里是为了获得容器所在位置
       window.onresize = myChart.resize;
 
@@ -627,12 +680,24 @@ export default {
           bottom: "5%",
           containLabel: true,
         },
-
+        1: { timeStamp: "OT<=1h", num: 0, percent: 0 },
+        2: { timeStamp: "1h<OT<=5h", num: 0, percent: 0 },
+        3: { timeStamp: "5h<OT<=10h", num: 0, percent: 0 },
+        4: { timeStamp: "10h<OT<=15h", num: 0, percent: 0 },
+        5: { timeStamp: "15h<OT<=20h", num: 0, percent: 0 },
+        6: { timeStamp: "20h<OT<=24h", num: 0, percent: 0 },
         xAxis: [
           {
             type: "category",
             axisTick: { show: false },
-            data: ["<1h", "1-5h", "6-10h", "11-15h", "16-20h", "21-24h"],
+            data: [
+              "OT<=1h",
+              "1h<OT<=5h",
+              "5h<OT<=10h",
+              "10h<OT<=15h",
+              "15h<OT<=20h",
+              "20h<OT<=24h",
+            ],
           },
         ],
         yAxis: [
@@ -777,7 +842,7 @@ export default {
           {
             type: "category",
             axisTick: { show: false },
-            data: ["0次", "1-3次", "4-6次", "6-10次", ">10次"],
+            data: ["0次", "1-3次", "4-6次", "7-10次", ">10次"],
           },
         ],
         yAxis: [

@@ -78,13 +78,9 @@ export default {
   data() {
     return {
       radio1: "设备类型",
-      versointype: "-1",
+      versointype: 1,
       versointime: "0",
       options: [
-        {
-          value: "",
-          label: "全部版本",
-        },
         {
           value: "1",
           label: "3.2.2",
@@ -120,7 +116,7 @@ export default {
       shoudzyx: false,
       showzdyz: false,
 
-      valueTime4: "",
+      valueTime4: [new Date(new Date().setHours(0, 0, 0, 0)), new Date()],
       activeName: "first",
       value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       value2: "",
@@ -137,7 +133,6 @@ export default {
           prop: "percent",
           label: "占比(%)",
         },
-        
       ],
       rowHeader1: [
         {
@@ -152,7 +147,6 @@ export default {
           prop: "percent",
           label: "占比(%)",
         },
-       
       ],
       tableData: [],
       tableData1: [],
@@ -201,20 +195,21 @@ export default {
     queryTypeInfo() {
       this.options = [];
       let param = {};
-      this.options=[]
+      this.options = [];
       device_typerom_all(param)
         .then(res => {
-                  let tempArr = res.data;
-          let obj1={
-             value:"-1",
-            label:"全部类型"
-          }
-          this.options.push(obj1)
+          let tempArr = res.data;
+          // let obj1={
+          //    value:"-1",
+          //   label:"全部类型"
+          // }
+          // this.options.push(obj1)
           for (var i = 0; i < tempArr.length; i++) {
             let obj = {};
             if (tempArr[i].type == 0) {
               (obj.value = tempArr[i].type), (obj.label = "测试类型1");
-            } else if (tempArr[i].type == 1) {
+            }
+            if (tempArr[i].type == 1) {
               (obj.value = tempArr[i].type), (obj.label = "RK3328");
             } else if (tempArr[i].type == 2) {
               (obj.value = tempArr[i].type), (obj.label = "AMS805");
@@ -228,11 +223,15 @@ export default {
       if (val == "设备类型") {
         this.showType = true;
         this.querydeviceType();
+                this.flag = 1;
+        this.valueTime4=[new Date(new Date().setHours(0, 0, 0, 0)), new Date()]
         // this.queryOnlineTable();
-        this.flag = 1;
+
       } else {
         this.flag = 0;
         this.showType = false;
+                this.valueTime4=[new Date(new Date().setHours(0, 0, 0, 0)), new Date()]
+
         this.querydeviceRom();
         //this.queryOfflineTable();
       }
@@ -251,21 +250,20 @@ export default {
     //分页
     handleCurrentChange(val) {
       this.pager.page = val.val;
-      this.queryOnlineTable();
+      this.querydeviceType();
     },
     handleSizeChange1() {},
     //分页
     handleCurrentChange1(val) {
       this.pager1.page = val.val;
-      this.queryOnlineTable();
+      this.querydeviceRom();
     },
 
-    //在线table
+    //设备类型查询
     querydeviceType() {
-      // let startTime = new Date().getTime() / 1000;
-      // let endTime = (new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
-      let startTime = 1531924885;
-      let endTime = 1596012943;
+      let startTime =
+        new Date(new Date().toLocaleDateString()).getTime() / 1000;
+      let endTime = new Date().getTime() / 1000;
       if (this.valueTime4) {
         if (this.valueTime4 == "") {
           startTime = new Date().getTime() / 1000;
@@ -275,19 +273,16 @@ export default {
           startTime = Math.floor(this.valueTime4[0].getTime() / 1000);
         }
       } else {
-        // startTime = new Date().getTime() / 1000;
-        // endTime = (new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
+        startTime = startTime;
+        endTime = endTime;
       }
-      let param = {
-        start_ts: this.starttime,
-        end_ts: this.endtime,
-        flag: 1,
-        pageNo: this.pager.page - 1,
-        pageSize: 10,
-      };
+      
+
       let paramActive = {};
-      paramActive.start_ts = startTime;
-      paramActive.end_ts = endTime;
+      paramActive.start_ts = parseInt(startTime);
+      paramActive.end_ts = parseInt(endTime);
+      paramActive.pageNo=this.pager.page-1
+      paramActive.pageSize=10
       device_type(paramActive)
         .then(res => {
           if (res.status == 0) {
@@ -314,10 +309,12 @@ export default {
               this.offLineY.push(tempArr[i].incNum);
             }
             this.tableData = tempArr;
+              console.log(this.tableData);
+             this.pager.count = res.totalCnt;
+
             this.drawLine(this.offLineX, this.offLineY);
 
-            console.log(this.tableData);
-            // this.pager.count = res.data.totalCnt;
+          
           } else {
             this.$message({
               message: "服务出错",
@@ -330,10 +327,11 @@ export default {
         });
     },
 
-    //离线线table
+    //设备ROM查询
     querydeviceRom() {
-      let startTime = 1531924885;
-      let endTime = 1596012943;
+      let startTime =
+        new Date(new Date().toLocaleDateString()).getTime() / 1000;
+      let endTime = new Date().getTime() / 1000;
       if (this.valueTime4) {
         if (this.valueTime4 == "") {
           startTime = new Date().getTime() / 1000;
@@ -343,14 +341,16 @@ export default {
           startTime = Math.floor(this.valueTime4[0].getTime() / 1000);
         }
       } else {
-        // startTime = new Date().getTime() / 1000;
-        // endTime = (new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
+        startTime = startTime;
+        endTime = endTime;
       }
 
       let paramActive = {};
-      paramActive.start_ts = startTime;
-      paramActive.end_ts = endTime;
+      paramActive.start_ts = parseInt(startTime);
+      paramActive.end_ts = parseInt(endTime);
       paramActive.type = this.versointype;
+        paramActive.pageNo=this.pager1.page-1
+      paramActive.pageSize=10
 
       device_rom(paramActive)
         .then(res => {
@@ -369,6 +369,8 @@ export default {
             }
 
             this.tableData1 = tempArr;
+                         this.pager1.count = res.totalCnt;
+
             this.drawLine1(this.offLineX, this.offLineY);
           }
         })

@@ -13,8 +13,8 @@ module.exports = {
   },
   externals:{
     'Vue': 'vue',
-    'ElementUI': 'element-ui',
-    'element-ui': 'ElementUI',
+    // 'ElementUI': 'element-ui',
+    // 'element-ui': 'ElementUI',
      //'echarts': 'echarts',
      'vue-router': 'VueRouter',
      'axios':'axios',

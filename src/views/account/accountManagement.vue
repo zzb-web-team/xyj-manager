@@ -59,7 +59,7 @@
 
     </div>
     <el-dialog :visible.sync="dialogVisible" width="25%" :before-close="handleClose" @close="handleClose1">
-        <div class="addaccout">
+        <div class="addaccout addaccout_active">
             <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" class="demo-ruleForm ">
                 <h3 class="title">新建用户</h3>
                 <el-form-item label="使用状态:">
@@ -70,7 +70,7 @@
       {validator: jiousername, trigger: 'blur' }
     ]">
 
-                    <el-form-item label="用户名:">
+                    <el-form-item label="账号:">
 
                         <el-input v-model="ruleForm2.username" placeholder="4-20位英文加数字组合"></el-input>
                     </el-form-item>
@@ -86,7 +86,7 @@
       {validator: jiopwd1, trigger: 'blur' }
     ]">
                     <el-form-item label="确认密码:">
-                        <el-input v-model="ruleForm2.password2" placeholder="请再次密码" type="password"></el-input>
+                        <el-input v-model="ruleForm2.password2" placeholder="请确认密码" type="password"></el-input>
                     </el-form-item>
                 </el-form-item>
                 <el-form-item prop="name" :rules="[
@@ -94,7 +94,7 @@
     ]">
 
                     <el-form-item label="真实姓名:">
-                        <el-input v-model="ruleForm2.name" placeholder="真实姓名为4-20位汉字数字字母组合"></el-input>
+                        <el-input v-model="ruleForm2.name" placeholder="真实姓名为4-20位汉字"></el-input>
                     </el-form-item>
                 </el-form-item>
                 <el-form-item prop="phone" :rules="[
@@ -110,11 +110,11 @@
             </el-form>
         </div>
     </el-dialog>
-    <el-dialog :visible.sync="dialogVisible2" width="17%" :before-close="handleClose">
-        <div class="addaccout">
+    <el-dialog :visible.sync="dialogVisible2" width="17%" :before-close="handleClose" @close="handleCloseDefail">
+        <div class="addaccout addaccout_active">
             <el-form :model="ruleForm3" ref="ruleForm3" :rules="rules3" label-position="left" class="demo-ruleForm ">
                 <h3 class="title">用户详情</h3>
-                <el-form-item label="用户名:">
+                <el-form-item label="使用状态:">
                     <el-radio v-model="ruleForm3.radio" label="0">启用</el-radio>
                     <el-radio v-model="ruleForm3.radio" label="1">禁用</el-radio>
                 </el-form-item>
@@ -146,8 +146,8 @@
             </el-form>
         </div>
     </el-dialog>
-    <el-dialog :visible.sync="dialogVisible3" width="20%" :before-close="handleClose">
-        <div class="addaccout">
+    <el-dialog :visible.sync="dialogVisible3" width="20%" :before-close="handleClose" @close="handleClosePassword">
+        <div class="addaccout addaccout_active">
             <el-form :model="ruleForm4" :rules="rules4" ref="ruleForm4" label-position="left" class="demo-ruleForm ">
                 <h3 class="title">密码重置</h3>
 
@@ -155,14 +155,14 @@
       {validator: jiopwd, trigger: 'blur' }
     ]">
                     <el-form-item label="新密码:">
-                        <el-input v-model="ruleForm4.password" placeholder="新密码" type="password"></el-input>
+                        <el-input v-model="ruleForm4.password" placeholder="请输入6~20个字符的英文数字组合密码" type="password"></el-input>
                     </el-form-item>
                 </el-form-item>
                 <el-form-item prop="password2" :rules="[
       {validator: jiopwd, trigger: 'blur' }
     ]">
-                    <el-form-item label="确认密码:">
-                        <el-input v-model="ruleForm4.password2" placeholder="确认密码" type="password"></el-input>
+                    <el-form-item label="请确认密码:">
+                        <el-input v-model="ruleForm4.password2" placeholder="请输入6~20个字符的英文数字组合密码" type="password"></el-input>
                     </el-form-item>
                 </el-form-item>
 
@@ -173,10 +173,10 @@
         </div>
     </el-dialog>
     <el-dialog :visible.sync="dialogVisibleDetail" width="17%" :before-close="handleClose">
-        <div class="addaccout">
+        <div class="addaccout addaccout_active">
             <el-form :model="ruleForm3" ref="ruleForm3" :rules="rules3" label-position="left" class="demo-ruleForm ">
                 <h3 class="title">用户详情</h3>
-                <el-form-item label="用户名:">
+                <el-form-item label="使用状态:">
                     <el-radio v-model="ruleForm3.radio" label="0" :disabled="true">启用</el-radio>
                     <el-radio v-model="ruleForm3.radio" label="1" :disabled="true">禁用</el-radio>
                 </el-form-item>
@@ -202,9 +202,9 @@
                         <el-input v-model="ruleForm3.phone" placeholder="联系方式" :disabled="true"></el-input>
                     </el-form-item>
                 </el-form-item>
-                <el-form-item style="width:100%;display: flex;justify-content:center;">
+                <!-- <el-form-item style="width:100%;display: flex;justify-content:center;">
                     <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit4" :loading="logining">修改</el-button>
-                </el-form-item>
+                </el-form-item> -->
             </el-form>
         </div>
     </el-dialog>
@@ -491,6 +491,18 @@ export default {
   },
 
   methods: {
+    //密码取消清空
+    handleClosePassword(){
+      this.$refs.ruleForm4.resetFields();
+      this.dialogVisible3=false
+
+    }, 
+      //修改详情取消清空
+    handleCloseDefail(){
+      this.$refs.ruleForm3.resetFields();
+      this.dialogVisible2=false
+
+    },
        get: function (name) {
         var v = window.document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
           return v ? v[2] : null;
@@ -523,7 +535,7 @@ export default {
     onSubmitKey() {
       this.queryUserList();
     },
-    //校验账户名
+    //校验账号名
     jiousername(rule, value, callback) {
       if (value === "") {
         callback(new Error("请输入账号"));
@@ -614,7 +626,7 @@ export default {
         });
         return false;
       }
-      this.$confirm("确定要批量启用角色吗?", "提示", {
+      this.$confirm("确定要批量启用账号吗?", "提示", {
         type: "warning"
       })
         .then(() => {
@@ -631,9 +643,9 @@ export default {
                   type: "success"
                 });
                 this.queryUserList();
-                this.common.monitoringLogs("修改", "批量启用账户", 1);
+                this.common.monitoringLogs("修改", "批量启用账号", 1);
               } else {
-                this.common.monitoringLogs("修改", "批量启用账户", 1);
+                this.common.monitoringLogs("修改", "批量启用账号", 1);
               }
             })
             .catch(error => {});
@@ -649,7 +661,7 @@ export default {
         });
         return false;
       }
-      this.$confirm("确定要批量启用角色吗?", "提示", {
+      this.$confirm("确定要批量启用账号吗?", "提示", {
         type: "warning"
       })
         .then(() => {
@@ -665,11 +677,11 @@ export default {
                   message: "操作成功",
                   type: "success"
                 });
-                this.common.monitoringLogs("修改", "批量启用账户", 1);
+                this.common.monitoringLogs("修改", "批量启用账号", 1);
 
                 this.queryUserList();
               } else {
-                this.common.monitoringLogs("修改", "批量启用账户", 0);
+                this.common.monitoringLogs("修改", "批量启用账号", 0);
               }
             })
             .catch(error => {});
@@ -685,7 +697,7 @@ export default {
         });
         return false;
       }
-      this.$confirm("确定要批量禁用角色吗?", "提示", {
+      this.$confirm("确定要批量禁用账号吗?", "提示", {
         type: "warning"
       })
         .then(() => {
@@ -702,9 +714,9 @@ export default {
                   type: "success"
                 });
                 this.queryUserList();
-                this.common.monitoringLogs("修改", "批量禁用用账户", 1);
+                this.common.monitoringLogs("修改", "批量禁用用账号", 1);
               } else {
-                this.common.monitoringLogs("修改", "批量禁用用账户", 0);
+                this.common.monitoringLogs("修改", "批量禁用用账号", 0);
               }
             })
             .catch(error => {});
@@ -720,7 +732,7 @@ export default {
         });
         return false;
       }
-      this.$confirm("确定要批量删除角色吗?", "提示", {
+      this.$confirm("确定要批量删除账号吗?", "提示", {
         type: "warning"
       })
         .then(() => {
@@ -737,9 +749,9 @@ export default {
                   type: "success"
                 });
                 this.queryUserList();
-                this.common.monitoringLogs("删除", "批量删除账户", 1);
+                this.common.monitoringLogs("删除", "批量删除账号", 1);
               } else {
-                this.common.monitoringLogs("删除", "批量删除账户", 0);
+                this.common.monitoringLogs("删除", "批量删除账号", 0);
               }
             })
             .catch(error => {});
@@ -831,7 +843,7 @@ export default {
                 message: msg,
                 type: "error"
               });
-              this.common.monitoringLogs("新增", "新增账户", 0);
+              this.common.monitoringLogs("新增", "新增账号", 0);
             } else {
               this.$message({
                 message: "添加成功",
@@ -839,7 +851,7 @@ export default {
               });
 
               this.queryUserList();
-              this.common.monitoringLogs("新增", "新增账户", 1);
+              this.common.monitoringLogs("新增", "新增账号", 1);
             }
           });
         } else {
@@ -869,7 +881,7 @@ export default {
      
   
 
-      this.$confirm("确定执行该操作麽吗", "提示", {
+      this.$confirm("确定执行该操作吗？", "提示", {
         type: "warning"
       })
         .then(() => {
@@ -883,14 +895,14 @@ export default {
                   message: msg,
                   type: "error"
                 });
-                this.common.monitoringLogs("修改", "禁用账户", 0);
+                this.common.monitoringLogs("修改", "禁用账号", 0);
               } else {
                 this.$message({
                   message: "禁用成功",
                   type: "success"
                 });
                 this.queryUserList();
-                this.common.monitoringLogs("修改", "禁用账户", 1);
+                this.common.monitoringLogs("修改", "禁用账号", 1);
               }
             } else {
               if (status !== 0) {
@@ -898,14 +910,14 @@ export default {
                   message: msg,
                   type: "error"
                 });
-                this.common.monitoringLogs("修改", "启用账户", 0);
+                this.common.monitoringLogs("修改", "启用账号", 0);
               } else {
                 this.$message({
                   message: "启用成功",
                   type: "success"
                 });
                 this.queryUserList();
-                this.common.monitoringLogs("修改", "启用账户", 1);
+                this.common.monitoringLogs("修改", "启用账号", 1);
               }
             }
           });
@@ -954,7 +966,7 @@ export default {
       let param = new Object();
       param.id = val.id;
 
-      this.$confirm("确定要删除角色吗?", "提示", {
+      this.$confirm("确定要删除账号吗?", "提示", {
         type: "warning"
       })
         .then(() => {
@@ -965,13 +977,13 @@ export default {
                   message: res.msg,
                   type: "error"
                 });
-                this.common.monitoringLogs("删除", "删除账户", 0);
+                this.common.monitoringLogs("删除", "删除账号", 0);
               } else {
                 this.$message({
                   message: "删除成功",
                   type: "success"
                 });
-                this.common.monitoringLogs("删除", "删除账户", 1);
+                this.common.monitoringLogs("删除", "删除账号", 1);
 
                 this.queryUserList();
               }
@@ -981,7 +993,7 @@ export default {
                 message: res.msg,
                 type: "error"
               });
-              this.common.monitoringLogs("删除", "删除账户", 0);
+              this.common.monitoringLogs("删除", "删除账号", 0);
             });
         })
         .catch(() => {});
@@ -1019,13 +1031,13 @@ export default {
                 message: msg,
                 type: "error"
               });
-              this.common.monitoringLogs("修改", "修改账户信息", 0);
+              this.common.monitoringLogs("修改", "修改账号信息", 0);
             } else {
               this.$message({
-                message: "添加成功",
+                message: "修改成功",
                 type: "success"
               });
-              this.common.monitoringLogs("修改", "修改账户信息", 1);
+              this.common.monitoringLogs("修改", "修改账号信息", 1);
 
               this.queryUserList();
             }
@@ -1057,14 +1069,14 @@ export default {
                 message: msg,
                 type: "error"
               });
-              this.common.monitoringLogs("修改", "重置账户密码", 0);
+              this.common.monitoringLogs("修改", "重置账号密码", 0);
             } else {
               this.dialogVisible3 = false;
               this.$message({
                 message: "重置成功",
                 type: "success"
               });
-              this.common.monitoringLogs("修改", "重置账户密码", 1);
+              this.common.monitoringLogs("修改", "重置账号密码", 1);
               this.queryUserList();
             }
           });
@@ -1202,8 +1214,8 @@ export default {
     width: 90px;
   }
 
-  .el-form-item__error {
-    margin-left: 80px;
+  &.addaccout_active .el-form-item__error {
+    margin-left: 90px;
   }
 }
 </style>

@@ -9,7 +9,7 @@ if (href.indexOf('xyj.grapefruitcloud.com') >= 0) {
     var ownbase = 'http://xyj.grapefruitcloud.com' //PHP服务域名
 } else {
     var ownbase = 'http://zzb.onezen.net' //PHP服务域名
-    var ownbase2 = '39.100.131.247:8090' //李锐测试
+    var ownbase2 = 'http://10.0.0.156:8090' //李锐测试
 }
 
 
@@ -257,6 +257,7 @@ export const setactionlog = params => { return axios.post(`${ownbase}/PTFSLogSys
 export const setactionlogAll = params => { return axios.post(`${ownbase}/cloudterminal/setactionlog`, params).then(res => res.data) };
 //操作日志列表获取
 export const actionlogactive = params => { return axios.post(`${ownbase}/cloudterminal/actionlog`, params).then(res => res.data) };
+
 
 
 

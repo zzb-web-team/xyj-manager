@@ -44,7 +44,7 @@ export default {
   props: ["userJson"],
   data() {
     return {
-      valueTime: "",
+      valueTime: [new Date(new Date().setHours(0, 0, 0, 0)), new Date()],
       chart: null,
       tableData: [],
       echartsX: [],
@@ -83,15 +83,15 @@ export default {
     queryTypeInfo() {
       this.options = [];
       let param = {};
-      this.options=[]
+      this.options = [];
       device_typerom_all(param)
         .then(res => {
           let tempArr = res.data;
-          let obj1={
-             value:"-1",
-            label:"全部类型"
-          }
-          this.options.push(obj1)
+          let obj1 = {
+            value: "-1",
+            label: "全部类型",
+          };
+          this.options.push(obj1);
           for (var i = 0; i < tempArr.length; i++) {
             let obj = {};
             if (tempArr[i].type == 0) {
@@ -103,8 +103,8 @@ export default {
             }
             this.options.push(obj);
           }
-      
-          console.log(this.options)
+
+          console.log(this.options);
         })
         .catch(error => {});
     },
@@ -114,8 +114,9 @@ export default {
     },
     //查询数据
     queryInfo() {
-      let startTime = 1531924885;
-      let endTime = 1596012943;
+     
+           let startTime = new Date(new Date().toLocaleDateString()).getTime()/1000
+      let endTime = new Date().getTime()/1000
       if (this.valueTime) {
         if (this.valueTime == "") {
           startTime = new Date().getTime() / 1000;
@@ -125,8 +126,8 @@ export default {
           startTime = Math.floor(this.valueTime[0].getTime() / 1000);
         }
       } else {
-        startTime = 1589385600;
-        endTime = 1589472000;
+        startTime = startTime;
+        endTime = endTime;
       }
       // let endTime = new Date().getTime() / 1000;
       // let startTime = (new Date().getTime() - 60 * 60 * 24 * 30 * 1000) / 1000;
@@ -136,23 +137,30 @@ export default {
       // };
       let paramActive = {};
       // paramActive.dayList = [];
-      paramActive.start_ts = startTime;
-      (paramActive.end_ts = endTime), (paramActive.type = this.deviceType);
+      paramActive.start_ts = parseInt(startTime) ;
+      (paramActive.end_ts = parseInt(endTime) ), (paramActive.type = this.deviceType);
       app_usage_region_dist(paramActive)
         .then(res => {
           // console.log(res);
           if (res.status == 0) {
             let tempArr = res.data;
-        //             tempArr.forEach((element) => {
-        // element.percent=(element.percent*100).toFixed(2)
-        //     });
-       
+            //             tempArr.forEach((element) => {
+            // element.percent=(element.percent*100).toFixed(2)
+            //     });
+
             this.echartsX = [];
             for (var i = 0; i < tempArr.length; i++) {
-              let obj = {
-                value: tempArr[i].num,
-                name: tempArr[i].region.replace("省", ""),
-              };
+              // let obj = {
+              //   value: tempArr[i].num,
+              //   name: tempArr[i].region.replace("省", ""),
+              // };
+
+              let obj = {};
+              obj.name = tempArr[i].region.replace("省", "");
+               obj.name = obj.name.replace("市", "");
+              obj.name = obj.name.replace("维吾尔自治区", "");
+              obj.value = tempArr[i].num;
+              // arr.push(obj);
               // tempArr[i].indexActive = i + 1;
               this.echartsX.push(obj);
             }

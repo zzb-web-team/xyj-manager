@@ -113,11 +113,11 @@
         </el-col>
       </el-row>
     </div>
-    <el-dialog :visible.sync="dialogVisible1" width="30%" :before-close="handleClose">
+    <el-dialog :visible.sync="dialogVisible1" width="30%" :before-close="handleClose" @close="handleCloseDefail">
       <div class="addaccout addaccout_add">
         <el-form :model="ruleForm2" :rules="rules" ref="ruleForm2" label-width="100px" class="demo-valiForm">
           <h3 class="title">新建设备</h3>
-          <el-form-item label="名称：" prop="dev_sn">
+          <el-form-item label="设备SN：" prop="dev_sn">
             <el-input v-model="ruleForm2.dev_sn" placeholder="请输入设备SN" style="width:200px;"></el-input>
           </el-form-item>
           <el-form-item label="设备型号：">
@@ -467,6 +467,12 @@ export default {
     this.getInfo();
   },
   methods: {
+         //添加设备取消清空
+    handleCloseDefail(){
+      this.$refs.ruleForm2.resetFields();
+      this.dialogVisible1=false
+
+    },
     onChange2Type(val) {
       console.log(val);
       this.dev_type_active = val;
@@ -580,6 +586,7 @@ export default {
       this.activate_start_ts = "";
       this.activate_end_ts = "";
       this.searchText = "";
+      this.is_activated=""
       this.getInfo();
     },
     //导出地址变量

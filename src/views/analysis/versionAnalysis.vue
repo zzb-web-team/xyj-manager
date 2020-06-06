@@ -5,7 +5,8 @@
       <el-date-picker v-model="valueTime" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left">
       </el-date-picker>
       <el-select v-model="versointype" placeholder="请选择" @change="onChange">
-        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+        <el-option  label="全部" value="*">
+        </el-option> <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
       <el-button type="primary" @click="onQueryInfo" style="margin-left:20px;">确定</el-button>
@@ -56,22 +57,22 @@ export default {
   data() {
     return {
       primaryActive: "primary",
-      versointype: "",
-      valueTime: "",
+      versointype: "*",
+      valueTime: [new Date(new Date().setHours(0, 0, 0, 0)), new Date()],
 
       options: [
-        {
-          value: "",
-          label: "全部版本",
-        },
-        {
-          value: "1",
-          label: "3.2.2",
-        },
-        {
-          value: "2",
-          label: "3.2.3",
-        },
+        // {
+        //   value: "",
+        //   label: "全部版本",
+        // },
+        // {
+        //   value: "1",
+        //   label: "3.2.2",
+        // },
+        // {
+        //   value: "2",
+        //   label: "3.2.3",
+        // },
       ],
       rowHeader: [
         {
@@ -83,7 +84,7 @@ export default {
           label: "截至今日版本累计用户(%)",
         },
         {
-          prop: "totalUserNum",
+          prop: "installUserNum",
           label: "版本安装用户",
         },
         {
@@ -143,6 +144,7 @@ export default {
         .then(res => {
           if (res.status == 0) {
             this.options = [];
+        
             for (var i = 0; i < res.data.length; i++) {
               let obj = {
                 value: res.data[i],
@@ -164,8 +166,9 @@ export default {
     queryDeviceversion() {
       // let startTime = new Date().getTime() / 1000;
       // let endTime = (new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
-      let startTime = 1531924885;
-      let endTime = 1596012943;
+      let startTime = new Date(new Date().toLocaleDateString()).getTime()/1000
+      let endTime = new Date().getTime()/1000
+   
       if (this.valueTime) {
         if (this.valueTime == "") {
           startTime = new Date().getTime() / 1000;
@@ -175,13 +178,10 @@ export default {
           startTime = Math.floor(this.valueTime[0].getTime() / 1000);
         }
       } else {
-        startTime = 1531924885;
-        endTime = 1596012943;
+        startTime = parseInt(startTime)
+        endTime = parseInt(endTime) 
       }
-      let param = {
-        start_ts: startTime,
-        end_ts: endTime,
-      };
+ 
       let paramActive = {};
       paramActive.dayList = [];
       paramActive.dayList[0] = startTime;
@@ -195,7 +195,7 @@ export default {
             let tempArr1 = [];
             let tempArr2 = [];
             let tempArr3 = [];
-            tempArr = res.data.slice(0, 10);
+            tempArr = res.data
             for (var i = 0; i < tempArr.length; i++) {
               let obj = {
                 value: tempArr[i].cnt,
@@ -228,7 +228,7 @@ export default {
     //分页
     handleCurrentChange(val) {
       this.pager.page = val.val;
-      // this.queryversionTable();
+     this.querydeviceversionDay();
     },
     //分页
     handleCurrentChange1(val) {
@@ -254,8 +254,8 @@ export default {
       }
       let paramActive = {
         dayType: this.daytype,
-        version: this.versointype,
-        pageNo: 1,
+        version: "*",
+        pageNo: this.pager.page-1,
         pageSize: 10,
       };
       // start_ts: parseInt(startTime),
@@ -274,8 +274,8 @@ export default {
                 element.startupUserPercent * 100
               ).toFixed(2);
               element.totalUserPercent = (
-                element.totalUserPercent * 100
-              ).toFixed(2);
+             element.totalUserNum+"("+ ((element.totalUserPercent * 100).toFixed(2)+"%")+")"
+              )
             });
             this.tableData = res.data;
           } else {
@@ -286,6 +286,7 @@ export default {
           }
         })
         .catch(error => {
+          console.log(error)
           this.$message({
             message: "服务出错",
             type: "error",

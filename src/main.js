@@ -4,8 +4,10 @@ import store from './store/index'
 import Vuex from 'vuex'
 
 Vue.use(Vuex);
-
+import ElementUI from 'element-ui';
+Vue.use(ElementUI)
 import './assets/inon_frent/iconfont.css'
+import 'element-ui/lib/theme-chalk/index.css';
 
 import VCharts from 'v-charts'
 import common from "./common/js/util.js";
