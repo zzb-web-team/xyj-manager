@@ -22,23 +22,22 @@
     <el-dialog :visible.sync="dialogVisibleGroupEdit" width="20%" :before-close="handleClose">
       <el-form ref="form">
         <h3 style="width: 100%;
-    border-bottom: 1px solid #999999;
     padding-bottom: 20px;
     text-align: center;">新增应用分组</h3>
         <el-form-item label="分组名称:">
-          <el-input v-model="groupform.group_name"></el-input>
+          <el-input v-model="groupform.group_name" style="width:300px;"></el-input>
         </el-form-item>
         <el-form-item label="关联应用">
           <el-button type="primary" @click="addrelate">添加</el-button>
         </el-form-item>
-        <el-form-item label>
-          <el-input type="textarea" v-model="app_arrayname" style="width:240px;" :disabled="true"></el-input>
+        <el-form-item label="应用名称:">
+          <el-input type="textarea" v-model="app_arrayname" style="width:300px;" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="分组说明:">
-          <el-input v-model="groupform.group_describe"></el-input>
+          <el-input v-model="groupform.group_describe" style="width:300px;"></el-input>
         </el-form-item>
-        <el-form-item label="是否推荐到首页:">
-          <el-select v-model="is_recommend" placeholder="请选择" style="width:143px;">
+        <el-form-item label="推荐首页:">
+          <el-select v-model="is_recommend" placeholder="请选择" style="width:300px;">
             <el-option label="推荐" value="1">
             </el-option>
             <el-option label="不推荐" value="0">
@@ -52,26 +51,25 @@
         </div>
       </el-form>
     </el-dialog>
-    <el-dialog :visible.sync="dialogVisibleGroupEdit1" width="25%" :before-close="handleClose">
+    <el-dialog :visible.sync="dialogVisibleGroupEdit1" width="20%" :before-close="handleClose">
       <el-form ref="form">
         <h3 style="width: 100%;
-    border-bottom: 1px solid #999999;
     padding-bottom: 20px;
     text-align: center;">编辑应用分组</h3>
         <el-form-item label="分组名称:">
-          <el-input v-model="groupformupdate.group_name"></el-input>
+          <el-input v-model="groupformupdate.group_name" style="width:300px;"></el-input>
         </el-form-item>
         <el-form-item label="关联应用">
           <el-button type="primary" @click="addrelate">添加</el-button>
         </el-form-item>
-        <el-form-item label>
-          <el-input type="textarea" v-model="app_arrayname" style="width:240px;" :disabled="true"></el-input>
+        <el-form-item label="应用名称:">
+          <el-input type="textarea" v-model="app_arrayname" style="width:300px;" :disabled="true"></el-input>
         </el-form-item>
         <el-form-item label="分组说明:">
-          <el-input v-model="groupformupdate.group_describe"></el-input>
+          <el-input v-model="groupformupdate.group_describe" style="width:300px;"></el-input>
         </el-form-item>
-        <el-form-item label="是否推荐到首页:">
-          <el-select v-model="is_recommend" placeholder="请选择" style="width:143px;">
+        <el-form-item label="推荐首页:">
+          <el-select v-model="is_recommend" placeholder="请选择" style="width:300px;">
             <el-option label="推荐" value="1">
             </el-option>
             <el-option label="不推荐" value="0">
@@ -267,6 +265,9 @@ export default {
   methods: {
     //取消选择应用
     oncloseEdit() {
+       this.groupform.app_array = [];
+        this.app_arrayname = "";
+        this.tempidname=[]
       this.dialogVisiblereleta = false;
     },
     //字符长度限制
@@ -353,6 +354,7 @@ export default {
       }
     },
     onSeach() {
+      this.pager1.page=1
       this.queryApp();
     },
     //新增分组
@@ -531,8 +533,12 @@ export default {
       this.is_recommend = "0";
     },
     addrelate() {
+          this.groupform.app_array = [];
+        this.pager1.page=1
+        this.group_app_name=""
+      this.queryApp()
       this.dialogVisiblereleta = true;
-      this.groupform.app_array = [];
+  
     },
     onSubmitGroupEdit() {},
     //排序

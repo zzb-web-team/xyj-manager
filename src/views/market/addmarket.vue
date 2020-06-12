@@ -83,20 +83,20 @@
       <el-form-item label="应用名称:" prop="app_name">
         <div style="display: flex; justify-content: flex-start;">
           <el-input v-model="ruleForm.app_name" placeholder="请输入应用名称" style="width:300px;"></el-input>
-          <div style="color:#9999;white-space:nowrap;margin-left:10px;">请输入1-16个字符</div>
+          <div style="color:red;white-space:nowrap;margin-left:10px;">*</div><div style="color:#9999;white-space:nowrap;margin-left:10px;">请输入1-16个字符</div>
         </div>
       </el-form-item>
       <el-form-item label="开发者:" prop="developer">
         <div style="display: flex; justify-content: flex-start;">
           <el-input v-model="ruleForm.developer " placeholder="请输入开发者信息" style="width:300px;"></el-input>
-          <div style="color:#9999;white-space:nowrap;margin-left:10px;">字数不得超过50个字符</div>
+         <div style="color:red;white-space:nowrap;margin-left:10px;">*</div> <div style="color:#9999;white-space:nowrap;margin-left:10px;">字数不得超过50个字符</div>
         </div>
       </el-form-item>
       <el-form-item label="应用简述:" prop="snapshot">
         <div style="display: flex; justify-content: flex-start;">
 
           <el-input v-model="ruleForm.snapshot" placeholder="一句话描述该商品的广告词" style="width:300px;"></el-input>
-          <div style="color:#9999;white-space:nowrap;margin-left:10px;">请输入2-20个字符</div>
+         <div style="color:red;white-space:nowrap;margin-left:10px;">*</div> <div style="color:#9999;white-space:nowrap;margin-left:10px;">请输入2-20个字符</div>
         </div>
       </el-form-item>
       <el-form-item label="应用评分:" prop="app_score">
@@ -125,7 +125,7 @@
       <el-form-item label="应用介绍:" prop="app_brief">
         <div style="display: flex; justify-content: flex-start;">
           <el-input type="textarea" v-model="ruleForm.app_brief" placeholder="请输入应用介绍" style="width:300px;"></el-input>
-          <div style="color:#9999;white-space:nowrap;margin-left:10px;">请输入2-500个字符</div>
+          <div style="color:#9999;white-space:nowrap;margin-left:10px;"><i style="color:red;white-space:nowrap;margin-left:10px;margin-right:10px;">*</i>请输入2-500个字符</div>
         </div>
       </el-form-item>
       <el-form-item label="应用图片:" prop="name">

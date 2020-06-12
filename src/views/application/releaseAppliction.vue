@@ -121,7 +121,7 @@
                 </el-row>
             </div>
         </div>
-        <el-dialog :visible.sync="newdialogReleaseState" class="my_dialog_setnew" :show-close="false">
+        <el-dialog :visible.sync="newdialogReleaseState" class="my_dialog_setnew" :show-close="true">
             <el-row type="flex" class="row_active">
                 <el-col :span="24">
                     <template>

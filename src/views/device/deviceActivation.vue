@@ -288,7 +288,7 @@ export default {
       activated_dev_cnt: "",
       today_import_dev_cnt: 0,
       today_activated_dev_cnt: 0,
-      is_activated: "",
+      is_activated: "-1",
       import_start_ts: "",
       import_end_ts: "",
       activate_start_ts: "",
@@ -300,7 +300,7 @@ export default {
           label: "全部",
         },
         {
-          value: "100",
+          value: "99",
           label: "未激活",
         },
         {

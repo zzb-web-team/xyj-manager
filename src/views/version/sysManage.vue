@@ -1318,7 +1318,7 @@ h2 {
       position: absolute;
       z-index: 100;
       width: auto;
-      opacity: 0;
+      // opacity: 0;
       height: auto;
     }
 

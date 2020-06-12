@@ -730,7 +730,6 @@ export default {
           type: "warning",
         })
           .then(() => {
-            this.dialogVisiblecontent = true;
             let templist = JSON.parse(
               window.localStorage.getItem("educatList")
             );
@@ -738,8 +737,17 @@ export default {
             this.contentTitle = templist.contentTitle;
             this.handbook = templist.handbookActive;
             this.cat_id = templist.cat_id_active;
-            let tempobj = JSON.parse(window.localStorage.getItem("requestid"));
+            let tempobj={}
+            if(window.localStorage.getItem("requestid")){
+            tempobj = JSON.parse(window.localStorage.getItem("requestid"));
+            }else{
+                 tempobj.cat_name=""
+            }
             this.form.statusText = tempobj.cat_name;
+                        this.dialogVisiblecontent = true;
+
+            console.log(this.contentTitle)
+
             // var requesteducatData = {
             //   "contentTitle": this.contentTitle,
             //   "handbookActive": this.htmlText,
@@ -754,13 +762,14 @@ export default {
             this.contentTitle = "";
             this.htmlText = "";
             this.cat_id = "";
-            this.dialogVisiblecontent = true;
+            //this.dialogVisiblecontent = true;
             this.releaseActive = false;
             this.contentTitle = "";
             this.handbook = "";
             this.cat_id = "";
             this.groupvalue = "";
-            this.form.statusText = "全部";
+            // this.form.statusText = "全部";
+            window.localStorage.removeItem("educatList")
           });
       } else {
         this.contentTitle = "";
@@ -772,7 +781,7 @@ export default {
         this.handbook = "";
         this.cat_id = "";
         this.groupvalue = "";
-        this.form.statusText = "全部";
+       // this.form.statusText = "全部";
       }
     },
     //排序
@@ -946,13 +955,17 @@ export default {
                 tempArr[i].value = tempArr[i].cat_id;
                 tempArr[i].label = tempArr[i].cat_name;
               }
-              console.log(this.optionsActive);
-              this.tableData = tempArr;
-              let obj={
-                value:"0",
-                label:"全部"
-              }
-              this.tableData.unshift(obj)
+            this.tableData = tempArr;
+              this.groupId=tempArr[0].cat_id
+              this.form.statusText=tempArr[0].cat_name
+              this.cat_name=tempArr[0].cat_name
+              this.cat_id=tempArr[0].cat_id
+              
+              // let obj={
+              //   value:"0",
+              //   label:"全部"
+              // }
+              // this.tableData.unshift(obj)
             }
           } else {
             this.$message({

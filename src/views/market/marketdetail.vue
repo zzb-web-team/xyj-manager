@@ -1,21 +1,21 @@
 <template>
   <section class="myself-container">
-       <div class="goback" style="width: 100%;line-height: 50px;">
+    <div class="goback" style="width: 100%;line-height: 50px;">
       <div style="margin-top:20px;">
-        
+
         <el-button type="primary" class="el-upload__tip" @click="$router.go(-1)">返回</el-button>
       </div>
-      
+
     </div>
     <div class="device_form device_form_detail">
       <div class="detail_left">
         <div class="item itemactiveimg">
           <div class="item-l">
-              <img :src="cropImg" class="pre-img" width="100" height="100" />          </div>
+            <img :src="cropImg" class="pre-img" width="100" height="100" /> </div>
           <div class="item-r">{{ruleForm.app_name}}</div>
         </div>
         <div class="item">
-          <div class="item-l">应用状态：{{ruleForm.app_name}}</div>
+          <div class="item-l">应用名称：{{ruleForm.app_name}}</div>
           <div class="item-r">一级分类：{{oneType}}</div>
         </div>
         <div class="item">
@@ -35,21 +35,19 @@
           <div class="item-r">应用评分：{{(ruleForm.app_score)/10}}</div>
         </div>
         <div class="item itemactive">
-          <div
-            class="item-l"
-          >应用详情：{{ruleForm.app_brief}}</div>
+          <div class="item-l">应用详情：{{ruleForm.app_brief}}</div>
         </div>
       </div>
       <div class="detail_right">
         <div>
-                <el-button type="primary" size="small" @click="goEdit">编辑</el-button>
-                <el-button type="primary" size="small" @click="godelete" v-show="pub_status">删除</el-button>
+          <el-button type="primary" size="small" @click="goEdit">编辑</el-button>
+          <el-button type="primary" size="small" @click="godelete" v-show="pub_status">删除</el-button>
         </div>
         <div class="block">
           <el-carousel trigger="click" height="250px">
-             <el-carousel-item class="lun_img" v-for="item in imgs" v-bind:key="item" >
-             <img :src="item"/>
-           </el-carousel-item>
+            <el-carousel-item class="lun_img" v-for="item in imgs" v-bind:key="item">
+              <img :src="item" />
+            </el-carousel-item>
 
           </el-carousel>
         </div>
@@ -62,16 +60,15 @@
 import tableBar from "../../components/tableBar";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
-import { get_app_by_appid,
-del_app,get_apptype  } from "../../api/api";
+import { get_app_by_appid, del_app, get_apptype } from "../../api/api";
 import common from "../../common/js/util.js";
 
 export default {
   data() {
     return {
-      cropImg:"",
-      imgs:[],
-      
+      cropImg: "",
+      imgs: [],
+
       tableOption: {
         label: "操作",
         width: 200,
@@ -79,171 +76,156 @@ export default {
           {
             label: "发布",
             type: "primary",
-            methods: "freeze"
+            methods: "freeze",
           },
           {
             label: "下架",
             type: "danger",
-            methods: "clickOff"
+            methods: "clickOff",
           },
           {
             label: "编辑",
             type: "danger",
-            methods: "clickOff"
+            methods: "clickOff",
           },
           {
             label: "详情",
             type: "danger",
-            methods: "clickOff"
-          }
-        ]
+            methods: "clickOff",
+          },
+        ],
       },
       pager: {
         count: 0,
         page: 1,
-        rows: 100
+        rows: 100,
       },
-       ruleForm:{
-       
+      ruleForm: {},
+      optionsAll: [],
+      first: {},
+      oneType: "",
+      twoType: "",
 
-    },
-    optionsAll:[],
-    first:{},
-    oneType:"",
-    twoType:"",
-
-  linkappid:"",
-  pub_status:false
-
-    }
-   
+      linkappid: "",
+      pub_status: false,
+    };
   },
   mounted: function() {
     //this.queryUsersTotal();
     // this.queryUserList();
-     this.getpptypeInfo()
-   // this.queryAppInfo()
-    this.linkappid=this.$route.query.linkappid
+    this.getpptypeInfo();
+    // this.queryAppInfo()
+    this.linkappid = this.$route.query.linkappid;
 
-  if(this.$route.query.pub_status==1){
- this.pub_status=false
-  }else{
-     this.pub_status=true
-  }
+    if (this.$route.query.pub_status == 1) {
+      this.pub_status = false;
+    } else {
+      this.pub_status = true;
+    }
   },
   methods: {
-        //获取一级分类
-    getpptypeInfo(){
-      let param={
+    //获取一级分类
+    getpptypeInfo() {
+      let param = {};
+      get_apptype(param)
+        .then(res => {
+          if (res.status == 0) {
+            this.optionsAll = res.data;
+            var second = {};
+            let _this = this;
+            var data = this.optionsAll.filter(function(item) {
+              _this.first[item.type] = {};
+              _this.first[item.type].name = item.name;
+              console.log(item.sub.length);
+              _this.first[item.type].sub = {};
+              for (var i = 0; i < item.sub.length; i++) {
+                _this.first[item.type].sub[item.sub[i].sub_type] =
+                  item.sub[i].sub_name;
+              }
+            });
 
-      }
-      get_apptype(param).then(res=>{
-        if(res.status==0){
-        this.optionsAll=res.data
-        var second = {};
-        let _this=this
-        var data= this.optionsAll.filter(function(item){
-     
-          _this.first[item.type] = {};
-          _this.first[item.type].name = item.name
-          console.log(item.sub.length)
-          _this.first[item.type].sub = {};
-          for(var i=0;i<item.sub.length;i++) {
-            _this.first[item.type].sub[item.sub[i].sub_type]=item.sub[i].sub_name
+            this.queryAppInfo();
           }
         })
-      
-        this.queryAppInfo()
-
-        }
-      }).catch(error=>{
-        console.log(error)
-        
-      })
+        .catch(error => {
+          console.log(error);
+        });
     },
-  //删除
-  godelete(){
-    let param= new Object
-    param.app_id=(this.linkappid)
-    del_app(param).then(res=>{
-      if(res.status==0){
-          this.$message({
-            message: "删除成功",
-            type: "success"
-          });
-                     this.common.monitoringLogs("删除", "删除应用管理", 1);
-      }
-      else{
-          this.$message({
-            message: "删除失败",
-            type: "error"
-          });
-                               this.common.monitoringLogs("删除", "删除应用管理", 0);
-
-      }
-        this.$router.push({
-          path: "/marketindex",
-          query: {
-            linkappid: this.linkappid
+    //删除
+    godelete() {
+      let param = new Object();
+      param.app_id = this.linkappid;
+      del_app(param)
+        .then(res => {
+          if (res.status == 0) {
+            this.$message({
+              message: "删除成功",
+              type: "success",
+            });
+            this.common.monitoringLogs("删除", "删除应用管理", 1);
+            this.$router.push({
+              path: "/marketindex",
+              query: {
+                linkappid: this.linkappid,
+              },
+            });
+          } else {
+            this.$message({
+              message: "删除失败",
+              type: "error",
+            });
+            this.common.monitoringLogs("删除", "删除应用管理", 0);
           }
         })
-
-    }).catch(error=>{
-      this.$message({
+        .catch(error => {
+          this.$message({
             message: "后台服务出错",
-            type: "error"
+            type: "error",
           });
-                               this.common.monitoringLogs("删除", "删除应用管理", 0);
-
-
-    })
-
-  },
-     //查询APP信息
-    queryAppInfo(){
-      let param = new Object()
-      param.app_id=this.$route.query.linkappid
-      get_app_by_appid(param).then(res=>{
-        console.log(res)
-        if(res.status==0){
-          
-           this.cropImg = res.data.app_icon
-           this.imgs=res.data.app_pic
-          this.ruleForm=res.data
-                 if(this.first[this.ruleForm.app_type1].name){
-                 this.oneType=this.first[this.ruleForm.app_type1].name
-
-              }
-              if((this.first[this.ruleForm.app_type1].sub[this.ruleForm.app_type2])){
-                                    this.twoType=this.first[this.ruleForm.app_type1].sub[this.ruleForm.app_type2]
-
-              }
-          
-          console.log(this.ruleForm.app_name)
-        }
-
-      }).catch(error=>{
-
-      })
-
+          this.common.monitoringLogs("删除", "删除应用管理", 0);
+        });
     },
-      goEdit(){
-             this.$router.push({
-          path: "/editmarket",
-          query: {
-            linkappid: this.linkappid
+    //查询APP信息
+    queryAppInfo() {
+      let param = new Object();
+      param.app_id = this.$route.query.linkappid;
+      get_app_by_appid(param)
+        .then(res => {
+          console.log(res);
+          if (res.status == 0) {
+            this.cropImg = res.data.app_icon;
+            this.imgs = res.data.app_pic;
+            this.ruleForm = res.data;
+            if (this.first[this.ruleForm.app_type1].name) {
+              this.oneType = this.first[this.ruleForm.app_type1].name;
+            }
+            if (
+              this.first[this.ruleForm.app_type1].sub[this.ruleForm.app_type2]
+            ) {
+              this.twoType = this.first[this.ruleForm.app_type1].sub[
+                this.ruleForm.app_type2
+              ];
+            }
+
+            console.log(this.ruleForm.app_name);
           }
         })
-            
-          
-
-      },
+        .catch(error => {});
+    },
+    goEdit() {
+      this.$router.push({
+        path: "/editmarket",
+        query: {
+          linkappid: this.linkappid,
+        },
+      });
+    },
   },
   components: {
     pageNation: pageNation,
     tableBar: tableBar,
-    mySearch: mySearch
-  }
+    mySearch: mySearch,
+  },
 };
 </script>
 
@@ -272,14 +254,13 @@ export default {
           width: 500px;
         }
       }
-         &.itemactiveimg {
-      .item-r {
-        display: flex;
-        align-items: center;
+      &.itemactiveimg {
+        .item-r {
+          display: flex;
+          align-items: center;
+        }
       }
     }
-    }
- 
   }
   .detail_right {
     width: 500px;
@@ -307,10 +288,6 @@ export default {
 }
 
 .myself-container {
- 
-
-
-
   .device_form {
     box-sizing: border-box;
 

@@ -17,8 +17,8 @@
       </div>
       <div class="devide_table">
         <el-row type="flex">
-          <el-button :type="primaryActive" plain @click="changeTab(1)">今日</el-button>
-          <el-button :type="!primaryActive" plain @click="changeTab(2)">昨日</el-button>
+          <el-button  :class="{'activebutton':isActive}" plain @click="changeTab(1)">今日</el-button>
+          <el-button :class="{'activebutton1':isActive1}"  plain @click="changeTab(2)">昨日</el-button>
         </el-row>
         <el-row type="flex" class="row_active">
           <el-col :span="24">
@@ -56,6 +56,8 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
+      isActive:true,
+      isActive1:false,
       primaryActive: "primary",
       versointype: "*",
       valueTime: [new Date(new Date().setHours(0, 0, 0, 0)), new Date()],
@@ -158,8 +160,17 @@ export default {
     },
     //今日昨日切换
     changeTab(val) {
-      val == 1 ? (this.daytype = 1) : (this.daytype = 2);
-      this.primaryActive = !this.primaryActive;
+      if(val==1){
+        this.daytype = 1
+        this.isActive=true
+        this.isActive1=false
+      }else{
+         this.daytype = 2
+        this.isActive=false
+        this.isActive1=true
+      }
+      // val == 1 ? (this.daytype = 1) : (this.daytype = 2);
+      // this.primaryActive = !this.primaryActive;
       this.querydeviceversionDay();
     },
     //版本在线分布图
@@ -415,6 +426,14 @@ export default {
 
 <style lang="less">
 .myself-container {
+  .activebutton{
+    border: 1px solid #409EFF;
+    
+  }
+    .activebutton1{
+    border: 1px solid #409EFF;
+    
+  }
   .device_form {
     .bottom {
       margin-top: 20px;

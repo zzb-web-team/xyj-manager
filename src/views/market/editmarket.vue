@@ -154,7 +154,7 @@
                 <div style="width:450px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">{{ruleForm.app_pic[4]}}</div>
                 <el-button type="primary" style="margin-left:20px;margin-right:20px;" @click="reuploadImg(5)">重新选择</el-button>
               </div>
-              <input id="fileid3" class="weui-uploader__input" type="file" accept="image/*" @change="addImg4"  v-show="imgupload5" ref="inputer4" multiple>
+              <input id="fileid3" class="weui-uploader__input" type="file" accept="image/*" @change="addImg4" v-show="imgupload5" ref="inputer4" multiple>
             </div>
             <div class="weui-uploader__input-box" style="display: flex;justify-content: flex-start;align-items: center;margin-top:10px;">
               <div style="align-items: center; display: flex;justify-content: flex-start;" v-show="!imgupload6">
@@ -237,7 +237,7 @@ export default {
         app_icon: "",
       },
       imgdata: [],
-      app_pic_active:[]
+      app_pic_active: [],
     };
   },
   created() {
@@ -280,7 +280,6 @@ export default {
       let param = {};
       get_apptype(param)
         .then(res => {
-          console.log(res);
           if (res.status == 0) {
             let temparr = [];
             let templist = res.data;
@@ -315,12 +314,10 @@ export default {
       param.app_id = this.$route.query.linkappid;
       get_app_by_appid(param)
         .then(res => {
-          console.log(res);
           if (res.status == 0) {
             this.cropImg = res.data.app_icon;
             this.ruleForm = res.data;
             //this.ruleForm.app_pic=[]
-            console.log(this.ruleForm.app_pic[4]);
             if (!this.ruleForm.app_pic[4]) {
               this.imgupload5 = true;
               this.ruleForm.app_pic[4] = "";
@@ -336,6 +333,14 @@ export default {
             this.ruleForm.app_score = res.data.app_score / 10;
             this.ruleForm.app_type1 = res.data.app_type1;
             this.ruleForm.app_type2 = res.data.app_type2;
+            var array = res.data.app_pic;
+            for (var i = 0; i < array.length; i++) {
+              if (array[i] == "" || typeof array[i] == "undefined") {
+                array.splice(i, 1);
+                i = i - 1;
+              }
+            }
+            this.app_pic_active = array;
           }
         })
         .catch(error => {});
@@ -353,7 +358,6 @@ export default {
           if (res.status == 0) {
             // this.ruleForm.app_pic.push(res.data);
             this.ruleForm.app_icon = res.data;
-            console.log(this.ruleForm);
           }
         })
         .catch(error => {
@@ -375,7 +379,6 @@ export default {
     },
     cropImage() {
       this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
-      console.log(this.$refs.cropper.getCroppedCanvas().toDataURL());
       this.imgBase = this.$refs.cropper.getCroppedCanvas().toDataURL();
     },
     cancelCrop() {
@@ -461,7 +464,6 @@ export default {
     },
     onchangeappType1(item) {
       this.ruleForm.app_type1 = item;
-      console.log(item);
       if (item == "1") {
         this.options1 = this.optionsAll[0].sub;
       } else if (item == "2") {
@@ -532,13 +534,12 @@ export default {
       }
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(this.ruleForm);
           this.ruleForm.create_time = parseInt(Date.now() / 1000);
           this.ruleForm.dl_count = parseInt(this.ruleForm.dl_count);
           this.ruleForm.app_score = parseFloat(this.ruleForm.app_score) * 10;
           this.ruleForm.app_type1 = parseInt(this.ruleForm.app_type1);
           this.ruleForm.app_type2 = parseInt(this.ruleForm.app_type2);
-          this.ruleForm.app_pic=this.app_pic_active
+          this.ruleForm.app_pic = this.app_pic_active;
           let param = this.ruleForm;
 
           update_app(param)
@@ -594,12 +595,8 @@ export default {
       }
       return isJPG && isLt2M;
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePreview(file) {
-      console.log(file);
-    },
+    handleRemove(file, fileList) {},
+    handlePreview(file) {},
     addImg: function(event) {
       var that = this;
       // that.$toast('图片上传中...');
@@ -627,7 +624,6 @@ export default {
           that.imgdata.push(imgcode);
         };
       }
-      //  console.log(this.entity.cardid_photo)
     },
     addImg1: function(event) {
       var that = this;
@@ -656,7 +652,6 @@ export default {
           that.imgdata.push(imgcode);
         };
       }
-      //  console.log(this.entity.cardid_photo)
     },
     addImg2: function(event) {
       var that = this;
@@ -685,7 +680,6 @@ export default {
           that.imgdata.push(imgcode);
         };
       }
-      //  console.log(this.entity.cardid_photo)
     },
     addImg3: function(event) {
       var that = this;
@@ -714,7 +708,6 @@ export default {
           that.imgdata.push(imgcode);
         };
       }
-      //  console.log(this.entity.cardid_photo)
     },
     addImg4: function(event) {
       var that = this;
@@ -743,7 +736,6 @@ export default {
           that.imgdata.push(imgcode);
         };
       }
-      //  console.log(this.entity.cardid_photo)
     },
     addImg5: function(event) {
       var that = this;
@@ -779,11 +771,10 @@ export default {
       let param = {};
       param.data = this.imgdata;
       saveimagemore(param).then(function(res) {
-        console.log(res);
         if (res.status == 0) {
           let temp = res.msg;
           let tempArr = [];
-          that.app_pic_active=[]
+          that.app_pic_active = [];
           for (var i = 0; i < temp.length; i++) {
             tempArr.push(temp[i].data);
             that.app_pic_active.push(temp[i].data);
@@ -824,7 +815,6 @@ export default {
       }
       var len = 2 * 1024 * 1024;
       var tota_temp = Math.ceil(totalSize / len);
-      console.log(tota_temp);
 
       var start = 0;
       var end = start + len;
@@ -836,7 +826,6 @@ export default {
         File.prototype.slice;
 
       var fileReader = new FileReader();
-      console.log(index);
       //  return false
       function sliceandpost() {
         //if (start >= totalSize)return;
@@ -864,7 +853,6 @@ export default {
             if (xhr.status == 200) {
               //var headers =  JSON.parse(xhr.responseText);
               var headers = JSON.parse(xhr.response);
-              console.log(headers);
               //分片上传成功
               if (headers.status == 0) {
                 index = index + 1;

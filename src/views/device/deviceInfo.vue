@@ -50,8 +50,8 @@
               </el-select>
             </el-form-item>
             <el-form-item label="注册时间" style="display: flex;">
-              <el-date-picker v-model="bind_start_ts" style="width:110px;" type="datetime" placeholder="选择开始日期时间"></el-date-picker>-
-              <el-date-picker v-model="bind_end_ts" style="width:110px;" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
+              <el-date-picker v-model="bind_start_ts" style="width:160px;" type="datetime" placeholder="选择开始日期时间"></el-date-picker>-
+              <el-date-picker v-model="bind_end_ts" style="width:160px;" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" style="" @click="search">确定</el-button>
@@ -158,9 +158,9 @@ export default {
       dialogVisibleactive: false,
       reserveselection: true,
       rom_version: "",
-      dev_type: "",
-      online_state: "",
-      bind_flag: "",
+      dev_type: "-1",
+      online_state: "-1",
+      bind_flag: "-1",
       bind_start_ts: "",
       bind_end_ts: "",
       dev_types: [
@@ -446,10 +446,10 @@ export default {
       this.pager.page = 1;
       this.searchText = "";
       this.bind_end_ts = "";
-      this.bind_flag = "";
+      this.bind_flag = "-1";
       this.bind_start_ts = "";
-      this.dev_type = "";
-      this.online_state = "";
+      this.dev_type = "-1";
+      this.online_state = "-1";
       this.rom_version = "";
       this.getInfo();
     },
@@ -505,10 +505,10 @@ export default {
         page_no: this.pager.page - 1,
         page_size: 10,
         dev_type:
-          this.dev_type === "" ? -1 : this.dev_type === "RK3328" ? 1 : 2,
-        online_state: this.online_state === "" ? -1 : Number(this.online_state),
+          this.dev_type === "-1" ? -1 : this.dev_type === "RK3328" ? 1 : 2,
+        online_state: this.online_state === "-1" ? -1 : Number(this.online_state),
         rom_version: this.rom_version === "" ? "" : this.rom_version,
-        bind_flag: this.bind_flag === "" ? -1 : Number(this.bind_flag),
+        bind_flag: this.bind_flag === "-1" ? -1 : Number(this.bind_flag),
 
         bind_start_ts:
           this.bind_start_ts === ""
@@ -595,10 +595,10 @@ export default {
         page_no: this.pageActive,
         page_size: 10,
         dev_type:
-          this.dev_type === "" ? -1 : this.dev_type === "RK3328" ? 1 : 2,
-        online_state: this.online_state === "" ? -1 : Number(this.online_state),
+          this.dev_type === "-1" ? -1 : this.dev_type === "RK3328" ? 1 : 2,
+        online_state: this.online_state === "-1" ? -1 : Number(this.online_state),
         rom_version: this.rom_version === "" ? "" : this.rom_version,
-        bind_flag: this.bind_flag === "" ? -1 : Number(this.bind_flag),
+        bind_flag: this.bind_flag === "-1" ? -1 : Number(this.bind_flag),
 
         bind_start_ts:
           this.bind_start_ts === ""

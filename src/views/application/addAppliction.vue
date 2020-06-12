@@ -54,11 +54,11 @@
                 </div>
             </div> -->
               <div class="item dialog_div_con" style=" align-items: flex-start; display: flex;justify-content: center;">
-                <div class="item_l" style="white-space: nowrap;  text-overflow:ellipsis;line-height:30px;">应用包：</div>
+                <div class="item_l" style="white-space: nowrap;  text-overflow:ellipsis;line-height:30px;margin-top:10px;">应用包：</div>
                 <div class="item-r" style="position: relative;">
-                    <el-button class="choose-file" size="mini">请选择要上传的文件</el-button>
-                    <input id="f" class="choose-input" type="file" name="file">
-                    <el-button type="primary" class="onchoose-file" @click="upFile()" :disabled="disableStatus">确定</el-button>
+                    <!-- <el-button class="choose-file" size="mini">请选择要上传的文件</el-button> -->
+                    <input id="f" ref="test" class="choose-input" type="file" name="file">
+                    <el-button type="primary" class="onchoose-file" @click="upFile()" :disabled="disableStatus" style="margin-top:10px;">确定</el-button>
                     进度条 <span id="per">{{perNum}}</span>%
                     <div style="width: 95%;height: 16px;background-color: #999;margin-top:10px;">
                         <div style="height: 16px;background-color: #67c23a" id="loading" v-bind:style="{'width': widthData+'%'}"></div>
@@ -81,7 +81,7 @@
             <div class="dialog_item dialog_div_desc">
                 <div class="dialog_item_l" style="display:block;word-break:keep-all;white-space:nowrap;">添加描述：</div>
                 <div class="dialog_item_r">
-                    <textarea placeholder="请输入文字描述" v-model="newFrom.app_info" style="width:90%;">></textarea>
+                    <textarea placeholder="请输入文字描述" style="font-size: 12px;width: 90%;color: #C0C4CC;" v-model="newFrom.app_info" ></textarea>
                 </div>
             </div>
             <div slot="footer" class="dialog-footer" style="">
@@ -585,6 +585,14 @@ export default {
     },
 
     dialogFormVisible() {
+       this.disableStatus = false;
+         if(this.$refs.test==undefined){
+        console.log("***")
+      }else{
+        this.$refs.test.value=""
+      document.getElementById("result").innerText=""
+      this.uploadinput=""
+      }
       this.dialogFormState = true;
            this.perNum=0
       this.widthData=0
@@ -799,10 +807,12 @@ export default {
                 document.getElementById("result").innerHTML =
                   "上传成功:" + headers.msg;
                 _this.sdkUrl = headers.url;
+                _this.disableStatus=false
                 //_this.dialog = false
                 // _this.queryInfo()
                 _this.uploadForm = headers;
                 _this.uploadType = true;
+                 
 
                   _this.newFrom.app_version = headers.version;
             _this.newFrom.app_name = headers.name;
@@ -900,10 +910,10 @@ export default {
       margin-bottom: 10px;
 
       .dialog_item_l {
-        width: 90%;
+        width: 125px;
         height: 35px;
         line-height: 35px;
-        text-align: left;
+        text-align: right;
         float: left;
       }
 

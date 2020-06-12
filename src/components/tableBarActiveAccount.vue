@@ -9,7 +9,7 @@
             <el-button @click="toChange(scope.row)" size="mini">修改</el-button>
             <el-button @click="changePassword(scope.row)" size="mini">重置密码</el-button>
             <el-button @click="disable(scope.row)" :disabled="scope.row.id == uid || scope.row.id == 6" size="mini">{{ scope.row.status=='禁用'?'启用':'禁用'}}</el-button>
-            <el-button @click="toDelete(scope.row)" size="mini">删除</el-button>
+            <el-button @click="toDelete(scope.row)" :disabled="scope.row.id == uid || scope.row.id == 6" size="mini" >删除</el-button>
 
         </template>
     </el-table-column>

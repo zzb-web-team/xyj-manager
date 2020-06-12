@@ -23,8 +23,8 @@
                     </el-form-item>
 
                     <el-form-item label="时间" style="display: flex;" >
-                        <el-date-picker v-model="start_time" style="width:150px;" type="datetime" placeholder="选择开始日期时间" :picker-options="pickerOptions1" ></el-date-picker> -
-                        <el-date-picker v-model="end_time" style="width:150px;" type="datetime" placeholder="选择结束日期时间" :picker-options="pickerOptions"></el-date-picker>
+                        <el-date-picker v-model="start_time" style="width:160px;" type="datetime" placeholder="选择开始日期时间" :picker-options="pickerOptions1" ></el-date-picker> -
+                        <el-date-picker v-model="end_time" style="width:160px;" type="datetime" placeholder="选择结束日期时间" :picker-options="pickerOptions"></el-date-picker>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" style="margin-left:68px;" @click="search">确定</el-button>
