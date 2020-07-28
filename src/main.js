@@ -27,6 +27,12 @@ import deviceInfo from './views/device/deviceInfo.vue'
 import middle from './views/device/middle.vue'
 import devicePower from './views/device/devicePower.vue'
 import deviceActivation from './views/device/deviceActivation.vue'
+import deviceMiddle from './views/deviceActive/middle.vue'
+import newsd from './views/deviceActive/newsd.vue'
+import device_etails from './views/deviceActive/device_etails.vue'
+import deviceProcess from './views/deviceActive/deviceprocess.vue'
+
+
 import deviceupload from './views/device/upload.vue'
 import pointsmiddle from './views/point/middle.vue'
 import pointsDetails from './views/point/pointsDetails.vue'
@@ -113,7 +119,11 @@ if (user) {
             'middle': middle,
             'devicePower': devicePower,
             'deviceActivation': deviceActivation,
+            'deviceMiddle':deviceMiddle,
+            'newsd':newsd,
+            'device_etails':device_etails,
             'deviceupload': deviceupload,
+            'deviceProcess':deviceProcess,
             'income': income,
             'setparam': setparam,
             'pointsmiddle': pointsmiddle,
@@ -250,6 +260,48 @@ if (user) {
                         }
 
                     },
+                    {
+                        path: "/deviceMiddle",
+                        name: "设备监控",
+                        component: 'deviceMiddle',
+                        icon: 'iconfont icon-dian',
+                        children: [
+                            {
+                                path: "/newsd",
+                                name: "设备监控详情",
+                                component: 'newsd',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                            {
+                                path: "/deviceProcess",
+                                name: "设备进程监控",
+                                component: 'deviceProcess',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                            
+                            {
+                                path: "/device_etails",
+                                name: "设备异常记录",
+                                component: 'device_etails',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                           
+
+
+                        ],
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
 
 
                 ]
@@ -260,7 +312,8 @@ if (user) {
                 name: "西柚机APP",
                 titleActive: "应用",
                 icon: 'iconfont icon-APPkaifa',
-                children: [{
+                children: [
+                    {
                         path: "/miningmiddle",
                         name: "挖矿节点",
                         component: 'miningmiddle',

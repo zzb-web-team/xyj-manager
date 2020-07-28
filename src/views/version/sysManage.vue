@@ -1,201 +1,242 @@
 <template>
-<section class="myself-container">
+  <section class="myself-container">
+    <div class="device_form">
+      <el-form ref="form">
+        <el-row type="flex" class="row_active row_active_monitor">
+          <div>
+            <el-input v-model="packageName" placeholder="请输入设备SN"></el-input>
+          </div>
+          <div class="seach_top_right" @click="option_display()">
+            筛选
+            <i class="el-icon-caret-bottom" :class="[
+                  rotate ? 'fa fa-arrow-down go' : 'fa fa-arrow-down aa'
+                ]"></i>
+          </div>
+        </el-row>
+      </el-form>
+    </div>
+    <div v-if="optiondisplay" class="seach_bottom">
+      <span>适用设备品牌:</span>
+      <el-select v-model="valuestate" placeholder="请选择" @change="onChange">
+        <el-option v-for="item in optionstate" :key="item.value" :label="item.label" :value="item.value"></el-option>
+      </el-select>
+      <span style="margin-left:20px;">选择日期：</span>
+
+      <el-date-picker v-model="value2" type="datetimerange" :picker-options="pickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="right"></el-date-picker>
+
+      <el-button type="primary" style="margin-left:10px;" @click="toQueryInfo()">确定</el-button>
+      <el-button type="primary" @click="setInfo()">重置</el-button>
+    </div>
     <div class="devide_table">
-        <el-row type="flex" class="row_active">
-            <el-col :span="2" style="display: flex;justify-content: flex-start;">
-                <el-button type="primary" @click="dialogFormVisible">上传系统包</el-button>
-            </el-col>
-            <el-col :span="2" >
-                <el-button type="primary" @click="golink()">版本发布</el-button>
-            </el-col>
-        </el-row>
-        <el-row type="flex" class="row_active">
-            <el-col :span="24">
-                <!-- <tableBarActive :tableData="tableData" :rowHeader="rowHeader" :clomnSelection="clomnSelection" :tableOption="tableOption" @toSet="toSet" @toRelease="toRelease" @toChange="toChange" @toDelete="toDelete" @handleButton="handleButton"></tableBarActive> -->
-            </el-col>
-        </el-row>
-        <el-row type="flex" class="row_active">
-            <el-col :span="24">
-                <el-table :data="tableData11" style="width: 100%;margin-bottom: 20px;" border row-key="id">
-                    <el-table-column prop="version_name" label="包名" width="150">
-                        <template slot-scope="scope">
+      <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-start;">
+        <el-button type="primary" @click="dialogFormVisible">上传系统包</el-button>
+        <el-button type="primary" @click="golink()" style="margin-left:20px;">版本发布</el-button>
+      </el-row>
+      <el-row type="flex" class="row_active">
+        <el-col :span="24">
+          <!-- <tableBarActive :tableData="tableData" :rowHeader="rowHeader" :clomnSelection="clomnSelection" :tableOption="tableOption" @toSet="toSet" @toRelease="toRelease" @toChange="toChange" @toDelete="toDelete" @handleButton="handleButton"></tableBarActive> -->
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row_active">
+        <el-col :span="24">
+          <el-table :data="tableData11" style="width: 100%;margin-bottom: 20px;" border row-key="id">
+            <el-table-column prop="version_name" label="系统包名" width="150">
+             
+            </el-table-column>
+            <el-table-column label="适用设备品牌" width="120">
+              <template slot-scope="scope">
+                <div style="text-align:center">{{scope.row.rom_type | formatType}}</div>
+              </template>
+            </el-table-column>
+                <el-table-column prop="equip_type" label="包类型" width="70">
+        
+            </el-table-column>
+     
+           <el-table-column prop="rom_size" label="文件大小" width="90" :formatter="common.formatByte">
+           
+              </el-table-column>
+            <el-table-column prop="md5" label="md5" width="250">
+           
+            </el-table-column>
+            <el-table-column prop="hashid" label="hashid" width="200">
+             
+            </el-table-column>
+             <el-table-column prop="ptfs_file_upload_status" label="是否上传到PTFS节点" width="150">
+              <template slot-scope="scope">
+                <div style="text-align:center">
+                  <div v-if="scope.row.ptfs_file_upload_status==0">
+                    <span>未上传</span>
+                    <br>
+                    <el-button type="primary" class="button_active" style="margin-left:0px;" @click="Reonload(scope.row,index)">重新上传</el-button>
+                  </div>
+                  <div v-if="scope.row.ptfs_file_upload_status==1">
+                    <span>已上传</span>
+                  </div>
+                </div>
+              </template>
+            </el-table-column>
+             <el-table-column prop="rom_version" label="版本号" width="70">
+            </el-table-column>
+            <el-table-column prop="" label="文件描述" width="300px;">
+              <template slot-scope="scope">
+                <div style="overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:280px;margin:0 auto;">{{scope.row.rom_desc}}</div>
+              </template>
+            </el-table-column>
+            <el-table-column prop="time_create" label="上传日期" width="200">
+            </el-table-column>
+            <el-table-column prop="push_mod" label="发布方式" width="70">
+            </el-table-column>
+            <el-table-column prop="time_update" label="近发布日期" width="200">
+            </el-table-column>
+            <el-table-column width="100" label="操作">
+              <template slot-scope="scope">
+                <a style="color:#6699ff;cursor: pointer;" @click="toDelete(scope.row)" type="danger" size="small">删除</a>
+                <a style="color:#6699ff;cursor: pointer;" @click="toChange(scope.row)" type="primary" size="small">修改</a>
+              </template>
+            </el-table-column> 
 
-                            <div style="text-align:center" v-for="(item,index) in scope.row.version_name" :key="index">{{item}}</div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="equip_type" label="包类型" width="70">
-                        <template slot-scope="scope">
-                            <div style="text-align:center" v-for="(item,index) in scope.row.equip_type" :key="index">{{item}}</div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="rom_size" label="文件大小" width="90" :formatter="common.formatByte">
-                        <template slot-scope="scope">
-                            <div style="text-align:center" v-for="(item,index) in scope.row.rom_size" :key="index">{{item}}</div>
-
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="md5" label="md5" width="250">
-                        <template slot-scope="scope">
-                            <div style="text-align:center" v-for="(item,index) in scope.row.md5" :key="index">{{item}}</div>
-
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="hashid" label="hashid" width="200">
-                        <template slot-scope="scope">
-                            <div style="text-align:center" v-for="(item,index) in scope.row.hashid" :key="index">{{item}}</div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="ptfs_file_upload_status" label="是否上传到PTFS节点" width="150">
-                        <template slot-scope="scope">
-                            <div style="text-align:center" v-for="(item,index) in scope.row.ptfs_file_upload_status" :key="index">
-                                <div v-if="item==0">
-                                  <span>未上传</span>
-                                  <br>
-                                    <el-button type="primary" class="button_active" style="margin-left:0px;" @click="Reonload(scope.row,index)">重新上传</el-button>
-                                </div>
-                                <div v-if="item==1"><span>已上传</span></div>
-                            </div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="rom_version" label="版本号" width="70">
-                    </el-table-column>
-                    <el-table-column prop="" label="文件描述" width="300px;">
-                        <template slot-scope="scope">
-                            <div style="overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:280px;margin:0 auto;">{{scope.row.rom_desc}}</div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="time_create" label="上传日期" width="200">
-                    </el-table-column>
-                    <el-table-column prop="push_mod" label="发布方式" width="70">
-                    </el-table-column>
-                    <el-table-column prop="time_update" label="近发布日期" width="200">
-                    </el-table-column>
-                    <el-table-column width="100" label="操作">
-                        <template slot-scope="scope"  >
-                            <a style="color:#6699ff;cursor: pointer;" @click="toDelete(scope.row)" type="danger" size="small">删除</a>
-                            <a style="color:#6699ff;cursor: pointer;" @click="toChange(scope.row)" type="primary" size="small">修改</a>
-                        </template>
-                    </el-table-column>
-
-                </el-table>
-            </el-col>
-        </el-row>
-        <el-row type="flex" class="row_active">
-            <el-col :span="24">
-                <myDatanums :dataNum="dataNum"></myDatanums>
-            </el-col>
-        </el-row>
+          </el-table>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row_active">
+        <el-col :span="24">
+          <myDatanums :dataNum="dataNum"></myDatanums>
+        </el-col>
+      </el-row>
 
     </div>
     <div class="devide_pageNation">
-        <div class="devide_pageNation_active">
-            <el-row type="flex">
-                <el-col :span="6">
-                    <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
-                </el-col>
-            </el-row>
-        </div>
+      <div class="devide_pageNation_active">
+        <el-row type="flex">
+          <el-col :span="6">
+            <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
+          </el-col>
+        </el-row>
+      </div>
     </div>
-    <el-dialog :visible.sync="dialogFormState" id="my_dialogForm" :show-close="false"  :close-on-click-modal="false">
-        <div class="dialog_div" width="28%" v-loading="loading2" element-loading-text="上传中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
-
-            <div v-for="item in uploadsize" :key="item">
-                <div class="dialog_div_con">
-                    <div class="dialog_div_title" v-if="item==1">上传FULL包</div>
-                    <div class="dialog_div_title" v-else>上传DIFF包</div>
-                    <div class="dialog_div_warning">
-                        <p v-if="item==1">*必传，full包为包含完整系统资源的文件，一般带有full后缀，如1.0.0_full.zip</p>
-                        <p v-else>*diff包为包含增量系统资源的文件，一般带有diff后缀，如：1.0.0_1.0.1_diff.zip</p>
-                        </div>
-                    <div class="dialog_div_upload">
-                        <div class="add-sdk">
-                            <div class="item">
-                                <div class="item_l">应用包：</div>
-                                <div class="item-r" style="position: relative;">
-                                    <!-- <el-button class="choose-file" size="mini">请选择要上传的文件</el-button> -->
-                                    <input :id="['f'+item]" type="file" name="file">
-                                    <el-button type="primary" class="onchoose-file" @click="upFile(item)" :disabled="disableStatus">确定</el-button>
-                                     <span :id="['per'+item]"></span>%
-                                    <div style="width: 400px;height: 16px;background-color: #999;margin-top:10px;">
-                                        <!-- <div style="width: 0%;height: 16px;background-color: #67c23a" id="loading" v-bind:style="{'width': widthData+'%'}"></div> -->
-                                        <div style="width: 0%;height: 16px;background-color: green;" :id="['loading'+item]"></div>
-                                    </div>
-                                    <div :id="['result'+item]" style="margin-top:10px;"></div>
-                                </div>
-                            </div>
-                        </div>
-                      
-                    </div>
-                      <div class="dialog_div_uploadinfo" v-if="uploadList[item-1].showType">
-                            <div><span>版本号：</span>{{uploadList[item-1].info.rom_version}}</div>
-                            <div><span>包名：</span>{{uploadList[item-1].info.version_name}}</div>
-                            <div><span>类型：</span>{{uploadList[item-1].info.push_mod}}</div>
-                            <div><span>大小：</span>{{uploadList[item-1].info.rom_size}}</div>
-                            <div><span>md5：</span>{{uploadList[item-1].info.md5}}</div>
-                        </div>
-                </div>
-
-            </div>
-            <div class="dialog_div_desc">
-                <textarea placeholder="请输入文字描述" v-model="textareaText"></textarea>
-            </div>
-                    <div style="display:flex;justify-content: center;padding-bottom: 20px;"><el-button style="color:#ffffff;cursor: pointer;" @click="plus" type="primary" size="small">+</el-button></div>
-
-            <div slot="footer" class="dialog-footer" style="">
-                <el-button @click="dialogFormState = false">取 消</el-button>
-                <el-button type="primary" @click="onUpload()">确 定</el-button>
-            </div>
+    <el-dialog :visible.sync="dialogFormState" id="my_dialogForm" :show-close="false" :close-on-click-modal="false">
+      <div class="dialog_div" width="28%" v-loading="loading2" element-loading-text="上传中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+        <div style="display: flex;justify-content: flex-start;align-items: center;margin-left:20px;">
+          <div>使用设备品牌：</div>
+          <el-select v-model="valuestate1" placeholder="请选择" @change="onChange">
+            <el-option v-for="item in optionstate1" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
         </div>
+        <div v-for="item in uploadsize" :key="item">
+          <div class="dialog_div_con">
+            <div class="dialog_div_title" v-if="item==1">上传FULL包</div>
+            <div class="dialog_div_title" v-else>上传DIFF包</div>
+            <div class="dialog_div_warning">
+              <p v-if="item==1">*必传，full包为包含完整系统资源的文件，一般带有full后缀，如1.0.0_full.zip</p>
+              <p v-else>*diff包为包含增量系统资源的文件，一般带有diff后缀，如：1.0.0_1.0.1_diff.zip</p>
+            </div>
+            <div class="dialog_div_upload">
+              <div class="add-sdk">
+                <div class="item">
+                  <div class="item_l">应用包：</div>
+                  <div class="item-r" style="position: relative;">
+                    <!-- <el-button class="choose-file" size="mini">请选择要上传的文件</el-button> -->
+                    <input :id="['f'+item]" type="file" ref="test" name="file">
+                    <el-button type="primary" class="onchoose-file" @click="upFile(item)" :disabled="disableStatus">确定</el-button>
+                    <span :id="['per'+item]"></span>%
+                    <div style="width: 400px;height: 16px;background-color: #999;margin-top:10px;">
+                      <!-- <div style="width: 0%;height: 16px;background-color: #67c23a" id="loading" v-bind:style="{'width': widthData+'%'}"></div> -->
+                      <div style="width: 0%;height: 16px;background-color: green;" :id="['loading'+item]"></div>
+                    </div>
+                    <div :id="['result'+item]" style="margin-top:10px;"></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="dialog_div_uploadinfo" v-if="uploadList[item-1].showType">
+              <div>
+                <span>版本号：</span>{{uploadList[item-1].info.rom_version}}</div>
+              <div>
+                <span>包名：</span>{{uploadList[item-1].info.version_name}}</div>
+              <div>
+                <span>类型：</span>{{uploadList[item-1].info.push_mod}}</div>
+              <div>
+                <span>大小：</span>{{uploadList[item-1].info.rom_size}}</div>
+              <div>
+                <span>md5：</span>{{uploadList[item-1].info.md5}}</div>
+            </div>
+          </div>
+
+        </div>
+        <div class="dialog_div_desc">
+          <textarea placeholder="请输入文字描述" v-model="textareaText" style="  width: 400px;margin-left: 85px;"></textarea>
+        </div>
+        <div style="display:flex;justify-content: center;padding-bottom: 20px;">
+          <el-button style="color:#ffffff;cursor: pointer;" @click="plus" type="primary" size="small">+</el-button>
+        </div>
+        <div>
+          <div style="margin-left:20px;font-size: 14px;font-weight: bold;margin-top: 10px;">上传md5校验值</div><br>
+          <div style="display: flex;justify-content: flex-start;align-items: center;margin-left:20px;">
+            <div style="margin-left:40px;margin-right:20px;">md5值</div>
+
+            <el-upload action="/" ref="upload" accept=".txt" :before-upload="beforeUpload" :disabled="this.fileList.length !== 0" :default-file-list="this.fileList">
+              <button type="primary" :disabled="this.fileList.length !== 0">上传文件</button>
+            </el-upload>
+          </div>
+
+        </div>
+
+        <div slot="footer" class="dialog-footer" style="">
+          <el-button @click="dialogFormState = false">取 消</el-button>
+          <el-button type="primary" @click="onUpload()">确 定</el-button>
+        </div>
+      </div>
 
     </el-dialog>
     <el-dialog :visible.sync="dialogSetState" class="my_dialog_release" :show-close="false" :close-on-click-modal="false">
-        <el-table :data="arr">
-            <el-table-column prop="types" label="发布渠道">
-            </el-table-column>
-            <el-table-column prop="name" label="发布优先级渠道">
-                <template slot-scope="scope">
-                    <el-radio v-model="radio" :label="scope.row.name">优先</el-radio>
-                </template>
-            </el-table-column>
-        </el-table>
-        <div slot="footer" class="dialog-footer" style="">
-            <el-button @click="dialogSetState = false">取 消</el-button>
-            <el-button type="primary" @click="onSet()">确 定</el-button>
-        </div>
+      <el-table :data="arr">
+        <el-table-column prop="types" label="发布渠道">
+        </el-table-column>
+        <el-table-column prop="name" label="发布优先级渠道">
+          <template slot-scope="scope">
+            <el-radio v-model="radio" :label="scope.row.name">优先</el-radio>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div slot="footer" class="dialog-footer" style="">
+        <el-button @click="dialogSetState = false">取 消</el-button>
+        <el-button type="primary" @click="onSet()">确 定</el-button>
+      </div>
     </el-dialog>
     <el-dialog :visible.sync="dialogReleaseState" class="my_dialog_set" :show-close="false" :close-on-click-modal="false">
-        <div>
-            <div>版本号：{{releaseVersion}}</div>
-            <div v-for="(item,index) in releaseInfo" :key="index">
-                <div>名称：{{item.version_name}}</div>
-                <div>发布渠道：{{item.push_mod}}</div>
-            </div>
-            <div>点击确认后，系统包将分发给上述渠道</div>
+      <div>
+        <div>版本号：{{releaseVersion}}</div>
+        <div v-for="(item,index) in releaseInfo" :key="index">
+          <div>名称：{{item.version_name}}</div>
+          <div>发布渠道：{{item.push_mod}}</div>
         </div>
-        <div slot="footer" class="dialog-footer" style="">
-            <el-button @click="dialogReleaseState = false">取 消</el-button>
-            <el-button type="primary" @click="determine()">确 定</el-button>
-        </div>
+        <div>点击确认后，系统包将分发给上述渠道</div>
+      </div>
+      <div slot="footer" class="dialog-footer" style="">
+        <el-button @click="dialogReleaseState = false">取 消</el-button>
+        <el-button type="primary" @click="determine()">确 定</el-button>
+      </div>
     </el-dialog>
     <el-dialog :visible.sync="dialogUpdate" class="my_dialog_update" :show-close="false" :close-on-click-modal="false">
-        <div class="dialog_div" v-loading="loading2" element-loading-text="上传中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
-            <div class="dialog_div_con">
-                <div class="dialog_div_title" style="text-align:center">修改文件描述</div>
-                <div class="dialog_div_item">
-                    <div class="item_l">文件描述：</div>
-                    <div>
-                        <el-input v-model="updateFrom.rom_desc" placeholder="请输入内容"></el-input>
-                    </div>
-                </div>
+      <div class="dialog_div" v-loading="loading2" element-loading-text="上传中" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+        <div class="dialog_div_con">
+          <div class="dialog_div_title" style="text-align:center">修改文件描述</div>
+          <div class="dialog_div_item">
+            <div class="item_l">文件描述：</div>
+            <div>
+              <el-input v-model="updateFrom.rom_desc" placeholder="请输入内容"></el-input>
             </div>
-            <div slot="footer" class="dialog-footer" style="">
-                <el-button @click="dialogUpdate = false">取 消</el-button>
-                <el-button type="primary" @click="onUpdate()">确 定</el-button>
-            </div>
+          </div>
         </div>
+        <div slot="footer" class="dialog-footer" style="">
+          <el-button @click="dialogUpdate = false">取 消</el-button>
+          <el-button type="primary" @click="onUpdate()">确 定</el-button>
+        </div>
+      </div>
     </el-dialog>
 
-</section>
+  </section>
 </template>
 
 <script>
@@ -219,7 +260,8 @@ import {
   publish,
   updateMod,
   uploadpfts,
-  hostUrl
+  hostUrl,
+  uploadmd5,
 } from "../../api/api.js";
 import common from "../../common/js/util.js";
 import echarts from "echarts";
@@ -230,11 +272,67 @@ import echarts from "echarts";
 export default {
   data() {
     return {
+      fileList: [],
+      value2: "",
+      valuestate: "-1",
+      valuestate1: "1",
+      optionstate: [
+        {
+          value: "-1",
+          label: "全部",
+        },
+        {
+          value: "0",
+          label: "西柚机",
+        },
+      
+        {
+          value: "1",
+          label: "玩客云",
+        },
+        {
+          value: "2",
+          label: "小米盒子4C",
+        },
+        {
+          value: "3",
+          label: "小米盒子4",
+        },
+          {
+          value: "4",
+          label: "PC版西柚机",
+        },
+      ],
+      optionstate1: [
+        {
+          value: "0",
+          label: "西柚机",
+        },
+      
+        {
+          value: "1",
+          label: "玩客云",
+        },
+        {
+          value: "2",
+          label: "小米盒子4C",
+        },
+        {
+          value: "3",
+          label: "小米盒子4",
+        },
+          {
+          value: "4",
+          label: "PC版西柚机",
+        },
+      ],
+      rotate: false,
+      packageName: "",
       uploadList: [
         {
           showType: false,
-          info: {}
-        }
+          info: {},
+        },
       ],
       uploadsize: 1,
       tableList: 3,
@@ -251,57 +349,57 @@ export default {
         // 未做任何格式化处理的数据
         {
           prop: "id",
-          label: "文件ID"
+          label: "文件ID",
         },
         {
           prop: "version_name",
           label: "包名",
-          width: "150"
+          width: "150",
         },
         {
           prop: "equip_type",
           label: "包类型",
-          width: "100"
+          width: "100",
         },
         {
           prop: "rom_size",
           label: "文件大小",
-          formatter: "formatterSize"
+          formatter: "formatterSize",
         },
         {
           prop: "md5",
           label: "md5",
-          width: "150"
+          width: "150",
         },
         {
           prop: "hashid",
           label: "hashid",
-          width: "150"
+          width: "150",
         },
         {
           prop: "rom_version",
           label: "版本号",
-          width: "80"
+          width: "80",
         },
         {
           prop: "rom_desc",
           label: "文件描述",
-          width: "150"
+          width: "150",
         },
         {
           prop: "time_create",
           label: "上传日期",
-          width: "150"
+          width: "150",
         },
         {
           prop: "push_mod",
-          label: "发布方式"
+          label: "发布方式",
         },
         {
           prop: "time_update",
           label: "最近发布日期",
-          width: "150"
-        }
+          width: "150",
+        },
       ],
       tableOption: {
         label: "操作",
@@ -310,29 +408,29 @@ export default {
           {
             label: "删除",
             type: "danger",
-            methods: "toDelete"
+            methods: "toDelete",
           },
           {
             label: "修改",
             type: "primary",
-            methods: "toChange"
+            methods: "toChange",
           },
           {
             label: "设置发布渠道",
             type: "success",
-            methods: "toSet"
+            methods: "toSet",
           },
           {
             label: "发布",
             type: "info",
-            methods: "toRelease"
-          }
-        ]
+            methods: "toRelease",
+          },
+        ],
       },
       pager: {
         count: 40,
         page: 1,
-        rows: 10
+        rows: 10,
       },
       alertNum: 0,
       dataNum: "",
@@ -343,14 +441,14 @@ export default {
       arr: [
         {
           name: "1",
-          types: "HTTP"
+          types: "HTTP",
         },
         {
           name: "2",
-          types: "PTFS"
-        }
+          types: "PTFS",
+        },
       ],
-      textareaText: "添加版本描述",
+      textareaText: "",
       pushType: "HTTP",
       setArr: [],
       radio: "1",
@@ -366,15 +464,54 @@ export default {
         rom_url: "",
         time_create: "",
         push_mod: "",
-        time_update: ""
+        time_update: "",
       },
       releaseInfo: [],
       releaseVersion: "",
       dialogStatus: "",
       perNum: 0,
-      widthData: 0
+      widthData: 0,
+      arrMd5: [],
+      md5Version: "",
     };
   },
+  filters: {
+    formatType: function(value) {
+      if (value == -1) {
+        return "全部";
+      } else if (value == 0) {
+        return "西柚机";
+      }  else if (value == 1) {
+        return "玩客云";
+      } else if (value == 2) {
+        return "小米盒子4C";
+      } else if (value == 3) {
+        return "小米盒子4";
+      }else if (value == 4) {
+        return "PC版西柚机";
+      }
+    },
+  },
+  beforeCreate() {
+    // 读取文件
+    FileReader.prototype.reading = function({ encode } = pms) {
+      let bytes = new Uint8Array(this.result); //无符号整型数组
+      let text = new TextDecoder(encode || "UTF-8").decode(bytes);
+      return text;
+    };
+    /* 重写readAsBinaryString函数 */
+    FileReader.prototype.readAsBinaryString = function(f) {
+      if (!this.onload)
+        //如果this未重写onload函数，则创建一个公共处理方式
+        this.onload = e => {
+          //在this.onload函数中，完成公共处理
+          let rs = this.reading();
+          console.log(rs);
+        };
+      this.readAsArrayBuffer(f); //内部会回调this.onload方法
+    };
+  },
+
   mounted: function() {
     this.getinfo();
     // this.drawLine();
@@ -384,18 +521,69 @@ export default {
   },
 
   methods: {
+    //查询
+    toQueryInfo() {
+      this.pager.page = 1;
+      this.getinfo();
+    },
+    setInfo() {
+      this.pager.page = 1;
+      this.value2 = "";
+      this.valuestate = "0";
+      this.getinfo();
+    },
+
+    //上传MD5
+    uploadMd5() {
+      let param = new Object();
+      param.rom_type = this.optionstate1;
+      param.rom_version = this.md5Version;
+      param.md5 = this.arrMd5;
+      uploadmd5(param)
+        .then(res => {
+          console.log(res);
+        })
+        .error(error => {
+          console.log(error);
+        });
+    },
+    beforeUpload(file) {
+      this.fileList = [file];
+      console.log("选择了文件beforeUpload");
+      // 读取数据
+      this.read(file);
+      return false;
+    },
+    read(f) {
+      let rd = new FileReader();
+      rd.onload = e => {
+        //this.readAsArrayBuffer函数内，会回调this.onload函数。在这里处理结果
+        let cont = rd.reading({ encode: "GBK" });
+        // console.log(cont);
+        // console.log(JSON.parse(cont).data)
+        this.arrMd5 = JSON.parse(cont).data;
+        let formerData = this.textData;
+        this.textData = formerData + "\n" + cont;
+      };
+      rd.readAsBinaryString(f);
+    },
+    //筛选按钮
+    option_display() {
+      this.optiondisplay = !this.optiondisplay;
+      this.rotate = !this.rotate;
+    },
     plus() {
       this.uploadsize++;
       let obj = {
         showType: false,
-        info: {}
+        info: {},
       };
       this.uploadList.push(obj);
     },
     //发布设置跳转
     golink() {
       this.$router.push({
-        path: "/SysVersion1"
+        path: "/SysVersion1",
       });
     },
     //上传到PTFS
@@ -409,12 +597,12 @@ export default {
           if (res.status != 0) {
             this.$message({
               message: `${res.msg}`,
-              type: "error"
+              type: "error",
             });
           } else {
             this.$message({
               type: "success",
-              message: "上传成功"
+              message: "上传成功",
             });
             this.getinfo();
           }
@@ -422,7 +610,7 @@ export default {
         .catch(error => {
           this.$message({
             message: "网络出错，请重新请求",
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -431,24 +619,25 @@ export default {
       this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           let param = new Object();
           console.log(val);
           param.rom_version = val.rom_version;
+          param.rom_type=val.rom_type
           deleteRom(param)
             .then(res => {
               console.log(res);
               if (res.status != 0) {
                 this.$message({
                   message: `${res.msg}`,
-                  type: "error"
+                  type: "error",
                 });
               } else {
                 this.$message({
                   type: "success",
-                  message: "删除成功!"
+                  message: "删除成功!",
                 });
                 this.getinfo();
               }
@@ -456,14 +645,14 @@ export default {
             .catch(error => {
               this.$message({
                 message: "网络出错，请重新请求",
-                type: "error"
+                type: "error",
               });
             });
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
     },
@@ -479,7 +668,7 @@ export default {
         .catch(error => {
           this.$message({
             message: "网络出错，请重新请求",
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -498,7 +687,7 @@ export default {
         .catch(error => {
           this.$message({
             message: "网络出错，请重新请求",
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -525,12 +714,12 @@ export default {
           if (res.status != 0) {
             this.$message({
               message: `${res.msg}`,
-              type: "error"
+              type: "error",
             });
           } else {
             this.$message({
               type: "success",
-              message: "修改发布渠道成功"
+              message: "修改发布渠道成功",
             });
             this.getinfo();
           }
@@ -538,7 +727,7 @@ export default {
         .catch(error => {
           this.$message({
             message: "网络出错，请重新请求",
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -548,7 +737,29 @@ export default {
     },
 
     dialogFormVisible() {
-      this.dialogFormState = true;
+       this.dialogFormState = true;
+       // this.textareaText=""
+       // this.uploadList[0].info={}
+  
+      //   if(this.$refs.test==undefined){
+      //    this.uploadinput=""
+        
+      // }else{
+      //     this.uploadinput=""
+      //   this.$refs.test.value=""
+      //   if(document.getElementById("result1")){
+      //        document.getElementById("result1").innerText=""
+      //   }
+      //    if(document.getElementById("result2")){
+      //        document.getElementById("result2").innerText=""
+      //   }
+      //    if(document.getElementById("result3")){
+      //        document.getElementById("result3").innerText=""
+      //   }
+     
+    
+      // }
+     
     },
     //确定发布
     determine() {
@@ -560,12 +771,12 @@ export default {
           if (res.status != 0) {
             this.$message({
               message: `${res.msg}`,
-              type: "error"
+              type: "error",
             });
           } else {
             this.$message({
               type: "success",
-              message: "发布成功!"
+              message: "发布成功!",
             });
             this.getinfo();
           }
@@ -573,7 +784,7 @@ export default {
         .catch(error => {
           this.$message({
             message: "网络出错，请重新请求",
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -582,21 +793,40 @@ export default {
     getinfo() {
       let param = new Object();
       param.page = this.pager.page - 1;
+      let startTime =
+        new Date(new Date().toLocaleDateString()).getTime() / 1000;
+      let endTime = new Date().getTime() / 1000;
+      if (!this.value2) {
+        startTime = null;
+        endTime = null;
+      } else {
+        if (this.value2 == "") {
+          startTime = new Date().getTime() / 1000;
+          endTime = null;
+        } else {
+          startTime = this.value2[0].getTime() / 1000;
+          endTime = this.value2[1].getTime() / 1000;
+        }
+      }
+      param.time_start = startTime;
+      param.time_end = endTime;
+
+      param.rom_type = this.valuestate;
       queryRom(param)
         .then(res => {
           if (res.status != 0) {
             this.$message({
               message: `${res.msg}`,
-              type: "error"
+              type: "error",
             });
           } else {
             let nowarr = res.result.cols;
-            let nowarractive = res.data;
+            //let nowarractive = res.data;
 
-            let nowarractives = res.result.cols;
+            let nowarractive = res.result.cols;
             let nowarrLength =
               res.result.page * 10 +
-              nowarractives.length +
+              nowarractive.length +
               res.result.les_count;
             this.pager.count = nowarrLength;
             this.dataNum = nowarrLength;
@@ -619,13 +849,14 @@ export default {
             }
             this.tableData = nowarr;
             this.tableData11 = nowarractive;
-            console.log(this.tableData1);
+            //console.log(this.tableData11);
           }
         })
         .catch(error => {
+          console.log(error)
           this.$message({
             message: "网络出错，请重新请求",
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -635,6 +866,7 @@ export default {
       let param = new Object();
       let data = [];
       for (var i = 0; i < this.uploadList.length; i++) {
+        this.uploadList[i].info.rom_desc = this.textareaText
         data.push(this.uploadList[i].info);
       }
       param.data = data;
@@ -666,24 +898,26 @@ export default {
           if (res.status == -6) {
             this.$message({
               message: "上传包重复，请仔细检阅后重新上传",
-              type: "error"
+              type: "error",
             });
             this.common.monitoringLogs("新增", "新增ROM升级包", 0);
+            this.uploadMd5();
           } else {
             this.$message({
               type: "success",
-              message: "新增i成功!"
+              message: "新增成功!",
             });
             this.getinfo();
             this.common.monitoringLogs("新增", "新增ROM升级包", 1);
           }
         })
         .catch(error => {
-          this.$message({
-            message: "新增失败",
-            type: "error"
-          });
+          // this.$message({
+          //   message: "新增失败",
+          //   type: "error",
+          // });
           this.common.monitoringLogs("新增", "新增ROM升级包", 0);
+          //  this.uploadMd5()
         });
     },
     //确定修改
@@ -696,12 +930,12 @@ export default {
           if (res.status != 0) {
             this.$message({
               message: "上传包重复，请仔细检阅后重新上传",
-              type: "error"
+              type: "error",
             });
           } else {
             this.$message({
               type: "success",
-              message: "修改成功"
+              message: "修改成功",
             });
           }
           this.getinfo();
@@ -709,7 +943,7 @@ export default {
         .catch(error => {
           this.$message({
             message: "网络出错，请重新请求",
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -723,7 +957,7 @@ export default {
       if (f == undefined) {
         this.$message({
           type: "warning",
-          message: "请选择要上传的文件"
+          message: "请选择要上传的文件",
         });
         return false;
       }
@@ -732,7 +966,7 @@ export default {
       if (totalSize == 0) {
         this.$message({
           message: "请选择文件SIZE大于0文件",
-          type: "success"
+          type: "success",
         });
         return false;
       }
@@ -771,10 +1005,11 @@ export default {
         formData.append("fileName", f.name);
         formData.append("num", index);
         formData.append("start", start);
+        formData.append("rom_type", _this.valuestate1);
         formData.append("end", end);
         formData.append("totalSize", totalSize);
         formData.append("total", tota_temp);
-        var url = hostUrl +"/admin/upload";
+        var url = hostUrl + "/admin/upload";
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = onchange;
         xhr.open("POST", url);
@@ -825,20 +1060,25 @@ export default {
                 _this.disableStatus = false;
                 // _this.uploadinfoState1 = true
                 // console.log(headers)
+                
                 _this.uploadList[itemActive].info.equip_type = headers.type;
                 _this.uploadList[itemActive].info.rom_version = headers.version;
                 _this.uploadList[itemActive].info.version_name = headers.name;
                 _this.uploadList[itemActive].info.rom_url = headers.url;
                 _this.uploadList[itemActive].info.rom_size = headers.size;
+                _this.md5Version = headers.version;
                 _this.uploadList[itemActive].info.md5 = headers.md5;
                 _this.uploadList[itemActive].info.push_mod = _this.pushType;
                 _this.uploadList[itemActive].info.hashid = headers.hashid;
                 _this.uploadList[itemActive].info.rom_desc = _this.textareaText;
+                _this.uploadList[itemActive].info.dev_type = parseInt(
+                  _this.valuestate1
+                );
                 // _this.uploadinfo1 = headers;
               } else if (headers.status == -900) {
                 _this.$message({
                   type: "error",
-                  message: `${headers.msg}`
+                  message: `${headers.msg}`,
                 });
               }
             } else {
@@ -857,7 +1097,7 @@ export default {
       if (f == undefined) {
         this.$message({
           type: "warning",
-          message: "请选择要上传的文件"
+          message: "请选择要上传的文件",
         });
         return false;
       }
@@ -928,6 +1168,7 @@ export default {
                 console.log(headers);
                 _this.newObject2.equip_type = headers.type;
                 _this.newObject2.rom_version = headers.version;
+
                 _this.newObject2.version_name = headers.name;
                 _this.newObject2.rom_url = headers.url;
                 _this.newObject2.rom_size = headers.size;
@@ -938,7 +1179,7 @@ export default {
               } else if (headers.status == -900) {
                 _this.$message({
                   type: "error",
-                  message: `${headers.msg}`
+                  message: `${headers.msg}`,
                 });
               }
             } else {
@@ -948,7 +1189,7 @@ export default {
         }
       }
       sliceandpost();
-    }
+    },
   },
 
   components: {
@@ -959,15 +1200,13 @@ export default {
     dateTimePicker: dateTimePicker,
     myDropdown: myDropdown,
     myAlert: myAlert,
-    myDatanums: myDatanums
-  }
+    myDatanums: myDatanums,
+  },
 };
 </script>
 
 <style lang="less">
 .myself-container {
-
-
   #my_dialogForm {
     .upload-demo {
       margin-left: 0px;
@@ -1021,8 +1260,6 @@ export default {
 
   .my_dialog_set {
     .el-dialog {
-  
-
       .el-dialog__body {
         padding: 0px 20px;
         padding-bottom: 0px;
@@ -1094,8 +1331,6 @@ export default {
   }
 
   .device_form {
-  
-
     .el-form-item {
       margin-bottom: 0px;
     }
@@ -1333,5 +1568,13 @@ h2 {
       margin-right: 10px;
     }
   }
+}
+//旋转
+.aa {
+  transition: all 1s;
+}
+.go {
+  transform: rotate(-180deg);
+  transition: all 1s;
 }
 </style>

@@ -177,6 +177,7 @@ export default {
   methods: {
     //发布设置跳转
     golink() {
+       
       this.$router.push({
         path: "/AppVersion",
       });

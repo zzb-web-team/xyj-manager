@@ -1,201 +1,208 @@
 <template>
-<section class="myself-container version_active version_active_new">
+  <section class="myself-container version_active version_active_new">
     <div class="changetab">
-        <el-radio-group v-model="tabPosition" style="margin-bottom: 30px;" @change="onchangeTabs">
-            <el-radio-button label="RK3328">RK3328设备版本发布管理</el-radio-button>
-            <el-radio-button label="AMS805">AMS805设备版本发布管理</el-radio-button>
+      <el-radio-group v-model="tabPosition" style="margin-bottom: 30px;" @change="onchangeTabs">
+        <el-radio-button label="RK33XX">西柚机</el-radio-button>
+        <el-radio-button label="AMS805W">玩客云</el-radio-button>
+        <el-radio-button label="AMS905M4C">小米盒子4C</el-radio-button>
+        <el-radio-button label="AMS905M4">小米盒子4</el-radio-button>
+        <el-radio-button label="PCGRAPE">PC版西柚机</el-radio-button>
 
-        </el-radio-group>
+      </el-radio-group>
 
     </div>
     <div class="devide_table">
-        <div>当前发布版本(全网)</div>
-        <el-row type="flex" class="row_active">
-            <el-col :span="24">
-                <tableBarActive2 id="rebateSetTable" ref="table" tooltip-effect="dark" :tableData="tableData3" :clomnSelection="clomnSelection" :rowHeader="rowHeader3" :tableOption="tableOption" @handleButton="handleButton" :operatingStatus="operatingStatus1" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
-            </el-col>
-        </el-row>
+      <div>当前发布版本(全网)</div>
+      <el-row type="flex" class="row_active">
+        <el-col :span="24">
+          <tableBarActive2 id="rebateSetTable" ref="table" tooltip-effect="dark" :tableData="tableData3" :clomnSelection="clomnSelection" :rowHeader="rowHeader3" :tableOption="tableOption" @handleButton="handleButton" :operatingStatus="operatingStatus1" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
+        </el-col>
+      </el-row>
     </div>
     <div class="devide_table">
-        <div>当前发布版本(灰度)</div>
-        <el-row type="flex" class="row_active">
-            <el-col :span="24">
-                <tableBarActive2 id="rebateSetTable1" ref="table1" tooltip-effect="dark" :tableData="tableData2" :clomnSelection="clomnSelection" :rowHeader="rowHeader2" :tableOption="tableOption1" @handleButton="handleButton1" :operatingStatus="operatingStatus1" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
-            </el-col>
-        </el-row>
+      <div>当前发布版本(灰度)</div>
+      <el-row type="flex" class="row_active">
+        <el-col :span="24">
+          <tableBarActive2 id="rebateSetTable1" ref="table1" tooltip-effect="dark" :tableData="tableData2" :clomnSelection="clomnSelection" :rowHeader="rowHeader2" :tableOption="tableOption1" @handleButton="handleButton1" :operatingStatus="operatingStatus1" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
+        </el-col>
+      </el-row>
 
     </div>
     <div style="display: flex;justify-content: center;">
-        <el-button type="primary" style="margin:15px 0px 0px 0px;" @click="add">新增发布</el-button>
+      <el-button type="primary" style="margin:15px 0px 0px 0px;" @click="add">新增发布</el-button>
     </div>
 
     <div class="devide_table">
-        <div>历史发布</div>
-        <el-row type="flex" class="row_active">
-            <el-col :span="24">
-                <tableBarActive2pub id="rebateSetTable2" ref="table2" tooltip-effect="dark" :tableData="tableData1" :clomnSelection="clomnSelection" :rowHeader="rowHeader1" :tableOption="tableOption2" @handleButton="handleButton2" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2pub>
-            </el-col>
-        </el-row>
+      <div>历史发布</div>
+      <el-row type="flex" class="row_active">
+        <el-col :span="24">
+          <tableBarActive2pub id="rebateSetTable2" ref="table2" tooltip-effect="dark" :tableData="tableData1" :clomnSelection="clomnSelection" :rowHeader="rowHeader1" :tableOption="tableOption2" @handleButton="handleButton2" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2pub>
+        </el-col>
+      </el-row>
     </div>
     <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
-        <el-row type="flex"></el-row>
-        <el-row type="flex">
-            <el-col :span="6">
-                <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
-            </el-col>
-        </el-row>
+      <el-row type="flex"></el-row>
+      <el-row type="flex">
+        <el-col :span="6">
+          <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
+        </el-col>
+      </el-row>
     </div>
     <!--新增发布-->
     <el-dialog :visible.sync="dialogVisible" width="40%" :before-close="handleClose">
-        <el-form ref="form" :model="form" label-width="80px">
-            <el-form-item label="发布类型">
-                <el-select v-model="form.type" placeholder="请选择发布类型" @change="onchangeTab">
-                    <el-option label="正式发布" value="正式发布"></el-option>
-                    <el-option label="灰度发布" value="灰度发布"></el-option>
-                </el-select>
-            </el-form-item>
-            <!-- <el-form-item label="设备类型">
+      <el-form ref="form" :model="form" label-width="80px">
+        <el-form-item label="发布类型">
+          <el-select v-model="form.type" placeholder="请选择发布类型" @change="onchangeTab">
+            <el-option label="正式发布" value="正式发布"></el-option>
+            <el-option label="灰度发布" value="灰度发布"></el-option>
+          </el-select>
+        </el-form-item>
+        <!-- <el-form-item label="设备类型">
                 <el-select v-model="form.tab" placeholder="请选择设备类型">
                     <el-option label="RK3228" value="0"></el-option>
                     <el-option label="AMS805" value="1"></el-option>
                 </el-select>
             </el-form-item> -->
-            <el-form-item label="发布版本">
-                <el-select v-model="form.versions" placeholder="请选择发布版本">
-                    <el-option v-for="item in versionsList" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled">
-                    </el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="发布渠道">
-                <el-radio-group v-model="form.modelType" @change="changeAssign">
-                    <el-radio label="HTTP" border></el-radio>
-                    <el-radio label="PTFS" border></el-radio>
-                </el-radio-group>
-            </el-form-item>
-            <el-form-item label="发布描述">
-                <el-input type="textarea" v-model="form.desc" maxlength="100" show-word-limit></el-input>
-            </el-form-item>
-            <el-form-item label="发布设备">
-                <el-radio-group v-model="form.user" @change="changeAssign">
-                    <el-radio label="全网用户" border :disabled="allType"></el-radio>
-                    <el-radio label="指定设备" border :disabled="oneType"></el-radio>
-                </el-radio-group>
-            </el-form-item>
-            <el-form-item label="      " v-if="allType">
-                <el-radio-group v-model="form.assign">
-                    <el-radio label="指定账号"></el-radio>
-                    <!-- <el-button type="text" @click="onclickimport">批量导入</el-button> -->
-                </el-radio-group>
-                <el-input v-model="form.version" placeholder="" type="textarea"></el-input>
-            </el-form-item>
-            <el-form-item label="发布时间">
-                <el-radio-group v-model="form.time" @change="changeTime">
-                    <el-radio label="立即发布"></el-radio>
-                    <el-radio label="定时发布"></el-radio>
-                </el-radio-group>
-            </el-form-item>
-            <el-form-item label="    " v-show="timing==='定时发布'">
-                <el-col :span="11">
-                    <el-date-picker type="datetime" placeholder="选择日期" value-format="timestamp" v-model="form.date" style="width: 350px;"></el-date-picker>
-                </el-col>
-            </el-form-item>
-            <div style="text-align: center;">
-                <el-button type="primary" @click="onSubmitApp">立即创建</el-button>
-                <el-button @click="dialogVisible=false">取消</el-button>
-            </div>
-        </el-form>
+        <el-form-item label="发布版本">
+          <el-select v-model="form.versions" placeholder="请选择发布版本">
+            <el-option v-for="item in versionsList" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="发布渠道">
+          <el-radio-group v-model="form.modelType" @change="changeAssign">
+            <el-radio label="HTTP" border></el-radio>
+            <el-radio label="PTFS" border></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="发布描述">
+          <el-input type="textarea" v-model="form.desc" maxlength="100" show-word-limit></el-input>
+        </el-form-item>
+        <el-form-item label="发布设备">
+          <el-radio-group v-model="form.user" @change="changeAssign">
+            <el-radio label="全网用户" border :disabled="allType"></el-radio>
+            <el-radio label="指定设备" border :disabled="oneType"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="      " v-if="allType">
+          <el-radio-group v-model="form.assign">
+            <el-radio label="指定账号"></el-radio>
+            <!-- <el-button type="text" @click="onclickimport">批量导入</el-button> -->
+          </el-radio-group>
+          <el-input v-model="form.version" placeholder="" type="textarea"></el-input>
+        </el-form-item>
+        <el-form-item label="发布时间">
+          <el-radio-group v-model="form.time" @change="changeTime">
+            <el-radio label="立即发布"></el-radio>
+            <el-radio label="定时发布"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="    " v-show="timing==='定时发布'">
+          <el-col :span="11">
+            <el-date-picker type="datetime" placeholder="选择日期" value-format="timestamp" v-model="form.date" style="width: 350px;"></el-date-picker>
+          </el-col>
+        </el-form-item>
+        <div style="text-align: center;">
+          <el-button type="primary" @click="onSubmitApp">立即创建</el-button>
+          <el-button @click="dialogVisible=false">取消</el-button>
+        </div>
+      </el-form>
     </el-dialog>
     <!--批量导入-->
     <el-dialog class="dialog_active2" :visible.sync="dialogVisible4">
-        <div>
-            <el-upload class="upload-demo" ref="upload" :limit="1" :action="UploadUrl()" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :on-success="handleAvatarSuccess" name="excel" :auto-upload="false">
-                <el-button slot="trigger" size="small" class="MyctiveButton" type="primary">上传Excel文件</el-button>
-                <el-button type="primary" @click="down" plain id="dwonexcel">下载模板</el-button>
-                <el-button style="position: absolute;left: 37px;bottom: 23px;width:85px;" size="small" type="success" @click="submitUpload">导 入</el-button>
-                <el-button style="position: absolute;left: 130px;bottom: 23px;width:85px;" size="small" type="success" :disabled="noClick" @click="submitUploadOK">确定</el-button>
-            </el-upload>
-            <div class="url_con" v-if="tableType">
-                <!-- 表格 -->
-                <el-table border :data="tableList" style="width: 100%" height="420px">
-                    <el-table-column label="phone">
-                        <template slot-scope="scope">
-                            <span v-if="scope.row.urlstatus===false" style="color:red">{{scope.row.phone}}</span>
-                            <span v-else style="color:green">{{scope.row.phone}}</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="操作">
-                        <template slot-scope="scope">
-                            <el-button type="text" v-if="scope.row.errstatus==0" size="small" @click="deleteRow(scope.$index,tableList)" style="color:#000000">删除</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </div>
+      <div>
+        <el-upload class="upload-demo" ref="upload" :limit="1" :action="UploadUrl()" :on-preview="handlePreview" :on-remove="handleRemove" :file-list="fileList" :on-success="handleAvatarSuccess" name="excel" :auto-upload="false">
+          <el-button slot="trigger" size="small" class="MyctiveButton" type="primary">上传Excel文件</el-button>
+          <el-button type="primary" @click="down" plain id="dwonexcel">下载模板</el-button>
+          <el-button style="position: absolute;left: 37px;bottom: 23px;width:85px;" size="small" type="success" @click="submitUpload">导 入</el-button>
+          <el-button style="position: absolute;left: 130px;bottom: 23px;width:85px;" size="small" type="success" :disabled="noClick" @click="submitUploadOK">确定</el-button>
+        </el-upload>
+        <div class="url_con" v-if="tableType">
+          <!-- 表格 -->
+          <el-table border :data="tableList" style="width: 100%" height="420px">
+            <el-table-column label="phone">
+              <template slot-scope="scope">
+                <span v-if="scope.row.urlstatus===false" style="color:red">{{scope.row.phone}}</span>
+                <span v-else style="color:green">{{scope.row.phone}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作">
+              <template slot-scope="scope">
+                <el-button type="text" v-if="scope.row.errstatus==0" size="small" @click="deleteRow(scope.$index,tableList)" style="color:#000000">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
+      </div>
     </el-dialog>
     <!--发布清单-->
 
     <!--撤回-->
     <el-dialog :visible.sync="dialogVisible2" width="50%" :before-close="handleClose">
-        <el-form ref="form" :model="form1" label-width="80px">
-            <p><b>版本详情</b></p>
-            <el-form-item label="发布类型:">
-                <span>{{form1.pushTypeActive}}</span>
-            </el-form-item>
-            <el-form-item label="发布类型:">
-                <span>{{form1.pushTabActive}}</span>
-            </el-form-item>
-            <el-form-item label="发布版本:">
-                <span>{{form1.romVersionActive}}</span>
-            </el-form-item>
-            <el-form-item label="发布渠道:">
-                <span>{{form1.pushModActive}}</span>
-            </el-form-item>
-            <el-form-item label="发布描述:">
-                <span>{{form1.descriptionActive}}</span>
-            </el-form-item>
-            <el-form-item label="发布时间:">
-                <span>{{form1.timeActive}}</span>
-            </el-form-item>
-            <el-form-item label="发布设备:">
-                <span v-if="this.userType=='全网用户'">{{userType}}</span>
-                <div  v-else>
-                  <span>指定设备</span>
-                   <el-button type="text" @click="getBackInfo">发布清单</el-button>
-                </div>
+      <el-form ref="form" :model="form1" label-width="80px">
+        <p>
+          <b>版本详情</b>
+        </p>
+        <el-form-item label="发布类型:">
+          <span>{{form1.pushTypeActive}}</span>
+        </el-form-item>
+        <el-form-item label="发布类型:">
+          <span>{{form1.pushTabActive}}</span>
+        </el-form-item>
+        <el-form-item label="发布版本:">
+          <span>{{form1.romVersionActive}}</span>
+        </el-form-item>
+        <el-form-item label="发布渠道:">
+          <span>{{form1.pushModActive}}</span>
+        </el-form-item>
+        <el-form-item label="发布描述:">
+          <span>{{form1.descriptionActive}}</span>
+        </el-form-item>
+        <el-form-item label="发布时间:">
+          <span>{{form1.timeActive}}</span>
+        </el-form-item>
+        <el-form-item label="发布设备:">
+          <span v-if="this.userType=='全网用户'">{{userType}}</span>
+          <div v-else>
+            <span>指定设备</span>
+            <el-button type="text" @click="getBackInfo">发布清单</el-button>
+          </div>
 
-            </el-form-item>
-            <p><b>版本撤回选项</b></p>
-            <!-- <el-form-item label="撤回至版本">
+        </el-form-item>
+        <p>
+          <b>版本撤回选项</b>
+        </p>
+        <!-- <el-form-item label="撤回至版本">
                 <el-select v-model="form1.backversion" placeholder="请选择版本" style="width:220px;">
                     <el-option v-for="item in versionsListActive" :key="item.value" :label="item.label" :value="item.value" :disabled="item.disabled">
                     </el-option>
                 </el-select>
             </el-form-item> -->
-            <el-form-item label="撤回时间">
-                <el-radio-group v-model="form1.time" @change="changeTime">
-                    <el-radio label="立即撤回"></el-radio>
-                    <el-radio label="定时撤回"></el-radio>
-                </el-radio-group>
-            </el-form-item>
-            <el-form-item label="     " v-show="timing==='定时撤回'">
-                <el-col :span="11">
-                    <el-date-picker type="datetime" placeholder="选择日期" v-model="form1.date" style="300px;"></el-date-picker>
-                </el-col>
-            </el-form-item>
-            <div style="text-align: center;">
-                <el-button type="primary" @click="onSubmitBack">撤回</el-button>
-                <el-button @click="dialogVisible2=false">取消</el-button>
-            </div>
-        </el-form>
+        <el-form-item label="撤回时间">
+          <el-radio-group v-model="form1.time" @change="changeTime">
+            <el-radio label="立即撤回"></el-radio>
+            <el-radio label="定时撤回"></el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="     " v-show="timing==='定时撤回'">
+          <el-col :span="11">
+            <el-date-picker type="datetime" placeholder="选择日期" v-model="form1.date" style="300px;"></el-date-picker>
+          </el-col>
+        </el-form-item>
+        <div style="text-align: center;">
+          <el-button type="primary" @click="onSubmitBack">撤回</el-button>
+          <el-button @click="dialogVisible2=false">取消</el-button>
+        </div>
+      </el-form>
     </el-dialog>
 
     <el-dialog class="dialog_active1" :before-close="beforeclose" :visible.sync="dialogVisible5" title="发布清单" width="15%">
-        <div class="pub_con">
-            <p v-for="item in pubUser" :key="item">{{item.snormac}}</p>
+      <div class="pub_con">
+        <p v-for="item in pubUser" :key="item">{{item.snormac}}</p>
 
-        </div>
+      </div>
     </el-dialog>
-</section>
+  </section>
 </template>
 
 <script>
@@ -211,16 +218,17 @@ import {
   publishuser,
   rollbackRom,
   publishuserRom,
-  hostUrl
+  hostUrl,
 } from "../../api/api.js";
 import tableBarActive2 from "../../components/tableBarActive2";
 import tableBarActive2pub from "../../components/tableBarActive2pub";
 import mySearch from "../../components/mySearch";
 import pageNation from "../../components/pageNation";
+import { fail } from 'assert';
 export default {
   data() {
     return {
-      backPushkey:"",
+      backPushkey: "",
       userType: "",
       operatingStatus1: true,
       tableType: false,
@@ -228,7 +236,7 @@ export default {
       dialogVisible4: false,
       allType: false,
       oneType: false,
-      tabPosition: "RK3328",
+      tabPosition: "RK33XX",
 
       form: {
         type: "",
@@ -241,7 +249,7 @@ export default {
         tab: "",
         time: "立即发布",
         date: "",
-        versions: ""
+        versions: "",
       },
       form1: {
         type: "",
@@ -257,7 +265,7 @@ export default {
         versions: "",
         backversion: "",
         pushTypeActive: "",
-        pushTabActive: ""
+        pushTabActive: "",
       },
       versionsList: [],
       assigning: "",
@@ -268,64 +276,64 @@ export default {
       rowHeader3: [
         {
           prop: "rom_version",
-          label: "版本号"
+          label: "版本号",
         },
 
         {
           prop: "description",
-          label: "版本描述"
-        }
+          label: "版本描述",
+        },
       ],
       rowHeader2: [
         {
           prop: "rom_version",
-          label: "版本号"
+          label: "版本号",
         },
         {
           prop: "push_mod",
-          label: "发布渠道"
+          label: "发布渠道",
         },
         {
           prop: "description",
-          label: "版本描述"
-        }
+          label: "版本描述",
+        },
       ],
       rowHeader1: [
         {
           prop: "id",
           label: "NO",
-          width: "100px"
+          width: "100px",
         },
         {
           prop: "act_types",
-          label: "类型"
+          label: "类型",
         },
 
         {
           prop: "rom_version",
-          label: "版本号"
+          label: "版本号",
         },
         {
           prop: "push_type",
-          label: "发布类型"
+          label: "发布类型",
         },
         {
           prop: "push_mod",
-          label: "发布渠道"
+          label: "发布渠道",
         },
 
         {
           prop: "description",
           label: "发布描述",
-          width: "400px"
+          width: "400px",
         },
         {
           prop: "statusActive",
-          label: "状态"
+          label: "状态",
         },
         {
           prop: "time_create",
-          label: "发布时间"
+          label: "发布时间",
         },
         // {
         //     prop: "atonceactive",
@@ -339,8 +347,8 @@ export default {
         // },
         {
           prop: "timingActive",
-          label: "修改时间"
-        }
+          label: "修改时间",
+        },
       ],
       tableData2: [],
       tableData3: [],
@@ -348,13 +356,13 @@ export default {
         {
           version: "测试数据1",
           channel: "测试数据1",
-          desc: "测试数据1"
+          desc: "测试数据1",
         },
         {
           version: "测试数据2",
           channel: "测试数据2",
-          desc: "测试数据2"
-        }
+          desc: "测试数据2",
+        },
       ],
       tableData1: [
         {
@@ -363,7 +371,7 @@ export default {
           desc: "测试数据11",
           version1: "测试数据11",
           channel1: "测试数据11",
-          desc1: "测试数据11"
+          desc1: "测试数据11",
         },
         {
           version: "测试数据22",
@@ -371,8 +379,8 @@ export default {
           desc: "测试数据22",
           version1: "测试数据22",
           channel1: "测试数据23",
-          desc1: "测试数据22"
-        }
+          desc1: "测试数据22",
+        },
       ],
       tableOption: {
         label: "操作",
@@ -380,9 +388,9 @@ export default {
           {
             label: "撤回",
             type: "primary",
-            methods: "withdraw"
-          }
-        ]
+            methods: "withdraw",
+          },
+        ],
       },
       tableOption1: {
         label: "操作",
@@ -390,9 +398,9 @@ export default {
           {
             label: "撤回",
             type: "primary",
-            methods: "withdraw"
-          }
-        ]
+            methods: "withdraw",
+          },
+        ],
       },
       tableOption2: {
         label: "操作",
@@ -400,24 +408,24 @@ export default {
           {
             label: "发布清单",
             type: "primary",
-            methods: "freeze"
-          }
-        ]
+            methods: "freeze",
+          },
+        ],
       },
       pager: {
         count: 0,
         page: 1,
-        rows: 100
+        rows: 100,
       },
       pager1: {
         count: 0,
         page: 1,
-        rows: 100
+        rows: 100,
       },
       pager2: {
         count: 0,
         page: 1,
-        rows: 100
+        rows: 100,
       },
       tableData2: [],
       showState: true,
@@ -433,8 +441,8 @@ export default {
       backId: "",
       pushKey: "",
       oldversion: "",
-      rom_version_active:""
-
+      rom_version_active: "",
+      newsRom: "",
     };
   },
   mounted: function() {
@@ -446,19 +454,17 @@ export default {
     // this.queryPublishuser()
   },
   methods: {
-       //导出地址变量
-        UploadUrl(){
-            return hostUrl+"/url_mgmt/excel_url"
-        },
+    //导出地址变量
+    UploadUrl() {
+      return hostUrl + "/url_mgmt/excel_url";
+    },
     //撤回清单
-    getBackInfo(){
-      this.pagePublic=0
-      this.blackList()
-
+    getBackInfo() {
+      this.pagePublic = 0;
+      this.blackList();
     },
     //撤回
     onSubmitBack(val) {
-   
       let timetype = 1;
       let timeNums = 0;
       if (this.form1.time == "立即撤回") {
@@ -470,20 +476,20 @@ export default {
         if (timeNums <= Date.parse(new Date()) / 1000) {
           this.$message({
             message: "指定时间不能小于当前时间",
-            type: "error"
+            type: "error",
           });
           return false;
         }
       }
-      if (this.rom_version_active == 0) {
-        this.$message({
-          message: "当前已是最低版本，已经最低版本可撤回",
-          type: "error"
-        });
-        return false;
-      }
+      // if (this.rom_version_active == 0) {
+      //   this.$message({
+      //     message: "当前已是最低版本，已经最低版本可撤回",
+      //     type: "error"
+      //   });
+      //   return false;
+      // }
       let param = {
-        rom_version: this.rom_version_active,
+        rom_version: this.newsRom,
         // push_type: this.form1.type,
         // dev_type: this.form1.tab,
         // push_mod: this.form1.modelType,
@@ -492,16 +498,16 @@ export default {
         timing: timeNums,
         id: this.backId,
         push_key: this.pushKey,
-        dev_type: this.dev_type
+        dev_type: this.dev_type,
       };
       rollbackRom(param)
         .then(res => {
-          console.log(res);
+          
           if (res.status == 0) {
             this.dialogVisible2 = false;
             this.$message({
               message: "撤回成功",
-              type: "success"
+              type: "success",
             });
             this.common.monitoringLogs(
               "撤回",
@@ -512,10 +518,27 @@ export default {
             );
             this.queryPublishlistRom();
             this.queryversionlistRom();
-          } else {
+          }
+          // if (res.status == 0 && res.result.length == 0) {
+          //   this.dialogVisible2 = false;
+          //   this.$message({
+          //     message: "当前已经是最低版本",
+          //     type: "warning",
+          //   });
+          //   this.common.monitoringLogs(
+          //     "撤回",
+          //     "撤回ROM系统包",
+          //     1,
+          //     this.oldversion,
+          //     this.form1.backversion
+          //   );
+          //   this.queryPublishlistRom();
+          //   this.queryversionlistRom();
+          // } 
+          else {
             this.$message({
               message: `${res.msg}`,
-              type: "error"
+              type: "error",
             });
             this.common.monitoringLogs(
               "撤回",
@@ -538,14 +561,25 @@ export default {
     },
     //Tab选择改变
     onchangeTabs(val) {
-      console.log(val);
       this.pager.page = 1;
-      if (val == "RK3328") {
+      if (val == "RK33XX") {
         this.dev_type = 0;
         this.queryPublishlistRom();
         this.queryversionlistRom();
-      } else {
-        this.dev_type1 = 1;
+      } else if (val == "AMS805W") {
+        this.dev_type = 1;
+        this.queryPublishlistRom();
+        this.queryversionlistRom();
+      } else if (val == "AMS905M4C") {
+        this.dev_type = 2;
+        this.queryPublishlistRom();
+        this.queryversionlistRom();
+      } else if (val == "AMS905M4") {
+        this.dev_type = 3;
+        this.queryPublishlistRom();
+        this.queryversionlistRom();
+      } else if (val == "PCGRAPE") {
+        this.dev_type = 4;
         this.queryPublishlistRom();
         this.queryversionlistRom();
       }
@@ -560,7 +594,7 @@ export default {
       this.dialogVisible5 = true;
       let param = {
         push_key: row.push_key,
-        page: this.pagePublic
+        page: this.pagePublic,
       };
       publishuserRom(param)
         .then(res => {
@@ -586,7 +620,7 @@ export default {
       this.dialogVisible5 = true;
       let param = {
         push_key: this.backPushkey,
-        page: this.pagePublic
+        page: this.pagePublic,
       };
       publishuserRom(param)
         .then(res => {
@@ -611,7 +645,7 @@ export default {
     queryversionlistRom() {
       let param = {
         page: this.pager1.page - 1,
-        dev_type: this.dev_type
+        dev_type: this.dev_type,
       };
       versionlistRom(param)
         .then(res => {
@@ -649,7 +683,6 @@ export default {
               this.tableData3.push(res.online_version);
             }
             // this.tableData3 = [];
-            console.log(this.tableData3);
             this.tableData2 = nowArr;
           } else {
           }
@@ -681,7 +714,7 @@ export default {
         if (timeNums <= Date.parse(new Date()) / 1000) {
           this.$message({
             message: "指定时间不能小于当前时间",
-            type: "error"
+            type: "error",
           });
           return false;
         }
@@ -694,7 +727,7 @@ export default {
       if (this.form.type == "") {
         this.$message({
           message: "请选择发布类型",
-          type: "error"
+          type: "error",
         });
         return false;
       }
@@ -708,14 +741,14 @@ export default {
       if (this.form.versions == "") {
         this.$message({
           message: "请选择发布版本",
-          type: "error"
+          type: "error",
         });
         return false;
       }
       if (this.form.desc == "") {
         this.$message({
           message: "发布描述不可为空",
-          type: "error"
+          type: "error",
         });
         return false;
       }
@@ -723,7 +756,23 @@ export default {
         if (this.form.version == "") {
           this.$message({
             message: "请输入指定账号",
-            type: "error"
+            type: "error",
+          });
+          return false;
+        }
+      }
+    
+      for(var i=0;i<user_list.length;i++){
+        let nowstr=""
+        if(user_list[i].substring(3,4)=="X"){
+          nowstr=4 
+        }else{
+          nowstr=user_list[i].substring(3,4)
+        }
+        if(nowstr!=this.dev_type){
+             this.$message({
+            message: "请检查输入的SN号是否和设备品牌匹配",
+            type: "error",
           });
           return false;
         }
@@ -736,7 +785,7 @@ export default {
         description: this.form.desc,
         atonce: timetype,
         timing: timeNums,
-        sn_list: user_list
+        sn_list: user_list,
       };
       console.log(param);
       publishRom(param)
@@ -744,7 +793,7 @@ export default {
           if (res.status == 0) {
             this.$message({
               message: "发布成功",
-              type: "success"
+              type: "success",
             });
             this.common.monitoringLogs("发布", "发布ROM系统包", 1);
             this.dialogVisible = false;
@@ -753,7 +802,7 @@ export default {
           } else {
             this.$message({
               message: `${res.msg}`,
-              type: "error"
+              type: "error",
             });
             this.common.monitoringLogs("发布", "发布ROM系统包", 0);
             this.dialogVisible = false;
@@ -766,15 +815,15 @@ export default {
     },
     //         //获取历史发布记录
     queryPublishlistRom() {
-      if (this.tabPosition == "RK3328") {
-        this.dev_type = 0;
-      } else {
-        this.dev_type = 1;
-      }
+      // if (this.tabPosition == "RK3328") {
+      //   this.dev_type = 0;
+      // } else {
+      //   this.dev_type = 1;
+      // }
 
       let param = {
         page: this.pager.page - 1,
-        dev_type: this.dev_type
+        dev_type: this.dev_type,
       };
       publishlistRom(param)
         .then(res => {
@@ -828,8 +877,8 @@ export default {
                   nowArr[i].timing * 1000
                 );
               }
-              if (nowArr[i].act_type== 1) {
-                nowArr[i].timingActive = "-"
+              if (nowArr[i].act_type == 1) {
+                nowArr[i].timingActive = "-";
               }
               if (nowArr[i].atonce == 0) {
                 nowArr[i].atonceactive = "定时发布";
@@ -841,7 +890,7 @@ export default {
           } else {
             this.$message({
               message: `${res.msg}`,
-              type: "success"
+              type: "success",
             });
           }
         })
@@ -880,16 +929,13 @@ export default {
 
               // obj.label= item.id+"+"+item.chanid+"+"+item.name
               this.versionsList.push(obj);
-              
             });
-            if(this.versionsListActive.length==0){
-              this.rom_version_active=="0"
-            }else{
-               let nowindex=this.versionsListActive.length-1
-              this.rom_version_active=this.versionsListActive[nowindex].value
-
+            if (this.versionsListActive.length == 0) {
+              this.rom_version_active == "0";
+            } else {
+              let nowindex = this.versionsListActive.length - 1;
+              this.rom_version_active = this.versionsListActive[nowindex].value;
             }
-           
 
             if (res.result.les_count == 0) {
               return false;
@@ -900,7 +946,7 @@ export default {
           } else {
             this.$message({
               message: "IPFS服务出错",
-              type: "success"
+              type: "success",
             });
           }
         })
@@ -925,8 +971,10 @@ export default {
       this.showState = !this.showState;
     },
     handleButton(val, rows) {
-     
-      this.backPushkey=rows.push_key
+      console.log(rows);
+      this.newsRom = rows.rom_version;
+
+      this.backPushkey = rows.push_key;
       this.userType = "全网用户";
       this.dialogVisible2 = true;
       this.romVersion = rows.rom_version;
@@ -950,10 +998,10 @@ export default {
       param.page = this.pageActive1;
       param.dev_type = this.dev_type;
       param.rom_version = this.tempRomVersion;
-       param.rom_version= rows.rom_version
-       param.to_version = "0.0.0";
+      param.rom_version = rows.rom_version;
+      param.to_version = "0.0.0";
       // param.to_version = "0.0.0";
-     //param.to_version= rows.rom_version
+      //param.to_version= rows.rom_version
       getversionRom(param)
         .then(res => {
           if (res.status == 0) {
@@ -967,13 +1015,12 @@ export default {
               // obj.label= item.id+"+"+item.chanid+"+"+item.name
               this.versionsListActive.push(obj);
             });
-  
-            if(this.versionsListActive.length==0){
-              this.rom_version_active=="0"
-            }else{
-               let nowindex=this.versionsListActive.length-1
-              this.rom_version_active=this.versionsListActive[nowindex].value
 
+            if (this.versionsListActive.length == 0) {
+              this.rom_version_active == "0";
+            } else {
+              let nowindex = this.versionsListActive.length - 1;
+              this.rom_version_active = this.versionsListActive[nowindex].value;
             }
             if (res.result.les_count == 0) {
               return false;
@@ -984,7 +1031,7 @@ export default {
           } else {
             this.$message({
               message: "IPFS服务出错",
-              type: "success"
+              type: "success",
             });
           }
         })
@@ -995,8 +1042,9 @@ export default {
     //灰度撤回
 
     handleButton1(val, rows) {
-      this.backPushkey=rows.push_key
-        this.userType = "指定设备";
+      this.newsRom=rows.rom_version
+      this.backPushkey = rows.push_key;
+      this.userType = "指定设备";
       this.dialogVisible2 = true;
       if (rows.dev_type == 0) {
         this.form1.pushTabActive = "RK3328";
@@ -1035,13 +1083,14 @@ export default {
 
               // obj.label= item.id+"+"+item.chanid+"+"+item.name
               this.versionsListActive.push(obj);
-            if(this.versionsListActive.length==0){
-              this.rom_version_active=="0"
-            }else{
-               let nowindex=this.versionsListActive.length-1
-              this.rom_version_active=this.versionsListActive[nowindex].value
-
-            }
+              if (this.versionsListActive.length == 0) {
+                this.rom_version_active = "0";
+              } else {
+                let nowindex = this.versionsListActive.length - 1;
+                this.rom_version_active = this.versionsListActive[
+                  nowindex
+                ].value;
+              }
             });
             ///console.log(this.versionsListActive[0].value)
             if (res.result.les_count == 0) {
@@ -1053,7 +1102,7 @@ export default {
           } else {
             this.$message({
               message: "IPFS服务出错",
-              type: "success"
+              type: "success",
             });
           }
         })
@@ -1135,23 +1184,23 @@ export default {
         this.$message({
           showClose: true,
           message: "服务器响应超时",
-          type: "error"
+          type: "error",
         });
       }
     },
     errormove(err, file, fileList) {},
     down() {
-      var url = hostUrl +"/static/app_user.xls";
+      var url = hostUrl + "/static/app_user.xls";
       // window.location.href = url;
       window.open(url, "_blank");
-    }
+    },
   },
   components: {
     pageNation: pageNation,
     tableBarActive2: tableBarActive2,
     mySearch: mySearch,
-    tableBarActive2pub: tableBarActive2pub
-  }
+    tableBarActive2pub: tableBarActive2pub,
+  },
 };
 </script>
 
@@ -1221,8 +1270,6 @@ export default {
   .el-table .cell {
     text-align: center;
   }
-
-
 
   .devide_table {
     width: 100%;
