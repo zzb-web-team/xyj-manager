@@ -1,118 +1,192 @@
 <template>
-	<div class="content" style="padding-bottom:20px;">
-		<!-- 头部 -->
-
-		<!-- 搜索 -->
-		<div class="seach">
-			<div class="seach_top">
-				<el-input placeholder="设备SN，节点ID" v-model="input" @keyup.enter.native="seachuser()" class="input-with-select">
-					<i slot="prefix" class="el-input__icon el-icon-search" @click="seachuser()"></i>
-				</el-input>
-				<div class="seach_top_right" @click="option_display()">
-					筛选
-					<i class="el-icon-caret-bottom" :class="[
+  <div class="content" style="padding-bottom:20px;">
+    <!-- 头部 -->
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="硬件异常记录" name="first">
+        <!-- 搜索 -->
+        <div class="seach">
+          <div class="seach_top">
+            <el-input placeholder="设备SN，节点ID" v-model="input" @keyup.enter.native="seachuser()" class="input-with-select">
+              <i slot="prefix" class="el-input__icon el-icon-search" @click="seachuser()"></i>
+            </el-input>
+            <div class="seach_top_right" @click="option_display()">
+              筛选
+              <i class="el-icon-caret-bottom" :class="[
 							rotate
 								? 'fa fa-arrow-down go'
 								: 'fa fa-arrow-down aa'
 						]"></i>
-				</div>
-			</div>
-			<div v-if="optiondisplay" class="seach_bottom">
-				<span>异常类型：</span>
-				<el-select v-model="value" placeholder="请选择" @change="seachuser">
-					<el-option label="全部" value="0"></el-option>
-					<el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.value"></el-option>
-				</el-select>
-				<span>选择日期：</span>
+            </div>
+          </div>
+          <div v-if="optiondisplay" class="seach_bottom">
+            <span>异常类型：</span>
+            <el-select v-model="value" placeholder="请选择" @change="seachuser">
+              <el-option label="全部" value="0"></el-option>
+              <el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+            <span>选择日期：</span>
 
-				<el-date-picker v-model="value1" type="datetimerange" :picker-options="pickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="right"></el-date-picker>
-				<el-button plain @click="reset()">重置</el-button>
-				<div class="seach_bottom_btn">
-					<!-- <el-button type="primary" plain size="mini" @click="seachuser()"
+            <el-date-picker @change="queryHardware()" v-model="value1" type="datetimerange" :picker-options="pickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="right"></el-date-picker>
+            <el-button plain @click="reset()">重置</el-button>
+            <div class="seach_bottom_btn">
+              <!-- <el-button type="primary" plain size="mini" @click="seachuser()"
             >确定</el-button
           > -->
-				</div>
-			</div>
-		</div>
+            </div>
+          </div>
+        </div>
 
-		<!-- 表格 -->
-		<div>
-			<div style="text-align:right;margin:10px 0;">
-				<el-button type="primary" @click="geydata2()" :disabled="showdisabled">导出</el-button>
-			</div>
-			<el-table :data="tableData" border :cell-style="rowClass">
-				<el-table-column prop="now_date" label="日期" width="180">
-					<template slot-scope="scope">
-						<span>{{ scope.row.time_stamp | getymd }}</span>
-					</template>
-				</el-table-column>
-				<el-table-column label="异常类型" width="220">
-					<template slot-scope="scope">
-						<span v-if="scope.row.badstade == '正常'" style="color:green;">{{ scope.row.badstade }}</span>
-						<span v-else style="color:red;">{{ scope.row.badstade }}
-						</span>
-					</template>
-				</el-table-column>
-				<el-table-column prop="dev_sn" label="设备SN" width="180"></el-table-column>
-				<el-table-column prop="node_id" label="节点ID"></el-table-column>
+        <!-- 表格 -->
+        <div>
+          <div style="text-align:right;margin:10px 0;">
+            <el-button type="primary" @click="geydata2()" :disabled="showdisabled">导出</el-button>
+          </div>
+          <el-table :data="tableData" border :cell-style="rowClass">
+            <el-table-column prop="now_date" label="日期" width="180">
+              <template slot-scope="scope">
+                <span>{{ scope.row.time_stamp | getymd }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="异常类型" width="220">
+              <template slot-scope="scope">
+                <span v-if="scope.row.badstade == '正常'" style="color:green;">{{ scope.row.badstade }}</span>
+                <span v-else style="color:red;">{{ scope.row.badstade }}
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="dev_sn" label="设备SN" width="180"></el-table-column>
+            <el-table-column prop="node_id" label="节点ID"></el-table-column>
 
-				<el-table-column prop="cpu_temperature" label="当前使用空间/总空间">
-					<template slot-scope="scope">
-						<span v-if="!scope.row.user_cap">--</span>
-						<span v-else>{{ scope.row.user_cap }}</span>/
-						<span v-if="!scope.row.total_cap">--</span>
-						<span v-else>{{ scope.row.total_cap }}</span>
-					</template>
-				</el-table-column>
-				<el-table-column prop="upstream_bandwidth" label="当前上行/下行宽带">
-					<template slot-scope="scope">
-						<span v-if="!scope.row.up_bw">--</span>
-						<span>{{ scope.row.up_bw }}</span>/
-						<span v-if="!scope.row.down_bw">--</span>
-						<span>{{ scope.row.down_bw }}</span>
-					</template>
-				</el-table-column>
-				<el-table-column label="CPU温度">
-					<template slot-scope="scope">
-						<span v-if="scope.row.cputem_color" style="color:red;">{{ scope.row.cpu_tem }}</span>
-						<span v-else>{{ scope.row.cpu_tem }}</span>
-					</template>
-				</el-table-column>
+            <el-table-column prop="cpu_temperature" label="当前使用空间/总空间">
+              <template slot-scope="scope">
+                <span v-if="!scope.row.user_cap">--</span>
+                <span v-else>{{ scope.row.user_cap }}</span>/
+                <span v-if="!scope.row.total_cap">--</span>
+                <span v-else>{{ scope.row.total_cap }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="upstream_bandwidth" label="当前上行/下行宽带">
+              <template slot-scope="scope">
+                <span v-if="!scope.row.up_bw">--</span>
+                <span>{{ scope.row.up_bw }}</span>/
+                <span v-if="!scope.row.down_bw">--</span>
+                <span>{{ scope.row.down_bw }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="CPU温度">
+              <template slot-scope="scope">
+                <span v-if="scope.row.cputem_color" style="color:red;">{{ scope.row.cpu_tem }}</span>
+                <span v-else>{{ scope.row.cpu_tem }}</span>
+              </template>
+            </el-table-column>
 
-				<el-table-column label="硬盘温度">
-					<template slot-scope="scope">
-						<span v-if="scope.row.hdtem_color" style="color:red;">{{ scope.row.hd_tem }}
-						</span>
-						<span v-else>{{ scope.row.hd_tem }}</span>
-					</template>
-				</el-table-column>
-				<el-table-column label="磁盘剩余容量">
-					<template slot-scope="scope">
-						<span v-if="scope.row.cap_color" style="color:red;">{{ scope.row.cap_ratio }}
-						</span>
-						<span v-else>{{ scope.row.cap_ratio }}</span>
-					</template>
-				</el-table-column>
-				<el-table-column label="内存占用">
-					<template slot-scope="scope">
-						<span v-if="scope.row.memtem_color" style="color:red;">{{ scope.row.mem_ratio }}</span>
-						<span v-else>{{ scope.row.mem_ratio }}</span>
-					</template>
-				</el-table-column>
-			</el-table>
-		</div>
+            <el-table-column label="硬盘温度">
+              <template slot-scope="scope">
+                <span v-if="scope.row.hdtem_color" style="color:red;">{{ scope.row.hd_tem }}
+                </span>
+                <span v-else>{{ scope.row.hd_tem }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="磁盘剩余容量">
+              <template slot-scope="scope">
+                <span v-if="scope.row.cap_color" style="color:red;">{{ scope.row.cap_ratio }}
+                </span>
+                <span v-else>{{ scope.row.cap_ratio }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="内存占用">
+              <template slot-scope="scope">
+                <span v-if="scope.row.memtem_color" style="color:red;">{{ scope.row.mem_ratio }}</span>
+                <span v-else>{{ scope.row.mem_ratio }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <pageNation style="float: right;margin-top:10px;" :pager="pagerActive" @handleSizeChange="handleSizeChange1" @handleCurrentChange="handleCurrentChange1"></pageNation>
+      </el-tab-pane>
+      <el-tab-pane label="进程异常记录" name="second">
+        <!-- 搜索 -->
+        <div class="seach">
+          <div class="seach_top">
+            <el-input placeholder="设备SN" v-model="input" @keyup.enter.native="seachuser1()" class="input-with-select">
+              <i slot="prefix" class="el-input__icon el-icon-search" @click="seachuser1()"></i>
+            </el-input>
+            <div class="seach_top_right" @click="option_display()">
+              筛选
+              <i class="el-icon-caret-bottom" :class="[
+							rotate
+								? 'fa fa-arrow-down go'
+								: 'fa fa-arrow-down aa'
+						]"></i>
+            </div>
+          </div>
+          <div v-if="optiondisplay" class="seach_bottom">
+            <span>异常类型：</span>
+            <el-select v-model="valuess" placeholder="请选择" @change="seachProcess">
+              <el-option label="全部" value="0"></el-option>
+              <el-option v-for="(item, index) in optionsss" :key="index" :label="item.label" :value="item.value"></el-option>
+            </el-select>
+            <span>选择日期：</span>
 
-		<!-- <fenye style="text-align: right;margin:20px 0 0 0;" @fatherMethod="getpage" @fathernum="gettol" :pagesa="total_cnt" :currentPage="currentPage"></fenye> -->
-		<pageNation style="float: right;margin-top:10px;" :pager="pagerActive" @handleSizeChange="handleSizeChange1" @handleCurrentChange="handleCurrentChange1"></pageNation>
+            <el-date-picker @change="queryProcess()" v-model="value1" type="datetimerange" :picker-options="pickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="right"></el-date-picker>
+            <el-button plain @click="reset()">重置</el-button>
+            <div class="seach_bottom_btn">
+              <!-- <el-button type="primary" plain size="mini" @click="seachuser()"
+            >确定</el-button
+          > -->
+            </div>
+          </div>
+        </div>
 
-	</div>
+        <!-- 表格 -->
+        <div>
+          <div style="text-align:right;margin:10px 0;">
+            <el-button type="primary" @click="toExport" :disabled="showdisabled">导出</el-button>
+          </div>
+          <el-table :data="tableDataProcess" border :cell-style="rowClass" @sort-change='tableSortChange'>
+            <el-table-column label="日期" width="180" sortable="costum">
+              <template slot-scope="scope">
+                <span>{{ scope.row.time | getymd }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="进程ID">
+              <template slot-scope="scope">
+                <span>{{ scope.row.pid}}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="进程名">
+              <template slot-scope="scope">
+                <span>{{ scope.row.pid_name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="进程异常">
+              <template slot-scope="scope">
+                <span style="color:red;">{{ scope.row.md5_type | formatMd5 }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="设备SN">
+              <template slot-scope="scope">
+                <span>{{ scope.row.dev_sn }}</span>
+              </template>
+            </el-table-column>
+
+          </el-table>
+        </div>
+        <pageNation style="float: right;margin-top:10px;" :pager="pagerActive1" @handleSizeChange="handleSizeChange2" @handleCurrentChange="handleCurrentChange2"></pageNation>
+      </el-tab-pane>
+    </el-tabs>
+
+  </div>
 </template>
 
 <script>
 import pageNation from "../../components/pageNation";
 
 import fenye from "@/components/fenye";
-import { query_detail_info_list } from "../../api/api.js";
+import {
+  query_detail_info_list,
+  query_dev_pid_history_list,
+} from "../../api/api.js";
 
 import {
   getlocaltimes,
@@ -125,8 +199,15 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
+      exportLinks: "",
+      activeName: "first",
       pagerActive: {
-        count: 1,
+        count: 0,
+        page: 0,
+        rows: 10,
+      },
+      pagerActive1: {
+        count: 0,
         page: 0,
         rows: 10,
       },
@@ -166,10 +247,10 @@ export default {
           value: "1",
           label: "CPU温度报警",
         },
-        // {
-        //   value: "2",
-        //   label: "主板报警温度"
-        // },
+        {
+          value: "2",
+          label: "主板报警温度"
+        },
         {
           value: "3",
           label: "磁盘温度报警",
@@ -183,25 +264,22 @@ export default {
           label: "内存比例报警",
         },
       ],
-      tableData: [
-        // {
-        //   time_stamp: "2016-05-02", //日期
-        //   badstade: "cpu温度报警",
-        //   dev_sn: "fas1g35wa1f53", //设备sn
-        //   node_id: "gager165g1ae51g6a5ew1", //节点ID
-        //   used_cap: 301, //当前使用空间
-        //   total_cap: 800, //总空间
-        //   online_state: 0, //设备状态
-        //   up_bw: "38.56", //上行带宽
-        //   down_bw: "12.67", //下行带宽
-        //   cpu_tem: "13.1", //cpu温度
-        //   mb_tem: "18", //主板温度
-        //   hd_tem: "28", //硬盘温度
-        //   mem_ratio: "26" //内存占用
-        // }
+      optionsss: [
+        {
+          value: "1",
+          label: "进程md5变更",
+        },
+        {
+          value: "2",
+          label: "新增未知进程",
+        },
       ],
+      tableData: [],
       tableData_dao: [],
       tolpage_dao: 0,
+      tableDataProcess: [],
+      order: 0,
+      valuess: "",
     };
   },
   filters: {
@@ -209,12 +287,61 @@ export default {
     getymd(time) {
       return getymdtime(time);
     },
+    formatMd5(data) {
+      if (data == 1) {
+        return "正常";
+      } else if (data == 2) {
+        return "进程md5变更";
+      } else if (data == 3) {
+        return "新增未知进度";
+      }
+    },
   },
   components: { fenye, pageNation },
   mounted() {
     this.getdata();
   },
   methods: {
+    seachProcess() {
+      this.queryProcess();
+    },
+    //时间排序
+    tableSortChange(column) {
+      if (column.column.order == "descending") {
+        this.order = 0;
+      } else {
+        this.order = 1;
+      }
+      this.queryProcess();
+    },
+    //进程异常时间确认
+    queryProcess() {
+      this.getdataProcess();
+    },
+    //硬件时间确认筛选
+    queryHardware() {
+      this.getdata();
+    },
+    //进程记录分页
+    handleSizeChange2(val) {},
+    handleCurrentChange2(val) {
+      this.pagerActive1.page = val.val;
+      this.getdataProcess();
+    },
+    //导出
+    toExport() {
+      window.open(this.exportLinks, "_blank");
+    },
+    //tab选项卡
+    handleClick(tab) {
+      this.value1 = "";
+      this.input = "";
+      if (tab.index == 0) {
+        this.getdata();
+      } else {
+        this.getdataProcess();
+      }
+    },
     //获取页码
     handleCurrentChange1(pages) {
       this.pagerActive.page = pages.val;
@@ -253,10 +380,7 @@ export default {
         params.end_time = setbatime(this.value1[1]);
       } else {
         params.start_time =
-          setbatime(
-            new Date(new Date(new Date().toLocaleDateString()).getTime())
-          ) -
-          7 * 24 * 60 * 60;
+          new Date(new Date().toLocaleDateString()).getTime() / 1000;
         params.end_time = setbatime(new Date());
       }
       params.page = this.pagerActive.page - 1;
@@ -326,6 +450,43 @@ export default {
         })
         .catch(err => {});
     },
+    //进程异常记录
+    getdataProcess() {
+      this.tableData = [];
+      let params = new Object();
+      let param = new Object();
+      if (this.value1) {
+        param.start_time = setbatime(this.value1[0]);
+        param.end_time = setbatime(this.value1[1]);
+      } else {
+        param.start_time =
+          new Date(new Date().toLocaleDateString()).getTime() / 1000;
+        param.end_time = setbatime(new Date());
+      }
+
+      (param.dev_sn = ""),
+        (param.md5_type = parseInt(this.valuess)),
+        (param.page = this.pagerActive1.page - 1),
+        (param.order = this.order);
+      query_dev_pid_history_list(param)
+        .then(res => {
+          if (res.status == 0) {
+            this.tableDataProcess = [];
+            if (res.data.pid_unsual_list) {
+              this.tableDataProcess = [];
+              this.exportLinks = res.data.filename;
+              this.tableDataProcess = res.data.pid_unsual_list;
+              this.pagerActive1.count = res.data.total_num;
+            } else {
+              this.showdisabled = true;
+              this.$message("暂无数据");
+            }
+          } else {
+            this.$message.error(res.err_msg);
+          }
+        })
+        .catch(err => {});
+    },
     //筛选按钮
     option_display() {
       this.optiondisplay = !this.optiondisplay;
@@ -336,17 +497,21 @@ export default {
     seachuser() {
       this.pagerActive.page = 1;
       this.getdata();
-      // this.optiondisplay = false;
-      // this.value = "";
-      // this.input = "";
-      // this.value1 = "";
       this.tolpage = 0;
+    },
+    //确定搜索
+    seachuser1() {
+      this.pagerActive1.page = 1;
+      this.getdataProcess();
     },
     //重置
     reset() {
       this.value = "0";
       this.input = "";
       this.value1 = "";
+      this.valuess = "";
+      this.pagerActive1.page = 1;
+      this.pagerActive.page = 1;
       this.getdata();
     },
     geydata2() {
@@ -400,7 +565,6 @@ export default {
             this.common.monitoringLogs("导出", "设备异常记录", 1);
           } else {
             this.common.monitoringLogs("导出", "设备异常记录", 0);
-
             this.$message.error(res.err_msg);
           }
         })

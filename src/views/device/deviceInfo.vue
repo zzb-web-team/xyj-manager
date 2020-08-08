@@ -1,6 +1,6 @@
 <template>
   <section class="myself-container deviceinfo">
-    <div class="user-title">
+    <!-- <div class="user-title">
       <el-row>
         <el-col :span="5">
           <div class="user-item">
@@ -15,7 +15,7 @@
           </div>
         </el-col>
       </el-row>
-    </div>
+    </div> -->
     <div class="device_form">
       <el-form ref="form" :model="form">
         <el-row type="flex">
@@ -29,29 +29,65 @@
         </el-row>
         <div v-show="showState">
           <el-row type="flex" class="row_activess">
-            <el-form-item label="设备类型" style="display: flex;width:170px;">
+            <el-form-item label="一级渠道商" style="display: flex;width:270px;">
+              <el-select v-model="pri_chan_prv" placeholder="请选择">
+                <el-option label="全部" value=""></el-option>
+                <el-option v-for="item in pri_chan_prvs" :key="item" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="二级渠道商" style="display: flex;width:270px;">
+              <el-select v-model="scd_chan_prv" placeholder="请选择">
+                <el-option label="全部" value=""></el-option>
+
+                <el-option v-for="item in scd_chan_prvs" :key="item" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="设备品牌" style="display: flex;width:270px;">
+              <el-select v-model="eqp_brd" placeholder="请选择">
+                <el-option v-for="item in eqp_brds" :key="item" :label="item" :value="item"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="设备类型" style="display: flex;width:270px;">
+              <el-select v-model="eqp_type" placeholder="请选择">
+                <el-option label="全部" value=""></el-option>
+                <el-option v-for="item in eqp_types" :key="item" :label="item" :value="item"></el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="设备型号" style="display: flex;width:270px;">
               <el-select v-model="dev_type" placeholder="请选择">
                 <el-option v-for="item in dev_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="ROM" style="display: flex; width:130px;">
+
+            <el-form-item label="操作系统" style="display: flex;width:290px;">
+              <el-select v-model="op_sys" placeholder="请选择">
+                <el-option v-for="item in op_syss" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="ROM" style="display: flex; width:230px;">
               <el-select v-model="rom_version" placeholder="请选择">
                 <el-option v-for="item in roms" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="设备状态" style="display: flex;width:170px;">
+          </el-row>
+          <el-row type="flex" class="row_activess">
+            <el-form-item label="设备状态" style="display: flex;width:270px;">
               <el-select v-model="online_state" placeholder="请选择">
+                                <el-option label="全部" value="-1"></el-option>
+
                 <el-option v-for="item in onlineStates" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="绑定" style="display: flex;width:130px;">
+            <el-form-item label="绑定" style="display: flex;width:230px;">
               <el-select v-model="bind_flag" placeholder="请选择" @change="onChange2">
                 <el-option v-for="item in bindFlags" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item label="注册时间" style="display: flex;">
-              <el-date-picker v-model="bind_start_ts" style="width:160px;" type="datetime" placeholder="选择开始日期时间"></el-date-picker>-
-              <el-date-picker v-model="bind_end_ts" style="width:160px;" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
+              <el-date-picker v-model="bind_start_ts" style="width:200px;" type="datetime" placeholder="选择开始日期时间"></el-date-picker>-
+              <el-date-picker v-model="bind_end_ts" style="width:200px;" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" style="" @click="search">确定</el-button>
@@ -71,10 +107,18 @@
       </el-row>
       <el-row type="flex" class="row_active">
         <el-col>
-          <el-table :data="tableData" border width="100%" @sort-change="changeTableSort">
+          <el-table :data="tableData" border width="100%" @sort-change="changeTableSort" @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="55">
+            </el-table-column>
             <el-table-column prop="dev_sn" label="设备SN" width="150px"></el-table-column>
-            <el-table-column :formatter="formatDevType" prop="dev_type" label="设备类型"></el-table-column>
-            <el-table-column prop="rom_version" label="ROM"></el-table-column>
+            <el-table-column prop="pri_chan_prv" label="一级渠道商"></el-table-column>
+            <el-table-column prop="scd_chan_prv" label="二级渠道商"></el-table-column>
+            <el-table-column prop="eqp_brd" label="设备品牌"></el-table-column>
+            <el-table-column prop="eqp_type" label="设备类型"></el-table-column>
+            <el-table-column prop="hd_type" label="硬件类型"></el-table-column>
+            <el-table-column :formatter="formatDevType" prop="dev_type" label="设备型号"></el-table-column>
+            <el-table-column prop="op_sys" label="操作系统"></el-table-column>
+            <el-table-column prop="rom_version" label="ROM版本"></el-table-column>
             <el-table-column prop="dev_name" label="设备名称"></el-table-column>
             <el-table-column prop="dev_mac" label="MAC地址"></el-table-column>
             <el-table-column prop="cpu_id" label="CPU-ID"></el-table-column>
@@ -88,7 +132,7 @@
             <el-table-column label="操作" fixed="right" width="250px">
               <template slot-scope="scope">
                 <div style="    display: flex;justify-content: flex-start;">
-                  <el-button @click="shut(scope.row)" type="text" size="small">关机</el-button>
+                  <el-button v-if="scope.row.online_state==1 || scope.row.online_state==101" @click="shut(scope.row)" type="text" size="small">关机</el-button>
                   <el-button type="text" @click="restart(scope.row)" size="small">重启</el-button>
                   <!-- <el-button v-else :disabled="true" type="text" size="small">强制解绑</el-button> -->
                   <!-- <el-button v-show="scope.row.bind_flag===0" type="text" @click="tie(scope.row)" size="small">绑定</el-button> -->
@@ -103,7 +147,11 @@
       </el-row>
     </div>
     <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
-      <el-row type="flex"></el-row>
+      <el-row type="flex">
+        <el-button size="small" style="width:60px;" @click="allOn">重启</el-button>
+
+        <el-button size="small" style="width:60px;" @click="allOff">关机</el-button>
+      </el-row>
       <el-row type="flex">
         <el-col :span="6">
           <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
@@ -145,6 +193,110 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
+      pri_chan_prv: "",
+      pri_chan_prvs: [
+        {
+          "value":"f.computer.unknown.pcgrapefruit",
+          "label":"PC版西柚机"
+        },
+         {
+          "value":"f.harddiskbox.grapefruit.grapefruit",
+          "label":"西柚机"
+        },
+         {
+          "value":"f.harddiskbox.xunlei.onethingcloud",
+          "label":"玩客云"
+        },
+         {
+          "value":"f.tvbox.xiaomi.xiaomi4c",
+          "label":"小米盒子4C"
+        },
+         {
+          "value":"f.tvbox.xiaomi.xiaomi4",
+          "label":"小米盒子4"
+        },
+         {
+          "value":"f.tvbox.skyworth.skyworthqplus1",
+          "label":"创维Q+一代"
+        },
+         {
+          "value":"f.tvbox.phicomm.phicommn1",
+          "label":"斐讯N1盒子"
+        },
+         {
+          "value":"f.tvbox.tencent.tencentjg1s",
+          "label":"企鹅极光1S"
+        },
+         {
+          "value":"f.computer.unknown.yunlian",
+          "label":"云链"
+        },
+         {
+          "value":"f.computer.unknown.hk",
+          "label":"香港运维"
+        },
+         {
+          "value":"f.computer.unknown.rouji-kernel2-3",
+          "label":"rouji-kernel2-3"
+        },
+         {
+          "value":"f.computer.unknown.rouji-kernel4-5",
+          "label":"rouji-kernel4-5"
+        },
+        
+   
+      ],
+      scd_chan_prv: "",
+      scd_chan_prvs: [
+           {
+          "value":"s.computer.unknown.pcgrapefruit",
+          "label":"PC版西柚机"
+        },
+         {
+          "value":"s.harddiskbox.grapefruit.grapefruit",
+          "label":"西柚机"
+        },
+         {
+          "value":"f.computer.unknown.yunlian",
+          "label":"云链"
+        },
+         {
+          "value":"s.computer.unknown.hk",
+          "label":"香港运维"
+        },
+         {
+          "value":"s.computer.unknown.rouji-kernel2-3",
+          "label":"rouji-kernel2-3"
+        },
+         {
+          "value":"s.computer.unknown.rouji-kernel4-5",
+          "label":"rouji-kernel4-5"
+        },
+        
+      ],
+      op_sys: "",
+      op_syss: [
+        {
+          value: "",
+          label: "全部",
+        },
+        {
+          value: "linux",
+          label: "linux",
+        },
+        {
+          value: "android",
+          label: "android",
+        },
+        {
+          value: "windows",
+          label: "windows",
+        },
+      ],
+      eqp_brd: "全部",
+      eqp_brds: ["grapefruit", "迅雷", "小米", "创维", "斐讯","腾讯"],
+      eqp_type: "",
+      eqp_types: ["PC服务器", "硬盘盒子", "电视盒子", "PC服务器"],
       bind_user_tel_num: "",
       IDvalue: "",
       dialogVisible: false,
@@ -169,31 +321,55 @@ export default {
           label: "全部",
         },
         {
-          value: "RK3328",
-          label: "RK3328",
+          value: "RK33XX",
+          label: "RK33XX",
         },
         {
-          value: "AMS805",
-          label: "AMS805",
+          value: "AMS805W",
+          label: "AMS805W",
         },
+        {
+          value: "AMS905M4C",
+          label: "AMS905M4C",
+        },
+        {
+          value: "AMS905M4",
+          label: "AMS905M4",
+        },
+        {
+          value: "AMS805QP1",
+          label: "AMS805QP1",
+        },
+        {
+          value: "AMS905N1",
+          label: "AMS905N1",
+        },
+        {
+          value: "AMS905JG1S",
+          label: "AMS905JG1S",
+        },
+       
+        
       ],
-      onlineStates: [
-        {
-          value: "-1",
-          label: "全部",
-        },
-        {
-          value: "0",
+      onlineStates:[
+        
+            {
+          value: 0,
           label: "离线",
         },
         {
-          value: "1",
+          value: 1,
           label: "在线",
         },
         {
-          value: "2",
-          label: "非法设备",
+          value: 1000,
+          label: "重启中",
         },
+        {
+          value: 1001,
+          label: "关机中",
+        },
+        
       ],
       bindFlags: [
         {
@@ -301,6 +477,8 @@ export default {
       bind_user_tel_num: "",
       order_type: 1,
       active_dev_name: "",
+      multipleSelection: [],
+      snId: [],
     };
   },
   mounted() {
@@ -308,7 +486,68 @@ export default {
     this.getInfo();
   },
   methods: {
-    //排序
+    //获取所选ID
+    handleSelectionChange(val) {
+      let _this = this;
+      this.multipleSelection = val;
+      this.snId = [];
+      this.multipleSelection.forEach(function(item, index) {
+        _this.snId.push(item.dev_sn);
+      });
+      console.log(this.snId);
+    },
+    //批量重启
+    allOff() {
+      if (this.snId.length == 0) {
+        this.$message({
+          type: "error",
+          message: "请至少勾选一项",
+        });
+        return false;
+      }
+
+      //关机
+      this.$confirm("确定批量关机?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.closeRestore(2, this.snId);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消关机",
+          });
+        });
+    },
+    //批量关机
+    allOn(rows) {
+      if (this.snId.length == 0) {
+        this.$message({
+          type: "error",
+          message: "请至少勾选一项",
+        });
+        return false;
+      }
+      //关机
+      this.$confirm("确定批量重启?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.closeRestore(1, this.snId);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消关机",
+          });
+        });
+    },
+    //排序w
     changeTableSort(column) {
       if (column.prop == "bind_timestamp") {
         if (column.order == "descending") {
@@ -369,13 +608,12 @@ export default {
               message: "同一用户下绑定昵称不可以",
               type: "error",
             });
-          } 
-           else if (res.status == 0 && res.err_code == 225) {
+          } else if (res.status == 0 && res.err_code == 225) {
             this.$message({
               message: "设备不存在,无法绑定！",
               type: "error",
             });
-          }else {
+          } else {
             this.$message({
               message: "用户ID不存在，绑定失败",
               type: "error",
@@ -451,7 +689,10 @@ export default {
       this.dev_type = "-1";
       this.online_state = "-1";
       this.rom_version = "";
-      this.getInfo();
+      (this.pri_chan_prv = ""),
+        (this.scd_chan_prv = ""),
+        (this.op_sys = ""),
+        this.getInfo();
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => v[j]));
@@ -499,14 +740,19 @@ export default {
     },
     getInfo() {
       var data = {
+        pri_chan_prv: this.pri_chan_prv,
+        scd_chan_prv: this.scd_chan_prv,
+        op_sys: this.op_sys,
+        hd_type: "",
+        eqp_brd: this.eqp_brd,
+        eqp_type: this.eqp_type,
         ipfs_id: "",
         bind_user_id: 0,
         order_type: this.order_type,
         page_no: this.pager.page - 1,
         page_size: 10,
-        dev_type:
-          this.dev_type === "-1" ? -1 : this.dev_type === "RK3328" ? 1 : 2,
-        online_state: this.online_state === "-1" ? -1 : Number(this.online_state),
+        dev_type:this.dev_type ,
+        online_state:parseInt(this.online_state) ,
         rom_version: this.rom_version === "" ? "" : this.rom_version,
         bind_flag: this.bind_flag === "-1" ? -1 : Number(this.bind_flag),
 
@@ -596,7 +842,8 @@ export default {
         page_size: 10,
         dev_type:
           this.dev_type === "-1" ? -1 : this.dev_type === "RK3328" ? 1 : 2,
-        online_state: this.online_state === "-1" ? -1 : Number(this.online_state),
+        online_state:
+          this.online_state === "-1" ? -1 : Number(this.online_state),
         rom_version: this.rom_version === "" ? "" : this.rom_version,
         bind_flag: this.bind_flag === "-1" ? -1 : Number(this.bind_flag),
 
@@ -855,7 +1102,9 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.closeRestore(2, rows.dev_sn);
+          this.snId = [];
+          this.snId.push(rows.dev_sn);
+          this.closeRestore(2, this.snId);
         })
         .catch(() => {
           this.$message({
@@ -872,7 +1121,9 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.closeRestore(1, rows.dev_sn);
+          this.snId = [];
+          this.snId.push(rows.dev_sn);
+          this.closeRestore(1, this.snId);
         })
         .catch(() => {
           this.$message({

@@ -119,7 +119,7 @@
         <div style="display: flex;justify-content: flex-start;align-items: center;margin-left:20px;">
           <div>使用设备品牌：</div>
           <el-select v-model="valuestate1" placeholder="请选择" @change="onChange">
-            <el-option v-for="item in optionstate1" :key="item.value" :label="item.label" :value="item.value"></el-option>
+            <el-option v-for="item in optionstate1s" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </div>
         <div v-for="item in uploadsize" :key="item">
@@ -303,7 +303,7 @@ export default {
           label: "PC版西柚机",
         },
       ],
-      optionstate1: [
+      optionstate1s: [
         {
           value: "0",
           label: "西柚机",
@@ -513,6 +513,7 @@ export default {
   },
 
   mounted: function() {
+      
     this.getinfo();
     // this.drawLine();
     // this.drawColumn();
@@ -525,18 +526,21 @@ export default {
     toQueryInfo() {
       this.pager.page = 1;
       this.getinfo();
+      let product_type= parseInt(this.valuestate) 
+      sessionStorage.setItem("product_type",product_type)
     },
     setInfo() {
       this.pager.page = 1;
       this.value2 = "";
-      this.valuestate = "0";
+      this.valuestate = "-1";
       this.getinfo();
     },
 
     //上传MD5
     uploadMd5() {
+   
       let param = new Object();
-      param.rom_type = this.optionstate1;
+      param.rom_type = parseInt(this.valuestate1) ;
       param.rom_version = this.md5Version;
       param.md5 = this.arrMd5;
       uploadmd5(param)
@@ -759,6 +763,14 @@ export default {
      
     
       // }
+      let product_types=sessionStorage.getItem("product_type")
+      
+      if(!product_types){
+        this.valuestate1="0"
+      }else{
+this.valuestate1=product_types+""
+      }
+      
      
     },
     //确定发布
@@ -883,6 +895,9 @@ export default {
       //     this.newObject2.rom_desc = this.textareaText;
       //     data.push(this.newObject2);
       //   }
+      
+
+
       //   if (nowarr3.length > 0) {
       //     this.newObject3.rom_desc = this.textareaText;
       //     data.push(this.newObject3);
@@ -901,15 +916,17 @@ export default {
               type: "error",
             });
             this.common.monitoringLogs("新增", "新增ROM升级包", 0);
-            this.uploadMd5();
+      
           } else {
             this.$message({
               type: "success",
               message: "新增成功!",
             });
+              this.uploadMd5();
             this.getinfo();
             this.common.monitoringLogs("新增", "新增ROM升级包", 1);
           }
+              
         })
         .catch(error => {
           // this.$message({

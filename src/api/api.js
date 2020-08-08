@@ -47,7 +47,6 @@ export const userlist = (params) => {
 export const requestLogin = (params) => {
     return axios.post(`${base}/login`, params).then((res) => res.data);
 };
-
 export const getUserList = (params) => {
     return axios.get(`${base}/user/list`, {
         params: params
@@ -770,7 +769,7 @@ export const chg_device_state = (params) => {
         .then((res) => res.data);
 };
 
-2019 - 11 - 23;
+//2019 - 11 - 23;
 //积分管理   积分明细
 export const query_user_total_profit_everyday = (params) => {
     return axios
@@ -852,6 +851,31 @@ export const query_detail_info_list = (params) => {
         .post(`${ownbase}/dev_status/query_detail_info_list `, params)
         .then((res) => res.data);
 };
+
+//设备进程监控
+export const query_dev_pid_general_list = (params) => {
+    return axios
+        .post(`${ownbase}/dev_status/query_dev_pid_general_list `, params)
+        .then((res) => res.data);
+};
+
+//设备异常记录
+export const query_dev_pid_detail_list = (params) => {
+    return axios
+        .post(`${ownbase}/dev_status/query_dev_pid_detail_list `, params)
+        .then((res) => res.data);
+}
+//进程异常记录
+export const query_dev_pid_history_list = (params) => {
+    return axios
+        .post(`${ownbase}/dev_status/query_dev_pid_history_list `, params)
+        .then((res) => res.data);
+}
+
+
+
+
+
 
 //IPFS业务数据统计
 //设备热度分布

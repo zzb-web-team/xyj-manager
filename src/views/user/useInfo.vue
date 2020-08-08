@@ -12,7 +12,7 @@
             <el-col :span="5">
                 <div class="user-item">
                     <div class="item-count">{{sum_profit}}</div>
-                    <div class="item-text" style="margin-top:7px;">总分积分</div>
+                    <div class="item-text" style="margin-top:7px;">累计西柚机收益</div>
                     <div class="item-text" style="margin-top:7px;">
                         <el-button type="primary" size="mini" @click="getQueryInfo">查看明细</el-button>
                     </div>
@@ -21,7 +21,7 @@
             <el-col :span="5" style="margin-left:30px;">
                 <div class="user-item">
                     <div class="item-count">{{sum_profit1}}</div>
-                    <div class="item-text" style="margin-top:7px;">累计收益</div>
+                    <div class="item-text" style="margin-top:7px;">累计节点收益</div>
                     <div class="item-text" style="margin-top:7px;">
                         <el-button type="primary" size="mini" @click="getQueryInfo1">查看明细</el-button>
                     </div>
@@ -30,7 +30,7 @@
             <el-col :span="5" style="margin-left:30px;">
                 <div class="user-item">
                     <div class="item-count">{{dev_num}}</div>
-                    <div class="item-text" style="margin-top:7px;">设备总数</div>
+                    <div class="item-text" style="margin-top:7px;">设备数</div>
                     <div class="item-text" style="margin-top:7px;">
                         <el-button type="primary" size="mini" @click="getQueryInfo2">查看明细</el-button>
                     </div>
@@ -38,8 +38,9 @@
             </el-col>
             <el-col :span="5" style="margin-left:30px;">
                 <div class="user-item">
-                    <div class="item-count">{{average_store}}</div>
-                    <div class="item-text" style="margin-top:7px;">日平均算力</div>
+                    <div class="item-count">0</div>
+                    <!-- <div class="item-count">{{average_store}}</div> -->
+                    <div class="item-text" style="margin-top:7px;">节点数</div>
                     <div class="item-text" style="margin-top:7px;">
                     </div>
                 </div>
@@ -83,7 +84,7 @@
         <div class="userdetails">
             <el-row style="height:40px;line-height:40px;font-weight: bold;">
                 <el-col :span="24">
-                    用户积分明细
+                   '{{user_ids}}' ID用户西柚机收益明细
                 </el-col>
             </el-row>
             <el-row type="flex" class="row_active">
@@ -99,7 +100,7 @@
         <div class="userdetails">
             <el-row style="height:40px;line-height:40px;font-weight: bold;">
                 <el-col :span="24">
-                   '{{user_ids}}' 用户收益明细
+                   '{{user_ids}}' D用户节点收益明细
                 </el-col>
             </el-row>
             <el-row type="flex" class="row_active">
@@ -115,7 +116,7 @@
         <div class="userdetails">
             <el-row style="height:40px;line-height:40px;font-weight: bold;">
                 <el-col :span="24">
-                    '{{user_ids}}' 用户设备明细
+                    '{{user_ids}}'  ID用户设备明细
                 </el-col>
             </el-row>
             <el-row type="flex" class="row_active">
@@ -223,26 +224,26 @@ export default {
                     label: "收益金额"
                 },
 
-                {
-                    prop: "dev_sn",
-                    label: "设备SN"
-                },
-                {
-                    prop: "total_cap",
-                    label: "挖矿空间"
-                },
-                {
-                    prop: "up_bandwidth",
-                    label: "上行宽带"
-                },
-                {
-                    prop: "down_bandwidth",
-                    label: "下行宽带"
-                },
-                 {
-                    prop: "com_power",
-                    label: "当日算力"
-                },
+                // {
+                //     prop: "dev_sn",
+                //     label: "设备SN"
+                // },
+                // {
+                //     prop: "total_cap",
+                //     label: "挖矿空间"
+                // },
+                // {
+                //     prop: "up_bandwidth",
+                //     label: "上行宽带"
+                // },
+                // {
+                //     prop: "down_bandwidth",
+                //     label: "下行宽带"
+                // },
+                //  {
+                //     prop: "com_power",
+                //     label: "当日算力"
+                // },
 
                 {
                     prop: "time_stamp",
@@ -251,17 +252,14 @@ export default {
                 },
 
             ],
-            rowHeader1: [{
-                    prop: "profit_type",
-                    label: "收支类型"
-                },
+            rowHeader1: [
                 {
                     prop: "cur_profit",
                     label: "金额"
                 },
                 {
                     prop: "total_profit",
-                    label: "账户余额"
+                    label: "当日连续在线"
                 },
                 {
                     prop: "time_stamp",
@@ -269,7 +267,8 @@ export default {
                 },
 
             ],
-            rowHeader2: [{
+            rowHeader2: [
+                {
                     prop: "dev_sn",
                     label: "设备SN"
                 },

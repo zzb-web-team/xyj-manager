@@ -12,7 +12,7 @@
         <el-form ref="form" :model="form">
           <el-row type="flex" class="row_active row_active_monitor">
             <div>
-              <el-input v-model="form.dev_sn" placeholder="请输入设备SN"></el-input>
+              <el-input v-model="dev_sn_active" placeholder="请输入设备SN" @keyup.enter.native="onSubmitKey"></el-input>
             </div>
             <div class="seach_top_right" @click="option_display()">
               筛选
@@ -29,9 +29,6 @@
           <el-option label="全部" value="-1"></el-option>
           <el-option v-for="item in optionstate" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
-        <span style="margin-left:20px;">选择日期：</span>
-
-				<el-date-picker v-model="value1" type="datetimerange" :picker-options="pickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="right"></el-date-picker>
 
         <el-button plain @click="setInfo()">重置</el-button>
       </div>
@@ -39,36 +36,36 @@
         <el-row type="flex" class="row_active">
           <el-col :span="24">
             <el-table :data="tableData" style="width: 100%" :cell-style="rowClass" :header-cell-style="headClass">
-              <!-- <el-table-column
-                prop="time_stamp"
-                label="时间"
-                width="180"
-              ></el-table-column> -->
               <el-table-column prop="dev_sn" label="设备SN"></el-table-column>
-              <el-table-column prop="node_id" label="设备状态"></el-table-column>
-              <el-table-column prop="online_status" label="预置进程数">
-              </el-table-column>
-              <el-table-column prop="ipfsc" label="当前进程数">
+              <el-table-column label="设备状态">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.ipfsc">{{ scope.row.ipfsc }}</span>
-                  <span v-else>--</span>
+                  {{scope.row.online_status |formatStatus}}
                 </template>
               </el-table-column>
-              <el-table-column prop="xiyouc" label="CPU占用">
+              <el-table-column prop="default_process_num" label="预置进程数">
+              </el-table-column>
+              <el-table-column prop="cur_process_num" label="当前进程数">
+
+              </el-table-column>
+              <el-table-column label="CPU占用">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.xiyouc">{{ scope.row.xiyouc }}</span>
-                  <span v-else>--</span>
+                  {{scope.row.dev_cpu |formatCpu}}
                 </template>
               </el-table-column>
               <el-table-column label="内存占用">
                 <template slot-scope="scope">
-                  <span>{{ scope.row.up_bandwidth }}/{{ scope.row.down_bandwidth }}
-                  </span>
+                  {{ scope.row.dev_mem |formatBytes }}
+
                 </template>
               </el-table-column>
-              <el-table-column prop="online_time" label="使用流量"></el-table-column>
+              <el-table-column label="使用流量">
+                <template slot-scope="scope">
+                  {{scope.row.dev_flow |formatBytes}}
 
-              <el-table-column label="状态">
+                </template>
+              </el-table-column>
+
+              <el-table-column label="操作">
                 <template slot-scope="scope">
                   <el-button @click="handleButton(scope)" type="text" size="small">查看详情</el-button>
                 </template>
@@ -76,9 +73,7 @@
             </el-table>
           </el-col>
         </el-row>
-        <el-row type="flex" class="row_active">
-          <el-col :span="24"> </el-col>
-        </el-row>
+
       </div>
       <div class="devide_pageNation">
         <div class="devide_pageNation_active">
@@ -91,58 +86,65 @@
       </div>
       <el-dialog :visible.sync="monitorDetails" class="monitor-details" :close-on-click-modal="false">
         <div class="monitor-con">
-        
+
           <div class="monitorDetails-bottom">
             <div class="searach-con">
               <el-form ref="form" :model="form">
-                  ' SME11950525367F ' 设备进程监控详情
+                ' {{snNum}} ' 设备进程监控详情
               </el-form>
             </div>
             <el-table :data="tableDataActive" style="width: 100%" :cell-style="rowClass" :header-cell-style="headClass">
-              <el-table-column prop="time_stamp" label="进程ID" width="180">
+              <el-table-column prop="pid" label="进程ID" width="180">
               </el-table-column>
-              <el-table-column prop="dev_sn" label="进程名" width="180">
+              <el-table-column label="进程名" prop="pid_name" width="180">
+
               </el-table-column>
-              <el-table-column prop="node_id" label="进程类型"> </el-table-column>
-              <el-table-column prop="cpu_temperature" label="md5码是否变更">
+              <el-table-column label="进程类型">
                 <template slot-scope="scope">
-                  <span v-if="!scope.row.user_cap">--</span>
-                  <span v-else>{{ scope.row.user_cap }}</span>/
-                  <span v-if="!scope.row.total_cap">--</span>
-                  <span v-else>{{ scope.row.total_cap }}</span>
+                  {{scope.row.pid_type | formatName}}
+
                 </template>
               </el-table-column>
-              <el-table-column prop="upstream_bandwidth" label="CPU占用">
+              <el-table-column label="md5码是否变更">
                 <template slot-scope="scope">
-                  <span v-if="!scope.row.up_bw">--</span>
-                  <span>{{ scope.row.up_bw }}</span>/
-                  <span v-if="!scope.row.down_bw">--</span>
-                  <span>{{ scope.row.down_bw }}</span>
+                  {{scope.row.change_md5 | formatMd5}}
+
                 </template>
               </el-table-column>
-              <el-table-column prop="cpu_tem" label="内存占用">
+              <el-table-column label="CPU占用">
                 <template slot-scope="scope">
-                  <span style="color:red;" v-if="scope.row.cpu_tem >= 80">{{ scope.row.cpu_tem + "℃" }}
-                  </span>
-                  <span v-else>{{ scope.row.cpu_tem + "℃" }}</span>
+                  {{scope.row.pid_cpu | formatCpu}}
+
+                </template>
+              </el-table-column>
+              <el-table-column prop="" label="内存占用">
+                <template slot-scope="scope">
+                  {{ scope.row.pid_mem |formatBytes }}
+
                 </template>
               </el-table-column>
 
-              <el-table-column prop="hd_tem" label="使用流量">
+              <el-table-column prop="" label="使用流量">
                 <template slot-scope="scope">
-                  <span style="color:red;" v-if="scope.row.hd_tem >= 40">{{ scope.row.hd_tem + "℃" }}
-                  </span>
-                  <span v-else>{{ scope.row.hd_tem + "℃" }}</span>
+                  {{ scope.row.pid_flow |formatBytes }}
+
                 </template>
               </el-table-column>
-              <el-table-column prop="mb_tem" label="操作">
+              <el-table-column prop="" label="进程状态">
                 <template slot-scope="scope">
-                <div style="cursor: pointer;color: blue;">关闭进程</div>
+                  {{ scope.row.pid |formatStatus }}
+
                 </template>
               </el-table-column>
-             
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <div v-if="scope.row.pid!==-1" style="cursor: pointer;color: blue;" @click="onclickprocess(scope)">关闭进程</div>
+                  <div v-else style="cursor: pointer;color: blue;">--</div>
+                </template>
+              </el-table-column>
+
             </el-table>
-            <pageNation style="float: right;margin-top:10px;" :pager="pagerActive" @handleSizeChange="handleSizeChange1" @handleCurrentChange="handleCurrentChange1"></pageNation>
+            <pageNation style="float: right;margin-top:10px;" :pager="pagerActive" @handleSizeChange="handleSizeChange2" @handleCurrentChange="handleCurrentChange2"></pageNation>
           </div>
 
           <div slot="footer" class="monitor-footer" style>
@@ -158,125 +160,49 @@
 import pageNation from "../../components/pageNation";
 import fenye from "@/components/fenye";
 import {
-  devicelist,
-  query_general_info_list,
-  query_node_info,
-  query_detail_info_list,
+  query_dev_pid_general_list,
+  query_dev_pid_detail_list,
+  ctrl_node_state,
 } from "../../api/api.js";
-import common from "../../common/js/util";
+import common from "../../common/js/util.js";
 
 export default {
   data() {
     return {
-      value1:"",
+      dev_sn_active: "",
+      value1: "",
       rotate: false,
       operatingStatus: true,
       operatingStatus1: false,
       monitorDetails: false,
       currentPage: 1,
-      rowHeader: [
-        // 未做任何格式化处理的数据
-        {
-          prop: "time_stamp",
-          label: "时间",
-          width: 150,
-        },
-        {
-          prop: "dev_sn",
-          label: "设备SN",
-          width: 300,
-        },
-        {
-          prop: "node_id",
-          label: "节点ID",
-        },
-        {
-          prop: "online_status",
-          label: "设备状态",
-          width: 80,
-        },
-        {
-          prop: "total_cap",
-          label: "当前使用空间/总空间",
-          width: 180,
-        },
-        {
-          prop: "up_bandwidth",
-          label: "当前上行带宽",
-          width: 180,
-        },
-        {
-          prop: "online_time",
-          label: "当日在线时长",
-          width: 100,
-        },
-        {
-          prop: "alarm_status_text",
-          label: "今日安全状态",
-          width: 100,
-        },
-      ],
-      rowHeader1: [
-        // 未做任何格式化处理的数据
-        {
-          prop: "time_stamp",
-          label: "时间",
-        },
-        {
-          prop: "dev_sn",
-          label: "设备SN",
-        },
-        {
-          prop: "node_id",
-          label: "节点ID",
-          width: 350,
-        },
-        {
-          prop: "cpu_tem",
-          label: "CPU温度",
-        },
-        {
-          prop: "mb_tem",
-          label: "主板温度",
-          width: 200,
-        },
-        {
-          prop: "hd_tem",
-          label: "硬盘温度",
-        },
-        {
-          prop: "mem_ratio",
-          label: "内存占用",
-        },
-      ],
       valuestate: "-1",
+      snNum: "",
       optionstate: [
         {
           value: 0,
-          label: "离线",
+          label: "已关闭",
         },
         {
           value: 1,
-          label: "在线",
+          label: "运行中",
+        },
+        {
+          value: 1000,
+          label: "重启中",
+        },
+        {
+          value: 1,
+          label: "关机中",
         },
       ],
       tableDataActive: [],
       tableData: [],
       dev_sn: "",
-      tableOption: {
-        label: "操作",
-        width: 80,
-        options: [
-          {
-            label: "查看详情",
-            type: "primary",
-            methods: "editOnchange",
-          },
-        ],
-      },
+
       pager: {
         count: 0,
-        page: 0,
+        page: 1,
         rows: 10,
       },
       pager1: {
@@ -306,32 +232,7 @@ export default {
       dataNum: "8888",
       clomnSelection: false,
       push_key: "",
-      options: [
-        {
-          value: "-1",
-          label: "全部",
-        },
-        {
-          value: "1",
-          label: "CPU温度报警",
-        },
-        // {
-        //   value: "2",
-        //   label: "主板报警温度"
-        // },
-        {
-          value: "3",
-          label: "硬盘温度报警",
-        },
-        {
-          value: "4",
-          label: "磁盘剩余容量比例报警",
-        },
-        {
-          value: "5",
-          label: "内存比例报警",
-        },
-      ],
+
       value: "",
       query_type: 0,
       details_table: {
@@ -353,6 +254,57 @@ export default {
       optiondisplay: false,
     };
   },
+  filters: {
+    formatStatus(data) {
+      if (data == 1) {
+        return "在线";
+      } else if (data == 0) {
+        return "离线";
+      } else if (data == 1000) {
+        return "重启中";
+      } else if (data == 1001) {
+        return "关机中";
+      }
+    },
+    formatCpu(data) {
+      if (data == 0) {
+        return 0;
+      } else {
+        return (data / 100).toFixed(2) + "%";
+      }
+    },
+    formatBytes(data) {
+      let _this = this;
+      if (data == 0) {
+        return 0;
+      } else {
+        return common.formatByteActive(data);
+      }
+    },
+    formatName(data) {
+      if (data == 0) {
+        return "预置进程";
+      } else {
+        return "未知进程";
+      }
+    },
+    formatMd5(data) {
+      if (data == 1) {
+        return "正常";
+      } else if (data == 2) {
+        return "非法改变";
+      } else if (data == 3) {
+        return "未知进程";
+      }
+    },
+    formatStatus(data) {
+      if (data !== -1) {
+        return "运行中";
+      } else {
+        return "关闭";
+      }
+    },
+  },
   mounted: function() {
     this.push_key = this.$route.query.push_key;
     this.dataNum = this.tableData.length;
@@ -371,48 +323,47 @@ export default {
       this.queryInfo();
   },
   methods: {
+    onclickprocess(data) {
+      console.log(data);
+      let param = new Object();
+      (param.login_token = "8vAmfX19fX1NeaggfX19fQ=="),
+        (param.dev_sn = this.snNum),
+        (param.ctrl_type = 5),
+        (param.pid = data.row.pid_name),
+        (param.pname = data.row.pid_name);
+      param.extra_info = {
+        ctrl_type: 5,
+      };
+      ctrl_node_state(param)
+        .then(res => {
+          if (res.status == 0) {
+            this.$message({
+              message: "关闭进程成功",
+              type: "success",
+            });
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     //获取页码
 
     //获取每页数量
-    handleSizeChange1(pagetol) {
-      // this.pagesize = pagetol;
-      // this.queryDevInfo();
-    },
-    onClose() {
-      this.monitorDetails = false;
-      
-    },
-    onChange(item) {
-      this.form.alarm_type = item;
+    handleCurrentChange1(pagetol) {
+      this.pager.page = pagetol;
       this.queryInfo();
     },
-    onChangeActive(item) {
-      this.alarm_status = item;
-      this.pagerActive.page = 1;
-      this.queryDevInfo();
-    },
-    handleButton(val) {
-      // this.tolpage = 1;
-
-      this.$forceUpdate(); //强制刷新组件
-      this.alarm_status = val.row.alarm_status;
-      this.monitorDetails = true;
-      this.currentPage = 1;
-      this.dev_sn = val.row.dev_sn;
-      var nowTime = new Date(val.row.time_stamp);
+    handleCurrentChange2(pagetol) {
+      this.pager1.page = pagetol.val;
       let param = new Object();
-      param.time_stamp = nowTime.getTime() / 1000 + 24 * 3600 - 1;
-      // alert(nowTime.getTime()/1000)
-      //  alert(nowTime.getTime()/1000+24*3600-1)
-      this.start_time_active = Math.round(nowTime.getTime() / 1000);
-      this.end_time_active = Math.round(
-        nowTime.getTime() / 1000 + 24 * 3600 - 1
-      );
-      // this.start_time_active=Math.round(nowTime.getTime()/1000)
-      param.dev_sn = val.row.dev_sn;
+      param.page = this.pager1.page - 1;
 
-      query_node_info(param)
+      param.dev_sn = this.snNum;
+
+      query_dev_pid_detail_list(param)
         .then(res => {
+          console.log(res);
           if (res.status == 0 && res.err_code != 0) {
             let errorId = res.err_code;
             this.$message({
@@ -421,78 +372,55 @@ export default {
             });
             this.details_table = {};
           } else {
-            this.details_table.dev_sn = val.row.dev_sn;
-            this.details_table.node_id = val.row.node_id;
-            this.details_table.online_status = val.row.online_status;
-            this.details_table.up_bandwidth = val.row.up_bandwidth;
-            this.details_table.down_bandwidth = val.row.down_bandwidth;
-            this.details_table.online_time = val.row.online_time;
-            this.details_table.total_cap = val.row.total_cap;
-            this.details_table.mem_ratio = res.data.mem_ratio / 100 + "%";
-            // this.details_table.total_cap = res.data.total_cap / 100 + "%";
-            this.details_table.cpu_tem = res.data.cpu_tem / 100 + "℃";
-            this.details_table.mb_tem = res.data.mb_tem / 100 + "℃";
-            this.details_table.hd_tmp = res.data.hd_tmp / 100 + "℃";
+            this.tableDataActive = [];
+            this.tableDataActive = res.data.detail_pid_list;
+            this.pagerActive.count = res.data.total_num;
           }
-          this.queryDevInfo();
+          // this.queryDevInfo();
         })
         .catch(err => {});
     },
-    //查看详情查看单个设备
-    queryDevInfo() {
-      let paramActive = new Object();
-      paramActive.node_id = "";
-      paramActive.start_time = this.start_time_active;
-      paramActive.end_time = this.end_time_active;
-      paramActive.query_type = 1;
-      paramActive.dev_sn = this.dev_sn;
-
-      if (this.value) {
-        paramActive.alarm_type = this.value;
-      } else {
-        paramActive.alarm_type = "-1";
-      }
-
-      paramActive.page = this.pagerActive.page - 1;
-      query_detail_info_list(paramActive)
+    onClose() {
+      this.monitorDetails = false;
+    },
+    onChange(item) {
+      this.pager.page = 1;
+      this.valuestate = item;
+      this.queryInfo();
+    },
+    onChangeActive(item) {
+      this.alarm_status = item;
+      this.pagerActive.page = 1;
+      this.queryDevInfo();
+    },
+    handleButton(val) {
+      this.monitorDetails = true;
+      this.$forceUpdate(); //强制刷新组件
+      let param = new Object();
+      param.page = this.pager1.page;
+      param.dev_sn = val.row.dev_sn;
+      this.snNum = val.row.dev_sn;
+      query_dev_pid_detail_list(param)
         .then(res => {
-          this.pagerActive.count = res.data.total_num;
-          this.total_cnt = res.data.total_num * 1;
+          console.log(res);
           if (res.status == 0 && res.err_code != 0) {
             let errorId = res.err_code;
             this.$message({
               message: `${this.common.getErrorcodeInfo(errorId)}`,
               type: "info",
             });
-            this.tableDataActive = [];
+            this.details_table = {};
           } else {
-            if (res.data.dev_detail_info_list) {
-              let nowarrLength = res.data.total_num;
-
-              this.pagerActive.count = nowarrLength;
-              let nowarractive = res.data.dev_detail_info_list;
-              for (var i = 0; i < nowarractive.length; i++) {
-                nowarractive[i].time_stamp = this.common.getTimes(
-                  parseInt(nowarractive[i].time_stamp * 1000)
-                );
-                nowarractive[i].total_cap = this.common.formatByteActive(
-                  nowarractive[i].total_cap
-                );
-                nowarractive[i].user_cap = this.common.formatByteActive(
-                  nowarractive[i].user_cap
-                );
-                nowarractive[i].cpu_tem = nowarractive[i].cpu_tem / 100;
-                nowarractive[i].mb_tem = nowarractive[i].mb_tem / 100;
-                nowarractive[i].hd_tem = nowarractive[i].hd_tem / 100;
-                nowarractive[i].mem_ratio = nowarractive[i].mem_ratio / 100;
-                nowarractive[i].cap_ratio = nowarractive[i].cap_ratio / 100;
-              }
-              this.tableDataActive = nowarractive;
-            }
+            this.tableDataActive = [];
+            this.tableDataActive = res.data.detail_pid_list;
+            this.pagerActive.count = res.data.total_num;
           }
+          // this.queryDevInfo();
         })
         .catch(err => {});
     },
+    //查看详情查看单个设备
+
     //改变起始时间
 
     onChangeStartTime(val) {
@@ -511,15 +439,15 @@ export default {
     handleSelectionChange(val) {
       this.alertNum = val.length;
     },
-    handleSizeChange(val) {},
-    handleCurrentChange(val) {
-      this.pager.page = val.val;
-      this.queryInfo();
-    },
-    handleCurrentChange1(val) {
-      this.pagerActive.page = val.val;
-      this.queryDevInfo();
-    },
+    // handleSizeChange(val) {},
+    // handleCurrentChange(val) {
+    //   this.pager.page = val.val;
+    //   this.queryInfo();
+    // },
+    // handleCurrentChange1(val) {
+    //   this.pagerActive.page = val.val;
+    //   this.queryDevInfo();
+    // },
     getInfoActive() {
       if (this.end_time - this.start_time_active < 0) {
         this.$message({
@@ -545,49 +473,26 @@ export default {
       }
       this.queryInfo();
     },
+    //回车键搜索
+    onSubmitKey() {
+      this.pager.page = 1;
+      this.queryInfo();
+    },
     //重置
     setInfo() {
-      this.form.dev_sn = "";
+      this.dev_sn_active = "";
       this.valuestate = "-1";
       this.queryInfo();
     },
     //查询发布版本历史信息
     queryInfo() {
       let param = new Object();
-      //只能输入由数字和26个英文字母组成的字符串
-      let nounied = /^[A-Za-z0-9]+$/;
-      //匹配节点ID
-      let das = /^Ci/;
-      if (nounied.test(this.form.dev_sn) == true) {
-        if (das.test(this.form.dev_sn) == true) {
-          param.node_id = this.form.dev_sn;
-          param.dev_sn = "";
-        } else {
-          param.dev_sn = this.form.dev_sn;
-          param.node_id = "";
-        }
-      } else if (this.form.dev_sn == "") {
-        param.dev_sn = "";
-        param.node_id = "";
-      } else {
-        this.$message.error("搜索条件超出搜索范围");
-        return false;
-      }
-      param.end_time = this.end_time;
-      param.start_time = this.start_time;
-      param.query_type = this.query_type;
-      param.alarm_type = "0";
-      param.page = this.pager.page - 1;
-      param.online_status = this.valuestate;
-      if (
-        param.dev_sn != "" ||
-        param.node_id != "" ||
-        param.online_status != -1
-      ) {
-        param.query_type = 1;
-      }
-      query_general_info_list(param)
+      (param.dev_sn = this.dev_sn_active),
+        (param.online_status = parseInt(this.valuestate)),
+        (param.page = this.pager.page - 1);
+      query_dev_pid_general_list(param)
         .then(res => {
+          console.log(res);
           if (res.status == 0 && res.err_code != 0) {
             let errorId = res.err_code;
             this.$message({
@@ -596,58 +501,11 @@ export default {
             });
             this.tableData = [];
           } else {
-            if (res.data.dev_detail_info_list) {
-              let nowarractive = res.data.dev_detail_info_list;
+            if (res.data.general_pid_list) {
+              let nowarractive = res.data.general_pid_list;
               let nowarrLength = res.data.total_num;
               this.pager.count = nowarrLength;
               this.dataNum = nowarrLength;
-              for (var i = 0; i < nowarractive.length; i++) {
-                nowarractive[i].time_stamp = this.common.getTimeDay(
-                  parseInt(nowarractive[i].time_stamp * 1000)
-                );
-                switch (nowarractive[i].online_status) {
-                  case 1:
-                    nowarractive[i].online_status = "在线";
-                    break;
-                  case 0:
-                    nowarractive[i].online_status = "离线";
-                    break;
-                }
-                let nowstr = nowarractive[i].alarm_status;
-                let nowArr = nowstr.split(",");
-                let tempStr = "";
-                for (var j = 0; j < nowArr.length; j++) {
-                  if (nowArr[j] == 1) {
-                    tempStr += "CPU过热,";
-                  } else if (nowArr[j] == 2) {
-                    tempStr += "主板过热,";
-                  } else if (nowArr[j] == 3) {
-                    tempStr += "硬盘过热,";
-                  } else if (nowArr[j] == 4) {
-                    tempStr += "硬盘容量不足,";
-                  } else if (nowArr[j] == 5) {
-                    tempStr += "内存不足";
-                  } else if (nowArr[j] == 9) {
-                    tempStr += "宕机";
-                  } else if (nowArr[j] == 0) {
-                    tempStr += "正常";
-                  }
-                }
-                nowarractive[i].alarm_status_text = tempStr;
-                nowarractive[i].alarm_status = nowarractive[i].alarm_status;
-                nowarractive[i].online_time =
-                  (nowarractive[i].online_time / 3600).toFixed(2) + "h";
-                nowarractive[i].total_cap =
-                  this.common.formatByteActive(nowarractive[i].use_cap) +
-                  "/" +
-                  this.common.formatByteActive(nowarractive[i].total_cap);
-                nowarractive[i].up_bandwidth = this.common.formatByteActive(
-                  nowarractive[i].up_bandwidth
-                );
-                nowarractive[i].down_bandwidth = this.common.formatByteActive(
-                  nowarractive[i].down_bandwidth
-                );
-              }
               this.tableData = nowarractive;
             } else {
               this.tableData = [];
@@ -684,7 +542,7 @@ export default {
 
 <style lang="less">
 .newsd {
-  min-width: 1755px;
+  // min-width: 1755px;
 }
 .myself-container {
   width: 100%;
@@ -765,6 +623,7 @@ export default {
     height: auto;
     overflow: hidden;
     margin-top: 20px;
+    padding-bottom: 20px;
 
     .devide_pageNation_active {
       float: right;
@@ -777,7 +636,7 @@ export default {
     }
 
     .el-dialog {
-      width: 80%;
+      width: 70%;
     }
 
     .monitor-con {

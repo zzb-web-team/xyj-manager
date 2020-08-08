@@ -286,6 +286,13 @@ export default {
         packet_url: this.uploadForm.url,
         packet_description: this.uploadinput,
       };
+      if(this.uploadinput==""){
+         this.$message({
+              message: "发布描述不能为空",
+              type: "error",
+            });
+            return false
+      }
       savePacket(param)
         .then(res => {
           if (res.status == 0) {

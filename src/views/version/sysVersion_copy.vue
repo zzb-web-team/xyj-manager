@@ -335,16 +335,7 @@ export default {
           prop: "time_create",
           label: "发布时间",
         },
-        // {
-        //     prop: "atonceactive",
-        //     label: "时间发布方式",
-
-        // },
-
-        // {
-        //     prop: "time_create",
-        //     label: "发布时间"
-        // },
+      
         {
           prop: "timingActive",
           label: "修改时间",
@@ -352,36 +343,8 @@ export default {
       ],
       tableData2: [],
       tableData3: [],
-      tableData: [
-        {
-          version: "测试数据1",
-          channel: "测试数据1",
-          desc: "测试数据1",
-        },
-        {
-          version: "测试数据2",
-          channel: "测试数据2",
-          desc: "测试数据2",
-        },
-      ],
-      tableData1: [
-        {
-          version: "测试数据11",
-          channel: "测试数据11",
-          desc: "测试数据11",
-          version1: "测试数据11",
-          channel1: "测试数据11",
-          desc1: "测试数据11",
-        },
-        {
-          version: "测试数据22",
-          channel: "测试数据23",
-          desc: "测试数据22",
-          version1: "测试数据22",
-          channel1: "测试数据23",
-          desc1: "测试数据22",
-        },
-      ],
+      tableData: [ ],
+      tableData1: [],
       tableOption: {
         label: "操作",
         options: [
@@ -519,22 +482,22 @@ export default {
             this.queryPublishlistRom();
             this.queryversionlistRom();
           }
-          // if (res.status == 0 && res.result.length == 0) {
-          //   this.dialogVisible2 = false;
-          //   this.$message({
-          //     message: "当前已经是最低版本",
-          //     type: "warning",
-          //   });
-          //   this.common.monitoringLogs(
-          //     "撤回",
-          //     "撤回ROM系统包",
-          //     1,
-          //     this.oldversion,
-          //     this.form1.backversion
-          //   );
-          //   this.queryPublishlistRom();
-          //   this.queryversionlistRom();
-          // } 
+         else if (res.status == 1) {
+            this.dialogVisible2 = false;
+            this.$message({
+              message: "当前已经是最低版本,不可以再撤回",
+              type: "warning",
+            });
+            this.common.monitoringLogs(
+              "撤回",
+              "撤回ROM系统包",
+              1,
+              this.oldversion,
+              this.form1.backversion
+            );
+            this.queryPublishlistRom();
+            this.queryversionlistRom();
+          } 
           else {
             this.$message({
               message: `${res.msg}`,
@@ -561,6 +524,7 @@ export default {
     },
     //Tab选择改变
     onchangeTabs(val) {
+      this.form.versions=""
       this.pager.page = 1;
       if (val == "RK33XX") {
         this.dev_type = 0;
@@ -719,7 +683,8 @@ export default {
           return false;
         }
       }
-      if (this.form.user == "正式发布") {
+      console.log(this.form.type)
+      if (this.form.type == "正式发布") {
         user_list = [];
       } else {
         user_list = this.form.version.split(",");
@@ -761,8 +726,8 @@ export default {
           return false;
         }
       }
-    
-      for(var i=0;i<user_list.length;i++){
+      if(user_list.length>0){
+           for(var i=0;i<user_list.length;i++){
         let nowstr=""
         if(user_list[i].substring(3,4)=="X"){
           nowstr=4 
@@ -777,6 +742,8 @@ export default {
           return false;
         }
       }
+      }
+     
       let param = {
         rom_version: this.form.versions,
         push_type: this.form.type,
@@ -981,9 +948,17 @@ export default {
       this.oldversion = rows.rom_version;
       if (rows.dev_type == 0) {
         this.form1.pushTabActive = "RK3328";
-      } else {
+      } else if(rows.dev_type == 1) {
         this.form1.pushTabActive = "AMS805";
+      }else if(rows.dev_type == 2) {
+        this.form1.pushTabActive = "AMS905M4C";
+      }else if(rows.dev_type == 3) {
+        this.form1.pushTabActive = "AMS905M4";
+      }else if(rows.dev_type == 4) {
+        this.form1.pushTabActive = "PCGRAPE";
       }
+
+    
       this.form1.pushTypeActive = rows.push_type;
       this.form1.pushModActive = rows.push_mod;
       this.form1.romVersionActive = rows.rom_version;
@@ -1048,9 +1023,16 @@ export default {
       this.dialogVisible2 = true;
       if (rows.dev_type == 0) {
         this.form1.pushTabActive = "RK3328";
-      } else {
-        this.form1.pushTabActive = "AMS805";
+      } else if(rows.dev_type == 1) {
+        this.form1.pushTabActive = "AMS805W";
+      } else if(rows.dev_type == 2) {
+        this.form1.pushTabActive = "AMS905M4C";
+      } else if(rows.dev_type == 3) {
+        this.form1.pushTabActive = "AMS905M4";
+      } else if(rows.dev_type == 4) {
+        this.form1.pushTabActive = "PCGRAPE";
       }
+
       this.form1.pushTypeActive = rows.push_type;
       this.form1.pushModActive = rows.push_mod;
       this.form1.romVersionActive = rows.rom_version;
@@ -1113,9 +1095,8 @@ export default {
     add() {
       this.dialogVisible = true;
       this.form.desc = "";
-      this.form.version = "";
+      this.form.versions = "";
       this.form.type = "";
-      this.form.version = "";
       this.querygetversion();
     },
     changeTime(value) {

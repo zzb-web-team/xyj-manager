@@ -45,11 +45,12 @@ import PushSetting from './views/push/push_setting.vue'
 import PushRecord from './views/push/push_record.vue'
 import DeviceAnalysis from './views/analysis/deviceAnalysis.vue'
 import Analysismiddle from './views/analysis/middle.vue'
-import Analysismiddle1 from './views/analysis/middle1.vue'
+import deviceflow from './views/analysis/deviceflow.vue'
 import deviceterminal from './views/analysis/deviceterminal.vue'
 
 import RegionAnalysis from './views/analysis/regionAnalysis.vue'
 import UserAnalysis from './views/analysis/userAnalysis.vue'
+// import deviceflow from './views/analysis/userAnalysis.vue'
 import VersionAnalysis from './views/analysis/versionAnalysis.vue'
 import AppVersion from './views/version/appVersion.vue'
 import SysVersion1 from './views/version/sysVersion_copy.vue'
@@ -132,6 +133,7 @@ if (user) {
             'Analysismiddle': Analysismiddle,
             'Analysismiddle1': Analysismiddle,
             'deviceterminal': deviceterminal,
+            'deviceflow':deviceflow,
             'RegionAnalysis': RegionAnalysis,
             'UserAnalysis': UserAnalysis,
             'VersionAnalysis': VersionAnalysis,
@@ -313,124 +315,124 @@ if (user) {
                 titleActive: "应用",
                 icon: 'iconfont icon-APPkaifa',
                 children: [
-                    {
-                        path: "/miningmiddle",
-                        name: "挖矿节点",
-                        component: 'miningmiddle',
-                        icon: 'iconfont icon-wakuang',
-                        children: [{
-                                path: "/miningindex",
-                                name: "节点等级",
-                                component: 'miningindex',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
-                            {
-                                path: "/contributionindex",
-                                name: "贡献值明细",
-                                component: 'contributionindex',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
-                            {
-                                path: "/powerindex",
-                                name: "贡献值管理",
-                                component: 'powerindex',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
+                    // {
+                    //     path: "/miningmiddle",
+                    //     name: "挖矿节点",
+                    //     component: 'miningmiddle',
+                    //     icon: 'iconfont icon-wakuang',
+                    //     children: [{
+                    //             path: "/miningindex",
+                    //             name: "节点等级",
+                    //             component: 'miningindex',
+                    //             icon: 'iconfont icon-dian',
+                    //             meta: {
+                    //                 requireAuth: true
+                    //             }
+                    //         },
+                    //         {
+                    //             path: "/contributionindex",
+                    //             name: "贡献值明细",
+                    //             component: 'contributionindex',
+                    //             icon: 'iconfont icon-dian',
+                    //             meta: {
+                    //                 requireAuth: true
+                    //             }
+                    //         },
+                    //         {
+                    //             path: "/powerindex",
+                    //             name: "贡献值管理",
+                    //             component: 'powerindex',
+                    //             icon: 'iconfont icon-dian',
+                    //             meta: {
+                    //                 requireAuth: true
+                    //             }
+                    //         },
 
 
-                        ],
-                        meta: {
-                            requireAuth: true
-                        }
-                    },
-                    {
-                        path: "/devicepower",
-                        name: "设备算力",
-                        component: 'devicepower',
-                        icon: 'iconfont icon-shebei',
-                        children: [{
-                                path: "/powerinfo",
-                                name: "算力信息",
-                                component: 'powerinfo',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
-                            {
-                                path: "/powerdetails",
-                                name: "算力值明细",
-                                component: 'powerdetails',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
-                            {
-                                path: "/powermanagement",
-                                name: "算力值管理",
-                                component: 'powermanagement',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
+                    //     ],
+                    //     meta: {
+                    //         requireAuth: true
+                    //     }
+                    // },
+                    // {
+                    //     path: "/devicepower",
+                    //     name: "设备算力",
+                    //     component: 'devicepower',
+                    //     icon: 'iconfont icon-shebei',
+                    //     children: [{
+                    //             path: "/powerinfo",
+                    //             name: "算力信息",
+                    //             component: 'powerinfo',
+                    //             icon: 'iconfont icon-dian',
+                    //             meta: {
+                    //                 requireAuth: true
+                    //             }
+                    //         },
+                    //         {
+                    //             path: "/powerdetails",
+                    //             name: "算力值明细",
+                    //             component: 'powerdetails',
+                    //             icon: 'iconfont icon-dian',
+                    //             meta: {
+                    //                 requireAuth: true
+                    //             }
+                    //         },
+                    //         {
+                    //             path: "/powermanagement",
+                    //             name: "算力值管理",
+                    //             component: 'powermanagement',
+                    //             icon: 'iconfont icon-dian',
+                    //             meta: {
+                    //                 requireAuth: true
+                    //             }
+                    //         },
 
-                        ],
-                        meta: {
-                            requireAuth: true
-                        }
-                    },
-                    {
-                        path: "/pointsmiddle",
-                        name: "积分",
-                        component: 'pointsmiddle',
-                        icon: 'iconfont icon-jifenguanli',
-                        children: [{
-                                path: "/pointsDetails",
-                                name: "积分明细",
-                                component: 'pointsDetails',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
-                            {
-                                path: "/income",
-                                name: "收益明细",
-                                component: 'income',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
+                    //     ],
+                    //     meta: {
+                    //         requireAuth: true
+                    //     }
+                    // },
+                    // {
+                    //     path: "/pointsmiddle",
+                    //     name: "积分",
+                    //     component: 'pointsmiddle',
+                    //     icon: 'iconfont icon-jifenguanli',
+                    //     children: [{
+                    //             path: "/pointsDetails",
+                    //             name: "积分明细",
+                    //             component: 'pointsDetails',
+                    //             icon: 'iconfont icon-dian',
+                    //             meta: {
+                    //                 requireAuth: true
+                    //             }
+                    //         },
+                    //         {
+                    //             path: "/income",
+                    //             name: "收益明细",
+                    //             component: 'income',
+                    //             icon: 'iconfont icon-dian',
+                    //             meta: {
+                    //                 requireAuth: true
+                    //             }
 
-                            },
-                            {
-                                path: "/setparam",
-                                name: "调整收益参数",
-                                component: 'setparam',
-                                icon: 'iconfont icon-dian',
-                                hidden: true,
-                                meta: {
-                                    requireAuth: true
-                                }
+                    //         },
+                    //         {
+                    //             path: "/setparam",
+                    //             name: "调整收益参数",
+                    //             component: 'setparam',
+                    //             icon: 'iconfont icon-dian',
+                    //             hidden: true,
+                    //             meta: {
+                    //                 requireAuth: true
+                    //             }
 
-                            },
+                    //         },
 
-                        ],
-                        meta: {
-                            requireAuth: true
-                        }
-                    },
+                    //     ],
+                    //     meta: {
+                    //         requireAuth: true
+                    //     }
+                    // },
                     {
                         path: "/helpmiddle",
                         name: "帮助中心",
@@ -695,7 +697,17 @@ if (user) {
                         name: "西柚机设备",
                         component: 'Analysismiddle1',
                         icon: 'iconfont icon-shebei',
-                        children: [{
+                        children: [
+                            {
+                                path: "/deviceflow",
+                                name: "设备流量分析",
+                                component: 'deviceflow',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                            {
                                 path: "/DeviceAnalysis",
                                 name: "设备在线分析",
                                 component: 'DeviceAnalysis',

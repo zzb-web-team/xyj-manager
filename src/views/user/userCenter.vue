@@ -187,6 +187,18 @@ export default {
           prop: "sex",
           label: "性别"
         },
+            {
+          prop: "sex",
+          label: "累计西柚机收益（gfm）"
+        },
+             {
+          prop: "sex",
+          label: "累计节点收益（gfm）"
+        },
+             {
+          prop: "sex",
+          label: "节点数"
+        },
         {
           prop: "sum_profit",
           label: "总积分",

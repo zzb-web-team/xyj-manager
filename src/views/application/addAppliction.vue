@@ -69,13 +69,13 @@
             <div class="dialog_item">
                 <div class="dialog_item_l" style="display:block;word-break:keep-all;white-space:nowrap;">应用名称：</div>
                 <div class="dialog_item_r">
-                    <el-input v-model="newFrom.app_version" placeholder="请输入内容" :disabled="true" style="width:90%;"></el-input>
+                    <el-input v-model="newFrom.app_name" placeholder="请输入内容" :disabled="true" style="width:90%;"></el-input>
                 </div>
             </div>
             <div class="dialog_item">
                 <div class="dialog_item_l" style="display:block;word-break:keep-all;white-space:nowrap;">应用版本：</div>
                 <div class="dialog_item_r">
-                    <el-input v-model="newFrom.app_name" placeholder="请输入内容" :disabled="true" style="width:90%;">></el-input>
+                    <el-input v-model="newFrom.app_version" placeholder="请输入内容" :disabled="true" style="width:90%;">></el-input>
                 </div>
             </div>
             <div class="dialog_item dialog_div_desc">
@@ -592,6 +592,9 @@ export default {
         this.$refs.test.value=""
       document.getElementById("result").innerText=""
       this.uploadinput=""
+    this.newFrom.app_name=""
+    this.newFrom.app_version=""
+    this.newFrom.app_info=""
       }
       this.dialogFormState = true;
            this.perNum=0

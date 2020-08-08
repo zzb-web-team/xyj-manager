@@ -32,12 +32,12 @@
 
         <el-button plain @click="setInfo()">重置</el-button>
       </div>
-      <div class="devide_table">
+      <div class="devide_table" style="width: 100%;">
         <el-row type="flex" class="row_active">
           <el-col :span="24">
-            <el-table :data="tableData" style="width: 100%" :cell-style="rowClass" :header-cell-style="headClass">
+            <el-table :data="tableData" style="width: 100%;" :cell-style="rowClass" :header-cell-style="headClass">
               <!-- <el-table-column
-                prop="time_stamp"
+                prop="time_stamp"      
                 label="时间"
                 width="180"
               ></el-table-column> -->
@@ -66,7 +66,7 @@
               </el-table-column>
               <el-table-column prop="online_time" label="当日在线时长"></el-table-column>
 
-              <el-table-column label="状态">
+              <el-table-column label="操作">
                 <template slot-scope="scope">
                   <el-button @click="handleButton(scope)" type="text" size="small">查看详情</el-button>
                 </template>
@@ -74,9 +74,7 @@
             </el-table>
           </el-col>
         </el-row>
-        <el-row type="flex" class="row_active">
-          <el-col :span="24"> </el-col>
-        </el-row>
+
       </div>
       <div class="devide_pageNation">
         <div class="devide_pageNation_active">
@@ -316,6 +314,14 @@ export default {
           value: 1,
           label: "在线",
         },
+        {
+          value: 1000,
+          label: "重启中",
+        },
+        {
+          value: 1001,
+          label: "关机中",
+        },
       ],
       tableDataActive: [],
       tableData: [],
@@ -437,7 +443,6 @@ export default {
     },
     onClose() {
       this.monitorDetails = false;
-      
     },
     onChange(item) {
       this.form.alarm_type = item;
@@ -669,6 +674,12 @@ export default {
                   case 0:
                     nowarractive[i].online_status = "离线";
                     break;
+                  case 1000:
+                    nowarractive[i].online_status = "重启中";
+                    break;
+                  case 1001:
+                    nowarractive[i].online_status = "关机中";
+                    break;
                 }
                 let nowstr = nowarractive[i].alarm_status;
                 let nowArr = nowstr.split(",");
@@ -741,7 +752,7 @@ export default {
 
 <style lang="less">
 .newsd {
-  min-width: 1755px;
+  // min-width: 1755px;
 }
 .myself-container {
   width: 100%;
@@ -834,7 +845,7 @@ export default {
     }
 
     .el-dialog {
-      width: 80%;
+      width: 70%;
     }
 
     .monitor-con {
