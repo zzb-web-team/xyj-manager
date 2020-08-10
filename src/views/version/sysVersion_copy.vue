@@ -543,7 +543,7 @@ export default {
         this.queryPublishlistRom();
         this.queryversionlistRom();
       } else if (val == "PCGRAPE") {
-        this.dev_type = 4;
+        this.dev_type = 88;
         this.queryPublishlistRom();
         this.queryversionlistRom();
       }
@@ -729,8 +729,8 @@ export default {
       if(user_list.length>0){
            for(var i=0;i<user_list.length;i++){
         let nowstr=""
-        if(user_list[i].substring(3,4)=="X"){
-          nowstr=4 
+        if(user_list[i].substring(3,5)=="X"){
+          nowstr=88 
         }else{
           nowstr=user_list[i].substring(3,4)
         }
@@ -954,7 +954,7 @@ export default {
         this.form1.pushTabActive = "AMS905M4C";
       }else if(rows.dev_type == 3) {
         this.form1.pushTabActive = "AMS905M4";
-      }else if(rows.dev_type == 4) {
+      }else if(rows.dev_type == 88) {
         this.form1.pushTabActive = "PCGRAPE";
       }
 
@@ -1029,7 +1029,7 @@ export default {
         this.form1.pushTabActive = "AMS905M4C";
       } else if(rows.dev_type == 3) {
         this.form1.pushTabActive = "AMS905M4";
-      } else if(rows.dev_type == 4) {
+      } else if(rows.dev_type == 88) {
         this.form1.pushTabActive = "PCGRAPE";
       }
 
@@ -1202,9 +1202,9 @@ export default {
   padding: 8px 20px;
 }
 
-.upload-demo {
-  // height: 400px;
-}
+// .upload-demo {
+//   // height: 400px;
+// }
 
 .version_active {
   .el-form-item {
