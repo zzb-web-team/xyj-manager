@@ -600,12 +600,12 @@ if (user) {
                     },
                     {
                         path: "/SysManageMiddleActive",
-                        name: "设备系统版本管理",
+                        name: "设备ROM版本",
                         component: 'SysManageMiddleActive',
                         icon: 'iconfont icon-ziyuanguanli',
                         children: [{
                                 path: "/SysVersion1",
-                                name: "设备系统版本管理",
+                                name: "设备ROM版本",
                                 component: 'SysVersion1',
                                 icon: 'iconfont icon-dian',
                                 meta: {
@@ -614,7 +614,7 @@ if (user) {
                             },
                             {
                                 path: "/SysManage",
-                                name: "系统包管理",
+                                name: "ROM包管理",
                                 component: 'SysManage',
                                 icon: 'iconfont icon-dian',
                                 meta: {

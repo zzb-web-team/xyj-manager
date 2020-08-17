@@ -12,7 +12,7 @@
         <el-form ref="form" :model="form">
           <el-row type="flex" class="row_active row_active_monitor">
             <div>
-              <el-input v-model="form.dev_sn" placeholder="请输入设备SN,节点ID"></el-input>
+              <el-input v-model="form.dev_sn" placeholder="请输入设备SN,节点ID" @keyup.enter.native="onSumitKey"></el-input>
             </div>
             <div class="seach_top_right" @click="option_display()">
               筛选
@@ -35,26 +35,19 @@
       <div class="devide_table" style="width: 100%;">
         <el-row type="flex" class="row_active">
           <el-col :span="24">
-            <el-table :data="tableData" style="width: 100%;" :cell-style="rowClass" :header-cell-style="headClass">
-              <!-- <el-table-column
-                prop="time_stamp"      
-                label="时间"
-                width="180"
-              ></el-table-column> -->
+            <el-table :data="tableData" style="width: 100%;" :cell-style="rowClass" :header-cell-style="headClass" @sort-change="tableSortChange">
               <el-table-column prop="dev_sn" label="设备SN"></el-table-column>
               <el-table-column prop="node_id" label="节点ID"></el-table-column>
               <el-table-column prop="online_status" label="设备状态">
               </el-table-column>
-              <el-table-column prop="ipfsc" label="ipfs节点存储">
+              <el-table-column  label="ipfs节点存储">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.ipfsc">{{ scope.row.ipfsc }}</span>
-                  <span v-else>--</span>
+                  <span>{{ common.formatByteActive(scope.row.ipfs_cap)  }}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="xiyouc" label="西柚机应用存储">
+              <el-table-column  label="西柚机应用存储">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.xiyouc">{{ scope.row.xiyouc }}</span>
-                  <span v-else>--</span>
+                  <span>{{ common.formatByteActive(scope.row.third_cap) }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="total_cap" label="当前使用空间/总空间"></el-table-column>
@@ -64,7 +57,7 @@
                   </span>
                 </template>
               </el-table-column>
-              <el-table-column prop="online_time" label="当日在线时长"></el-table-column>
+              <el-table-column prop="online_time" label="当日在线时长" :sortable="'custom'" ></el-table-column>
 
               <el-table-column label="操作">
                 <template slot-scope="scope">
@@ -80,7 +73,7 @@
         <div class="devide_pageNation_active">
           <el-row type="flex">
             <el-col :span="6">
-              <pageNation :pager="pager" @handleSizeChange="handleSizeChange1" @handleCurrentChange="handleCurrentChange1"></pageNation>
+              <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
             </el-col>
           </el-row>
         </div>
@@ -162,10 +155,10 @@
               </el-table-column>
               <el-table-column prop="upstream_bandwidth" label="当前上行/下行宽带">
                 <template slot-scope="scope">
-                  <span v-if="!scope.row.up_bw">--</span>
-                  <span>{{ scope.row.up_bw }}</span>/
-                  <span v-if="!scope.row.down_bw">--</span>
-                  <span>{{ scope.row.down_bw }}</span>
+                  <span v-if="!scope.row.up_bandwidth">--</span>
+                  <span>{{ common.formatByteActive(scope.row.up_bandwidth) }}</span>/
+                  <span v-if="!scope.row.down_bandwidth">--</span>
+                  <span>{{common.formatByteActive(scope.row.down_bandwidth)  }}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="cpu_tem" label="CPU温度">
@@ -378,10 +371,10 @@ export default {
           value: "1",
           label: "CPU温度报警",
         },
-        // {
-        //   value: "2",
-        //   label: "主板报警温度"
-        // },
+        {
+          value: "2",
+          label: "主板温度报警"
+        },
         {
           value: "3",
           label: "硬盘温度报警",
@@ -414,6 +407,7 @@ export default {
       alarm_type: 0,
       alarm_status: "",
       optiondisplay: false,
+      order:0,
     };
   },
   mounted: function() {
@@ -434,6 +428,23 @@ export default {
       this.queryInfo();
   },
   methods: {
+
+     //排序
+    tableSortChange(column) {
+      console.log(column);
+
+     this.pager.page = 1;
+      if (column.order == "descending") {
+        this.order = 0;
+      } else {
+        this.order = 1;
+      }
+      this.queryInfo();
+    },
+    //回车键搜索
+    onSumitKey(){
+      this.queryInfo()
+    },
     //获取页码
 
     //获取每页数量
@@ -640,7 +651,8 @@ export default {
       param.query_type = this.query_type;
       param.alarm_type = "0";
       param.page = this.pager.page - 1;
-      param.online_status = this.valuestate;
+      param.order=this.order
+      param.online_status = parseInt(this.valuestate) ;
       if (
         param.dev_sn != "" ||
         param.node_id != "" ||
@@ -657,6 +669,8 @@ export default {
               type: "info",
             });
             this.tableData = [];
+             let nowarrLength = res.data.total_num;
+              this.pager.count = nowarrLength;
           } else {
             if (res.data.dev_detail_info_list) {
               let nowarractive = res.data.dev_detail_info_list;
