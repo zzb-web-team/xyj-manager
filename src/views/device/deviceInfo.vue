@@ -133,7 +133,7 @@
               <template slot-scope="scope">
                 <div style="    display: flex;justify-content: flex-start;">
                   <el-button v-if="scope.row.online_state==1 || scope.row.online_state==101" @click="shut(scope.row)" type="text" size="small">关机</el-button>
-                  <el-button type="text" @click="restart(scope.row)" size="small">重启</el-button>
+                  <el-button v-if="scope.row.online_state==1 || scope.row.online_state==101" type="text" @click="restart(scope.row)" size="small">重启</el-button>
                   <!-- <el-button v-else :disabled="true" type="text" size="small">强制解绑</el-button> -->
                   <!-- <el-button v-show="scope.row.bind_flag===0" type="text" @click="tie(scope.row)" size="small">绑定</el-button> -->
                   <el-button v-if="scope.row.bind_flag===0 || scope.row.bind_flag===102" type="text" @click="tieactive(scope.row)" size="small">绑定</el-button>

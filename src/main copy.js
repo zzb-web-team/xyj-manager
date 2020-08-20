@@ -120,11 +120,11 @@ if (user) {
             'middle': middle,
             'devicePower': devicePower,
             'deviceActivation': deviceActivation,
-            'deviceMiddle': deviceMiddle,
-            'newsd': newsd,
-            'device_etails': device_etails,
+            'deviceMiddle':deviceMiddle,
+            'newsd':newsd,
+            'device_etails':device_etails,
             'deviceupload': deviceupload,
-            'deviceProcess': deviceProcess,
+            'deviceProcess':deviceProcess,
             'income': income,
             'setparam': setparam,
             'pointsmiddle': pointsmiddle,
@@ -133,7 +133,7 @@ if (user) {
             'Analysismiddle': Analysismiddle,
             'Analysismiddle1': Analysismiddle,
             'deviceterminal': deviceterminal,
-            'deviceflow': deviceflow,
+            'deviceflow':deviceflow,
             'RegionAnalysis': RegionAnalysis,
             'UserAnalysis': UserAnalysis,
             'VersionAnalysis': VersionAnalysis,
@@ -173,16 +173,30 @@ if (user) {
             'marketrelatedindex': marketrelatedindex,
         }
         //var newRoutes = res.msg
-        var newRoutes = [
-
-            {
+        var newRoutes = [{
                 path: "/",
                 component: 'Home',
-                name: "西柚机APP管理",
+                name: "后台管理",
+                icon: 'iconfont icon-houtaiguanli',
+                titleActive: "账户",
+                children: [{
+                    path: "/",
+                    name: "后台账户管理",
+                    component: 'accountManagement',
+                    icon: 'iconfont icon-dian',
+                    meta: {
+                        requireAuth: true
+                    }
+                }]
+            },
+            {
+                path: "/a",
+                component: 'Home',
+                name: "西柚机APP用户",
                 icon: 'iconfont icon-yonghu',
                 children: [{
-                        path: "/",
-                        name: "用户信息",
+                        path: "/userCenter",
+                        name: "注册用户",
                         component: 'userCenter',
                         icon: 'iconfont icon-dian',
                         meta: {
@@ -200,69 +214,13 @@ if (user) {
                         }
                     },
 
-                    {
-                        path: "/helpmiddle",
-                        component: 'helpmiddle',
-                        name: "推送设置",
-                        icon: 'iconfont icon-dian',
-                        children: [
-
-                            {
-                                path: "/PushSetting",
-                                name: "推送设置",
-                                component: 'PushSetting',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            }, {
-                                path: "/PushRecord",
-                                name: "推送记录",
-                                component: 'PushRecord',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
-                        ]
-                    },
-                    {
-                        path: "/SysManageMiddle",
-                        name: "APP应用版本管理",
-                        component: 'SysManageMiddle',
-                        icon: 'iconfont icon-banbenguanli',
-                        children: [{
-                                path: "/AppVersion",
-                                name: "版本发布管理",
-                                component: 'AppVersion',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
-                            {
-                                path: "/AppManage",
-                                name: "应用包管理",
-                                component: 'AppManage',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
-
-                        ],
-                        meta: {
-                            requireAuth: true
-                        }
-                    },
-
-
                 ]
             },
             {
                 path: "/c1",
                 component: 'Home',
                 name: "设备管理",
+                titleActive: "设备",
                 icon: 'iconfont icon-shebeiguanli1',
                 children: [{
                         path: "/deviceInfo",
@@ -272,7 +230,17 @@ if (user) {
                         meta: {
                             requireAuth: true
                         }
-                    },    
+                    },
+                    // {
+                    //     path: "/devicePower",
+                    //     name: "设备算力",
+                    //     component: 'devicePower',
+                    //     icon: 'iconfont icon-dian',
+                    //     meta: {
+                    //         requireAuth: true
+                    //     }
+
+                    // },
                     {
                         path: "/deviceActivation",
                         name: "设备激活",
@@ -284,19 +252,10 @@ if (user) {
 
                     },
                     {
-                        path: "/RegionAnalysis",
-                        name: "地域分布",
-                        component: 'RegionAnalysis',
-                        icon: 'iconfont icon-dian',
-                        meta: {
-                            requireAuth: true
-                        }
-                    },
-                    {
                         path: "/deviceupload",
                         name: "批量导入",
                         component: 'deviceupload',
-                        icon: 'iconfont icon-dian', 
+                        icon: 'iconfont icon-dian',
                         hidden: true,
                         meta: {
                             requireAuth: true
@@ -308,7 +267,8 @@ if (user) {
                         name: "设备监控",
                         component: 'deviceMiddle',
                         icon: 'iconfont icon-dian',
-                        children: [{
+                        children: [
+                            {
                                 path: "/newsd",
                                 name: "设备监控详情",
                                 component: 'newsd',
@@ -326,7 +286,7 @@ if (user) {
                                     requireAuth: true
                                 }
                             },
-
+                            
                             {
                                 path: "/device_etails",
                                 name: "设备异常记录",
@@ -336,37 +296,8 @@ if (user) {
                                     requireAuth: true
                                 }
                             },
+                           
 
-
-
-                        ],
-                        meta: {
-                            requireAuth: true
-                        }
-                    },
-                    {
-                        path: "/SysManageMiddleActive",
-                        name: "设备ROM版本",
-                        component: 'SysManageMiddleActive',
-                        icon: 'iconfont icon-ziyuanguanli',
-                        children: [{
-                                path: "/SysVersion1",
-                                name: "设备ROM版本",
-                                component: 'SysVersion1',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
-                            {
-                                path: "/SysManage",
-                                name: "ROM包管理",
-                                component: 'SysManage',
-                                icon: 'iconfont icon-dian',
-                                meta: {
-                                    requireAuth: true
-                                }
-                            },
 
                         ],
                         meta: {
@@ -377,12 +308,171 @@ if (user) {
 
                 ]
             },
-    
+            {
+                path: "/gg",
+                component: 'Home',
+                name: "西柚机APP",
+                titleActive: "应用",
+                icon: 'iconfont icon-APPkaifa',
+                children: [
+                    // {
+                    //     path: "/miningmiddle",
+                    //     name: "挖矿节点",
+                    //     component: 'miningmiddle',
+                    //     icon: 'iconfont icon-wakuang',
+                    //     children: [{
+                    //             path: "/miningindex",
+                    //             name: "节点等级",
+                    //             component: 'miningindex',
+                    //             icon: 'iconfont icon-dian',
+                    //             meta: {
+                    //                 requireAuth: true
+                    //             }
+                    //         },
+                    //         {
+                    //             path: "/contributionindex",
+                    //             name: "贡献值明细",
+                    //             component: 'contributionindex',
+                    //             icon: 'iconfont icon-dian',
+                    //             meta: {
+                    //                 requireAuth: true
+                    //             }
+                    //         },
+                    //         {
+                    //             path: "/powerindex",
+                    //             name: "贡献值管理",
+                    //             component: 'powerindex',
+                    //             icon: 'iconfont icon-dian',
+                    //             meta: {
+                    //                 requireAuth: true
+                    //             }
+                    //         },
+
+
+                    //     ],
+                    //     meta: {
+                    //         requireAuth: true
+                    //     }
+                    // },
+                    // {
+                    //     path: "/devicepower",
+                    //     name: "设备算力",
+                    //     component: 'devicepower',
+                    //     icon: 'iconfont icon-shebei',
+                    //     children: [{
+                    //             path: "/powerinfo",
+                    //             name: "算力信息",
+                    //             component: 'powerinfo',
+                    //             icon: 'iconfont icon-dian',
+                    //             meta: {
+                    //                 requireAuth: true
+                    //             }
+                    //         },
+                    //         {
+                    //             path: "/powerdetails",
+                    //             name: "算力值明细",
+                    //             component: 'powerdetails',
+                    //             icon: 'iconfont icon-dian',
+                    //             meta: {
+                    //                 requireAuth: true
+                    //             }
+                    //         },
+                    //         {
+                    //             path: "/powermanagement",
+                    //             name: "算力值管理",
+                    //             component: 'powermanagement',
+                    //             icon: 'iconfont icon-dian',
+                    //             meta: {
+                    //                 requireAuth: true
+                    //             }
+                    //         },
+
+                    //     ],
+                    //     meta: {
+                    //         requireAuth: true
+                    //     }
+                    // },
+                    {
+                        path: "/helpmiddle",
+                        name: "帮助中心",
+                        component: 'helpmiddle',
+                        icon: 'iconfont icon-bangzhu',
+                        children: [{
+                                path: "/groupindex",
+                                name: "分组管理",
+                                component: 'groupindex',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                            {
+                                path: "/contentindex",
+                                name: "内容管理",
+                                component: 'contentindex',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+
+
+                        ],
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/pointsmiddle",
+                        name: "账户收益",
+                        component: 'pointsmiddle',
+                        icon: 'iconfont icon-jifenguanli',
+                        children: [{
+                                path: "/pointsDetails",
+                                name: "设备收益账户",
+                                component: 'pointsDetails',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                            {
+                                path: "/income",
+                                name: "账户收益",
+                                component: 'income',
+                                icon: 'iconfont icon-dian',
+                                hidden: true,
+                                meta: {
+                                    requireAuth: true
+                                }
+
+                            },
+                            {
+                                path: "/setparam",
+                                name: "调整收益参数",
+                                component: 'setparam',
+                                icon: 'iconfont icon-dian',
+                                hidden: true,
+                                meta: {
+                                    requireAuth: true
+                                }
+
+                            },
+
+                        ],
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    
+                ]
+            },
 
             {
                 path: "/g1",
                 component: 'Home',
-                name: "西柚机盒子应用",
+                name: "TV盒子应用",
+                // titleActive:"系统版本",
                 icon: 'iconfont icon-hezi',
 
                 children: [{
@@ -476,9 +566,104 @@ if (user) {
                 ]
             },
             {
+                path: "/g",
+                component: 'Home',
+                name: "版本管理",
+                titleActive: "系统版本",
+                icon: 'iconfont icon-xitong',
+                children: [{
+                        path: "/SysManageMiddle",
+                        name: "APP应用版本管理",
+                        component: 'SysManageMiddle',
+                        icon: 'iconfont icon-banbenguanli',
+                        children: [{
+                                path: "/AppVersion",
+                                name: "版本发布管理",
+                                component: 'AppVersion',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                            {
+                                path: "/AppManage",
+                                name: "应用包管理",
+                                component: 'AppManage',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+
+                        ],
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/SysManageMiddleActive",
+                        name: "设备ROM版本",
+                        component: 'SysManageMiddleActive',
+                        icon: 'iconfont icon-ziyuanguanli',
+                        children: [{
+                                path: "/SysVersion1",
+                                name: "设备ROM版本",
+                                component: 'SysVersion1',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                            {
+                                path: "/SysManage",
+                                name: "ROM包管理",
+                                component: 'SysManage',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+
+                        ],
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                ]
+            },
+
+            {
+                path: "/b",
+                component: 'Home',
+                name: "推送设置",
+                titleActive: "内容推送",
+                icon: 'iconfont icon-tuisongguanli',
+                children: [
+
+                    {
+                        path: "/PushSetting",
+                        name: "推送设置",
+                        component: 'PushSetting',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+                    }, {
+                        path: "/PushRecord",
+                        name: "推送记录",
+                        component: 'PushRecord',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                ]
+            },
+            {
                 path: "/g2",
                 component: 'Home',
                 name: "数据分析",
+                titleActive: "数据分析",
                 icon: 'iconfont icon-shuju',
                 children: [{
                         path: "/Analysismiddle",
@@ -514,7 +699,8 @@ if (user) {
                         name: "西柚机设备",
                         component: 'Analysismiddle1',
                         icon: 'iconfont icon-shebei',
-                        children: [{
+                        children: [
+                            {
                                 path: "/deviceflow",
                                 name: "设备流量分析",
                                 component: 'deviceflow',
@@ -532,7 +718,15 @@ if (user) {
                                     requireAuth: true
                                 }
                             },
-                        
+                            {
+                                path: "/RegionAnalysis",
+                                name: "地域分布",
+                                component: 'RegionAnalysis',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
                             {
                                 path: "/deviceterminal",
                                 name: "设备终端",
@@ -552,95 +746,13 @@ if (user) {
                 ]
             },
 
-
             {
-                path: "/accountManagement",
+                path: "/h",
                 component: 'Home',
-                name: "后台管理",
-                icon: 'iconfont icon-houtaiguanli',
-                children: [
-                    {
-                    path: "/accountManagement",
-                    name: "后台账户管理",
-                    component: 'accountManagement',
-                    icon: 'iconfont icon-dian',
-                    meta: {
-                        requireAuth: true
-                    }
-                },
-                {
-                    path: "/pointsmiddle",
-                    name: "奖励管理",
-                    component: 'pointsmiddle',
-                    icon: 'iconfont icon-jifenguanli',
-                    children: [{
-                            path: "/pointsDetails",
-                            name: "西柚机设备奖励",
-                            component: 'pointsDetails',
-                            icon: 'iconfont icon-dian',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-                        {
-                            path: "/income",
-                            name: "账户收益",
-                            component: 'income',
-                            icon: 'iconfont icon-dian',
-                            hidden: true,
-                            meta: {
-                                requireAuth: true
-                            }
-
-                        },
-                        {
-                            path: "/setparam",
-                            name: "调整收益参数",
-                            component: 'setparam',
-                            icon: 'iconfont icon-dian',
-                            hidden: true,
-                            meta: {
-                                requireAuth: true
-                            }
-
-                        },
-
-                    ],
-                    meta: {
-                        requireAuth: true
-                    }
-                },
-                {
-                    path: "/helpmiddle",
-                    name: "帮助中心",
-                    component: 'helpmiddle',
-                    icon: 'iconfont icon-bangzhu',
-                    children: [{
-                            path: "/groupindex",
-                            name: "分组管理",
-                            component: 'groupindex',
-                            icon: 'iconfont icon-dian',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-                        {
-                            path: "/contentindex",
-                            name: "内容管理",
-                            component: 'contentindex',
-                            icon: 'iconfont icon-dian',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-
-
-                    ],
-                    meta: {
-                        requireAuth: true
-                    }
-                },
-                {
+                name: "操作管理",
+                titleActive: "后台操作",
+                icon: 'iconfont icon-rizhi',
+                children: [{
                     path: "/Log",
                     name: "操作日志",
                     component: 'Log',
@@ -648,15 +760,8 @@ if (user) {
                     meta: {
                         requireAuth: true
                     }
-                }
-                
-            ]
-            },
-    
-
-          
-
-        
+                }]
+            }
 
         ]
         var routes = common.trans(newRoutes, keymap)

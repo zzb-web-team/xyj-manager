@@ -1,53 +1,60 @@
 <template>
-    <section class="myself-container content" @click="closeSel">
-        <div class="top_title">资源用量</div>
-        <div class="user-title" style="display: flex;flex-flow: column;">
-            <div class="resources_con">
-                <div style="display: flex;flex-flow: row;margin-top: 20px;padding:20px 37px;background:rgba(255,255,255,1);box-shadow:0px 2px 3px 0px rgba(6,17,36,0.14);border-radius:2px;">
-                    <el-input v-model="value1Activechanid" placeholder="设备SN" @change="onchanidChange" style="width:160px;margin-right: 10px;"></el-input>
+  <section class="myself-container content" @click="closeSel">
+    <!-- <div class="top_title">设备流量分析</div> -->
+    <div class="user-title" style="display: flex;flex-flow: column;">
+      <div class="resources_con">
+        <div style="display: flex;flex-flow: row;margin-top: 20px;padding:20px 37px;background:rgba(255,255,255,1);box-shadow:0px 2px 3px 0px rgba(6,17,36,0.14);border-radius:2px;">
+          <el-input v-model="value1Activechanid" placeholder="设备SN" @change="onchanidChange" style="width:160px;margin-right: 10px;"></el-input>
 
-                    <el-select v-model="value1acce1" placeholder="请选择一级渠道" style="width: 10%;margin-right: 10px;" @change="getdata2">
-                        <el-option v-for="(item, index) in hashidSets" :key="index" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                    <el-select v-model="value1acce1" placeholder="请选择二级渠道" style="width: 10%;margin-right: 10px;" @change="getdata2">
-                        <el-option v-for="(item, index) in hashidSets" :key="index" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                    <el-select v-model="value1acce1" placeholder="请选择设备品牌" style="width: 10%;margin-right: 10px;" @change="getdata2">
-                        <el-option v-for="(item, index) in hashidSets" :key="index" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
-                    <el-select v-model="value1acce1" placeholder="请选择设备型号" style="width: 10%;margin-right: 10px;" @change="getdata2">
-                        <el-option v-for="(item, index) in hashidSets" :key="index" :label="item.label" :value="item.value"></el-option>
-                    </el-select>
+          <el-select v-model="pri_chan_prv" placeholder="请选择一级渠道商" style="width:200px;margin-left:10px;">
+            <el-option label="全部" value=""></el-option>
+            <el-option v-for="item in pri_chan_prvs" :key="item" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+          <el-select v-model="scd_chan_prv" placeholder="请选择二级渠道商" style="width:200px;margin-left:20px;">
+            <el-option label="全部" value=""></el-option>
 
-                    <el-radio-group v-model="radio1" @change="onchangeTab">
-                        <el-radio-button @click="today()" label="one">今天</el-radio-button>
-                        <el-radio-button @click="yesterday()" label="two">昨天</el-radio-button>
-                        <el-radio-button @click="sevendat()" label="three">近7天</el-radio-button>
-                        <el-radio-button @click="thirtyday()" label="four">近30天</el-radio-button>
-                        <el-radio-button @click="showzdyx">自定义
-                            <i class="el-icon-date"></i>
-                        </el-radio-button>
-                    </el-radio-group>
-                    <el-date-picker v-show="shoudzyx" style="margin-left:10px;" v-model="val2" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left" @change="gettimes"></el-date-picker>
-                    <el-button style="margin-left:10px;" type="primary" @click="seachtu(1)">确定</el-button>
-                </div>
-                <div class="user_item">
-                    <div class="item_left" style="width:100%;border:none;">
-                        <div class="item_text" style="text-align:center;">
-                            总流量
-                        </div>
-                        <div class="item_count" style="text-align:center;">
-                            <span>{{ totalYl | setbytes }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="device_form">
-                    <div id="myChartMap" :style="{ height: '607px' }"></div>
-                </div>
+            <el-option v-for="item in scd_chan_prvs" :key="item" :label="item.label" :value="item.value" ></el-option>
+          </el-select>
+          <el-select v-model="eqp_brd" placeholder="请选择设备品牌" style="width:200px;margin-left:20px;">
+            <el-option label="全部" value=""></el-option>
 
-            </div>
+            <el-option v-for="item in eqp_brds" :key="item" :label="item" :value="item" ></el-option>
+          </el-select>
+          <el-select v-model="dev_type" placeholder="请选择设备型号" style="width:200px;margin-left:20px;margin-right:20px;">
+            <el-option label="全部" value=""></el-option>
+
+            <el-option v-for="item in dev_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+
+          <el-radio-group v-model="radio1" @change="onchangeTab">
+            <el-radio-button @click="today()" label="one">今天</el-radio-button>
+            <el-radio-button @click="yesterday()" label="two">昨天</el-radio-button>
+            <el-radio-button @click="sevendat()" label="three">近7天</el-radio-button>
+            <el-radio-button @click="thirtyday()" label="four">近30天</el-radio-button>
+            <el-radio-button @click="showzdyx">自定义
+              <i class="el-icon-date"></i>
+            </el-radio-button>
+          </el-radio-group>
+          <el-date-picker v-show="shoudzyx" style="margin-left:10px;" v-model="val2" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left" @change="gettimes"></el-date-picker>
+          <el-button style="margin-left:10px;" type="primary" @click="seachtu(1)">确定</el-button>
         </div>
-    </section>
+        <div class="user_item">
+          <div class="item_left" style="width:100%;border:none;">
+            <div class="item_text" style="text-align:center;">
+              总流量
+            </div>
+            <div class="item_count" style="text-align:center;">
+              <span>{{ totalYl | setbytes }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="device_form">
+          <div id="myChartMap" :style="{ height: '607px' }"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -64,6 +71,120 @@ import common from "../../common/js/util";
 export default {
   data() {
     return {
+      dev_type:"",
+      dev_types: [
+  
+        {
+          value: "RK33XX",
+          label: "RK33XX",
+        },
+        {
+          value: "AMS805W",
+          label: "AMS805W",
+        },
+        {
+          value: "AMS905M4C",
+          label: "AMS905M4C",
+        },
+        {
+          value: "AMS905M4",
+          label: "AMS905M4",
+        },
+        {
+          value: "AMS805QP1",
+          label: "AMS805QP1",
+        },
+        {
+          value: "AMS905N1",
+          label: "AMS905N1",
+        },
+        {
+          value: "AMS905JG1S",
+          label: "AMS905JG1S",
+        },
+      ],
+      pri_chan_prv: "",
+      pri_chan_prvs: [
+        {
+          value: "f.computer.unknown.pcgrapefruit",
+          label: "PC版西柚机",
+        },
+        {
+          value: "f.harddiskbox.grapefruit.grapefruit",
+          label: "西柚机",
+        },
+        {
+          value: "f.harddiskbox.xunlei.onethingcloud",
+          label: "玩客云",
+        },
+        {
+          value: "f.tvbox.xiaomi.xiaomi4c",
+          label: "小米盒子4C",
+        },
+        {
+          value: "f.tvbox.xiaomi.xiaomi4",
+          label: "小米盒子4",
+        },
+        {
+          value: "f.tvbox.skyworth.skyworthqplus1",
+          label: "创维Q+一代",
+        },
+        {
+          value: "f.tvbox.phicomm.phicommn1",
+          label: "斐讯N1盒子",
+        },
+        {
+          value: "f.tvbox.tencent.tencentjg1s",
+          label: "企鹅极光1S",
+        },
+        {
+          value: "f.computer.unknown.yunlian",
+          label: "云链",
+        },
+        {
+          value: "f.computer.unknown.hk",
+          label: "香港运维",
+        },
+        {
+          value: "f.computer.unknown.rouji-kernel2-3",
+          label: "rouji-kernel2-3",
+        },
+        {
+          value: "f.computer.unknown.rouji-kernel4-5",
+          label: "rouji-kernel4-5",
+        },
+      ],
+      scd_chan_prv: "",
+      scd_chan_prvs: [
+        {
+          value: "s.computer.unknown.pcgrapefruit",
+          label: "PC版西柚机",
+        },
+        {
+          value: "s.harddiskbox.grapefruit.grapefruit",
+          label: "西柚机",
+        },
+        {
+          value: "f.computer.unknown.yunlian",
+          label: "云链",
+        },
+        {
+          value: "s.computer.unknown.hk",
+          label: "香港运维",
+        },
+        {
+          value: "s.computer.unknown.rouji-kernel2-3",
+          label: "rouji-kernel2-3",
+        },
+        {
+          value: "s.computer.unknown.rouji-kernel4-5",
+          label: "rouji-kernel4-5",
+        },
+      ],
+      eqp_brd: "",
+      eqp_brds: ["grapefruit", "迅雷", "小米", "创维", "斐讯", "腾讯"],
+      eqp_type: "",
+      eqp_types: ["PC服务器", "硬盘盒子", "电视盒子", "PC服务器"],
       radio1: "one",
       plain: "",
       search: "",

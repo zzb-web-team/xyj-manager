@@ -1,82 +1,151 @@
 <template>
-<section class="myself-container">
-    <div class="device_form">
-        <el-form ref="form" :model="form">
-            <el-row type="flex">
-                <div class="search-con">
-                    <i class="el-icon-search" style="color:#606266"></i>
-                    <el-input class="search-input" v-model="searchText" placeholder="用户ID、用户昵称" @keyup.enter.native="onSubmitKey"></el-input>
-                </div>
-                <div @click="getShow()" class="div_show" style="color:#606266">筛选
-                              <i
-                class="el-icon-caret-bottom"
-                :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
-              ></i>
-                </div>
-            </el-row>
-            <div v-show="showState">
-                <el-row type="flex" class="row_activess">
-                    <el-form-item label="类型" style="display: flex;">
-                        <el-select v-model="profit_type" placeholder="请选择">
-                            <el-option v-for="item in profit_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                        </el-select>
-                    </el-form-item>
+  <section class="myself-container">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tab-pane label="账户明细" name="first">
+       <div class="device_form">
+      <el-form ref="form" :model="form">
+        <el-row type="flex">
+          <div class="search-con">
+            <i class="el-icon-search" style="color:#606266"></i>
+            <el-input class="search-input" v-model="searchText" placeholder="用户ID、用户昵称" @keyup.enter.native="onSubmitKey"></el-input>
+          </div>
+          <div @click="getShow()" class="div_show" style="color:#606266">筛选
+            <i class="el-icon-caret-bottom" :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"></i>
+          </div>
+        </el-row>
+        <div v-show="showState">
+          <el-row type="flex" class="row_activess">
+            <el-form-item label="类型" style="display: flex;">
+              <el-select v-model="profit_type" placeholder="请选择">
+                <el-option v-for="item in profit_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
 
-                    <el-form-item label="时间" style="display: flex;" >
-                        <el-date-picker v-model="start_time" style="width:160px;" type="datetime" placeholder="选择开始日期时间" :picker-options="pickerOptions1" ></el-date-picker> -
-                        <el-date-picker v-model="end_time" style="width:160px;" type="datetime" placeholder="选择结束日期时间" :picker-options="pickerOptions"></el-date-picker>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" style="margin-left:68px;" @click="search">确定</el-button>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="onReset">重置</el-button>
-                    </el-form-item>
-                </el-row>
-            </div>
-        </el-form>
+            <el-form-item label="时间" style="display: flex;">
+              <el-date-picker v-model="start_time" style="width:160px;" type="datetime" placeholder="选择开始日期时间" :picker-options="pickerOptions1"></el-date-picker> -
+              <el-date-picker v-model="end_time" style="width:160px;" type="datetime" placeholder="选择结束日期时间" :picker-options="pickerOptions"></el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" style="margin-left:68px;" @click="search">确定</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="onReset">重置</el-button>
+            </el-form-item>
+          </el-row>
+        </div>
+      </el-form>
     </div>
     <div class="devide_table">
-        <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
-            <el-col style="display: flex;justify-content: flex-end;">
-                <el-button type="primary" @click="toexportExcelactive">导出</el-button>
-            </el-col>
-        </el-row>
-        <el-row type="flex" class="row_active">
-            <el-col :span="24">
-                <el-table :data="tableData" border style="width: 100%" @sort-change='tableSortChange'>
-                    <el-table-column prop="user_id" label="用户ID">
-                    </el-table-column>
-                    <el-table-column prop="user_nick_name" label="用户昵称">
-                    </el-table-column>
-                    <el-table-column prop="profit_type" label="收支类型">
-                    </el-table-column>
-                    <el-table-column prop="profit_typeActive" label="金额">
-                        <!-- <template slot-scope="scope">
-                            <div v-if="scope.row.profit_type === 1 " disable-transitions>{{(scope.row.cur_profit/1000000).toFixed(6)}}
-                            </div>
-                            <div v-if="scope.row.profit_type === 2 " disable-transitions>{{(scope.row.cur_amount/1000000).toFixed(6)}}
-                            </div>
-                        </template> -->
-                    </el-table-column>
+      <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
+        <el-col style="display: flex;justify-content: flex-end;">
+          <el-button type="primary" @click="toexportExcelactive">导出</el-button>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row_active">
+        <el-col :span="24">
+          <el-table :data="tableData" border style="width: 100%" @sort-change='tableSortChange'>
+            <el-table-column prop="user_id" label="用户ID">
+            </el-table-column>
+            <el-table-column prop="user_nick_name" label="用户昵称">
+            </el-table-column>
+            <el-table-column prop="profit_type" label="收支类型">
+            </el-table-column>
+            <el-table-column prop="profit_typeActive" label="金额">
+            </el-table-column>
 
-                    <el-table-column prop="total_profit" label="账户余额" :formatter="formatNumber">
-                    </el-table-column>
-                    <el-table-column prop="time_stamp" sortable="custom" label="时间">
-                    </el-table-column>
-                </el-table>
-            </el-col>
-        </el-row>
+            <el-table-column prop="total_profit" label="账户余额" :formatter="formatNumber">
+            </el-table-column>
+            <el-table-column prop="time_stamp" sortable="custom" label="时间">
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
     </div>
     <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
-        <el-row type="flex"></el-row>
-        <el-row type="flex">
-            <el-col :span="6">
-                <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
-            </el-col>
-        </el-row>
+      <el-row type="flex"></el-row>
+      <el-row type="flex">
+        <el-col :span="6">
+          <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
+        </el-col>
+      </el-row>
     </div>
-</section>
+    </el-tab-pane>
+    <el-tab-pane label="收益记录" name="second">
+        <div class="device_form">
+      <el-form ref="form" :model="form">
+        <el-row type="flex">
+          <div class="search-con">
+            <i class="el-icon-search" style="color:#606266"></i>
+            <el-input class="search-input" v-model="searchText" placeholder="用户ID、用户昵称" @keyup.enter.native="onSubmitKey"></el-input>
+          </div>
+          <div @click="getShow()" class="div_show" style="color:#606266">筛选
+            <i class="el-icon-caret-bottom" :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"></i>
+          </div>
+        </el-row>
+        <div v-show="showState">
+          <el-row type="flex" class="row_activess">
+            <el-form-item label="类型" style="display: flex;">
+              <el-select v-model="profit_type" placeholder="请选择">
+                <el-option v-for="item in profit_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+
+            <el-form-item label="时间" style="display: flex;">
+              <el-date-picker v-model="start_time" style="width:160px;" type="datetime" placeholder="选择开始日期时间" :picker-options="pickerOptions1"></el-date-picker> -
+              <el-date-picker v-model="end_time" style="width:160px;" type="datetime" placeholder="选择结束日期时间" :picker-options="pickerOptions"></el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" style="margin-left:68px;" @click="search">确定</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="onReset">重置</el-button>
+            </el-form-item>
+          </el-row>
+        </div>
+      </el-form>
+    </div>
+    <div class="devide_table">
+      <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-end;">
+        <el-col>
+          <el-button type="primary" @click="setparam">调整收益参数</el-button>
+        </el-col>
+        <el-col style="display: flex;justify-content: flex-end;">
+          <el-button type="primary" @click="toexportExcelactive">导出</el-button>
+        </el-col>
+      </el-row>
+      <el-row type="flex" class="row_active">
+        <el-col :span="24">
+          <el-table :data="tableData" border style="width: 100%" @sort-change='tableSortChange'>
+            <el-table-column prop="user_id" label="用户ID">
+            </el-table-column>
+            <el-table-column prop="user_nick_name" label="用户昵称">
+            </el-table-column>
+            <el-table-column prop="profit_type" label="收支类型">
+            </el-table-column>
+            <el-table-column prop="profit_typeActive" label="金额">
+            </el-table-column>
+
+            <el-table-column prop="total_profit" label="账户余额" :formatter="formatNumber">
+            </el-table-column>
+            <el-table-column prop="time_stamp" sortable="custom" label="时间">
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+    </div>
+    <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
+      <el-row type="flex"></el-row>
+      <el-row type="flex">
+        <el-col :span="6">
+          <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
+        </el-col>
+      </el-row>
+    </div>
+    </el-tab-pane>
+ 
+  </el-tabs>
+   
+  </section>
 </template>
 
 <script>
@@ -88,6 +157,7 @@ import common from "../../common/js/util.js";
 export default {
   data() {
     return {
+activeName: 'first',
       pickerOptions: {
         disabledDate(time) {
           return time.getTime() > Date.now() - 8.64e6; //如果没有后面的-8.64e6就是不可以选择今天的
@@ -135,6 +205,17 @@ export default {
     this.getInfo();
   },
   methods: {
+     handleClick(tab, event) {
+        this.searchText=""
+        this.profit_type=""
+        this.start_time=""
+        this.end_time=""
+      },
+      setparam() {
+      this.$router.push({
+        path: "/setparam",
+      });
+    },
     //排序
     tableSortChange(column) {
       this.pager.page = 1;
@@ -150,42 +231,7 @@ export default {
       this.common.monitoringLogs("导出", "导出积分明细", 1);
       window.open(this.exportLinks);
     },
-    // //导出的方法
-    // exportExcel() {
-    //     require.ensure([], () => {
-    //         const {
-    //             export_json_to_excel
-    //         } = require("../../excel/Export2Excel");
-    //         const tHeader = [
 
-    //             "用户ID",
-    //             "用户昵称",
-    //             "收支类型",
-    //             "金额",
-    //             "账户余额",
-    //             "时间",
-
-    //         ];
-    //         // 上面设置Excel的表格第一行的标题
-    //         const filterVal = [
-
-    //             "user_id",
-    //             "user_nick_name",
-    //             "profit_type",
-    //             "profit_typeActive",
-    //             "total_profit",
-    //             "time_stamp",
-
-    //         ];
-    //         // 上面的index、nickName、name是tableData里对象的属性
-    //         const list = this.tableData2; //把data里的tableData存到list
-    //         const data = this.formatJson(filterVal, list);
-    //         export_json_to_excel(tHeader, data, "积分明细表");
-    //     });
-    // },
-    // formatJson(filterVal, jsonData) {
-    //     return jsonData.map(v => filterVal.map(j => v[j]));
-    // },
     //重置
     onReset() {
       this.pager.page = 1;
@@ -235,12 +281,12 @@ export default {
         this.$message.error("请输入正确的用户ID、用户昵称");
         return;
       }
-     if((data.end_time-data.start_time)>7948801){
-            this.$message({
-              message: "只能查询任意当前结束时间往前的90天以内的数据",
-              type: "error"
-            });
-            return false
+      if (data.end_time - data.start_time > 7948801) {
+        this.$message({
+          message: "只能查询任意当前结束时间往前的90天以内的数据",
+          type: "error",
+        });
+        return false;
       }
       query_user_total_profit_everyday(param)
         .then(res => {
@@ -263,7 +309,7 @@ export default {
                 teamarr[i].time_stamp * 1000
               );
             }
-             this.tableData =[]
+            this.tableData = [];
             this.tableData = teamarr;
             this.pager.count = res.data.total_num;
             this.pager.rows = res.data.total_page;
