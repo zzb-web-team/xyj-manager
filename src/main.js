@@ -12,8 +12,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import VCharts from 'v-charts'
 import common from "./common/js/util.js";
 Vue.prototype.common = common
-//import NProgress from 'nprogress'
-//import 'nprogress/nprogress.css'
+    //import NProgress from 'nprogress'
+    //import 'nprogress/nprogress.css'
 import router from './routes'
 
 
@@ -31,6 +31,7 @@ import deviceMiddle from './views/deviceActive/middle.vue'
 import newsd from './views/deviceActive/newsd.vue'
 import device_etails from './views/deviceActive/device_etails.vue'
 import deviceProcess from './views/deviceActive/deviceprocess.vue'
+import reverse_ssh from './views/device/reverse_ssh.vue'
 
 
 import deviceupload from './views/device/upload.vue'
@@ -92,7 +93,7 @@ Vue.use(VCharts)
 import echarts from 'echarts'
 
 Vue.prototype.$echarts = echarts
-// Vue.use(echarts)
+    // Vue.use(echarts)
 
 import "babel-polyfill";
 
@@ -110,69 +111,70 @@ if (user) {
     menulistfortree(param).then(res => {
         var newRoutes
         var keymap = {
-            'Home': Home,
-            'accountManagement': accountManagement,
-            'userCenter': userCenter,
-            'userInfo': userInfo,
-            'deviceInfo': deviceInfo,
-            'PushSetting': PushSetting,
-            'PushRecord': PushRecord,
-            'middle': middle,
-            'devicePower': devicePower,
-            'deviceActivation': deviceActivation,
-            'deviceMiddle':deviceMiddle,
-            'newsd':newsd,
-            'device_etails':device_etails,
-            'deviceupload': deviceupload,
-            'deviceProcess':deviceProcess,
-            'income': income,
-            'setparam': setparam,
-            'pointsmiddle': pointsmiddle,
-            'pointsDetails': pointsDetails,
-            'DeviceAnalysis': DeviceAnalysis,
-            'Analysismiddle': Analysismiddle,
-            'Analysismiddle1': Analysismiddle,
-            'deviceterminal': deviceterminal,
-            'deviceflow':deviceflow,
-            'RegionAnalysis': RegionAnalysis,
-            'UserAnalysis': UserAnalysis,
-            'VersionAnalysis': VersionAnalysis,
-            'Applictionmiddle': Applictionmiddle,
-            'addAppliction': addAppliction,
-            'releaseAppliction': releaseAppliction,
-            'AppVersion': AppVersion,
-            'AppManage': AppManage,
-            'SysVersion': AppVersion,
-            'SysManage': SysManage,
-            'SysManageMiddle': SysManageMiddle,
-            'SysManageMiddleActive': SysManageMiddleActive,
+                'Home': Home,
+                'accountManagement': accountManagement,
+                'userCenter': userCenter,
+                'userInfo': userInfo,
+                'deviceInfo': deviceInfo,
+                'PushSetting': PushSetting,
+                'PushRecord': PushRecord,
+                'middle': middle,
+                'devicePower': devicePower,
+                'deviceActivation': deviceActivation,
+                'deviceMiddle': deviceMiddle,
+                'newsd': newsd,
+                'device_etails': device_etails,
+                'deviceupload': deviceupload,
+                'deviceProcess': deviceProcess,
+                'income': income,
+                'setparam': setparam,
+                'pointsmiddle': pointsmiddle,
+                'pointsDetails': pointsDetails,
+                'DeviceAnalysis': DeviceAnalysis,
+                'Analysismiddle': Analysismiddle,
+                'Analysismiddle1': Analysismiddle,
+                'deviceterminal': deviceterminal,
+                'deviceflow': deviceflow,
+                'RegionAnalysis': RegionAnalysis,
+                'UserAnalysis': UserAnalysis,
+                'VersionAnalysis': VersionAnalysis,
+                'Applictionmiddle': Applictionmiddle,
+                'addAppliction': addAppliction,
+                'releaseAppliction': releaseAppliction,
+                'AppVersion': AppVersion,
+                'AppManage': AppManage,
+                'SysVersion': AppVersion,
+                'SysManage': SysManage,
+                'SysManageMiddle': SysManageMiddle,
+                'SysManageMiddleActive': SysManageMiddleActive,
 
-            'SysVersion1': SysVersion1,
-            'SysManage': SysManage,
-            'AppManage': AppManage,
-            "Log": Log,
-            //新增
-            'miningmiddle': miningmiddle,
-            'miningindex': miningindex,
-            'contributionindex': contributionindex,
-            'powerindex': powerindex,
-            'powermanagement': powermanagement,
-            'devicepower': devicepower,
-            'powerinfo': powerinfo,
-            'powerdetails': powerdetails,
-            'helpmiddle': helpmiddle,
-            'contentindex': contentindex,
-            'groupindex': groupindex,
-            'marketmiddle': marketmiddle,
-            'marketindex': marketindex,
-            'addmarket': addmarket,
-            'marketdetail': marketdetail,
-            'editmarket': editmarket,
-            'marketgroupmiddle': marketgroupmiddle,
-            'marketgroupindex': marketgroupindex,
-            'marketrelatedindex': marketrelatedindex,
-        }
-        //var newRoutes = res.msg
+                'SysVersion1': SysVersion1,
+                'SysManage': SysManage,
+                'AppManage': AppManage,
+                "Log": Log,
+                //新增
+                'miningmiddle': miningmiddle,
+                'miningindex': miningindex,
+                'contributionindex': contributionindex,
+                'powerindex': powerindex,
+                'powermanagement': powermanagement,
+                'devicepower': devicepower,
+                'powerinfo': powerinfo,
+                'powerdetails': powerdetails,
+                'helpmiddle': helpmiddle,
+                'contentindex': contentindex,
+                'groupindex': groupindex,
+                'marketmiddle': marketmiddle,
+                'marketindex': marketindex,
+                'addmarket': addmarket,
+                'marketdetail': marketdetail,
+                'editmarket': editmarket,
+                'marketgroupmiddle': marketgroupmiddle,
+                'marketgroupindex': marketgroupindex,
+                'marketrelatedindex': marketrelatedindex,
+                'reverse_ssh': reverse_ssh
+            }
+            //var newRoutes = res.msg
         var newRoutes = [{
                 path: "/",
                 component: 'Home',
@@ -267,8 +269,7 @@ if (user) {
                         name: "设备监控",
                         component: 'deviceMiddle',
                         icon: 'iconfont icon-dian',
-                        children: [
-                            {
+                        children: [{
                                 path: "/newsd",
                                 name: "设备监控详情",
                                 component: 'newsd',
@@ -286,7 +287,7 @@ if (user) {
                                     requireAuth: true
                                 }
                             },
-                            
+
                             {
                                 path: "/device_etails",
                                 name: "设备异常记录",
@@ -296,7 +297,7 @@ if (user) {
                                     requireAuth: true
                                 }
                             },
-                           
+
 
 
                         ],
@@ -304,6 +305,15 @@ if (user) {
                             requireAuth: true
                         }
                     },
+                    {
+                        path: "/reverse_ssh",
+                        name: "反向ssh管理",
+                        component: 'reverse_ssh',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+                    }
 
 
                 ]
@@ -697,8 +707,7 @@ if (user) {
                         name: "西柚机设备",
                         component: 'Analysismiddle1',
                         icon: 'iconfont icon-shebei',
-                        children: [
-                            {
+                        children: [{
                                 path: "/deviceflow",
                                 name: "设备流量分析",
                                 component: 'deviceflow',
