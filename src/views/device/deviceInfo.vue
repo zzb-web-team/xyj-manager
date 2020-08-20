@@ -75,7 +75,7 @@
           <el-row type="flex" class="row_activess">
             <el-form-item label="设备状态" style="display: flex;width:270px;">
               <el-select v-model="online_state" placeholder="请选择">
-                                <el-option label="全部" value="-1"></el-option>
+                <el-option label="全部" value="-1"></el-option>
 
                 <el-option v-for="item in onlineStates" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
@@ -111,8 +111,8 @@
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column prop="dev_sn" label="设备SN" width="150px"></el-table-column>
-            <el-table-column prop="pri_chan_prv" label="一级渠道商"></el-table-column>
-            <el-table-column prop="scd_chan_prv" label="二级渠道商"></el-table-column>
+            <el-table-column prop="pri_chan_prv" label="一级渠道商" :formatter="formatOne"></el-table-column>
+            <el-table-column prop="scd_chan_prv" label="二级渠道商" :formatter="formatTwo"></el-table-column>
             <el-table-column prop="eqp_brd" label="设备品牌"></el-table-column>
             <el-table-column prop="eqp_type" label="设备类型"></el-table-column>
             <el-table-column prop="hd_type" label="硬件类型"></el-table-column>
@@ -196,83 +196,80 @@ export default {
       pri_chan_prv: "",
       pri_chan_prvs: [
         {
-          "value":"f.computer.unknown.pcgrapefruit",
-          "label":"PC版西柚机"
+          value: "f.computer.unknown.pcgrapefruit",
+          label: "PC版西柚机",
         },
-         {
-          "value":"f.harddiskbox.grapefruit.grapefruit",
-          "label":"西柚机"
+        {
+          value: "f.harddiskbox.grapefruit.grapefruit",
+          label: "西柚机",
         },
-         {
-          "value":"f.harddiskbox.xunlei.onethingcloud",
-          "label":"玩客云"
+        {
+          value: "f.harddiskbox.xunlei.onethingcloud",
+          label: "玩客云",
         },
-         {
-          "value":"f.tvbox.xiaomi.xiaomi4c",
-          "label":"小米盒子4C"
+        {
+          value: "f.tvbox.xiaomi.xiaomi4c",
+          label: "小米盒子4C",
         },
-         {
-          "value":"f.tvbox.xiaomi.xiaomi4",
-          "label":"小米盒子4"
+        {
+          value: "f.tvbox.xiaomi.xiaomi4",
+          label: "小米盒子4",
         },
-         {
-          "value":"f.tvbox.skyworth.skyworthqplus1",
-          "label":"创维Q+一代"
+        {
+          value: "f.tvbox.skyworth.skyworthqplus1",
+          label: "创维Q+一代",
         },
-         {
-          "value":"f.tvbox.phicomm.phicommn1",
-          "label":"斐讯N1盒子"
+        {
+          value: "f.tvbox.phicomm.phicommn1",
+          label: "斐讯N1盒子",
         },
-         {
-          "value":"f.tvbox.tencent.tencentjg1s",
-          "label":"企鹅极光1S"
+        {
+          value: "f.tvbox.tencent.tencentjg1s",
+          label: "企鹅极光1S",
         },
-         {
-          "value":"f.computer.unknown.yunlian",
-          "label":"云链"
+        {
+          value: "f.computer.unknown.yunlian",
+          label: "云链",
         },
-         {
-          "value":"f.computer.unknown.hk",
-          "label":"香港运维"
+        {
+          value: "f.computer.unknown.hk",
+          label: "香港运维",
         },
-         {
-          "value":"f.computer.unknown.rouji-kernel2-3",
-          "label":"rouji-kernel2-3"
+        {
+          value: "f.computer.unknown.rouji-kernel2-3",
+          label: "rouji-kernel2-3",
         },
-         {
-          "value":"f.computer.unknown.rouji-kernel4-5",
-          "label":"rouji-kernel4-5"
+        {
+          value: "f.computer.unknown.rouji-kernel4-5",
+          label: "rouji-kernel4-5",
         },
-        
-   
       ],
       scd_chan_prv: "",
       scd_chan_prvs: [
-           {
-          "value":"s.computer.unknown.pcgrapefruit",
-          "label":"PC版西柚机"
+        {
+          value: "s.computer.unknown.pcgrapefruit",
+          label: "PC版西柚机",
         },
-         {
-          "value":"s.harddiskbox.grapefruit.grapefruit",
-          "label":"西柚机"
+        {
+          value: "s.harddiskbox.grapefruit.grapefruit",
+          label: "西柚机",
         },
-         {
-          "value":"f.computer.unknown.yunlian",
-          "label":"云链"
+        {
+          value: "f.computer.unknown.yunlian",
+          label: "云链",
         },
-         {
-          "value":"s.computer.unknown.hk",
-          "label":"香港运维"
+        {
+          value: "s.computer.unknown.hk",
+          label: "香港运维",
         },
-         {
-          "value":"s.computer.unknown.rouji-kernel2-3",
-          "label":"rouji-kernel2-3"
+        {
+          value: "s.computer.unknown.rouji-kernel2-3",
+          label: "rouji-kernel2-3",
         },
-         {
-          "value":"s.computer.unknown.rouji-kernel4-5",
-          "label":"rouji-kernel4-5"
+        {
+          value: "s.computer.unknown.rouji-kernel4-5",
+          label: "rouji-kernel4-5",
         },
-        
       ],
       op_sys: "",
       op_syss: [
@@ -293,8 +290,8 @@ export default {
           label: "windows",
         },
       ],
-      eqp_brd: "全部",
-      eqp_brds: ["grapefruit", "迅雷", "小米", "创维", "斐讯","腾讯"],
+      eqp_brd: "",
+      eqp_brds: ["grapefruit", "迅雷", "小米", "创维", "斐讯", "腾讯"],
       eqp_type: "",
       eqp_types: ["PC服务器", "硬盘盒子", "电视盒子", "PC服务器"],
       bind_user_tel_num: "",
@@ -310,14 +307,14 @@ export default {
       dialogVisibleactive: false,
       reserveselection: true,
       rom_version: "",
-      dev_type: "-1",
+      dev_type: "",
       online_state: "-1",
       bind_flag: "-1",
       bind_start_ts: "",
       bind_end_ts: "",
       dev_types: [
         {
-          value: "-1",
+          value: "",
           label: "全部",
         },
         {
@@ -348,12 +345,9 @@ export default {
           value: "AMS905JG1S",
           label: "AMS905JG1S",
         },
-       
-        
       ],
-      onlineStates:[
-        
-            {
+      onlineStates: [
+        {
           value: 0,
           label: "离线",
         },
@@ -369,7 +363,6 @@ export default {
           value: 1001,
           label: "关机中",
         },
-        
       ],
       bindFlags: [
         {
@@ -686,7 +679,8 @@ export default {
       this.bind_end_ts = "";
       this.bind_flag = "-1";
       this.bind_start_ts = "";
-      this.dev_type = "-1";
+      this.dev_type = "";
+      this.eqp_type="";
       this.online_state = "-1";
       this.rom_version = "";
       (this.pri_chan_prv = ""),
@@ -729,6 +723,10 @@ export default {
         return "离线";
       } else if (row.online_state === 99) {
         return "非法设备";
+      }else if(row.online_state === 1000){
+        return "重启中"
+      }else if(row.online_state === 1001){
+        return "关机中"
       }
     },
     formatBind(row) {
@@ -737,6 +735,14 @@ export default {
       } else if (row.bind_flag === 1) {
         return "是";
       }
+    },
+    formatOne(data) {
+      let nowstr = data.pri_chan_prv + "";
+      return nowstr.split("|")[1];
+    },
+    formatTwo(data) {
+      let nowstr = data.scd_chan_prv + "";
+      return nowstr.split("|")[1];
     },
     getInfo() {
       var data = {
@@ -751,8 +757,8 @@ export default {
         order_type: this.order_type,
         page_no: this.pager.page - 1,
         page_size: 10,
-        dev_type:this.dev_type ,
-        online_state:parseInt(this.online_state) ,
+        dev_type: this.dev_type,
+        online_state: parseInt(this.online_state),
         rom_version: this.rom_version === "" ? "" : this.rom_version,
         bind_flag: this.bind_flag === "-1" ? -1 : Number(this.bind_flag),
 

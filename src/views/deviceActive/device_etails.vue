@@ -67,10 +67,10 @@
             </el-table-column>
             <el-table-column prop="upstream_bandwidth" label="当前上行/下行宽带">
               <template slot-scope="scope">
-                <span v-if="!scope.row.up_bw">--</span>
-                <span>{{ scope.row.up_bw }}</span>/
-                <span v-if="!scope.row.down_bw">--</span>
-                <span>{{ scope.row.down_bw }}</span>
+                <span>{{scope.row.down_bandwidth}}</span>/
+                <span>{{scope.row.up_bandwidth}}</span>
+
+      
               </template>
             </el-table-column>
             <el-table-column label="CPU温度">
@@ -249,7 +249,7 @@ export default {
         },
         {
           value: "2",
-          label: "主板报警温度"
+          label: "主板温度报警"
         },
         {
           value: "3",
@@ -411,6 +411,8 @@ export default {
                 devm.mem_ratio = item.mem_ratio / 100 + "%";
                 devm.total_cap = this.common.formatByteActive(item.total_cap);
                 devm.user_cap = this.common.formatByteActive(item.user_cap);
+                devm.up_bandwidth=this.common.formatByteActive(item.up_bandwidth)
+                devm.down_bandwidth=this.common.formatByteActive(item.down_bandwidth)
                 devm.badstade = "";
                 if (item.cpu_tem >= 8000) {
                   devm.badstade = "CPU温度报警" + " / ";
@@ -421,7 +423,7 @@ export default {
                   devm.mbtem_color = "red";
                 }
                 if (item.hd_tem >= 4000) {
-                  devm.badstade = devm.badstade + "硬盘温度报警" + " / ";
+                  devm.badstade = devm.badstade + "硬盘温度报警" ;
                   devm.hdtem_color = "red";
                 }
                 if (item.mem_ratio >= 8000) {
@@ -443,6 +445,7 @@ export default {
             } else {
               this.showdisabled = true;
               this.$message("暂无数据");
+              this.pagerActive.count = res.data.total_num;
             }
           } else {
             this.$message.error(res.err_msg);

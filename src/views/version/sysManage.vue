@@ -24,7 +24,7 @@
 			</el-form>
 		</div>
 		<div v-if="optiondisplay" class="seach_bottom">
-			<span>使用设备品牌:</span>
+			<span>适用设备:</span>
 			<el-select
 				v-model="valuestate"
 				placeholder="请选择"
@@ -92,7 +92,7 @@
 							width="150"
 						>
 						</el-table-column>
-						<el-table-column label="适用设备品牌" width="120">
+						<el-table-column label="适用设备" width="120">
 							<template slot-scope="scope">
 								<div style="text-align: center;">
 									{{ scope.row.rom_type | formatType }}
@@ -260,7 +260,7 @@
 						margin-left: 20px;
 					"
 				>
-					<div>使用设备品牌：</div>
+					<div>适用品牌：</div>
 					<el-select
 						v-model="valuestate1"
 						placeholder="请选择"

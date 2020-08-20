@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let base = "";
+var  ownbase = "";
 
 
 // var href = window.location.href;
@@ -12,11 +12,11 @@ let base = "";
 // }
 var href = window.location.href
 if (href.indexOf('xyj.grapefruitcloud.com') >= 0) {
-    var ownbase = 'http://xyj.grapefruitcloud.com'; //PHP服务URL
+     ownbase = 'http://xyj.grapefruitcloud.com'; //PHP服务URL
 } else if (href.indexOf('service.kclgames.com') >= 0) {
-    var ownbase = 'http://service.kclgames.com'; //PHP服务URL
+     ownbase = 'http://service.kclgames.com'; //PHP服务URL
 } else {
-    var ownbase = 'http://zzb.onezen.net';
+     ownbase = 'http://zzb.onezen.net';
 }
 
 
@@ -45,10 +45,10 @@ export const userlist = (params) => {
 };
 
 export const requestLogin = (params) => {
-    return axios.post(`${base}/login`, params).then((res) => res.data);
+    return axios.post(`${ownbase}/login`, params).then((res) => res.data);
 };
 export const getUserList = (params) => {
-    return axios.get(`${base}/user/list`, {
+    return axios.get(`${ownbase}/user/list`, {
         params: params
     });
 };
@@ -57,31 +57,31 @@ export const getUserList = (params) => {
 
 
 export const getUserListPage = (params) => {
-    return axios.get(`${base}/user/listpage`, {
+    return axios.get(`${ownbase}/user/listpage`, {
         params: params
     });
 };
 
 export const removeUser = (params) => {
-    return axios.get(`${base}/user/remove`, {
+    return axios.get(`${ownbase}/user/remove`, {
         params: params
     });
 };
 
 export const batchRemoveUser = (params) => {
-    return axios.get(`${base}/user/batchremove`, {
+    return axios.get(`${ownbase}/user/batchremove`, {
         params: params
     });
 };
 
 export const editUser = (params) => {
-    return axios.get(`${base}/user/edit`, {
+    return axios.get(`${ownbase}/user/edit`, {
         params: params
     });
 };
 
 export const addUser = (params) => {
-    return axios.get(`${base}/user/add`, {
+    return axios.get(`${ownbase}/user/add`, {
         params: params
     });
 };

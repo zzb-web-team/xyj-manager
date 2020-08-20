@@ -132,7 +132,7 @@
               </el-table-column>
               <el-table-column prop="" label="进程状态">
                 <template slot-scope="scope">
-                  {{ scope.row.pid |formatStatus }}
+                  {{ scope.row.pid |formatStatuss }}
 
                 </template>
               </el-table-column>
@@ -266,6 +266,7 @@ export default {
         return "关机中";
       }
     },
+  
     formatCpu(data) {
       if (data == 0) {
         return 0;
@@ -290,18 +291,18 @@ export default {
     },
     formatMd5(data) {
       if (data == 1) {
-        return "正常";
+        return "否";
       } else if (data == 2) {
-        return "非法改变";
+        return "是";
       } else if (data == 3) {
-        return "未知进程";
+        return "--";
       }
     },
-    formatStatus(data) {
+    formatStatuss(data) {
       if (data !== -1) {
         return "运行中";
       } else {
-        return "关闭";
+        return "关闭中";
       }
     },
   },
@@ -329,10 +330,12 @@ export default {
       (param.login_token = "8vAmfX19fX1NeaggfX19fQ=="),
         (param.dev_sn = this.snNum),
         (param.ctrl_type = 5),
-        (param.pid = data.row.pid_name),
+        (param.pid = data.row.pid),
         (param.pname = data.row.pid_name);
       param.extra_info = {
         ctrl_type: 5,
+        pid:data.row.pid,
+        pname: data.row.pid_name
       };
       ctrl_node_state(param)
         .then(res => {
@@ -342,6 +345,7 @@ export default {
               type: "success",
             });
           }
+          this.monitorDetails=false
         })
         .catch(error => {
           console.log(error);
@@ -395,9 +399,10 @@ export default {
     },
     handleButton(val) {
       this.monitorDetails = true;
+          this.pagerActive.page=1
       this.$forceUpdate(); //强制刷新组件
       let param = new Object();
-      param.page = this.pager1.page;
+      param.page = this.pagerActive.page;
       param.dev_sn = val.row.dev_sn;
       this.snNum = val.row.dev_sn;
       query_dev_pid_detail_list(param)
