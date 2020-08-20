@@ -111,69 +111,70 @@ if (user) {
     menulistfortree(param).then(res => {
         var newRoutes
         var keymap = {
-            'Home': Home,
-            'accountManagement': accountManagement,
-            'userCenter': userCenter,
-            'userInfo': userInfo,
-            'deviceInfo': deviceInfo,
-            'PushSetting': PushSetting,
-            'PushRecord': PushRecord,
-            'middle': middle,
-            'devicePower': devicePower,
-            'deviceActivation': deviceActivation,
-            'deviceMiddle': deviceMiddle,
-            'newsd': newsd,
-            'device_etails': device_etails,
-            'deviceupload': deviceupload,
-            'deviceProcess': deviceProcess,
-            'income': income,
-            'setparam': setparam,
-            'pointsmiddle': pointsmiddle,
-            'pointsDetails': pointsDetails,
-            'DeviceAnalysis': DeviceAnalysis,
-            'Analysismiddle': Analysismiddle,
-            'Analysismiddle1': Analysismiddle,
-            'deviceterminal': deviceterminal,
-            'deviceflow': deviceflow,
-            'RegionAnalysis': RegionAnalysis,
-            'UserAnalysis': UserAnalysis,
-            'VersionAnalysis': VersionAnalysis,
-            'Applictionmiddle': Applictionmiddle,
-            'addAppliction': addAppliction,
-            'releaseAppliction': releaseAppliction,
-            'AppVersion': AppVersion,
-            'AppManage': AppManage,
-            'SysVersion': AppVersion,
-            'SysManage': SysManage,
-            'SysManageMiddle': SysManageMiddle,
-            'SysManageMiddleActive': SysManageMiddleActive,
+                'Home': Home,
+                'accountManagement': accountManagement,
+                'userCenter': userCenter,
+                'userInfo': userInfo,
+                'deviceInfo': deviceInfo,
+                'PushSetting': PushSetting,
+                'PushRecord': PushRecord,
+                'middle': middle,
+                'devicePower': devicePower,
+                'deviceActivation': deviceActivation,
+                'deviceMiddle': deviceMiddle,
+                'newsd': newsd,
+                'device_etails': device_etails,
+                'deviceupload': deviceupload,
+                'deviceProcess': deviceProcess,
+                'income': income,
+                'setparam': setparam,
+                'pointsmiddle': pointsmiddle,
+                'pointsDetails': pointsDetails,
+                'DeviceAnalysis': DeviceAnalysis,
+                'Analysismiddle': Analysismiddle,
+                'Analysismiddle1': Analysismiddle,
+                'deviceterminal': deviceterminal,
+                'deviceflow': deviceflow,
+                'RegionAnalysis': RegionAnalysis,
+                'UserAnalysis': UserAnalysis,
+                'VersionAnalysis': VersionAnalysis,
+                'Applictionmiddle': Applictionmiddle,
+                'addAppliction': addAppliction,
+                'releaseAppliction': releaseAppliction,
+                'AppVersion': AppVersion,
+                'AppManage': AppManage,
+                'SysVersion': AppVersion,
+                'SysManage': SysManage,
+                'SysManageMiddle': SysManageMiddle,
+                'SysManageMiddleActive': SysManageMiddleActive,
 
-            'SysVersion1': SysVersion1,
-            'SysManage': SysManage,
-            'AppManage': AppManage,
-            "Log": Log,
-            //新增
-            'miningmiddle': miningmiddle,
-            'miningindex': miningindex,
-            'contributionindex': contributionindex,
-            'powerindex': powerindex,
-            'powermanagement': powermanagement,
-            'devicepower': devicepower,
-            'powerinfo': powerinfo,
-            'powerdetails': powerdetails,
-            'helpmiddle': helpmiddle,
-            'contentindex': contentindex,
-            'groupindex': groupindex,
-            'marketmiddle': marketmiddle,
-            'marketindex': marketindex,
-            'addmarket': addmarket,
-            'marketdetail': marketdetail,
-            'editmarket': editmarket,
-            'marketgroupmiddle': marketgroupmiddle,
-            'marketgroupindex': marketgroupindex,
-            'marketrelatedindex': marketrelatedindex,
-        }
-        //var newRoutes = res.msg
+                'SysVersion1': SysVersion1,
+                'SysManage': SysManage,
+                'AppManage': AppManage,
+                "Log": Log,
+                //新增
+                'miningmiddle': miningmiddle,
+                'miningindex': miningindex,
+                'contributionindex': contributionindex,
+                'powerindex': powerindex,
+                'powermanagement': powermanagement,
+                'devicepower': devicepower,
+                'powerinfo': powerinfo,
+                'powerdetails': powerdetails,
+                'helpmiddle': helpmiddle,
+                'contentindex': contentindex,
+                'groupindex': groupindex,
+                'marketmiddle': marketmiddle,
+                'marketindex': marketindex,
+                'addmarket': addmarket,
+                'marketdetail': marketdetail,
+                'editmarket': editmarket,
+                'marketgroupmiddle': marketgroupmiddle,
+                'marketgroupindex': marketgroupindex,
+                'marketrelatedindex': marketrelatedindex,
+                'reverse_ssh': reverse_ssh
+            }
+            //var newRoutes = res.msg
         var newRoutes = [
 
             {
@@ -273,7 +274,7 @@ if (user) {
                         meta: {
                             requireAuth: true
                         }
-                    },    
+                    },
                     {
                         path: "/deviceActivation",
                         name: "设备激活",
@@ -297,7 +298,7 @@ if (user) {
                         path: "/deviceupload",
                         name: "批量导入",
                         component: 'deviceupload',
-                        icon: 'iconfont icon-dian', 
+                        icon: 'iconfont icon-dian',
                         hidden: true,
                         meta: {
                             requireAuth: true
@@ -338,13 +339,22 @@ if (user) {
                                 }
                             },
 
-
-
                         ],
+                        meta: {
+                            requireAuth: true
+                        },
+
+                    },
+                    {
+                        path: "/reverse_ssh",
+                        name: "反向ssh管理",
+                        component: 'reverse_ssh',
+                        icon: 'iconfont icon-dian',
                         meta: {
                             requireAuth: true
                         }
                     },
+
                     {
                         path: "/SysManageMiddleActive",
                         name: "设备ROM版本",
@@ -378,7 +388,7 @@ if (user) {
 
                 ]
             },
-    
+
 
             {
                 path: "/g1",
@@ -533,7 +543,7 @@ if (user) {
                                     requireAuth: true
                                 }
                             },
-                        
+
                             {
                                 path: "/deviceterminal",
                                 name: "设备终端",
@@ -559,105 +569,104 @@ if (user) {
                 component: 'Home',
                 name: "后台管理",
                 icon: 'iconfont icon-houtaiguanli',
-                children: [
+                children: [{
+                        path: "/accountManagement",
+                        name: "后台账户管理",
+                        component: 'accountManagement',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
                     {
-                    path: "/accountManagement",
-                    name: "后台账户管理",
-                    component: 'accountManagement',
-                    icon: 'iconfont icon-dian',
-                    meta: {
-                        requireAuth: true
+                        path: "/pointsmiddle",
+                        name: "奖励管理",
+                        component: 'pointsmiddle',
+                        icon: 'iconfont icon-jifenguanli',
+                        children: [{
+                                path: "/pointsDetails",
+                                name: "西柚机设备奖励",
+                                component: 'pointsDetails',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                            {
+                                path: "/income",
+                                name: "账户收益",
+                                component: 'income',
+                                icon: 'iconfont icon-dian',
+                                hidden: true,
+                                meta: {
+                                    requireAuth: true
+                                }
+
+                            },
+                            {
+                                path: "/setparam",
+                                name: "调整收益参数",
+                                component: 'setparam',
+                                icon: 'iconfont icon-dian',
+                                hidden: true,
+                                meta: {
+                                    requireAuth: true
+                                }
+
+                            },
+
+                        ],
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/helpmiddle",
+                        name: "帮助中心",
+                        component: 'helpmiddle',
+                        icon: 'iconfont icon-bangzhu',
+                        children: [{
+                                path: "/groupindex",
+                                name: "分组管理",
+                                component: 'groupindex',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                            {
+                                path: "/contentindex",
+                                name: "内容管理",
+                                component: 'contentindex',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+
+
+                        ],
+                        meta: {
+                            requireAuth: true
+                        }
+                    },
+                    {
+                        path: "/Log",
+                        name: "操作日志",
+                        component: 'Log',
+                        icon: 'iconfont icon-dian',
+                        meta: {
+                            requireAuth: true
+                        }
                     }
-                },
-                {
-                    path: "/pointsmiddle",
-                    name: "奖励管理",
-                    component: 'pointsmiddle',
-                    icon: 'iconfont icon-jifenguanli',
-                    children: [{
-                            path: "/pointsDetails",
-                            name: "西柚机设备奖励",
-                            component: 'pointsDetails',
-                            icon: 'iconfont icon-dian',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-                        {
-                            path: "/income",
-                            name: "账户收益",
-                            component: 'income',
-                            icon: 'iconfont icon-dian',
-                            hidden: true,
-                            meta: {
-                                requireAuth: true
-                            }
 
-                        },
-                        {
-                            path: "/setparam",
-                            name: "调整收益参数",
-                            component: 'setparam',
-                            icon: 'iconfont icon-dian',
-                            hidden: true,
-                            meta: {
-                                requireAuth: true
-                            }
-
-                        },
-
-                    ],
-                    meta: {
-                        requireAuth: true
-                    }
-                },
-                {
-                    path: "/helpmiddle",
-                    name: "帮助中心",
-                    component: 'helpmiddle',
-                    icon: 'iconfont icon-bangzhu',
-                    children: [{
-                            path: "/groupindex",
-                            name: "分组管理",
-                            component: 'groupindex',
-                            icon: 'iconfont icon-dian',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-                        {
-                            path: "/contentindex",
-                            name: "内容管理",
-                            component: 'contentindex',
-                            icon: 'iconfont icon-dian',
-                            meta: {
-                                requireAuth: true
-                            }
-                        },
-
-
-                    ],
-                    meta: {
-                        requireAuth: true
-                    }
-                },
-                {
-                    path: "/Log",
-                    name: "操作日志",
-                    component: 'Log',
-                    icon: 'iconfont icon-dian',
-                    meta: {
-                        requireAuth: true
-                    }
-                }
-                
-            ]
+                ]
             },
-    
 
-          
 
-        
+
+
+
 
         ]
         var routes = common.trans(newRoutes, keymap)

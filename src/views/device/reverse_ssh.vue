@@ -20,9 +20,9 @@
 						<el-option label="全部" value="-1"></el-option>
 						<el-option
 							v-for="item in options"
-							:key="item.value"
+							:key="item.id"
 							:label="item.label"
-							:value="item.value"
+							:value="item.label"
 						>
 						</el-option> </el-select
 				></el-col>
@@ -35,7 +35,7 @@
 					>
 						<el-option label="全部" value="-1"></el-option>
 						<el-option label="ipv4" value="0"></el-option>
-						<el-option label="ipv6" value="0"></el-option>
+						<el-option label="ipv6" value="1"></el-option>
 					</el-select>
 				</el-col>
 				<el-col :span="3">
@@ -148,6 +148,42 @@ export default {
 				{ name: '腾讯', childen: ['AMS905JG1S'] },
 			],
 			dev_types: [],
+			options: [
+				{ id: '44', label: '广东' },
+				{ id: '11', label: '北京' },
+				{ id: '33', label: '浙江' },
+				{ id: '35', label: '福建' },
+				{ id: '42', label: '湖北' },
+				{ id: '31', label: '上海' },
+				{ id: '32', label: '江苏' },
+				{ id: '12', label: '天津' },
+				{ id: '13', label: '河北' },
+				{ id: '14', label: '山西' },
+				{ id: '15', label: '内蒙古' },
+				{ id: '21', label: '辽宁' },
+				{ id: '22', label: '吉林' },
+				{ id: '23', label: '黑龙江' },
+				{ id: '34', label: '安徽' },
+				{ id: '36', label: '江西' },
+				{ id: '37', label: '山东' },
+				{ id: '41', label: '河南' },
+				{ id: '43', label: '湖南' },
+				{ id: '45', label: '广西' },
+				{ id: '46', label: '海南' },
+				{ id: '50', label: '重庆' },
+				{ id: '51', label: '四川' },
+				{ id: '52', label: '贵州' },
+				{ id: '53', label: '云南' },
+				{ id: '54', label: '西藏' },
+				{ id: '61', label: '陕西' },
+				{ id: '62', label: '甘肃' },
+				{ id: '63', label: '青海' },
+				{ id: '64', label: '宁夏' },
+				{ id: '65', label: '新疆' },
+				{ id: '71', label: '台湾' },
+				{ id: '81', label: '香港' },
+				{ id: '82', label: '澳门' },
+			],
 			roms: [
 				{
 					value: '-1',
@@ -207,14 +243,14 @@ export default {
 				},
 			],
 			tableData: [
-				{
-					ip: '192.10.365.20',
-					sn: 'SMEX5421ZLO8664',
-					mac: '00:0c:29:b3:da:14',
-					cpuid: 'c2482cf62c5d915a',
-					version: '1.0.5',
-					onile_time: '18小时26分',
-				},
+				// {
+				// 	ip: '192.10.365.20',
+				// 	sn: 'SMEX5421ZLO8664',
+				// 	mac: '00:0c:29:b3:da:14',
+				// 	cpuid: 'c2482cf62c5d915a',
+				// 	version: '1.0.5',
+				// 	onile_time: '18小时26分',
+				// },
 			],
 			input: '',
 			area_value: '',
@@ -229,6 +265,9 @@ export default {
 			},
 			dialogVisible: false,
 		};
+	},
+	mounted() {
+		
 	},
 	components: { pageNation },
 	methods: {
