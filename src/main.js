@@ -12,8 +12,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import VCharts from 'v-charts'
 import common from "./common/js/util.js";
 Vue.prototype.common = common
-//import NProgress from 'nprogress'
-//import 'nprogress/nprogress.css'
+    //import NProgress from 'nprogress'
+    //import 'nprogress/nprogress.css'
 import router from './routes'
 
 
@@ -31,6 +31,7 @@ import deviceMiddle from './views/deviceActive/middle.vue'
 import newsd from './views/deviceActive/newsd.vue'
 import device_etails from './views/deviceActive/device_etails.vue'
 import deviceProcess from './views/deviceActive/deviceprocess.vue'
+import reverse_ssh from './views/device/reverse_ssh.vue'
 
 
 import deviceupload from './views/device/upload.vue'
@@ -92,7 +93,7 @@ Vue.use(VCharts)
 import echarts from 'echarts'
 
 Vue.prototype.$echarts = echarts
-// Vue.use(echarts)
+    // Vue.use(echarts)
 
 import "babel-polyfill";
 
