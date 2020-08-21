@@ -297,7 +297,7 @@ export default {
           label: "内存占用",
         },
       ],
-      valuestate: "-1",
+      valuestate: 1,
       optionstate: [
         {
           value: 0,
@@ -765,9 +765,9 @@ export default {
 </script>
 
 <style lang="less">
-.newsd {
-  // min-width: 1755px;
-}
+// .newsd {
+//   // min-width: 1755px;
+// }
 .myself-container {
   width: 100%;
   //min-width: 1600px;
