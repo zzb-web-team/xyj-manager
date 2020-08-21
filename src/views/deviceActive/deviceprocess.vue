@@ -546,9 +546,9 @@ export default {
 </script>
 
 <style lang="less">
-.newsd {
-  // min-width: 1755px;
-}
+// .newsd {
+//   // min-width: 1755px;
+// }
 .myself-container {
   width: 100%;
   //min-width: 1600px;

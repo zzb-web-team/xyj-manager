@@ -1,6 +1,6 @@
 import axios from "axios";
 
-var  ownbase = "";
+var ownbase = "";
 
 
 // var href = window.location.href;
@@ -12,13 +12,13 @@ var  ownbase = "";
 // }
 var href = window.location.href
 if (href.indexOf('xyj.grapefruitcloud.com') >= 0) {
-     ownbase = 'http://xyj.grapefruitcloud.com'; //PHP服务URL
+    ownbase = 'http://xyj.grapefruitcloud.com'; //PHP服务URL
 } else if (href.indexOf('service.kclgames.com') >= 0) {
-     ownbase = 'http://service.kclgames.com'; //PHP服务URL
+    ownbase = 'http://service.kclgames.com'; //PHP服务URL
 } else {
-     ownbase = 'http://zzb.onezen.net';
+    ownbase = 'http://zzb.onezen.net';
 }
-
+var ownssh = 'http://106.15.189.182:9999'
 
 // export default {
 //     customData: function() {
@@ -861,11 +861,11 @@ export const query_dev_pid_general_list = (params) => {
 
 //设备异常记录
 export const query_dev_pid_detail_list = (params) => {
-    return axios
-        .post(`${ownbase}/dev_status/query_dev_pid_detail_list `, params)
-        .then((res) => res.data);
-}
-//进程异常记录
+        return axios
+            .post(`${ownbase}/dev_status/query_dev_pid_detail_list `, params)
+            .then((res) => res.data);
+    }
+    //进程异常记录
 export const query_dev_pid_history_list = (params) => {
     return axios
         .post(`${ownbase}/dev_status/query_dev_pid_history_list `, params)
@@ -1377,3 +1377,10 @@ export const device_typerom_all = (params) => {
 //         res => res.data
 //     );
 // };
+
+//查询西柚机所有版本
+export const upload = (params) => {
+    return axios
+        .post(`${ownssh}/upload`, params)
+        .then((res) => res.data);
+};

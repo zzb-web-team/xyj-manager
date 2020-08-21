@@ -34,8 +34,8 @@
 						@change="search_data"
 					>
 						<el-option label="全部" value="-1"></el-option>
-						<el-option label="ipv4" value="0"></el-option>
-						<el-option label="ipv6" value="1"></el-option>
+						<el-option label="ipv4" value="ipv4"></el-option>
+						<el-option label="ipv6" value="ipv6"></el-option>
 					</el-select>
 				</el-col>
 				<el-col :span="3">
@@ -95,11 +95,14 @@
 		<!--  -->
 		<el-table :data="tableData" border style="width: 100%;">
 			<el-table-column prop="ip" label="IP"> </el-table-column>
-			<el-table-column prop="sn" label="设备SN"> </el-table-column>
-			<el-table-column prop="mac" label="MAC地址"> </el-table-column>
-			<el-table-column prop="cpuid" label="CPU-ID"> </el-table-column>
-			<el-table-column prop="version" label="版本"> </el-table-column>
-			<el-table-column prop="onile_time" label="在线时间">
+			<el-table-column prop="dev_sn" label="设备SN"> </el-table-column>
+			<el-table-column prop="mac_addrs" label="MAC地址">
+			</el-table-column>
+			<el-table-column prop="cpu_id" label="CPU-ID"> </el-table-column>
+			<el-table-column prop="dev_ver" label="版本"> </el-table-column>
+			<el-table-column prop="on_duration" label="在线时长">
+			</el-table-column>
+			<el-table-column prop="online_time" label="在线时间">
 			</el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
@@ -121,20 +124,34 @@
 			></pageNation>
 		</div>
 		<!--  -->
-		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
-			<span>这是一段信息</span>
-			<span slot="footer" class="dialog-footer">
+		<el-dialog
+			title=""
+			:visible.sync="dialogVisible"
+			ref="el_set_cmd"
+			width="80%"
+			helght="80%"
+			class="ssh_con_dialog"
+		>
+			<!-- <span>这是一段信息</span> -->
+			<iframe
+				src="http://106.15.189.182:9999"
+				frameborder="0"
+				id="myiframe"
+				style="width: 100%; height: 100%;"
+			></iframe>
+			<!-- <span slot="footer" class="dialog-footer">
 				<el-button @click="dialogVisible = false">取 消</el-button>
 				<el-button type="primary" @click="dialogVisible = false"
 					>确 定</el-button
 				>
-			</span>
+			</span> -->
 		</el-dialog>
 	</div>
 </template>
 
 <script>
 import pageNation from '../../components/pageNation';
+import { upload } from '../../api/api';
 export default {
 	data() {
 		return {
@@ -243,14 +260,15 @@ export default {
 				},
 			],
 			tableData: [
-				// {
-				// 	ip: '192.10.365.20',
-				// 	sn: 'SMEX5421ZLO8664',
-				// 	mac: '00:0c:29:b3:da:14',
-				// 	cpuid: 'c2482cf62c5d915a',
-				// 	version: '1.0.5',
-				// 	onile_time: '18小时26分',
-				// },
+				{
+					ip: '192.10.365.20',
+					dev_sn: 'SMEX5421ZLO8664',
+					mac_addrs: '00:0c:29:b3:da:14',
+					cpu_id: 'c2482cf62c5d915a',
+					dev_ver: '1.0.5',
+					online_time: '2020-08-21 15:22:12',
+					on_duration: 18,
+				},
 			],
 			input: '',
 			area_value: '',
@@ -266,23 +284,41 @@ export default {
 			dialogVisible: false,
 		};
 	},
+	filters: {
+		TimeConversion(data) {
+			if (data <= 0) return 0 + 'S';
+			if (data < 60) {
+				return data + 'S';
+			} else if (data < 3600) {
+				return parseInt(data / 60) + '分钟' + (data % 60) + 'S';
+			}
+		},
+	},
 	mounted() {
-		
+		this.get_data_list();
 	},
 	components: { pageNation },
 	methods: {
 		get_data_list() {
 			let parame = new Object();
-			parame.devsn = '';
-			parame.area = '';
-			parame.ipv = '';
-			parame.brand = '';
-			parame.devtype = '';
-			parame.rom = '';
+			parame.dev_sn = this.input != '' ? this.input : -1;
+			parame.region = this.area_value != '' ? this.area_value : -1;
+			parame.ip_type = this.ipv_value != '' ? this.ipv_value : -1;
+			parame.dev_brand = this.brand_value != '' ? this.brand_value : -1;
+			parame.dev_model =
+				this.devtype_value != '' ? this.devtype_value : -1;
+			parame.rom_ver = this.rom_value != '' ? this.rom_value : -1;
 			parame.page = this.pager.page - 1;
+			upload(parame)
+				.then((res) => {
+					console.log(res);
+					this.tableData = res;
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 		},
 		search_data() {
-			console.log('去搜索');
 			this.pager.page = 1;
 			this.get_data_list();
 		},
@@ -313,6 +349,7 @@ export default {
 		handleDelete(index, row) {
 			console.log(index, row);
 			this.dialogVisible = true;
+			this.$refs.el_set_cmd.$el.firstChild.style.height = '80%';
 		},
 		handleSizeChange() {},
 		//翻页
@@ -325,6 +362,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.ssh_con_dialog .el-dialog {
+	height: 80% !important;
+	overflow: auto;
+}
+.ssh_con_dialog .el-dialog .el-dialog__body {
+	height: 85% !important;
+}
 .title_search {
 	margin-top: 20px;
 }

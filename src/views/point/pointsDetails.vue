@@ -50,10 +50,10 @@
             </el-table-column>
             <el-table-column prop="profit_type" label="收支类型">
             </el-table-column>
-            <el-table-column prop="profit_typeActive" label="金额">
+            <el-table-column prop="profit_typeActive" label="金额（积分）">
             </el-table-column>
 
-            <el-table-column prop="total_profit" label="账户余额" :formatter="formatNumber">
+            <el-table-column prop="total_profit" label="收益账户余额" :formatter="formatNumber">
             </el-table-column>
             <el-table-column prop="time_stamp" sortable="custom" label="时间">
             </el-table-column>
@@ -84,11 +84,11 @@
         </el-row>
         <div v-show="showState">
           <el-row type="flex" class="row_activess">
-            <el-form-item label="类型" style="display: flex;">
+            <!-- <el-form-item label="类型" style="display: flex;">
               <el-select v-model="profit_type" placeholder="请选择">
                 <el-option v-for="item in profit_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
 
             <el-form-item label="时间" style="display: flex;">
               <el-date-picker v-model="start_time" style="width:160px;" type="datetime" placeholder="选择开始日期时间" :picker-options="pickerOptions1"></el-date-picker> -
@@ -120,13 +120,13 @@
             </el-table-column>
             <el-table-column prop="user_nick_name" label="用户昵称">
             </el-table-column>
-            <el-table-column prop="profit_type" label="收支类型">
-            </el-table-column>
-            <el-table-column prop="profit_typeActive" label="金额">
+            <!-- <el-table-column prop="profit_type" label="收支类型">
+            </el-table-column> -->
+            <el-table-column prop="profit_typeActive" label="收益金额（积分）">
             </el-table-column>
 
-            <el-table-column prop="total_profit" label="账户余额" :formatter="formatNumber">
-            </el-table-column>
+            <!-- <el-table-column prop="total_profit" label="账户余额" :formatter="formatNumber">
+            </el-table-column> -->
             <el-table-column prop="time_stamp" sortable="custom" label="时间">
             </el-table-column>
           </el-table>
