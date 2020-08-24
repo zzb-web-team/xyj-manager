@@ -108,7 +108,7 @@
         <!-- 搜索 -->
         <div class="seach">
           <div class="seach_top">
-            <el-input placeholder="设备SN" v-model="input" @keyup.enter.native="seachuser1()" class="input-with-select">
+            <el-input placeholder="设备SN" v-model="inputsn" @keyup.enter.native="seachuser1()" class="input-with-select">
               <i slot="prefix" class="el-input__icon el-icon-search" @click="seachuser1()"></i>
             </el-input>
             <div class="seach_top_right" @click="option_display()">
@@ -129,7 +129,7 @@
             <span>选择日期：</span>
 
             <el-date-picker @change="queryProcess()" v-model="value1" type="datetimerange" :picker-options="pickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="right"></el-date-picker>
-            <el-button plain @click="reset()">重置</el-button>
+            <el-button plain @click="reset1()">重置</el-button>
             <div class="seach_bottom_btn">
               <!-- <el-button type="primary" plain size="mini" @click="seachuser()"
             >确定</el-button
@@ -233,6 +233,7 @@ export default {
         },
       },
       input: "",
+      inputsn:"",
       value: "0",
       input1: "", //开始时间
       input2: "", //结束时间
@@ -279,7 +280,7 @@ export default {
       tolpage_dao: 0,
       tableDataProcess: [],
       order: 0,
-      valuess: "",
+      valuess: "0",
     };
   },
   filters: {
@@ -467,7 +468,7 @@ export default {
         param.end_time = setbatime(new Date());
       }
 
-      (param.dev_sn = ""),
+      (param.dev_sn = this.inputsn),
         (param.md5_type = parseInt(this.valuess)),
         (param.page = this.pagerActive1.page - 1),
         (param.order = this.order);
@@ -479,11 +480,12 @@ export default {
               this.tableDataProcess = [];
               this.exportLinks = res.data.filename;
               this.tableDataProcess = res.data.pid_unsual_list;
-              this.pagerActive1.count = res.data.total_num;
             } else {
               this.showdisabled = true;
               this.$message("暂无数据");
             }
+                          this.pagerActive1.count = res.data.total_num;
+
           } else {
             this.$message.error(res.err_msg);
           }
@@ -512,10 +514,20 @@ export default {
       this.value = "0";
       this.input = "";
       this.value1 = "";
-      this.valuess = "";
+      this.valuess = "0";
       this.pagerActive1.page = 1;
       this.pagerActive.page = 1;
       this.getdata();
+    },
+      reset1() {
+      this.value = "0";
+      this.input = "";
+      this.value1 = "";
+      this.inputsn="",
+      this.valuess = "0";
+      this.pagerActive1.page = 1;
+      this.pagerActive.page = 1;
+      this.getdataProcess();
     },
     geydata2() {
       //只能输入由数字和26个英文字母组成的字符串
@@ -564,7 +576,7 @@ export default {
       query_detail_info_list(params)
         .then(res => {
           if (res.status == 0) {
-            window.open(res.data.file_path);
+            window.open(res.data.filename);
             this.common.monitoringLogs("导出", "设备异常记录", 1);
           } else {
             this.common.monitoringLogs("导出", "设备异常记录", 0);

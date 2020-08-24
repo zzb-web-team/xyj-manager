@@ -118,7 +118,7 @@
                 </template>
               </el-table-column>
               <el-table-column prop="" label="内存占用">
-                <template slot-scope="scope">
+                <template slot-scope="scope">·
                   {{ scope.row.pid_mem |formatBytes }}
 
                 </template>
@@ -180,19 +180,19 @@ export default {
       snNum: "",
       optionstate: [
         {
-          value: 0,
-          label: "已关闭",
+          value: 1,
+          label: "在线",
         },
         {
-          value: 1,
-          label: "运行中",
+          value: 0,
+          label: "离线",
         },
         {
           value: 1000,
           label: "重启中",
         },
         {
-          value: 1,
+          value: 1001,
           label: "关机中",
         },
       ],
@@ -508,14 +508,15 @@ export default {
           } else {
             if (res.data.general_pid_list) {
               let nowarractive = res.data.general_pid_list;
-              let nowarrLength = res.data.total_num;
-              this.pager.count = nowarrLength;
+            
               this.dataNum = nowarrLength;
               this.tableData = nowarractive;
             } else {
               this.tableData = [];
             }
           }
+            let nowarrLength = res.data.total_num;
+              this.pager.count = nowarrLength;
         })
         .catch(error => {
           this.$message({

@@ -1,64 +1,62 @@
 <template>
-<div class="content">
+  <div class="content">
 
     <section class="myself-container">
-        <div class="device_form">
-            <el-form ref="form" :model="form">
-                <el-row type="flex">
-                    <div class="search-con">
-                        <i class="el-icon-search" @click="searchInfo" style="color:#606266"></i>
-                        <el-input class="search-input" v-model="searchText" placeholder="请输入操作人" @keyup.enter.native="searchInfo"></el-input>
-                    </div>
-                    <div @click="getShow" class="div_show" style="color:#606266">
-                        筛选
-              <i
-                class="el-icon-caret-bottom"
-                :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
-              ></i>                    </div>
-                </el-row>
-                <el-row type="flex" class="row_activess" v-show="showState">
-                    <el-form-item label="状态" style="display: flex;">
-                        <el-select v-model="value" placeholder="请选择">
-                            <el-option  label="全部" value="-1"></el-option>
-                            <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="操作类型" style="display: flex;">
-                        <el-select v-model="value1" placeholder="请选择">
-                            <el-option label="全部" value="全部"></el-option>
-                            <el-option v-for="item in options2active" :key="item" :label="item" :value="item"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="注册时间" style="display: flex;">
-                        <el-date-picker v-model="valueTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                        </el-date-picker>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="searchInfo">确定</el-button>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="reset()">重置</el-button>
-                    </el-form-item>
-                </el-row>
-            </el-form>
-        </div>
-        <div class="devide_table">
-            <el-row type="flex" class="row_active">
-                <el-col :span="24">
-                    <tableBarActivelogs id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" :operatingStatus="operatingStatus" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toChange="toChange"></tableBarActivelogs>
-                </el-col>
-            </el-row>
-        </div>
-        <div class="devide_pageNation" style="display: flex;justify-content: flex-end; margin-bottom:30px;">
+      <div class="device_form">
+        <el-form ref="form" :model="form">
+          <el-row type="flex">
+            <div class="search-con">
+              <i class="el-icon-search" @click="searchInfo" style="color:#606266"></i>
+              <el-input class="search-input" v-model="searchText" placeholder="请输入操作人" @keyup.enter.native="searchInfo"></el-input>
+            </div>
+            <div @click="getShow" class="div_show" style="color:#606266">
+              筛选
+              <i class="el-icon-caret-bottom" :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"></i>
+            </div>
+          </el-row>
+          <el-row type="flex" class="row_activess" v-show="showState">
+            <el-form-item label="状态" style="display: flex;">
+              <el-select v-model="value" placeholder="请选择">
+                <el-option label="全部" value="-1"></el-option>
+                <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="操作类型" style="display: flex;">
+              <el-select v-model="value1" placeholder="请选择">
+                <el-option label="全部" value="全部"></el-option>
+                <el-option v-for="item in options2active" :key="item" :label="item" :value="item"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="注册时间" style="display: flex;">
+              <el-date-picker v-model="valueTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+              </el-date-picker>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="searchInfo">确定</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="reset()">重置</el-button>
+            </el-form-item>
+          </el-row>
+        </el-form>
+      </div>
+      <div class="devide_table">
+        <el-row type="flex" class="row_active">
+          <el-col :span="24">
+            <tableBarActivelogs id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" :operatingStatus="operatingStatus" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @disable="disable" @toChange="toChange"></tableBarActivelogs>
+          </el-col>
+        </el-row>
+      </div>
+      <div class="devide_pageNation" style="display: flex;justify-content: flex-end; margin-bottom:30px;">
 
-            <el-row type="flex">
-                <el-col :span="6">
-                    <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
-                </el-col>
-            </el-row>
-        </div>
+        <el-row type="flex">
+          <el-col :span="6">
+            <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
+          </el-col>
+        </el-row>
+      </div>
     </section>
-</div>
+  </div>
 </template>
 
 <script>
@@ -82,28 +80,19 @@ export default {
       operatingStatus: false,
       clomnSelection: false,
       reserveselection: true,
-      options2active: [
-        "新增",
-        "修改",
-        "删除",
-        "发布",
-        "撤回",
-        "导入",
-        "导出"
-      ],
+      options2active: ["新增", "修改", "删除", "发布", "撤回", "导入", "导出"],
       value1: "全部",
       value2: "",
       value: "-1",
       options2: [
-  
         {
           value: "1",
-          label: "成功"
+          label: "成功",
         },
         {
           value: "0",
-          label: "失败"
-        }
+          label: "失败",
+        },
       ],
       ruleForm2: {
         username: "",
@@ -113,7 +102,7 @@ export default {
         value: "",
         radio: "0",
         name: "",
-        phone: ""
+        phone: "",
       },
       ruleForm3: {
         username: "",
@@ -124,45 +113,45 @@ export default {
         radio: "0",
         name: "",
         phone: "",
-        id: ""
+        id: "",
       },
       ruleForm4: {
         password: "",
-        password2: ""
+        password2: "",
       },
       //重置密码校验
 
       rowHeader: [
         {
           prop: "status",
-          label: "状态"
+          label: "状态",
         },
         {
           prop: "action",
-          label: "操作类型"
+          label: "操作类型",
         },
         {
           prop: "username",
-          label: "操作人"
+          label: "操作人",
         },
         {
           prop: "beforevalue",
-          label: "原始值"
+          label: "原始值",
         },
         {
           prop: "aftervalue",
-          label: "修改值"
+          label: "修改值",
         },
 
         {
           prop: "description",
-          label: "操作描述"
+          label: "操作描述",
         },
 
         {
           prop: "time_update",
-          label: "操作时间"
-        }
+          label: "操作时间",
+        },
       ],
       tableData: [],
       tableOption: {
@@ -172,48 +161,71 @@ export default {
           {
             label: "修改",
             type: "primary",
-            methods: "checkInfo"
+            methods: "checkInfo",
           },
 
           {
             label: "密码重置",
             type: "danger",
-            methods: "password"
+            methods: "password",
           },
           {
             label: "禁用",
             type: "danger",
-            methods: "disable"
+            methods: "disable",
           },
           {
             label: "删除",
             type: "danger",
-            methods: "delete"
-          }
-        ]
+            methods: "delete",
+          },
+        ],
       },
       pager: {
         count: 0,
         page: 1,
-        rows: 100
+        rows: 100,
       },
       showState: false,
       allId: [],
-      uid:"",
-      uname:""
+      uid: "",
+      uname: "",
     };
   },
   mounted: function() {
-      let tempInfo =JSON.parse(this.get('userInfo'))
-        this.uid =tempInfo.id;
-        this.uname=tempInfo.username;
+    let tempInfo = JSON.parse(this.get("userInfo"));
+    this.uid = tempInfo.id;
+    this.uname = tempInfo.username;
     this.queryUserList();
+    function person(name){
+      this.name='杨国栋',
+      this.likes=function(){
+       return "爱好玩"
+      }
+    }
+    function test1(){
+
+    }
+    test1.prototype=new person()
+    var nowtemp=new test1
+    // console.log(nowtemp.name)
+    //  console.log(nowtemp.likes)
+
+     function test2(){
+       person.call(this)
+       this.name=name || "999"
+     }
+     var nowtemp1=new test2
+     console.log(nowtemp1.name)
+  
+
+
   },
   methods: {
-         get: function (name) {
-        var v = window.document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-          return v ? v[2] : null;
-
+   
+    get: function(name) {
+      var v = window.document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)");
+      return v ? v[2] : null;
     },
     //重置
     reset() {
@@ -269,11 +281,10 @@ export default {
 
       actionlogactive(param)
         .then(res => {
-          console.log(res);
           if (res.status != 0) {
             this.$message({
               message: `${res.err_msg}`,
-              type: "error"
+              type: "error",
             });
           } else {
             if (res.result.page == 0) {
@@ -339,8 +350,8 @@ export default {
             phone: this.ruleForm2.phone,
             status: parseInt(this.ruleForm2.radio),
             name: this.ruleForm2.name,
-               uname:this.uname,
-            uid:this.uid
+            uname: this.uname,
+            uid: this.uid,
           };
           userinsert(loginParams).then(data => {
             this.dialogVisible = false;
@@ -348,12 +359,12 @@ export default {
             if (status !== 0) {
               this.$message({
                 message: msg,
-                type: "error"
+                type: "error",
               });
             } else {
               this.$message({
                 message: "添加成功",
-                type: "success"
+                type: "success",
               });
               this.queryUserList();
             }
@@ -386,25 +397,24 @@ export default {
       }
       let param = {
         id: tampArr,
-        status: nowstatus
+        status: nowstatus,
       };
 
       this.$confirm("确定执行该操作麽吗", "提示", {
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           denyuser(param).then(res => {
-            console.log(res);
             //return false
             if (res.status !== 0) {
               this.$message({
                 message: msg,
-                type: "error"
+                type: "error",
               });
             } else {
               this.$message({
                 message: "操作成功",
-                type: "success"
+                type: "success",
               });
               this.queryUserList();
             }
@@ -421,8 +431,8 @@ export default {
           time_create: val.time_create,
           phone: val.phone,
           username: val.username,
-          email: val.email
-        }
+          email: val.email,
+        },
       });
 
       //this.ruleForm3.status = parseInt(this.ruleForm3.radio)
@@ -430,12 +440,12 @@ export default {
 
     addAccout() {
       this.dialogVisible = true;
-    }
+    },
   },
   components: {
     pageNation: pageNation,
-    tableBarActivelogs: tableBarActivelogs
-  }
+    tableBarActivelogs: tableBarActivelogs,
+  },
 };
 </script>
 
@@ -460,8 +470,6 @@ export default {
 }
 
 .myself-container {
-
-
   .devide_title {
     width: 100%;
     height: auto;
@@ -477,8 +485,6 @@ export default {
   }
 
   .device_form {
-
-
     .el-form-item__label {
       white-space: nowrap;
     }
