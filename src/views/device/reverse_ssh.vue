@@ -101,6 +101,11 @@
 			<el-table-column prop="cpu_id" label="CPU-ID"> </el-table-column>
 			<el-table-column prop="dev_ver" label="版本"> </el-table-column>
 			<el-table-column prop="on_duration" label="在线时长">
+				<template slot-scope="scope">
+					<span>
+						{{ scope.row.on_duration | getDuration }}
+					</span>
+				</template>
 			</el-table-column>
 			<el-table-column prop="online_time" label="在线时间">
 			</el-table-column>
@@ -134,7 +139,7 @@
 		>
 			<!-- <span>这是一段信息</span> -->
 			<iframe
-				src="http://106.15.189.182:9999"
+				:src="cmdsrc"
 				frameborder="0"
 				id="myiframe"
 				style="width: 100%; height: 100%;"
@@ -262,12 +267,12 @@ export default {
 			tableData: [
 				{
 					ip: '192.10.365.20',
-					dev_sn: 'SMEX5421ZLO8664',
+					dev_sn: 'SMEX2020RTU1177',
 					mac_addrs: '00:0c:29:b3:da:14',
 					cpu_id: 'c2482cf62c5d915a',
 					dev_ver: '1.0.5',
 					online_time: '2020-08-21 15:22:12',
-					on_duration: 18,
+					on_duration: 1561,
 				},
 			],
 			input: '',
@@ -282,16 +287,53 @@ export default {
 				rows: 100,
 			},
 			dialogVisible: false,
+            smdsrc:""
 		};
 	},
 	filters: {
-		TimeConversion(data) {
-			if (data <= 0) return 0 + 'S';
-			if (data < 60) {
-				return data + 'S';
-			} else if (data < 3600) {
-				return parseInt(data / 60) + '分钟' + (data % 60) + 'S';
+		// getDuration(second) {
+		// 	if (second <= 0) return 0 + '秒';
+		// 	var days = Math.floor(second / 86400);
+		// 	var hours = Math.floor((second % 86400) / 3600);
+		// 	var minutes = Math.floor(((second % 86400) % 3600) / 60);
+		// 	var seconds = Math.floor(((second % 86400) % 3600) % 60);
+		// 	var duration =
+		// 		days + '天' + hours + '小时' + minutes + '分' + seconds + '秒';
+		// 	return duration;
+		// },
+		getDuration(value) {
+			if (value <= 0) return 0 + '秒';
+			let theTime = parseInt(value); // 需要转换的时间秒
+			let theTime1 = 0; // 分
+			let theTime2 = 0; // 小时
+			let theTime3 = 0; // 天
+			if (theTime > 60) {
+				theTime1 = parseInt(theTime / 60);
+				theTime = parseInt(theTime % 60);
+				if (theTime1 > 60) {
+					theTime2 = parseInt(theTime1 / 60);
+					theTime1 = parseInt(theTime1 % 60);
+					if (theTime2 > 24) {
+						//大于24小时
+						theTime3 = parseInt(theTime2 / 24);
+						theTime2 = parseInt(theTime2 % 24);
+					}
+				}
 			}
+			let result = '';
+			if (theTime > 0) {
+				result = '' + parseInt(theTime) + '秒';
+			}
+			if (theTime1 > 0) {
+				result = '' + parseInt(theTime1) + '分钟' + result;
+			}
+			if (theTime2 > 0) {
+				result = '' + parseInt(theTime2) + '小时' + result;
+			}
+			if (theTime3 > 0) {
+				result = '' + parseInt(theTime3) + '天' + result;
+			}
+			return result;
 		},
 	},
 	mounted() {
@@ -350,6 +392,8 @@ export default {
 			console.log(index, row);
 			this.dialogVisible = true;
 			this.$refs.el_set_cmd.$el.firstChild.style.height = '80%';
+            this.cmdsrc="http://106.15.189.182:9999"+"?dev_sn="+row.dev_sn;
+            console.log(this.cmdsrc);
 		},
 		handleSizeChange() {},
 		//翻页
@@ -361,7 +405,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .ssh_con_dialog .el-dialog {
 	height: 80% !important;
 	overflow: auto;
