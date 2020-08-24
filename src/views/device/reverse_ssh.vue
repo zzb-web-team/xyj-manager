@@ -139,7 +139,7 @@
 		>
 			<!-- <span>这是一段信息</span> -->
 			<iframe
-				src="http://106.15.189.182:9999"
+				:src="cmdsrc"
 				frameborder="0"
 				id="myiframe"
 				style="width: 100%; height: 100%;"
@@ -267,7 +267,7 @@ export default {
 			tableData: [
 				{
 					ip: '192.10.365.20',
-					dev_sn: 'SMEX5421ZLO8664',
+					dev_sn: 'SMEX2020RTU1177',
 					mac_addrs: '00:0c:29:b3:da:14',
 					cpu_id: 'c2482cf62c5d915a',
 					dev_ver: '1.0.5',
@@ -287,6 +287,7 @@ export default {
 				rows: 100,
 			},
 			dialogVisible: false,
+            smdsrc:""
 		};
 	},
 	filters: {
@@ -391,6 +392,8 @@ export default {
 			console.log(index, row);
 			this.dialogVisible = true;
 			this.$refs.el_set_cmd.$el.firstChild.style.height = '80%';
+            this.cmdsrc="http://106.15.189.182:9999"+"?dev_sn="+row.dev_sn;
+            console.log(this.cmdsrc);
 		},
 		handleSizeChange() {},
 		//翻页
