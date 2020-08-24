@@ -1384,3 +1384,9 @@ export const upload = (params) => {
         .post(`${ownssh}/upload`, params)
         .then((res) => res.data);
 };
+//硬件收益配置
+export const set_earn_dot_value = (params) => {
+    return axios
+        .post(`${ownbase}/miner_earn/set_earn_dot_value`, params)
+        .then((res) => res.data);
+};

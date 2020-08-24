@@ -120,6 +120,8 @@
 									label="用户昵称"
 								>
 								</el-table-column>
+								<el-table-column prop="dev_sn" label="设备SN">
+								</el-table-column>
 								<el-table-column
 									prop="profit_type"
 									label="收支类型"
@@ -276,8 +278,8 @@
 									label="用户昵称"
 								>
 								</el-table-column>
-								<!-- <el-table-column prop="profit_type" label="收支类型">
-            </el-table-column> -->
+								<el-table-column prop="dev_sn" label="设备SN">
+								</el-table-column>
 								<el-table-column
 									prop="profit_typeActive"
 									label="收益金额（积分）"
@@ -319,7 +321,10 @@
 <script>
 import mySearch from '../../components/mySearch';
 import pageNation from '../../components/pageNation';
-import { query_user_total_profit_everyday } from '../../api/api';
+import {
+	query_user_total_profit_everyday,
+	ptfs_query_user_profit_list,
+} from '../../api/api';
 import common from '../../common/js/util.js';
 
 export default {
@@ -434,6 +439,7 @@ export default {
 		},
 		getInfo(num) {
 			let data = {
+				query_type: 0,
 				cur_page: this.pager.page - 1,
 				order: this.order,
 				profit_type:
@@ -448,11 +454,12 @@ export default {
 						: new Date(this.end_time).getTime() / 1000,
 			};
 			if (num) {
+				data.query_type = 1;
 				data.profit_type = 1;
 			}
 			if (this.judgeString(this.searchText)) {
 				var arr = Object.keys(this.judgeString(this.searchText));
-				data.query_type = arr.length === 0 ? 0 : 1;
+				// data.query_type = arr.length === 0 ? 0 : 1;
 				var param = Object.assign(
 					this.judgeString(this.searchText),
 					data
@@ -468,21 +475,21 @@ export default {
 				});
 				return false;
 			}
-			query_user_total_profit_everyday(param)
+			ptfs_query_user_profit_list(param)
 				.then((res) => {
 					if (res.status === 0) {
 						this.exportLinks = res.data.filename;
-						let teamarr = res.data.total_profit_list;
+						let teamarr = res.data.profit_detail_list;
 						for (var i = 0; i < teamarr.length; i++) {
 							if (teamarr[i].profit_type === 1) {
 								teamarr[i].profit_type = '收益';
 								teamarr[i].profit_typeActive = (
-									teamarr[i].cur_profit / 100
+									teamarr[i].profit / 100
 								).toFixed(2);
 							} else {
 								teamarr[i].profit_type = '兑换';
 								teamarr[i].profit_typeActive = (
-									teamarr[i].cur_amount / 100
+									teamarr[i].profit / 100
 								).toFixed(2);
 							}
 							teamarr[i].time_stamp = this.common.getTimess(
