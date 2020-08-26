@@ -362,7 +362,7 @@ export default {
 				.then((res) => {
 					if (res.status == 0) {
 						this.tableData = res.data;
-						this.pager.count = res.total_page;
+						this.pager.count = res.total_item;
 					} else {
 						this.$message.errro(res.message);
 					}
