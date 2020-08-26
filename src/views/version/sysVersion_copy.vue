@@ -89,7 +89,7 @@
             <el-radio label="指定账号"></el-radio>
             <!-- <el-button type="text" @click="onclickimport">批量导入</el-button> -->
           </el-radio-group>
-          <el-input v-model="form.version" placeholder="" type="textarea"></el-input>
+          <el-input v-model="form.version" placeholder="多个账号以,隔开" type="textarea"></el-input>
         </el-form-item>
         <el-form-item label="发布时间">
           <el-radio-group v-model="form.time" @change="changeTime">
