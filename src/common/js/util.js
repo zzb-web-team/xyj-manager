@@ -204,6 +204,17 @@ export default {
         let endTime = `${year}-${month}-${day}`;
         return endTime
     },
+    timeUnitActive: function(startTime,endTime) {
+    
+        let tempTime = endTime - startTime;
+        if (tempTime <= 86400) {
+          return  5;
+        } else if (86400 < tempTime <= 2592000) {
+          return 60;
+        } else if (tempTime > 2592000) {
+          return   1440;
+        }
+      },
 
     
     getTimeDay: function(b) {

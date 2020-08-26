@@ -26,9 +26,9 @@
 						<span v-else>大于</span
 					></template>
 				</el-table-column>
-				<el-table-column prop="name" label="在线时间">
+				<el-table-column prop="hour" label="在线时间">
 				</el-table-column>
-				<el-table-column prop="province" label="奖励">
+				<el-table-column prop="reward" label="奖励">
 				</el-table-column>
 
 				<el-table-column label="操作" width="120">
@@ -72,17 +72,17 @@
 			<el-form :model="form">
 				<el-form-item label="在线范围" :label-width="formLabelWidth">
 					<el-select
-						v-model="form.date"
+						v-model="form.types"
 						placeholder="请选择在线范围"
-						style="width: 200px;"
-					>
-						<el-option label="于" value="1"></el-option>
-						<el-option label="等于" value="2"></el-option>
+						style="width: 200px;">
+					
+						<el-option label="大于" value="大于"></el-option>
+						<el-option label="等于" value="等于"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="在线时间" :label-width="formLabelWidth">
 					<el-input
-						v-model="form.name"
+						v-model="form.hour"
 						autocomplete="off"
 						style="width: 200px;"
 						oninput="value=value.replace(/[^\d]/g,'')"
@@ -90,7 +90,7 @@
 				</el-form-item>
 				<el-form-item label="在线奖励" :label-width="formLabelWidth">
 					<el-input
-						v-model="form.province"
+						v-model="form.reward"
 						autocomplete="off"
 						style="width: 200px;"
 						oninput="value=value.replace(/[^\d]/g,'')"
@@ -122,24 +122,7 @@ export default {
 		return {
 			dialogFormVisible: false,
 			tableData: [
-				{
-					date: '大于',
-					date_value: 21,
-					name: '8',
-					province: '1',
-				},
-				{
-					date: '大于',
-					date_value: 2,
-					name: '8',
-					province: '2',
-				},
-				{
-					date: '等于',
-					date_value: 1,
-					name: '24',
-					province: '3',
-				},
+			
 			],
 			form: {
 				date: '',
@@ -149,21 +132,21 @@ export default {
 		};
 	},
 	mounted() {
-		this.get_data(0);
+		this.get_data(1);
 	},
 	methods: {
 		get_data(get_type) {
 			let params = new Object();
 			params.type = get_type;
-			if (get_type == 0) {
-				params.hour = [];
-				params.reward = [];
+			if (get_type == 1) {
+				// params.hour = [];
+				// params.reward = [];
 			} else {
 				let name_list = [];
 				let province_list = [];
 				this.tableData.forEach((item, idnex) => {
-					name_list.push(item.name);
-					province_list.push(item.province);
+					name_list.push(parseInt(item.hour) );
+					province_list.push(parseInt(item.reward) );
 				});
 				params.hour = name_list;
 				params.reward = province_list;
@@ -173,6 +156,22 @@ export default {
 				.then((res) => {
 					console.log(res);
 					if (res.status == 0) {
+						let tempArr=res.data.reward_list
+							tempArr.forEach((item, idnex) => {
+								let obj={
+
+								}
+								obj.hour=item.hour
+								obj.reward=item.reward
+								if(item.hour==24){
+									obj.types="等于"
+								}else{
+									obj.types="大于"
+								}
+								this.tableData.push(obj)
+					// name_list.push(item.hour);
+					// province_list.push(item.reward);
+				});
 					} else {
 						this.$message.error(res.err_msg);
 					}
@@ -182,7 +181,7 @@ export default {
 				});
 		},
 		set_earn() {
-			this.get_data(1);
+			this.get_data(0);
 		},
 		deleteRow(index, rows) {
 			rows.splice(index, 1);
@@ -195,9 +194,9 @@ export default {
 		},
 		addList() {
 			let obj = {
-				date: '等于',
-				province: '0',
-				name: '0',
+				types: '等于',
+				hour: 0,
+				reward: 0,
 			};
 			this.tableData.push(obj);
 		},
