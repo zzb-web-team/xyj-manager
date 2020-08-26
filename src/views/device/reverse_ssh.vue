@@ -403,7 +403,7 @@ export default {
 			console.log(index, row);
 			this.dialogVisible = true;
 			this.$refs.el_set_cmd.$el.firstChild.style.height = '80%';
-			this.cmdsrc = 'http://10.0.0.136:9999' + '?dev_sn=' + row.dev_sn;
+			this.cmdsrc = 'http://106.15.189.182:9999' + '?dev_sn=' + row.dev_sn;
 			console.log(this.cmdsrc);
 		},
 		handleSizeChange() {},

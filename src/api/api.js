@@ -18,7 +18,7 @@ if (href.indexOf('xyj.grapefruitcloud.com') >= 0) {
 } else {
     ownbase = 'http://zzb.onezen.net';
 }
-var ownssh = 'http://10.0.0.136:9999'
+var ownssh = 'http://106.15.189.182:9999'
 
 // export default {
 //     customData: function() {
