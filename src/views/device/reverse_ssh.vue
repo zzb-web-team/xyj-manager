@@ -89,12 +89,12 @@
 			</el-row>
 		</div>
 		<!--  -->
-		<div style="margin: 10px 0;">
+		<div style="margin: 10px 0">
 			<el-button type="primary" @click="search_data">刷新设备</el-button>
 		</div>
 		<!--  -->
-		<el-table :data="tableData" border style="width: 100%;">
-			<el-table-column prop="ip" label="IP"> </el-table-column>
+		<el-table :data="tableData" border style="width: 100%">
+			<el-table-column prop="dev_ip" label="IP"> </el-table-column>
 			<el-table-column prop="dev_sn" label="设备SN"> </el-table-column>
 			<el-table-column prop="mac_addrs" label="MAC地址">
 			</el-table-column>
@@ -108,6 +108,9 @@
 				</template>
 			</el-table-column>
 			<el-table-column prop="online_time" label="在线时间">
+				<template slot-scope="scope">{{
+					scope.row.online_time | formatDevTime
+				}}</template>
 			</el-table-column>
 			<el-table-column label="操作">
 				<template slot-scope="scope">
@@ -142,7 +145,7 @@
 				:src="cmdsrc"
 				frameborder="0"
 				id="myiframe"
-				style="width: 100%; height: 100%;"
+				style="width: 100%; height: 100%"
 			></iframe>
 			<!-- <span slot="footer" class="dialog-footer">
 				<el-button @click="dialogVisible = false">取 消</el-button>
@@ -157,6 +160,7 @@
 <script>
 import pageNation from '../../components/pageNation';
 import { upload } from '../../api/api';
+import common from '../../common/js/util.js';
 export default {
 	data() {
 		return {
@@ -266,7 +270,7 @@ export default {
 			],
 			tableData: [
 				{
-					ip: '192.10.365.20',
+					dev_ip: '192.10.365.20',
 					dev_sn: 'SMEX2020RTU1177',
 					mac_addrs: '00:0c:29:b3:da:14',
 					cpu_id: 'c2482cf62c5d915a',
@@ -287,20 +291,23 @@ export default {
 				rows: 100,
 			},
 			dialogVisible: false,
-            smdsrc:""
+			smdsrc: '',
 		};
 	},
 	filters: {
-		// getDuration(second) {
-		// 	if (second <= 0) return 0 + '秒';
-		// 	var days = Math.floor(second / 86400);
-		// 	var hours = Math.floor((second % 86400) / 3600);
-		// 	var minutes = Math.floor(((second % 86400) % 3600) / 60);
-		// 	var seconds = Math.floor(((second % 86400) % 3600) % 60);
-		// 	var duration =
-		// 		days + '天' + hours + '小时' + minutes + '分' + seconds + '秒';
-		// 	return duration;
-		// },
+		formatDevTime: function (b) {
+			let e = new Date(b * 1000);
+			let year = e.getFullYear();
+			let month = e.getMonth() + 1;
+			let day = e.getDate();
+			let hh = e.getHours() < 10 ? '0' + e.getHours() : e.getHours();
+			let mm =
+				e.getMinutes() < 10 ? '0' + e.getMinutes() : e.getMinutes();
+			let ss =
+				e.getSeconds() < 10 ? '0' + e.getSeconds() : e.getSeconds();
+			let endTime = `${year}-${month}-${day} ${hh}:${mm}:${ss}`;
+			return endTime;
+		},
 		getDuration(value) {
 			if (value <= 0) return 0 + '秒';
 			let theTime = parseInt(value); // 需要转换的时间秒
@@ -353,8 +360,12 @@ export default {
 			parame.page = this.pager.page - 1;
 			upload(parame)
 				.then((res) => {
-					console.log(res);
-					this.tableData = res;
+					if (res.status == 0) {
+						this.tableData = res.data;
+						this.pager.count = res.total_page;
+					} else {
+						this.$message.errro(res.message);
+					}
 				})
 				.catch((error) => {
 					console.log(error);
@@ -392,8 +403,8 @@ export default {
 			console.log(index, row);
 			this.dialogVisible = true;
 			this.$refs.el_set_cmd.$el.firstChild.style.height = '80%';
-            this.cmdsrc="http://106.15.189.182:9999"+"?dev_sn="+row.dev_sn;
-            console.log(this.cmdsrc);
+			this.cmdsrc = 'http://10.0.0.136:9999' + '?dev_sn=' + row.dev_sn;
+			console.log(this.cmdsrc);
 		},
 		handleSizeChange() {},
 		//翻页
@@ -420,5 +431,8 @@ export default {
 .con_Pagination {
 	margin: 10px 0;
 	text-align: right;
+}
+.terminal {
+	height: 100%;
 }
 </style>
