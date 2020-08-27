@@ -1,7 +1,7 @@
 <template>
 	<section class="myself-container">
-		<div class="goback" style="width: 100%; line-height: 50px;">
-			<div style="margin-top: 20px;">
+		<div class="goback" style="width: 100%; line-height: 50px">
+			<div style="margin-top: 20px">
 				<el-button
 					type="primary"
 					class="el-upload__tip"
@@ -10,34 +10,29 @@
 				>
 			</div>
 		</div>
-		<div style="height: 40px; line-height: 40px;">硬件收益配置</div>
+		<div style="height: 40px; line-height: 40px">硬件收益配置</div>
 		<el-button type="primary" @click="addList">添加</el-button>
-		<div style="width: 600px;">
+		<div style="width: 600px">
 			<el-table
 				:data="tableData"
 				border
 				width="100%"
-				style="margin-top: 20px;"
+				style="margin-top: 20px"
 			>
 				<el-table-column prop="date_value" label="范围">
 					<template slot-scope="scope">
-                        <span v-if="scope.row.date_value==0">小于</span>
-						<span v-else-if="scope.row.date_value==1">等于</span>
-						<span v-else>大于</span
-					></template>
+						<span v-if="scope.row.reward == 24">小于</span>
+						<span v-else>大于</span></template
+					>
 				</el-table-column>
 				<el-table-column prop="hour" label="在线时间">
 				</el-table-column>
-				<el-table-column prop="reward" label="奖励">
-				</el-table-column>
+				<el-table-column prop="reward" label="奖励"> </el-table-column>
 
 				<el-table-column label="操作" width="120">
 					<template slot-scope="scope">
 						<div
-							style="
-								display: flex;
-								justify-content: space-evenly;
-							"
+							style="display: flex; justify-content: space-evenly"
 						>
 							<el-button
 								type="text"
@@ -74,8 +69,8 @@
 					<el-select
 						v-model="form.types"
 						placeholder="请选择在线范围"
-						style="width: 200px;">
-					
+						style="width: 200px"
+					>
 						<el-option label="大于" value="大于"></el-option>
 						<el-option label="等于" value="等于"></el-option>
 					</el-select>
@@ -84,7 +79,7 @@
 					<el-input
 						v-model="form.hour"
 						autocomplete="off"
-						style="width: 200px;"
+						style="width: 200px"
 						oninput="value=value.replace(/[^\d]/g,'')"
 					></el-input>
 				</el-form-item>
@@ -92,13 +87,13 @@
 					<el-input
 						v-model="form.reward"
 						autocomplete="off"
-						style="width: 200px;"
+						style="width: 200px"
 						oninput="value=value.replace(/[^\d]/g,'')"
 					></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click="dialogFormVisible = false">取 消</el-button>
+				<el-button @click="noset_earn">取 消</el-button>
 				<el-button type="primary" @click="set_earn">确 定</el-button>
 			</div>
 		</el-dialog>
@@ -121,9 +116,7 @@ export default {
 	data() {
 		return {
 			dialogFormVisible: false,
-			tableData: [
-			
-			],
+			tableData: [],
 			form: {
 				date: '',
 				province: '',
@@ -145,8 +138,8 @@ export default {
 				let name_list = [];
 				let province_list = [];
 				this.tableData.forEach((item, idnex) => {
-					name_list.push(parseInt(item.hour) );
-					province_list.push(parseInt(item.reward) );
+					name_list.push(parseInt(item.hour));
+					province_list.push(parseInt(item.reward));
 				});
 				params.hour = name_list;
 				params.reward = province_list;
@@ -155,23 +148,27 @@ export default {
 			set_earn_dot_value(params)
 				.then((res) => {
 					console.log(res);
+					this.tableData = [];
 					if (res.status == 0) {
-						let tempArr=res.data.reward_list
-							tempArr.forEach((item, idnex) => {
-								let obj={
-
-								}
-								obj.hour=item.hour
-								obj.reward=item.reward
-								if(item.hour==24){
-									obj.types="等于"
-								}else{
-									obj.types="大于"
-								}
-								this.tableData.push(obj)
-					// name_list.push(item.hour);
-					// province_list.push(item.reward);
-				});
+						if (get_type != 1) {
+							this.get_data(1);
+						} else {
+							this.$message.success('设置成功');
+						}
+						let tempArr = res.data.reward_list;
+						tempArr.forEach((item, idnex) => {
+							let obj = {};
+							obj.hour = item.hour;
+							obj.reward = item.reward;
+							if (item.hour == 24) {
+								obj.types = '等于';
+							} else {
+								obj.types = '大于';
+							}
+							this.tableData.push(obj);
+							// name_list.push(item.hour);
+							// province_list.push(item.reward);
+						});
 					} else {
 						this.$message.error(res.err_msg);
 					}
@@ -180,17 +177,50 @@ export default {
 					console.log(error);
 				});
 		},
+		noset_earn() {
+			this.dialogFormVisible = false;
+			this.get_data(1);
+		},
 		set_earn() {
+			if (this.tableData.indexOf(this.form.hour) != -1) {
+				this.$message.error('不能设置重复的时间范围');
+				return false;
+			}
+			if (this.tableData.indexOf(this.form.reward) != -1) {
+				this.$message.error('不同时间范围的奖励不能一样');
+				return false;
+			}
+			let max_data_nuum = 0;
+			this.tableData.forEach((item, index) => {
+				if (item.hour > this.form.hour) {
+					max_data_nuum = index;
+				}
+			});
+			if (this.tableData[max_data_nuum].reward <= this.form.reward) {
+				this.$message.error(
+					'该时间范围内的奖励值不能大于上一个区间的奖励'
+				);
+				return false;
+			} else if (
+				this.tableData[max_data_nuum + 1] &&
+				this.tableData[max_data_nuum + 1].reward >= this.form.reward
+			) {
+				this.$message.error(
+					'该时间范围内的奖励值不能小于下一个区间的奖励'
+				);
+				return false;
+			}
+			this.tableData.push(this.form);
 			this.get_data(0);
 		},
 		deleteRow(index, rows) {
 			rows.splice(index, 1);
+			this.get_data(1);
 		},
 		goEdit(index, rows) {
 			this.dialogFormVisible = true;
-			console.log(index, rows);
-			console.log(rows[index]);
-			this.form = rows[index];
+			this.form = JSON.parse(JSON.stringify(rows[index]));
+			rows.splice(index, 1);
 		},
 		addList() {
 			let obj = {

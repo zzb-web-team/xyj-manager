@@ -266,7 +266,7 @@
 					<el-row type="flex" class="row_active">
 						<el-col :span="24">
 							<el-table
-								:data="tableData"
+								:data="tab_data"
 								border
 								style="width: 100%"
 								@sort-change="tableSortChange"
@@ -361,7 +361,8 @@ export default {
 					label: '兑换',
 				},
 			],
-			tableData: [],
+            tableData: [],
+            tab_data:[],
 			pager: {
 				count: 0,
 				page: 1,
@@ -382,7 +383,8 @@ export default {
 			this.searchText = '';
 			this.profit_type = '';
 			this.start_time = '';
-			this.end_time = '';
+            this.end_time = '';
+            this.pager.page = 1;
 			if (this.activeName == 'first') {
 				this.get_data();
 			} else {
@@ -429,6 +431,7 @@ export default {
 		},
 		//input按钮搜索
 		onSubmitKey() {
+            this.pager.page = 1;
 			if (this.activeName == 'first') {
 				this.get_data();
 			} else {
@@ -506,8 +509,10 @@ export default {
 						this.tableData = teamarr;
 						this.pager.count = res.data.total_num;
                         this.pager.rows = res.data.total_page;
-                        console.log(this.tableData);
-					}
+                       
+					}else{
+                        this.$message.error(res.err_msg);
+                    }
 				})
 				.catch((error) => {
 					console.log(error);
@@ -572,11 +577,13 @@ export default {
 								teamarr[i].time_stamp * 1000
 							);
 						}
-						this.tableData = [];
-						this.tableData = teamarr;
+						this.tab_data = [];
+						this.tab_data = teamarr;
 						this.pager.count = res.data.total_num;
 						this.pager.rows = res.data.total_page;
-					}
+					}else{
+                        this.$message.error(res.err_msg);
+                    }
 				})
 				.catch((error) => {
 					console.log(error);
