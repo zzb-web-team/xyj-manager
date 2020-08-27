@@ -128,7 +128,7 @@ export default {
 		this.get_data(1);
 	},
 	methods: {
-		get_data(get_type) {
+		get_data(get_type, type) {
 			let params = new Object();
 			params.type = get_type;
 			if (get_type == 1) {
@@ -152,8 +152,11 @@ export default {
 					if (res.status == 0) {
 						if (get_type != 1) {
 							this.get_data(1);
-						} else {
+						}
+						if (type && type == 1) {
 							this.$message.success('设置成功');
+						} else if (type && type == 2) {
+							this.$message.success('删除成功');
 						}
 						let tempArr = res.data.reward_list;
 						tempArr.forEach((item, idnex) => {
@@ -211,11 +214,11 @@ export default {
 				return false;
 			}
 			this.tableData.push(this.form);
-			this.get_data(0);
+			this.get_data(0, 1);
 		},
 		deleteRow(index, rows) {
 			rows.splice(index, 1);
-			this.get_data(1);
+			this.get_data(0, 2);
 		},
 		goEdit(index, rows) {
 			this.dialogFormVisible = true;
