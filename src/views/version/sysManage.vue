@@ -765,7 +765,7 @@ export default {
 				return '小米盒子4C';
 			} else if (value == 3) {
 				return '小米盒子4';
-			} else if (value == 4) {
+			} else if (value == 88) {
 				return 'PC版西柚机';
 			}
 		},

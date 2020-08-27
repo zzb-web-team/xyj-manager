@@ -258,7 +258,7 @@ export default {
         },
         {
           value: "4",
-          label: "剩余磁盘容量报警",
+          label: "磁盘剩余容量报警",
         },
         {
           value: "5",
@@ -294,7 +294,7 @@ export default {
       } else if (data == 2) {
         return "进程md5变更";
       } else if (data == 3) {
-        return "新增未知进度";
+        return "新增未知进程";
       }
     },
   },
