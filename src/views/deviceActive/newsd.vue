@@ -107,7 +107,7 @@
                   {{ details_table.online_time }}
                 </td>
                 <td class="device_title_name">硬盘温度</td>
-                <td class="device_title_content">{{ details_table.hd_tmp }}</td>
+                <td class="device_title_content">{{ details_table.hd_tmp!='-1℃'?details_table.hd_tmp:"Unknown"}}</td>
               </tr>
               <tr>
                 <td class="device_title_name">设备状态</td>
@@ -116,7 +116,7 @@
                 </td>
                 <td class="device_title_name">CPU温度</td>
                 <td class="device_title_content">
-                  {{ details_table.cpu_tem }}
+                  {{ details_table.cpu_tem!='-1℃'?details_table.cpu_tem:"Unknown" }}
                 </td>
                 <td class="device_title_name">内存占用</td>
                 <td class="device_title_content">
@@ -165,7 +165,7 @@
                 <template slot-scope="scope">
                   <span style="color:red;" v-if="scope.row.cpu_tem >= 80">{{ scope.row.cpu_tem + "℃" }}
                   </span>
-                  <span v-else>{{ scope.row.cpu_tem + "℃" }}</span>
+                  <span v-else>{{ scope.row.cpu_tem!=-1?scope.row.cpu_tem + "℃":'Unknown' }}</span>
                 </template>
               </el-table-column>
 
@@ -173,7 +173,7 @@
                 <template slot-scope="scope">
                   <span style="color:red;" v-if="scope.row.hd_tem >= 40">{{ scope.row.hd_tem + "℃" }}
                   </span>
-                  <span v-else>{{ scope.row.hd_tem + "℃" }}</span>
+                  <span v-else>{{scope.row.hd_tem!=-1?scope.row.hd_tem + "℃":'Unknown'}}</span>
                 </template>
               </el-table-column>
               <el-table-column prop="mb_tem" label="磁盘剩余容量占比">
