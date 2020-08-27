@@ -8,7 +8,7 @@
 							<div class="search-con">
 								<i
 									class="el-icon-search"
-									style="color: #606266;"
+									style="color: #606266"
 								></i>
 								<el-input
 									class="search-input"
@@ -20,7 +20,7 @@
 							<div
 								@click="getShow()"
 								class="div_show"
-								style="color: #606266;"
+								style="color: #606266"
 							>
 								筛选
 								<i
@@ -37,7 +37,7 @@
 							<el-row type="flex" class="row_activess">
 								<el-form-item
 									label="类型"
-									style="display: flex;"
+									style="display: flex"
 								>
 									<el-select
 										v-model="profit_type"
@@ -54,11 +54,11 @@
 
 								<el-form-item
 									label="时间"
-									style="display: flex;"
+									style="display: flex"
 								>
 									<el-date-picker
 										v-model="start_time"
-										style="width: 160px;"
+										style="width: 160px"
 										type="datetime"
 										placeholder="选择开始日期时间"
 										:picker-options="pickerOptions1"
@@ -66,7 +66,7 @@
 									-
 									<el-date-picker
 										v-model="end_time"
-										style="width: 160px;"
+										style="width: 160px"
 										type="datetime"
 										placeholder="选择结束日期时间"
 										:picker-options="pickerOptions"
@@ -75,7 +75,7 @@
 								<el-form-item>
 									<el-button
 										type="primary"
-										style="margin-left: 68px;"
+										style="margin-left: 68px"
 										@click="search"
 										>确定</el-button
 									>
@@ -93,10 +93,10 @@
 					<el-row
 						type="flex"
 						class="row_active"
-						style="display: flex; justify-content: flex-end;"
+						style="display: flex; justify-content: flex-end"
 					>
 						<el-col
-							style="display: flex; justify-content: flex-end;"
+							style="display: flex; justify-content: flex-end"
 						>
 							<el-button
 								type="primary"
@@ -110,7 +110,7 @@
 							<el-table
 								:data="tableData"
 								border
-								style="width: 100%;"
+								style="width: 100%"
 								@sort-change="tableSortChange"
 							>
 								<el-table-column prop="user_id" label="用户ID">
@@ -120,21 +120,21 @@
 									label="用户昵称"
 								>
 								</el-table-column>
-								<el-table-column prop="dev_sn" label="设备SN">
-								</el-table-column>
+								<!-- <el-table-column prop="dev_sn" label="设备SN">
+								</el-table-column> -->
 								<el-table-column
 									prop="profit_type"
 									label="收支类型"
 								>
 								</el-table-column>
 								<el-table-column
-									prop="profit_typeActive"
+									prop="c_profit"
 									label="金额（积分）"
 								>
 								</el-table-column>
 
 								<el-table-column
-									prop="total_profit"
+									prop="t_profit"
 									label="收益账户余额"
 									:formatter="formatNumber"
 								>
@@ -151,7 +151,7 @@
 				</div>
 				<div
 					class="devide_pageNation"
-					style="display: flex; justify-content: space-between;"
+					style="display: flex; justify-content: space-between"
 				>
 					<el-row type="flex"></el-row>
 					<el-row type="flex">
@@ -172,7 +172,7 @@
 							<div class="search-con">
 								<i
 									class="el-icon-search"
-									style="color: #606266;"
+									style="color: #606266"
 								></i>
 								<el-input
 									class="search-input"
@@ -184,7 +184,7 @@
 							<div
 								@click="getShow()"
 								class="div_show"
-								style="color: #606266;"
+								style="color: #606266"
 							>
 								筛选
 								<i
@@ -207,11 +207,11 @@
 
 								<el-form-item
 									label="时间"
-									style="display: flex;"
+									style="display: flex"
 								>
 									<el-date-picker
 										v-model="start_time"
-										style="width: 160px;"
+										style="width: 160px"
 										type="datetime"
 										placeholder="选择开始日期时间"
 										:picker-options="pickerOptions1"
@@ -219,7 +219,7 @@
 									-
 									<el-date-picker
 										v-model="end_time"
-										style="width: 160px;"
+										style="width: 160px"
 										type="datetime"
 										placeholder="选择结束日期时间"
 										:picker-options="pickerOptions"
@@ -228,7 +228,7 @@
 								<el-form-item>
 									<el-button
 										type="primary"
-										style="margin-left: 68px;"
+										style="margin-left: 68px"
 										@click="search(2)"
 										>确定</el-button
 									>
@@ -246,7 +246,7 @@
 					<el-row
 						type="flex"
 						class="row_active"
-						style="display: flex; justify-content: flex-end;"
+						style="display: flex; justify-content: flex-end"
 					>
 						<el-col>
 							<el-button type="primary" @click="setparam"
@@ -254,7 +254,7 @@
 							>
 						</el-col>
 						<el-col
-							style="display: flex; justify-content: flex-end;"
+							style="display: flex; justify-content: flex-end"
 						>
 							<el-button
 								type="primary"
@@ -268,7 +268,7 @@
 							<el-table
 								:data="tableData"
 								border
-								style="width: 100%;"
+								style="width: 100%"
 								@sort-change="tableSortChange"
 							>
 								<el-table-column prop="user_id" label="用户ID">
@@ -300,7 +300,7 @@
 				</div>
 				<div
 					class="devide_pageNation"
-					style="display: flex; justify-content: space-between;"
+					style="display: flex; justify-content: space-between"
 				>
 					<el-row type="flex"></el-row>
 					<el-row type="flex">
@@ -375,7 +375,7 @@ export default {
 		};
 	},
 	mounted() {
-		this.getInfo();
+		this.get_data();
 	},
 	methods: {
 		handleClick(tab, event) {
@@ -384,7 +384,7 @@ export default {
 			this.start_time = '';
 			this.end_time = '';
 			if (this.activeName == 'first') {
-				this.getInfo();
+				this.get_data();
 			} else {
 				this.getInfo(2);
 			}
@@ -402,7 +402,11 @@ export default {
 			} else {
 				this.order = 1;
 			}
-			this.getInfo();
+			if (this.activeName == 'first') {
+				this.get_data();
+			} else {
+				this.getInfo(2);
+			}
 		},
 		//导出的方法
 		toexportExcelactive() {
@@ -417,11 +421,19 @@ export default {
 			this.end_time = '';
 			this.searchText = '';
 			this.profit_type = '';
-			this.getInfo();
+			if (this.activeName == 'first') {
+				this.get_data();
+			} else {
+				this.getInfo(2);
+			}
 		},
 		//input按钮搜索
 		onSubmitKey() {
-			this.getInfo();
+			if (this.activeName == 'first') {
+				this.get_data();
+			} else {
+				this.getInfo(2);
+			}
 		},
 		formatType(row) {
 			if (row.profit_type === 1) {
@@ -430,12 +442,76 @@ export default {
 				return '兑换';
 			}
 		},
-		formatNumber(row, column) {
-			const property = column['property'];
-			return (row[property] / 100).toFixed(2);
-		},
+		// formatNumber(row, column) {
+		// 	const property = column['property'];
+		// 	return (row[property] / 100).toFixed(2);
+		// },
 		formatTime(row) {
 			return this.common.getTimess(row.time_stamp * 1000);
+		},
+		get_data() {
+			let data = {
+				query_type: 0,
+				cur_page: this.pager.page - 1,
+				order: this.order,
+				profit_type:
+					this.profit_type === '' ? 0 : Number(this.profit_type),
+				start_time:
+					this.start_time === ''
+						? parseInt(new Date().getTime() / 1000) - 86400 * 90
+						: new Date(this.start_time).getTime() / 1000,
+				end_time:
+					this.end_time === ''
+						? parseInt(new Date().getTime() / 1000)
+						: new Date(this.end_time).getTime() / 1000,
+			};
+			if (this.judgeString(this.searchText)) {
+				var arr = Object.keys(this.judgeString(this.searchText));
+				data.query_type = arr.length === 0 ? 0 : 1;
+				// data.query_type = arr.length === 0 ? 0 : 1;
+				var param = Object.assign(
+					this.judgeString(this.searchText),
+					data
+				);
+			} else {
+				this.$message.error('请输入正确的用户ID、用户昵称');
+				return;
+			}
+			if (data.end_time - data.start_time > 7948801) {
+				this.$message({
+					message: '只能查询任意当前结束时间往前的90天以内的数据',
+					type: 'error',
+				});
+				return false;
+			}
+			query_user_total_profit_everyday(param)
+				.then((res) => {
+					if (res.status === 0) {
+						this.exportLinks = res.data.filename;
+
+						let teamarr = res.data.total_profit_list;
+						for (var i = 0; i < teamarr.length; i++) {
+							if (teamarr[i].profit_type === 1) {
+								teamarr[i].profit_type = '收益';
+							} else {
+								teamarr[i].profit_type = '兑换';
+							}
+							teamarr[i].c_profit = (teamarr[i].cur_profit / 100).toFixed(2);
+							teamarr[i].t_profit = (teamarr[i].total_profit / 100).toFixed(2);
+							teamarr[i].time_stamp = this.common.getTimess(
+								teamarr[i].time_stamp * 1000
+							);
+						}
+						this.tableData = [];
+						this.tableData = teamarr;
+						this.pager.count = res.data.total_num;
+                        this.pager.rows = res.data.total_page;
+                        console.log(this.tableData);
+					}
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 		},
 		getInfo(num) {
 			let data = {
@@ -454,8 +530,8 @@ export default {
 						: new Date(this.end_time).getTime() / 1000,
 			};
 			if (num) {
-				data.query_type = 1;
-				data.profit_type = 1;
+				data.query_type = 0;
+				data.profit_type = 0;
 			}
 			if (this.judgeString(this.searchText)) {
 				var arr = Object.keys(this.judgeString(this.searchText));
@@ -580,7 +656,11 @@ export default {
 		search(num) {
 			this.pager.page = 1;
 
-			this.getInfo(num);
+			if (this.activeName == 'first') {
+				this.get_data();
+			} else {
+				this.getInfo(2);
+			}
 		},
 		getShow() {
 			this.showState = !this.showState;

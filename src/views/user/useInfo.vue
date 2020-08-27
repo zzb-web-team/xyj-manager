@@ -567,7 +567,7 @@ export default {
 							item.time_stamp = this.common.getTimes(
 								item.time_stamp * 1000
                             );
-                            item.cur_profit=item.profit;
+                            item.cur_profit=parseInt(item.profit/100);
                             item.total_profit=this.getDuration(item.v210_online_time);
 						});
 						this.tableData1 = res.data.profit_detail_list;
