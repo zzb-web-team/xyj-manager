@@ -21,7 +21,7 @@
 			>
 				<el-table-column prop="date_value" label="范围">
 					<template slot-scope="scope">
-						<span v-if="scope.row.reward == 24">小于</span>
+						<span v-if="scope.row.hour == 24">小于</span>
 						<span v-else>大于</span></template
 					>
 				</el-table-column>
@@ -199,19 +199,30 @@ export default {
 					max_data_nuum = index;
 				}
 			});
-			if (this.tableData[max_data_nuum].reward <= this.form.reward) {
-				this.$message.error(
-					'该时间范围内的奖励值不能大于上一个区间的奖励'
-				);
-				return false;
-			} else if (
-				this.tableData[max_data_nuum + 1] &&
-				this.tableData[max_data_nuum + 1].reward >= this.form.reward
-			) {
-				this.$message.error(
-					'该时间范围内的奖励值不能小于下一个区间的奖励'
-				);
-				return false;
+			console.log(this.tableData);
+			console.log(max_data_nuum);
+			if (this.form.hour == 24) {
+				if (this.tableData[0].reward >= this.form.reward) {
+					this.$message.error(
+						'该时间范围内的奖励值不能小于下一个区间的奖励'
+					);
+					return false;
+				}
+			} else {
+				if (this.tableData[max_data_nuum].reward <= this.form.reward) {
+					this.$message.error(
+						'该时间范围内的奖励值不能大于上一个区间的奖励'
+					);
+					return false;
+				} else if (
+					this.tableData[max_data_nuum + 1] &&
+					this.tableData[max_data_nuum + 1].reward >= this.form.reward
+				) {
+					this.$message.error(
+						'该时间范围内的奖励值不能小于下一个区间的奖励'
+					);
+					return false;
+				}
 			}
 			this.tableData.push(this.form);
 			this.get_data(0, 1);
