@@ -68,15 +68,17 @@
     <el-dialog title="新增发布" :visible.sync="dialog" custom-class="customWidth" width="30%">
       <div class="add-sdk">
         <div class="item" style=" align-items: flex-start; display: flex;justify-content: center;">
-          <div class="item_l">应用包：</div>
+          <div class="item_l" style="margin-top:10px;">应用包：</div>
           <div class="item-r" style="position: relative;">
             <!-- <el-button class="choose-file" size="mini">请选择要上传的文件</el-button> -->
-            <input id="f" ref="test" class="choose-input" type="file" name="file">
-            <el-button type="primary" class="onchoose-file" @click="upFile()" :disabled="disableStatus">确定</el-button>
-            进度条
-            <span id="per">{{perNum}}</span>%
-            <div style="width: 350px;height: 16px;background-color: #999;margin-top:10px;">
-              <div style="height: 16px;background-color: #67c23a" id="loading" v-bind:style="{'width': widthData+'%'}"></div>
+            <div style="width: 350px;height: 16px;margin-top:10px;">
+            <input id="f" ref="test" class="choose-input" type="file" name="file" @change="upFile">
+            </div>
+            <!-- <el-button type="primary" class="onchoose-file" @click="upFile()" :disabled="disableStatus">确定</el-button> -->
+            <!-- 进度条
+            <span id="per">{{perNum}}</span>% -->
+            <div style="width: 350px;height: 16px;background-color: #999;margin-top:20px;">
+              <div style="height: 16px;background-color: #67c23a;text-align: right;" id="loading" v-bind:style="{'width': widthData+'%'}">{{perNum}}%</div>
             </div>
             <div id="result" style="margin-top:10px;"></div>
             <div class="uploadInfo" v-if="uploadType">
@@ -88,7 +90,12 @@
               <p>包地址:{{uploadForm.url}}</p>
             </div>
             <div>
-              <el-input v-model="uploadinput" placeholder="请输入描述" style="width:350px;"></el-input>
+              <!-- <el-input v-model="uploadinput" placeholder="请输入描述" style="width:350px;"></el-input> -->
+              <el-input
+                    type="textarea"
+                   :autosize="{ minRows: 4, maxRows: 6}"
+                    v-model="uploadinput" placeholder="请输入描述">
+                </el-input>
             </div>
             <div style="display: flex;justify-content: center;margin-left:-30px;margin-top:20px;">
               <el-button type="primary" @click="onsumbitUpload()">上传</el-button>
@@ -216,7 +223,7 @@ export default {
       // this.dialogEdit = true
       console.log(row);
       this.deleteId = row.id;
-      this.$confirm("确定执行该操作麽吗", "提示", {
+      this.$confirm("确定执行该操作吗", "提示", {
         type: "warning",
       })
         .then(res => {

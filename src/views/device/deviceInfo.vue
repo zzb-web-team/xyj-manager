@@ -21,7 +21,7 @@
 				<el-row type="flex">
 					<el-col :span="4">
 						<el-input
-							placeholder="设备SN、设备名称、MAC地址、设备IP、节点ID"
+							placeholder="设备SN、名称、IP、MAC地址或节点ID"
 							v-model="searchText"
 							@keyup.enter.native="onSubmitKey"
 						>
