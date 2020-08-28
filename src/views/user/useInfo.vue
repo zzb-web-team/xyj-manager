@@ -1,7 +1,7 @@
 <template>
 	<section class="myself-container">
-		<div class="goback" style="width: 100%; line-height: 50px;">
-			<div style="margin-top: 20px;">
+		<div class="goback" style="width: 100%; line-height: 50px">
+			<div style="margin-top: 20px">
 				<el-button
 					type="primary"
 					class="el-upload__tip"
@@ -15,10 +15,10 @@
 				<el-col :span="5">
 					<div class="user-item">
 						<div class="item-count">{{ sum_profit }}</div>
-						<div class="item-text" style="margin-top: 7px;">
+						<div class="item-text" style="margin-top: 7px">
 							累计西柚机收益
 						</div>
-						<div class="item-text" style="margin-top: 7px;">
+						<div class="item-text" style="margin-top: 7px">
 							<el-button
 								type="primary"
 								size="mini"
@@ -28,13 +28,13 @@
 						</div>
 					</div>
 				</el-col>
-				<el-col :span="5" style="margin-left: 30px;">
+				<el-col :span="5" style="margin-left: 30px">
 					<div class="user-item">
 						<div class="item-count">{{ sum_profit1 }}</div>
-						<div class="item-text" style="margin-top: 7px;">
+						<div class="item-text" style="margin-top: 7px">
 							累计节点收益
 						</div>
-						<div class="item-text" style="margin-top: 7px;">
+						<div class="item-text" style="margin-top: 7px">
 							<el-button
 								type="primary"
 								size="mini"
@@ -44,13 +44,13 @@
 						</div>
 					</div>
 				</el-col>
-				<el-col :span="5" style="margin-left: 30px;">
+				<el-col :span="5" style="margin-left: 30px">
 					<div class="user-item">
 						<div class="item-count">{{ dev_num }}</div>
-						<div class="item-text" style="margin-top: 7px;">
+						<div class="item-text" style="margin-top: 7px">
 							设备数
 						</div>
-						<div class="item-text" style="margin-top: 7px;">
+						<div class="item-text" style="margin-top: 7px">
 							<el-button
 								type="primary"
 								size="mini"
@@ -60,14 +60,14 @@
 						</div>
 					</div>
 				</el-col>
-				<el-col :span="5" style="margin-left: 30px;">
+				<el-col :span="5" style="margin-left: 30px">
 					<div class="user-item">
 						<div class="item-count">0</div>
 						<!-- <div class="item-count">{{average_store}}</div> -->
-						<div class="item-text" style="margin-top: 7px;">
+						<div class="item-text" style="margin-top: 7px">
 							节点数
 						</div>
-						<div class="item-text" style="margin-top: 7px;"></div>
+						<div class="item-text" style="margin-top: 7px"></div>
 					</div>
 				</el-col>
 			</el-row>
@@ -76,11 +76,9 @@
 			<div class="title">
 				<div class="title-text">基本信息</div>
 			</div>
-			<div class="h3">
-				基本信息
-			</div>
+			<div class="h3">基本信息</div>
 			<div class="user-con">
-				<div class="item" style="margin-top: 10px;">
+				<div class="item" style="margin-top: 10px">
 					<div class="item-l">用户ID:</div>
 					<div class="item-r">{{ user_id }}</div>
 				</div>
@@ -110,7 +108,7 @@
 		>
 			<div class="userdetails">
 				<el-row
-					style="height: 40px; line-height: 40px; font-weight: bold;"
+					style="height: 40px; line-height: 40px; font-weight: bold"
 				>
 					<el-col :span="24">
 						'{{ user_ids }}' ID用户西柚机收益明细
@@ -150,7 +148,7 @@
 		>
 			<div class="userdetails">
 				<el-row
-					style="height: 40px; line-height: 40px; font-weight: bold;"
+					style="height: 40px; line-height: 40px; font-weight: bold"
 				>
 					<el-col :span="24">
 						'{{ user_ids }}' D用户节点收益明细
@@ -190,7 +188,7 @@
 		>
 			<div class="userdetails">
 				<el-row
-					style="height: 40px; line-height: 40px; font-weight: bold;"
+					style="height: 40px; line-height: 40px; font-weight: bold"
 				>
 					<el-col :span="24">
 						'{{ user_ids }}' ID用户设备明细
@@ -348,10 +346,10 @@ export default {
 				},
 			],
 			rowHeader1: [
-                {
-                    prop:'dev_sn',
-                    label:'设备SN',
-                },
+				{
+					prop: 'dev_sn',
+					label: '设备SN',
+				},
 				{
 					prop: 'cur_profit',
 					label: '金额',
@@ -531,6 +529,7 @@ export default {
 						if (res.data.store_list) {
 							this.sum_profit1 =
 								res.data.store_list[0].sum_profit / 100;
+							this.dev_num = res.data.store_list[0].dev_num;
 						} else {
 						}
 					})
@@ -566,9 +565,11 @@ export default {
 						res.data.profit_detail_list.forEach((item) => {
 							item.time_stamp = this.common.getTimes(
 								item.time_stamp * 1000
-                            );
-                            item.cur_profit=parseInt(item.profit/100);
-                            item.total_profit=this.getDuration(item.v210_online_time);
+							);
+							item.cur_profit = parseInt(item.profit / 100);
+							item.total_profit = this.getDuration(
+								item.v210_online_time
+							);
 						});
 						this.tableData1 = res.data.profit_detail_list;
 						// let nowarr = res.data.total_profit_list;
@@ -590,8 +591,8 @@ export default {
 					}
 				})
 				.catch((error) => {});
-        },
-        getDuration(value) {
+		},
+		getDuration(value) {
 			if (value <= 0) return 0 + '秒';
 			let theTime = parseInt(value); // 需要转换的时间秒
 			let theTime1 = 0; // 分
@@ -807,7 +808,7 @@ export default {
 
 						this.tableData2 = nowarr;
 						this.pager2.count = res.data.total_num;
-						this.dev_num = res.data.total_num;
+						// this.dev_num = res.data.total_num;
 					}
 				})
 				.catch((error) => {
@@ -886,7 +887,7 @@ export default {
 
 						this.tableData2 = res.data.nowarr;
 						this.pager2.count = res.data.total_num;
-						this.dev_num = res.data.total_num;
+						// this.dev_num = res.data.total_num;
 					}
 				})
 				.catch((error) => {
