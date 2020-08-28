@@ -86,7 +86,7 @@
               <tr>
                 <td class="device_title_name">设备SN</td>
                 <td class="device_title_content">{{ details_table.dev_sn }}</td>
-                <td class="device_title_name">当前上/下行宽带</td>
+                <td class="device_title_name">当前上/下行带宽</td>
                 <td class="device_title_content">
                   {{ details_table.up_bandwidth }}/{{ details_table.down_bandwidth }}
                 </td>
@@ -153,7 +153,7 @@
                   <span v-else>{{ scope.row.total_cap }}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="upstream_bandwidth" label="当前上行/下行宽带">
+              <el-table-column prop="upstream_bandwidth" label="当前上行/下行带宽">
                 <template slot-scope="scope">
                   <span v-if="!scope.row.up_bandwidth">--</span>
                   <span>{{ common.formatByteActive(scope.row.up_bandwidth) }}</span>/

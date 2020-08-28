@@ -703,13 +703,15 @@ export default {
             ? -1
             : new Date(this.activate_end_ts).getTime() / 1000,
       };
-      let SME = /^SME[0-9a-zA-Z]{1}[0-9]{4}[0-9a-zA-Z]{7}$/;
-      let cpuid = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{9}$/;
+    //   let SME = /^SME[0-9a-zA-Z]{1}[0-9]{4}[0-9a-zA-Z]{7}$/;
+
+    //   let cpuid = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{9}$/;
+        let SME=/^SME{1}[0-9a-zA-Z]/;
       if (this.searchText != "") {
         if (SME.test(this.searchText) == true) {
           data.dev_sn = this.searchText;
           data.cpu_id = "";
-        } else if (cpuid.test(this.searchText) == true) {
+        } else{
           data.dev_sn = "";
           data.cpu_id = this.searchText;
         }
@@ -717,12 +719,6 @@ export default {
         data.dev_sn = "";
         data.cpu_id = "";
       }
-      // if (this.judgeString(this.searchText)) {
-      //   var param = Object.assign(this.judgeString(this.searchText), data);
-      // } else {
-      //   this.$message.error("请输入正确的设备SN、CPU-ID");
-      //   return;
-      // }
       query_devinfo_by_conditions(data)
         .then(res => {
           if (res.status === 0) {
