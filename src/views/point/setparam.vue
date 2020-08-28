@@ -21,7 +21,7 @@
 			>
 				<el-table-column prop="date_value" label="范围">
 					<template slot-scope="scope">
-						<span v-if="scope.row.hour == 24">小于</span>
+						<span v-if="scope.row.hour == 24">等于</span>
 						<span v-else>大于</span></template
 					>
 				</el-table-column>
@@ -63,6 +63,7 @@
 			:visible.sync="dialogFormVisible"
 			width="20%"
 			center
+			@close="noset_earn"
 		>
 			<el-form :model="form">
 				<el-form-item label="在线范围" :label-width="formLabelWidth">
@@ -226,8 +227,21 @@ export default {
 			this.get_data(0, 1);
 		},
 		deleteRow(index, rows) {
-			rows.splice(index, 1);
-			this.get_data(0, 2);
+			this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning',
+			})
+				.then(() => {
+					rows.splice(index, 1);
+					this.get_data(0, 2);
+				})
+				.catch(() => {
+					//   this.$message({
+					//     type: 'info',
+					//     message: '已取消删除'
+					//   });
+				});
 		},
 		goEdit(index, rows) {
 			this.dialogFormVisible = true;
