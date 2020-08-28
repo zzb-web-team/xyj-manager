@@ -408,11 +408,14 @@ export default {
 	},
 	methods: {
 		handleClick(tab, event) {
+            this.pager.page = 1;
+            this.pager.count=0;
+            this.tableData=[];
+            this.tableData2=[];
 			this.searchText = '';
 			this.profit_type = '';
 			this.start_time = '';
 			this.end_time = '';
-			this.pager.page = 1;
 			if (this.activeName == 'first') {
 				this.get_data();
 			} else {
@@ -708,8 +711,13 @@ export default {
 			this.dialogVisible = true;
 		},
 		handleCurrentChange(val) {
+
 			this.pager.page = val.val;
-			this.getInfo();
+			if (this.activeName == 'first') {
+				this.get_data();
+			} else {
+				this.getInfo(2);
+			}
 		},
 		judgeString(str) {
 			const reg1 = /^\d{7}$/;
