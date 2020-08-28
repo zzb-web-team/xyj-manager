@@ -118,7 +118,7 @@
                 </template>
               </el-table-column>
               <el-table-column prop="" label="内存占用">
-                <template slot-scope="scope">·
+                <template slot-scope="scope">
                   {{ scope.row.pid_mem |formatBytes }}
 
                 </template>

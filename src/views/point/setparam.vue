@@ -199,8 +199,6 @@ export default {
 					max_data_nuum = index;
 				}
 			});
-			console.log(this.tableData);
-			console.log(max_data_nuum);
 			if (this.form.hour == 24) {
 				if (this.tableData[0].reward >= this.form.reward) {
 					this.$message.error(
