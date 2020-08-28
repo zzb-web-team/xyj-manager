@@ -5,7 +5,7 @@
 				<div class="device_form">
 					<el-form ref="form" :model="form">
 						<el-row type="flex">
-							<div class="search-con">
+							<!-- <div class="search-con">
 								<i
 									class="el-icon-search"
 									style="color: #606266"
@@ -16,7 +16,20 @@
 									placeholder="用户ID、用户昵称"
 									@keyup.enter.native="onSubmitKey"
 								></el-input>
-							</div>
+							</div> -->
+							<el-col :span="4">
+								<el-input
+									v-model="searchText"
+									placeholder="用户ID、用户昵称"
+									@keyup.enter.native="onSubmitKey"
+								>
+									<i
+										slot="prefix"
+										class="el-input__icon el-icon-search"
+										@click="onSubmitKey"
+									></i>
+								</el-input>
+							</el-col>
 							<div
 								@click="getShow()"
 								class="div_show"
@@ -169,7 +182,7 @@
 				<div class="device_form">
 					<el-form ref="form" :model="form">
 						<el-row type="flex">
-							<div class="search-con">
+							<!-- <div class="search-con">
 								<i
 									class="el-icon-search"
 									style="color: #606266"
@@ -180,7 +193,22 @@
 									placeholder="用户ID、用户昵称"
 									@keyup.enter.native="onSubmitKey"
 								></el-input>
-							</div>
+							</div> -->
+	                        <el-col :span="4">
+								<el-input
+										v-model="searchText"
+									placeholder="用户ID、用户昵称"
+									@keyup.enter.native="onSubmitKey"
+								>
+									<i
+										slot="prefix"
+										class="el-input__icon el-icon-search"
+										@click="onSubmitKey"
+									></i>
+								</el-input>
+							</el-col>
+
+
 							<div
 								@click="getShow()"
 								class="div_show"
@@ -361,8 +389,8 @@ export default {
 					label: '兑换',
 				},
 			],
-            tableData: [],
-            tab_data:[],
+			tableData: [],
+			tab_data: [],
 			pager: {
 				count: 0,
 				page: 1,
@@ -383,8 +411,8 @@ export default {
 			this.searchText = '';
 			this.profit_type = '';
 			this.start_time = '';
-            this.end_time = '';
-            this.pager.page = 1;
+			this.end_time = '';
+			this.pager.page = 1;
 			if (this.activeName == 'first') {
 				this.get_data();
 			} else {
@@ -431,7 +459,7 @@ export default {
 		},
 		//input按钮搜索
 		onSubmitKey() {
-            this.pager.page = 1;
+			this.pager.page = 1;
 			if (this.activeName == 'first') {
 				this.get_data();
 			} else {
@@ -499,8 +527,12 @@ export default {
 							} else {
 								teamarr[i].profit_type = '兑换';
 							}
-							teamarr[i].c_profit = (teamarr[i].cur_profit / 100).toFixed(2);
-							teamarr[i].t_profit = (teamarr[i].total_profit / 100).toFixed(2);
+							teamarr[i].c_profit = (
+								teamarr[i].cur_profit / 100
+							).toFixed(2);
+							teamarr[i].t_profit = (
+								teamarr[i].total_profit / 100
+							).toFixed(2);
 							teamarr[i].time_stamp = this.common.getTimess(
 								teamarr[i].time_stamp * 1000
 							);
@@ -508,11 +540,10 @@ export default {
 						this.tableData = [];
 						this.tableData = teamarr;
 						this.pager.count = res.data.total_num;
-                        this.pager.rows = res.data.total_page;
-                       
-					}else{
-                        this.$message.error(res.err_msg);
-                    }
+						this.pager.rows = res.data.total_page;
+					} else {
+						this.$message.error(res.err_msg);
+					}
 				})
 				.catch((error) => {
 					console.log(error);
@@ -581,9 +612,9 @@ export default {
 						this.tab_data = teamarr;
 						this.pager.count = res.data.total_num;
 						this.pager.rows = res.data.total_page;
-					}else{
-                        this.$message.error(res.err_msg);
-                    }
+					} else {
+						this.$message.error(res.err_msg);
+					}
 				})
 				.catch((error) => {
 					console.log(error);

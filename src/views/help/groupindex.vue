@@ -4,10 +4,21 @@
     <div class="device_form">
         <el-form ref="form" :model="form">
             <el-row type="flex">
-                <div class="search-con">
+                <!-- <div class="search-con">
                     <i class="el-icon-search" @click="searchInfo" style="color:#606266"></i>
                     <el-input class="search-input" v-model="cat_name" placeholder="分组名称" @keyup.enter.native="onSubmitKey"></el-input>
-                </div>
+                </div> -->
+                    <el-col :span="4">
+								<el-input
+									v-model="cat_name" placeholder="分组名称" @keyup.enter.native="onSubmitKey"
+								>
+									<i
+										slot="prefix"
+										class="el-input__icon el-icon-search"
+										@click="onSubmitKey"
+									></i>
+								</el-input>
+							</el-col>
                 <!-- <div @click="getShow()" class="div_show" style="color:#606266">筛选
                     <i
                 class="el-icon-caret-bottom"

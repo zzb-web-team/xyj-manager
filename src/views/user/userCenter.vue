@@ -20,10 +20,17 @@
     <div class="device_form">
         <el-form ref="form" :model="form">
             <el-row type="flex">
-                <div class="search-con">
-                    <i class="el-icon-search" @click="searchInfo" style="color:#606266"></i>
-                    <el-input class="search-input" v-model="searchText" placeholder="用户ID、用户昵称、手机号" @keyup.enter.native="onSubmitKey"></el-input>
-                </div>
+                <!-- <div class="search-con">
+                    <i class="el-icon-search" style="color:#606266"></i>
+                    <el-input class="search-input" ></el-input>
+                </div> -->
+                <el-col :span="4">
+          <el-input
+  v-model="searchText" placeholder="用户ID、用户昵称、手机号" @keyup.enter.native="onSubmitKey"
+    >
+    <i slot="prefix" class="el-input__icon el-icon-search"  @click="onSubmitKey"></i>
+  </el-input>
+            </el-col>
                 <div @click="getShow()" class="div_show" style="color:#606266">筛选
                     <i
                 class="el-icon-caret-bottom"
@@ -521,7 +528,7 @@ export default {
     queryUserList() {
       let param = new Object();
       let phoneNumber = /^1(3|4|5|7|8)\d{9}$/;
-      let user_id = /^\d{7}$/;
+      let user_id = /^\d{8}$/;
       if (this.searchText != "") {
         if (phoneNumber.test(this.searchText) == true) {
           param.user_id = 0;
