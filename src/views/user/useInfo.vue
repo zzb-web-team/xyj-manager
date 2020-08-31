@@ -151,7 +151,7 @@
 					style="height: 40px; line-height: 40px; font-weight: bold"
 				>
 					<el-col :span="24">
-						'{{ user_ids }}' D用户节点收益明细
+						'{{ user_ids }}' ID用户节点收益明细
 					</el-col>
 				</el-row>
 				<el-row type="flex" class="row_active">

@@ -621,7 +621,7 @@ export default {
     //重置
     setInfo() {
       this.form.dev_sn = "";
-      this.valuestate = "-1";
+      this.valuestate = 1;
       this.queryInfo();
     },
     //查询发布版本历史信息

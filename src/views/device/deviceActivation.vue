@@ -54,16 +54,30 @@
                 <el-option v-for="item in actives" :key="item.value" :label="item.label" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
-
+<!-- 
             <el-form-item label="新建时间：" style="display: flex;">
               <el-date-picker style="width: 160px;" v-model="import_start_ts" type="datetime" placeholder="选择开始日期时间"></el-date-picker> -
               <el-date-picker style="width: 160px;" v-model="import_end_ts" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
-            </el-form-item>
-            <el-form-item label="激活时间：" style="display: flex;">
-              <el-date-picker style="width: 160px;" v-model="activate_start_ts" type="datetime" placeholder="选择开始日期时间"></el-date-picker> -
-              <el-date-picker style="width:160px;" v-model="activate_end_ts" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
-            </el-form-item>
+            </el-form-item> -->
 
+ <el-form-item label="新建时间：" style="display: flex;">
+      <el-date-picker
+      v-model="import_time_value"
+      type="datetimerange"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"></el-date-picker>
+ </el-form-item>
+
+            <el-form-item label="激活时间：" style="display: flex;">
+                 <el-date-picker
+      v-model="time_value"
+      type="datetimerange"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期">
+    </el-date-picker>
+            </el-form-item>
             <el-form-item>
               <el-button type="primary" style="margin-left:10px;" @click="search">确定</el-button>
             </el-form-item>
@@ -468,6 +482,8 @@ export default {
       },
       old_dev_sn: "",
       dev_type_active: 1,
+      import_time_value:'',
+      time_value:'',
     };
   },
   mounted() {
@@ -592,6 +608,8 @@ export default {
       this.import_end_ts = "";
       this.activate_start_ts = "";
       this.activate_end_ts = "";
+      this.import_time_value="",
+      this.time_value="";
       this.searchText = "";
       this.is_activated=""
       this.getInfo();
@@ -693,21 +711,22 @@ export default {
         login_token: "",
         is_activated: this.is_activated === "" ? -1 : Number(this.is_activated),
         import_start_ts:
-          this.import_start_ts === ""
+          this.import_time_value == ""
             ? -1
-            : new Date(this.import_start_ts).getTime() / 1000,
+            : new Date(this.import_time_value[0]).getTime() / 1000,
         import_end_ts:
-          this.import_end_ts === ""
+          this.import_time_value == ""
             ? -1
-            : new Date(this.import_end_ts).getTime() / 1000,
-        activate_start_ts:
-          this.activate_start_ts === ""
+            : new Date(this.import_time_value[1]).getTime() / 1000,
+         activate_start_ts:
+          this.time_value == ""
             ? -1
-            : new Date(this.activate_start_ts).getTime() / 1000,
+            : new Date(this.time_value[0]).getTime() / 1000,
         activate_end_ts:
-          this.activate_end_ts === ""
+          this.time_value == ""
             ? -1
-            : new Date(this.activate_end_ts).getTime() / 1000,
+            : new Date(this.time_value[1]).getTime() / 1000,
+            
       };
     //   let SME = /^SME[0-9a-zA-Z]{1}[0-9]{4}[0-9a-zA-Z]{7}$/;
     //   let cpuid = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{9}$/;
@@ -765,21 +784,21 @@ export default {
         login_token: "",
         is_activated: this.is_activated === "" ? -1 : Number(this.is_activated),
         import_start_ts:
-          this.import_start_ts === ""
+          this.import_time_value == ""
             ? -1
-            : new Date(this.import_start_ts).getTime() / 1000,
+            : new Date(this.import_time_value[0]).getTime() / 1000,
         import_end_ts:
-          this.import_end_ts === ""
+          this.import_time_value=== ""
             ? -1
-            : new Date(this.import_end_ts).getTime() / 1000,
-        activate_start_ts:
-          this.activate_start_ts === ""
+            : new Date(this.import_time_value[1]).getTime() / 1000,
+          activate_start_ts:
+          this.time_value == ""
             ? -1
-            : new Date(this.activate_start_ts).getTime() / 1000,
+            : new Date(this.time_value[0]).getTime() / 1000,
         activate_end_ts:
-          this.activate_end_ts === ""
+          this.time_value == ""
             ? -1
-            : new Date(this.activate_end_ts).getTime() / 1000,
+            : new Date(this.time_value[1]).getTime() / 1000,
       };
       if (this.judgeString(this.searchText)) {
         var param = Object.assign(this.judgeString(this.searchText), data);
