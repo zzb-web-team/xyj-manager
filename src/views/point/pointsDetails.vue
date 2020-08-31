@@ -194,9 +194,9 @@
 									@keyup.enter.native="onSubmitKey"
 								></el-input>
 							</div> -->
-	                        <el-col :span="4">
+							<el-col :span="4">
 								<el-input
-										v-model="searchText"
+									v-model="searchText"
 									placeholder="用户ID、用户昵称"
 									@keyup.enter.native="onSubmitKey"
 								>
@@ -207,7 +207,6 @@
 									></i>
 								</el-input>
 							</el-col>
-
 
 							<div
 								@click="getShow()"
@@ -408,10 +407,10 @@ export default {
 	},
 	methods: {
 		handleClick(tab, event) {
-            this.pager.page = 1;
-            this.pager.count=0;
-            this.tableData=[];
-            this.tableData2=[];
+			this.pager.page = 1;
+			this.pager.count = 0;
+			this.tableData = [];
+			this.tableData2 = [];
 			this.searchText = '';
 			this.profit_type = '';
 			this.start_time = '';
@@ -711,7 +710,6 @@ export default {
 			this.dialogVisible = true;
 		},
 		handleCurrentChange(val) {
-
 			this.pager.page = val.val;
 			if (this.activeName == 'first') {
 				this.get_data();
@@ -720,7 +718,8 @@ export default {
 			}
 		},
 		judgeString(str) {
-			const reg1 = /^\d{7}$/;
+			// const reg1 = /^\d{8}$/;
+			const reg1 = /^(\d{7}|\d{8})$/;
 			const reg2 = /^[\u4E00-\u9FA5A-Za-z0-9]{4,20}$/;
 			const reg7 = /^\d+$/;
 			if (reg1.test(str)) {
