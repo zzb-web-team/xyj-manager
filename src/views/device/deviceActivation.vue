@@ -429,7 +429,7 @@ export default {
       active_dev_name: "",
       rules: {
         dev_sn: [
-          { required: true, message: "请输入名称", trigger: "blur" },
+          { required: true, message: "请输入设备SN", trigger: "blur" },
           {
             max: 15,
             message: "长度最大15个字符",
@@ -438,7 +438,7 @@ export default {
           { validator: nameRule1, trigger: "blur" },
         ],
         dev_mac: [
-          { required: true, message: "请输入名称", trigger: "blur" },
+          { required: true, message: "请输入MAC地址", trigger: "blur" },
           {
             max: 17,
             message: "长度最大17个字符",
@@ -447,7 +447,7 @@ export default {
           { validator: nameRule2, trigger: "blur" },
         ],
         cpu_id: [
-          { required: true, message: "cpu_id", trigger: "blur" },
+          { required: true, message: "请输入CPU-ID", trigger: "blur" },
           // {
           //   max: 9,
           //   message: "长度最大9个字符",
@@ -537,13 +537,12 @@ export default {
         });
         return false;
       }
-
-      (param.bind_type = 1),
-        (param.user_id = parseInt(this.user_id_active)),
-        (param.dev_sn = this.dev_sn_active),
-        (param.bind_user_tel_num = this.bind_user_tel_num),
-        (param.dev_name = this.active_dev_name);
-      web_change_device_state(param)
+        param.bind_type = 1;
+        param.user_id = parseInt(this.user_id_active);
+        param.dev_sn = this.dev_sn_active;
+        param.bind_user_tel_num = this.bind_user_tel_num;
+        param.dev_name = this.active_dev_name;
+        web_change_device_state(param)
         .then(res => {
           if (res.status == 0 && res.err_code == 0) {
             this.$message({
@@ -688,7 +687,6 @@ export default {
     getInfo() {
       var data = {
         order_item: this.order_item,
-
         page_no: this.pager.page - 1,
         order_type: this.order_type,
         page_size: 10,
@@ -712,7 +710,6 @@ export default {
             : new Date(this.activate_end_ts).getTime() / 1000,
       };
     //   let SME = /^SME[0-9a-zA-Z]{1}[0-9]{4}[0-9a-zA-Z]{7}$/;
-
     //   let cpuid = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{9}$/;
         let SME=/^SME{1}[0-9a-zA-Z]/;
       if (this.searchText != "") {
@@ -748,7 +745,6 @@ export default {
               }
             }
             this.tableData = [];
-
             this.tableData = tempArr;
             this.pager.count = res.data.total_num;
             this.pager.rows = res.data.total_page;

@@ -232,7 +232,8 @@ if (user) {
                         path: "/SysManageMiddle",
                         name: "APP应用版本管理",
                         component: 'SysManageMiddle',
-                        icon: 'iconfont icon-banbenguanli',
+                        // icon: 'iconfont icon-banbenguanli',
+                        icon: 'iconfont icon-dian',
                         children: [{
                                 path: "/AppVersion",
                                 name: "版本发布管理",
@@ -359,7 +360,8 @@ if (user) {
                         path: "/SysManageMiddleActive",
                         name: "设备ROM版本",
                         component: 'SysManageMiddleActive',
-                        icon: 'iconfont icon-ziyuanguanli',
+                        // icon: 'iconfont icon-ziyuanguanli',
+                        icon: 'iconfont icon-dian',
                         children: [{
                                 path: "/SysVersion1",
                                 name: "设备ROM版本",
@@ -395,13 +397,13 @@ if (user) {
                 component: 'Home',
                 name: "西柚机盒子应用",
                 icon: 'iconfont icon-hezi',
-
                 children: [{
                         path: "/Applictionmiddle",
                         component: 'Applictionmiddle',
                         name: "内嵌应用",
                         titleActive: false,
-                        icon: 'iconfont icon-dianbozhibov1213',
+                        // icon: 'iconfont icon-dianbozhibov1213',
+                        icon: 'iconfont icon-dian',
                         children: [{
                                 path: "/releaseAppliction",
                                 name: "应用发布管理",
@@ -429,7 +431,8 @@ if (user) {
                         component: 'marketmiddle',
                         name: "应用市场",
                         titleActive: false,
-                        icon: 'iconfont icon-shichang',
+                        // icon: 'iconfont icon-shichang',
+                        icon: 'iconfont icon-dian',
                         children: [{
                                 path: "/marketindex",
                                 name: "应用管理",
@@ -495,7 +498,8 @@ if (user) {
                         path: "/Analysismiddle",
                         name: "西柚机APP",
                         component: 'Analysismiddle',
-                        icon: 'iconfont icon-APPkaifa',
+                        // icon: 'iconfont icon-APPkaifa',
+                        icon: 'iconfont icon-dian',
                         children: [{
                                 path: "/UserAnalysis",
                                 name: "APP用户分析",
@@ -524,7 +528,8 @@ if (user) {
                         path: "/Analysismiddle1",
                         name: "西柚机设备",
                         component: 'Analysismiddle1',
-                        icon: 'iconfont icon-shebei',
+                        // icon: 'iconfont icon-shebei',
+                        icon: 'iconfont icon-dian',
                         children: [{
                                 path: "/deviceflow",
                                 name: "设备流量分析",
@@ -582,7 +587,8 @@ if (user) {
                         path: "/pointsmiddle",
                         name: "奖励管理",
                         component: 'pointsmiddle',
-                        icon: 'iconfont icon-jifenguanli',
+                        // icon: 'iconfont icon-jifenguanli',
+                        icon: 'iconfont icon-dian',
                         children: [{
                                 path: "/pointsDetails",
                                 name: "西柚机设备奖励",
@@ -624,7 +630,8 @@ if (user) {
                         path: "/helpmiddle",
                         name: "帮助中心",
                         component: 'helpmiddle',
-                        icon: 'iconfont icon-bangzhu',
+                        // icon: 'iconfont icon-bangzhu',
+                        icon: 'iconfont icon-dian',
                         children: [{
                                 path: "/groupindex",
                                 name: "分组管理",

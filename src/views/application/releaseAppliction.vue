@@ -293,7 +293,7 @@ export default {
       tableData: [],
 
       pager: {
-        count: 40,
+        count: 0,
         page: 1,
         pageActive: 1,
         rows: 10,

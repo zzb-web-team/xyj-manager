@@ -37,7 +37,7 @@
 					:value="item.value"
 				></el-option>
 			</el-select>
-			<span style="margin-left: 20px;">选择日期：</span>
+			<span style="margin-left: 20px">选择日期：</span>
 
 			<el-date-picker
 				v-model="value2"
@@ -51,7 +51,7 @@
 
 			<el-button
 				type="primary"
-				style="margin-left: 10px;"
+				style="margin-left: 10px"
 				@click="toQueryInfo()"
 				>确定</el-button
 			>
@@ -61,7 +61,7 @@
 			<el-row
 				type="flex"
 				class="row_active"
-				style="display: flex; justify-content: flex-start;"
+				style="display: flex; justify-content: flex-start"
 			>
 				<el-button type="primary" @click="dialogFormVisible"
 					>上传系统包</el-button
@@ -69,7 +69,7 @@
 				<el-button
 					type="primary"
 					@click="golink()"
-					style="margin-left: 20px;"
+					style="margin-left: 20px"
 					>版本发布</el-button
 				>
 			</el-row>
@@ -82,7 +82,7 @@
 				<el-col :span="24">
 					<el-table
 						:data="tableData11"
-						style="width: 100%; margin-bottom: 20px;"
+						style="width: 100%; margin-bottom: 20px"
 						border
 						row-key="id"
 					>
@@ -94,7 +94,7 @@
 						</el-table-column>
 						<el-table-column label="适用设备" width="120">
 							<template slot-scope="scope">
-								<div style="text-align: center;">
+								<div style="text-align: center">
 									{{ scope.row.rom_type | formatType }}
 								</div>
 							</template>
@@ -120,6 +120,9 @@
 							label="hashid"
 							width="200"
 						>
+							<template slot-scope="scope">{{
+								scope.row.hashid != '' ? scope.row.hashid : '--'
+							}}</template>
 						</el-table-column>
 						<el-table-column
 							prop="ptfs_file_upload_status"
@@ -127,7 +130,7 @@
 							width="150"
 						>
 							<template slot-scope="scope">
-								<div style="text-align: center;">
+								<div style="text-align: center">
 									<div
 										v-if="
 											scope.row.ptfs_file_upload_status ==
@@ -139,7 +142,7 @@
 										<el-button
 											type="primary"
 											class="button_active"
-											style="margin-left: 0px;"
+											style="margin-left: 0px"
 											@click="Reonload(scope.row, index)"
 											>重新上传</el-button
 										>
@@ -201,14 +204,14 @@
 						<el-table-column width="100" label="操作">
 							<template slot-scope="scope">
 								<a
-									style="color: #6699ff; cursor: pointer;"
+									style="color: #6699ff; cursor: pointer"
 									@click="toDelete(scope.row)"
 									type="danger"
 									size="small"
 									>删除</a
 								>
 								<a
-									style="color: #6699ff; cursor: pointer;"
+									style="color: #6699ff; cursor: pointer"
 									@click="toChange(scope.row)"
 									type="primary"
 									size="small"
@@ -219,11 +222,11 @@
 					</el-table>
 				</el-col>
 			</el-row>
-			<el-row type="flex" class="row_active">
+			<!-- <el-row type="flex" class="row_active">
 				<el-col :span="24">
 					<myDatanums :dataNum="dataNum"></myDatanums>
 				</el-col>
-			</el-row>
+			</el-row> -->
 		</div>
 		<div class="devide_pageNation">
 			<div class="devide_pageNation_active">
@@ -294,7 +297,7 @@
 									<div class="item_l">应用包：</div>
 									<div
 										class="item-r"
-										style="position: relative;"
+										style="position: relative"
 									>
 										<!-- <el-button class="choose-file" size="mini">请选择要上传的文件</el-button> -->
 										<input
@@ -331,7 +334,7 @@
 										</div>
 										<div
 											:id="['result' + item]"
-											style="margin-top: 10px;"
+											style="margin-top: 10px"
 										></div>
 									</div>
 								</div>
@@ -368,7 +371,7 @@
 					<textarea
 						placeholder="请输入文字描述"
 						v-model="textareaText"
-						style="width: 400px; margin-left: 85px;"
+						style="width: 400px; margin-left: 85px"
 					></textarea>
 				</div>
 				<div
@@ -379,7 +382,7 @@
 					"
 				>
 					<el-button
-						style="color: #ffffff; cursor: pointer;"
+						style="color: #ffffff; cursor: pointer"
 						@click="plus"
 						type="primary"
 						size="small"
@@ -406,7 +409,7 @@
 							margin-left: 20px;
 						"
 					>
-						<div style="margin-left: 40px; margin-right: 20px;">
+						<div style="margin-left: 40px; margin-right: 20px">
 							md5值
 						</div>
 
@@ -493,7 +496,7 @@
 				element-loading-background="rgba(0, 0, 0, 0.8)"
 			>
 				<div class="dialog_div_con">
-					<div class="dialog_div_title" style="text-align: center;">
+					<div class="dialog_div_title" style="text-align: center">
 						修改文件描述
 					</div>
 					<div class="dialog_div_item">

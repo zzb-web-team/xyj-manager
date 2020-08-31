@@ -198,8 +198,7 @@
 
     <el-dialog class="dialog_active1" :before-close="beforeclose" :visible.sync="dialogVisible5" title="发布清单" width="15%">
       <div class="pub_con">
-        <p v-for="item in pubUser" :key="item">{{item.snormac}}</p>
-
+        <p v-for="item in pubUser" :key="item">{{item.snormac!='\n'?item.snormac:"暂无数据"}}</p>
       </div>
     </el-dialog>
   </section>

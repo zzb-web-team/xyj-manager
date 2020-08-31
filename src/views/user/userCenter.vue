@@ -200,22 +200,22 @@ export default {
         },
              {
           prop: "sex",
-          label: "累计节点收益（gfm）"
+          label: "累计节点收益（积分）"
         },
              {
           prop: "sex",
           label: "节点数"
         },
-        {
-          prop: "sum_profit",
-          label: "总积分",
-          sortable: "custom"
-        },
-        {
-          prop: "average_store",
-          label: "平均算力",
-          sortable: "custom"
-        },
+        // {
+        //   prop: "sum_profit",
+        //   label: "总积分",
+        //   sortable: "custom"
+        // },
+        // {
+        //   prop: "average_store",
+        //   label: "平均算力",
+        //   sortable: "custom"
+        // },
         {
           prop: "dev_num",
           label: "设备总数"
