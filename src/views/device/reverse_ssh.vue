@@ -10,117 +10,138 @@
 						@keyup.enter.native="search_data"
 					></el-input
 				></el-col>
-				<el-col :span="3">
-					<!-- <span>地区：</span> -->
-					<el-select
-						v-model="area_value"
-						placeholder="请选择地区"
-						@change="search_data"
-					>
-						<el-option label="全部" value="-1"></el-option>
-						<el-option
-							v-for="item in options"
-							:key="item.id"
-							:label="item.label"
-							:value="item.label"
+                <el-col :span="12">
+
+               
+				<el-row type="flex" :gutter="20" justify="space-between">
+					<el-col :span="5">
+						<!-- <span>地区：</span> -->
+						<el-select
+							v-model="area_value"
+							placeholder="请选择地区"
+							@change="search_data"
 						>
-						</el-option> </el-select
-				></el-col>
-				<el-col :span="3">
-					<!-- <span>ipv格式：</span> -->
-					<el-select
-						v-model="ipv_value"
-						placeholder="请选择ipv格式"
-						@change="search_data"
-					>
-						<el-option label="全部" value="-1"></el-option>
-						<el-option label="ipv4" value="ipv4"></el-option>
-						<el-option label="ipv6" value="ipv6"></el-option>
-					</el-select>
-				</el-col>
-				<el-col :span="3">
-					<!-- <span>设备品牌：</span> -->
-					<el-select
-						v-model="brand_value"
-						placeholder="请选择设备品牌"
-						@change="search_devtype"
-					>
-						<el-option label="全部" value="-1"></el-option>
-						<el-option
-							v-for="(item, idnex) in eqp_brds"
-							:key="item.name"
-							:label="item.name"
-							:value="item.name"
+							<el-option label="全部" value="-1"></el-option>
+							<el-option
+								v-for="item in options"
+								:key="item.id"
+								:label="item.label"
+								:value="item.label"
+							>
+							</el-option> </el-select
+					></el-col>
+					<el-col :span="5">
+						<!-- <span>ipv格式：</span> -->
+						<el-select
+							v-model="ipv_value"
+							placeholder="请选择ipv格式"
+							@change="search_data"
 						>
-						</el-option> </el-select></el-col
-				><el-col :span="3">
-					<!-- <span>设备型号：</span> -->
-					<el-select
-						v-model="devtype_value"
-						placeholder="请选择设备型号"
-						@change="search_data"
-					>
-						<el-option label="全部" value="-1"></el-option>
-						<el-option
-							v-for="item in dev_types"
-							:key="item"
-							:label="item"
-							:value="item"
+							<el-option label="全部" value="-1"></el-option>
+							<el-option label="ipv4" value="ipv4"></el-option>
+							<el-option label="ipv6" value="ipv6"></el-option>
+						</el-select>
+					</el-col>
+					<el-col :span="5">
+						<!-- <span>设备品牌：</span> -->
+						<el-select
+							v-model="brand_value"
+							placeholder="请选择设备品牌"
+							@change="search_devtype"
 						>
-						</el-option> </el-select
-				></el-col>
-				<el-col :span="3">
-					<!-- <span>ROM版本：</span> -->
-					<el-select
-						v-model="rom_value"
-						placeholder="请选择ROM版本"
-						@change="search_data"
-					>
-						<el-option
-							v-for="item in roms"
-							:key="item.value"
-							:label="item.label"
-							:value="item.value"
+							<el-option label="全部" value="-1"></el-option>
+							<el-option
+								v-for="(item, idnex) in eqp_brds"
+								:key="item.name"
+								:label="item.name"
+								:value="item.name"
+							>
+							</el-option> </el-select></el-col
+					><el-col :span="5">
+						<!-- <span>设备型号：</span> -->
+						<el-select
+							v-model="devtype_value"
+							placeholder="请选择设备型号"
+							@change="search_data"
 						>
-						</el-option> </el-select
-				></el-col>
-				<el-button @click="search_data">搜索</el-button>
-				<el-button @click="reset">重置</el-button>
+							<el-option label="全部" value="-1"></el-option>
+							<el-option
+								v-for="item in dev_types"
+								:key="item"
+								:label="item"
+								:value="item"
+							>
+							</el-option> </el-select
+					></el-col>
+					<el-col :span="5">
+						<!-- <span>ROM版本：</span> -->
+						<el-select
+							v-model="rom_value"
+							placeholder="请选择ROM版本"
+							@change="search_data"
+						>
+							<el-option
+								v-for="item in roms"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							>
+							</el-option> </el-select
+					></el-col>
+				</el-row>
+                 </el-col>
+					<el-button @click="search_data" size="medium"
+						>搜索</el-button
+					>
+					<el-button @click="reset" size="medium">重置</el-button>
 			</el-row>
 		</div>
 		<!--  -->
-		<div style="margin: 10px 0">
+		<div style="margin: 25px 0">
 			<el-button type="primary" @click="search_data">刷新设备</el-button>
 		</div>
 		<!--  -->
-		<el-table :data="tableData" border style="width: 100%">
-			<el-table-column prop="dev_ip" label="IP"> </el-table-column>
+		<el-table
+			:data="tableData"
+			border
+			style="width: 100%"
+			:cell-style="rowClass"
+			:header-cell-style="headClass"
+		>
+			<el-table-column prop="dev_ip" label="IP"></el-table-column>
 			<el-table-column prop="dev_sn" label="设备SN"> </el-table-column>
-			<el-table-column prop="mac_addrs" label="MAC地址">
-			</el-table-column>
-			<el-table-column prop="cpu_id" label="CPU-ID"> </el-table-column>
-			<el-table-column prop="dev_ver" label="版本"> </el-table-column>
-			<el-table-column prop="on_duration" label="在线时长">
-				<template slot-scope="scope">
-					<span>
-						{{ scope.row.on_duration | getDuration }}
-					</span>
-				</template>
-			</el-table-column>
-			<el-table-column prop="online_time" label="在线时间">
-				<template slot-scope="scope">{{
-					scope.row.online_time | formatDevTime
-				}}</template>
-			</el-table-column>
+			<el-table-column prop="mac_addrs" label="MAC地址"></el-table-column>
+			<el-table-column prop="cpu_id" label="CPU-ID"></el-table-column>
+			<el-table-column prop="dev_ver" label="版本"></el-table-column>
+			<el-table-column prop="region" label="地区"
+				><template slot-scope="scope">{{
+					scope.row.region ? scope.row.region : '--'
+				}}</template></el-table-column
+			>
+			<el-table-column prop="dev_ip" label="IPV格式"
+				><template slot-scope="scope">{{
+					scope.row.dev_ip ? scope.row.dev_ip : '--'
+				}}</template></el-table-column
+			>
+			<el-table-column prop="dev_brand" label="设备品牌"
+				><template slot-scope="scope">{{
+					scope.row.dev_brand ? scope.row.dev_brand : '--'
+				}}</template></el-table-column  
+			>
+			<el-table-column prop="dev_model" label="设备型号"
+				><template slot-scope="scope">{{
+					scope.row.dev_model ? scope.row.dev_model : '--'
+				}}</template></el-table-column
+			>
 			<el-table-column label="操作">
-				<template slot-scope="scope">
-					<el-button
+				<template slot-scope="scope"
+					><el-button
 						size="mini"
 						type="primary"
 						@click="handleDelete(scope.$index, scope.row)"
 						>链接</el-button
-					>
-				</template>
+					></template
+				>
 			</el-table-column>
 		</el-table>
 		<!--  -->
@@ -269,15 +290,15 @@ export default {
 				},
 			],
 			tableData: [
-				{
-					dev_ip: '192.10.365.20',
-					dev_sn: 'SMEX2020RTU1177',
-					mac_addrs: '00:0c:29:b3:da:14',
-					cpu_id: 'c2482cf62c5d915a',
-					dev_ver: '1.0.5',
-					online_time: '2020-08-21 15:22:12',
-					on_duration: 1561,
-				},
+				// {
+				// 	dev_ip: '192.10.365.20',
+				// 	dev_sn: 'SMEX2020RTU1177',
+				// 	mac_addrs: '00:0c:29:b3:da:14',
+				// 	cpu_id: 'c2482cf62c5d915a',
+				// 	dev_ver: '1.0.5',
+				// 	online_time: '2020-08-21 15:22:12',
+				// 	on_duration: 1561,
+				// },
 			],
 			input: '',
 			area_value: '',
@@ -403,7 +424,8 @@ export default {
 			console.log(index, row);
 			this.dialogVisible = true;
 			this.$refs.el_set_cmd.$el.firstChild.style.height = '80%';
-			this.cmdsrc = 'http://106.15.189.182:9999' + '?dev_sn=' + row.dev_sn;
+			this.cmdsrc =
+				'http://106.15.189.182:9999' + '?dev_sn=' + row.dev_sn;
 			console.log(this.cmdsrc);
 		},
 		handleSizeChange() {},
@@ -411,6 +433,14 @@ export default {
 		handleCurrentChange(val) {
 			this.pager.page = val.val;
 			this.get_data_list();
+		},
+		// 表头样式设置
+		headClass() {
+			return 'text-align: center;background:#F3F6FB;';
+		},
+		// 表格样式设置
+		rowClass() {
+			return 'text-align: center;';
 		},
 	},
 };
@@ -429,7 +459,7 @@ export default {
 }
 
 .con_Pagination {
-	margin: 10px 0;
+	margin: 20px 0;
 	text-align: right;
 }
 .terminal {

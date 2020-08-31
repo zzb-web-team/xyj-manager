@@ -884,7 +884,7 @@ export default {
 						});
 					} else {
 						this.$message({
-							message: '用户ID不存在，绑定失败',
+							message: res.err_msg,
 							type: 'error',
 						});
 					}
