@@ -6,7 +6,7 @@
 					<div>
 						<el-input
 							v-model="packageName"
-							placeholder="请输入设备SN"
+							placeholder="请输入系统包名"
 						></el-input>
 					</div>
 					<div class="seach_top_right" @click="option_display()">
@@ -26,7 +26,7 @@
 		<div v-if="optiondisplay" class="seach_bottom">
 			<span>适用设备:</span>
 			<el-select
-				v-model="valuestate"
+				v-model="valuestate"    
 				placeholder="请选择"
 				@change="onChange"
 			>

@@ -118,9 +118,9 @@
 					scope.row.region ? scope.row.region : '--'
 				}}</template></el-table-column
 			>
-			<el-table-column prop="dev_ip" label="IPV格式"
+			<el-table-column prop="ip_type" label="IPV格式"
 				><template slot-scope="scope">{{
-					scope.row.dev_ip ? scope.row.dev_ip : '--'
+					scope.row.ip_type ? scope.row.ip_type : '--'
 				}}</template></el-table-column
 			>
 			<el-table-column prop="dev_brand" label="设备品牌"
