@@ -67,7 +67,7 @@
 										@click="search"
 										>确定</el-button
 									>
-									<el-button type="primary" @click="onReset"
+									<el-button type="primary" @click="onReset" 	size="small"
 										>重置</el-button
 									>
 								</el-form-item>
@@ -658,19 +658,21 @@ export default {
 		judgeString(str) {
 			// const reg1 = /^\d{8}$/;
 			const reg1 = /^(\d{7}|\d{8})$/;
-			const reg2 = /^[\u4E00-\u9FA5A-Za-z0-9]{4,20}$/;
-			const reg7 = /^\d+$/;
+			const reg2 = /^[\u4E00-\u9FA5A-Za-z0-9-_./\/]{4,20}$/;
+            const reg7 = /^\d+$/;
 			if (reg1.test(str)) {
 				return {
 					user_id: Number(str),
 				};
-			} else if (reg2.test(str) && !reg7.test(str)) {
+            } 
+            else if (reg2.test(str)) {
 				return {
 					nick_name: str,
 				};
 			} else if (str === '') {
 				return {};
-			} else {
+            }
+             else {
 				return false;
 			}
 		},

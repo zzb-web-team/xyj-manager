@@ -11,7 +11,7 @@
 			</div>
 		</div> -->
 		<div style="height: 40px; line-height: 40px">硬件收益配置</div>
-		<el-button type="primary" @click="addList">添加</el-button>
+		<el-button type="primary" @click="addList" size="small">添加</el-button>
 		<div style="width: 600px">
 			<el-table
 				:data="tableData"

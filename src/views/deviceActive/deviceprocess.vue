@@ -405,7 +405,7 @@ export default {
 							type: 'success',
 						});
 					}
-					this.monitorDetails = false;
+					// this.monitorDetails = false;
 				})
 				.catch((error) => {});
 		},
