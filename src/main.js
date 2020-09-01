@@ -590,6 +590,15 @@ if (user) {
                         // icon: 'iconfont icon-jifenguanli',
                         icon: 'iconfont icon-dian',
                         children: [{
+                                path: "/setparam",
+                                name: "调整收益参数",
+                                component: 'setparam',
+                                icon: 'iconfont icon-dian',
+                                meta: {
+                                    requireAuth: true
+                                }
+                            },
+                            {
                                 path: "/pointsDetails",
                                 name: "西柚机设备奖励",
                                 component: 'pointsDetails',
@@ -609,17 +618,7 @@ if (user) {
                                 }
 
                             },
-                            {
-                                path: "/setparam",
-                                name: "调整收益参数",
-                                component: 'setparam',
-                                icon: 'iconfont icon-dian',
-                                hidden: true,
-                                meta: {
-                                    requireAuth: true
-                                }
 
-                            },
 
                         ],
                         meta: {

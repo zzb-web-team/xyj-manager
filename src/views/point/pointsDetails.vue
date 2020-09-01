@@ -99,6 +99,8 @@
 								style="width: 100%"
 								@sort-change="tableSortChange"
 							>
+								<el-table-column type="index" label="序号">
+								</el-table-column>
 								<el-table-column prop="user_id" label="用户ID">
 								</el-table-column>
 								<el-table-column
@@ -157,7 +159,7 @@
 						<el-row type="flex">
 							<el-form-item>
 								<el-input
-                                size="small"
+									size="small"
 									v-model="searchText"
 									placeholder="用户ID、用户昵称"
 									@keyup.enter.native="onSubmitKey"
@@ -175,7 +177,7 @@
 									style="display: flex"
 								>
 									<el-date-picker
-                                    size="small"
+										size="small"
 										v-model="start_time"
 										style="width: 160px"
 										type="datetime"
@@ -184,7 +186,7 @@
 									></el-date-picker>
 									-
 									<el-date-picker
-                                    size="small"
+										size="small"
 										v-model="end_time"
 										style="width: 160px"
 										type="datetime"
@@ -194,12 +196,15 @@
 								</el-form-item>
 								<el-form-item>
 									<el-button
-                                    size="small"
+										size="small"
 										type="primary"
 										@click="search(2)"
 										>确定</el-button
 									>
-									<el-button type="primary" size="small" @click="onReset"
+									<el-button
+										type="primary"
+										size="small"
+										@click="onReset"
 										>重置</el-button
 									>
 								</el-form-item>
@@ -213,11 +218,11 @@
 						class="row_active"
 						style="display: flex; justify-content: flex-end"
 					>
-						<el-col>
+						<!-- <el-col>
 							<el-button type="primary" @click="setparam"
 								>调整收益参数</el-button
 							>
-						</el-col>
+						</el-col> -->
 						<el-col
 							style="display: flex; justify-content: flex-end"
 						>
@@ -236,6 +241,8 @@
 								style="width: 100%"
 								@sort-change="tableSortChange"
 							>
+								<el-table-column type="index" label="序号">
+								</el-table-column>
 								<el-table-column prop="user_id" label="用户ID">
 								</el-table-column>
 								<el-table-column
@@ -485,8 +492,7 @@ export default {
 						this.$message.error(res.err_msg);
 					}
 				})
-				.catch((error) => {
-				});
+				.catch((error) => {});
 		},
 		getInfo(num) {
 			let data = {
@@ -555,8 +561,7 @@ export default {
 						this.$message.error(res.err_msg);
 					}
 				})
-				.catch((error) => {
-				});
+				.catch((error) => {});
 		},
 
 		toexportExcel() {
@@ -624,8 +629,7 @@ export default {
 						this.common.monitoringLogs('导出', '导出积分明细', 0);
 					}
 				})
-				.catch((error) => {
-				});
+				.catch((error) => {});
 		},
 		search(num) {
 			this.pager.page = 1;

@@ -19,17 +19,17 @@
 				width="100%"
 				style="margin-top: 20px"
 			>
-				<el-table-column prop="date_value" label="范围">
+				<!-- <el-table-column prop="date_value" label="在线时间（h）">
 					<template slot-scope="scope">
 						<span v-if="scope.row.hour == 24">等于</span>
 						<span v-else>大于</span></template
 					>
-				</el-table-column>
-				<el-table-column prop="hour" label="在线时间">
+				</el-table-column> -->
+				<el-table-column prop="hour" label="在线时间（h）">
 				</el-table-column>
 				<el-table-column prop="reward" label="奖励"> </el-table-column>
 
-				<el-table-column label="操作" width="120">
+				<el-table-column label="操作" width="180">
 					<template slot-scope="scope">
 						<div
 							style="display: flex; justify-content: space-evenly"
@@ -56,6 +56,9 @@
 					</template>
 				</el-table-column>
 			</el-table>
+            <p style="color:#d9001b;">
+                *  在线时间（单位：小时），仅支持整数；   奖励：1≦x≦100区间，仅支持整数
+            </p>
 		</div>
 
 		<el-dialog
@@ -163,11 +166,11 @@ export default {
 							let obj = {};
 							obj.hour = item.hour;
 							obj.reward = item.reward;
-							if (item.hour == 24) {
-								obj.types = '等于';
-							} else {
-								obj.types = '大于';
-							}
+							// if (item.hour == 24) {
+							// 	obj.types = '等于';
+							// } else {
+							// 	obj.types = '大于';
+							// }
 							this.tableData.push(obj);
 							// name_list.push(item.hour);
 							// province_list.push(item.reward);
