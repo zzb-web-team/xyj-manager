@@ -96,10 +96,10 @@
 					></el-col>
 				</el-row>
                  </el-col>
-					<el-button @click="search_data" size="small"
+					<el-button @click="search_data" size="small" type="primary"
 						>搜索</el-button
 					>
-					<el-button @click="reset" size="small">重置</el-button>
+					<el-button @click="reset" size="small" type="primary">重置</el-button>
 			</el-row>
 		</div>
 		<!--  -->

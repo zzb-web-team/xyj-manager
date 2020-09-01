@@ -47,7 +47,14 @@
 							end-placeholder="结束日期"
 							align="right"
 						></el-date-picker>
-						<el-button plain @click="reset()"  size="small" style="margin-left:10px;">重置</el-button>
+                        <el-button
+							size="small"
+							type="primary"
+							@click="seachuser()"
+							style="margin-left: 10px"
+							>确定</el-button
+						>
+						<el-button type="primary" @click="reset()"  size="small" style="margin-left:10px;">重置</el-button>
 					</div>
 				</div>
 
@@ -210,7 +217,14 @@
 							end-placeholder="结束日期"
 							align="right"
 						></el-date-picker>
-						<el-button plain @click="reset1()"  size="small" style="margin-left:10px;">重置</el-button>
+                         <el-button
+							size="small"
+							type="primary"
+							@click="seachuser1()"
+							style="margin-left: 10px"
+							>确定</el-button
+						>
+						<el-button type="primary" @click="reset1()"  size="small" style="margin-left:10px;">重置</el-button>
 						<div class="seach_bottom_btn">
 						</div>
 					</div>

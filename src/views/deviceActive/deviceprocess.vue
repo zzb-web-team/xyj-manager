@@ -19,7 +19,7 @@
 								@keyup.enter.native="onSubmitKey"
 							></el-input>
 						</div>
-						<span style="margin-left:10px;">状态：</span>
+						<span style="margin-left: 10px">状态：</span>
 						<el-select
 							size="small"
 							v-model="valuestate"
@@ -34,8 +34,18 @@
 								:value="item.value"
 							></el-option>
 						</el-select>
-
-						<el-button size="small" plain @click="setInfo()" style="margin-left:10px;"
+						<el-button
+							size="small"
+							type="primary"
+							@click="onSubmitKey()"
+							style="margin-left: 10px"
+							>确定</el-button
+						>
+						<el-button
+							size="small"
+							type="primary"
+							@click="setInfo()"
+							style="margin-left: 10px"
 							>重置</el-button
 						>
 					</el-row>
@@ -397,8 +407,7 @@ export default {
 					}
 					this.monitorDetails = false;
 				})
-				.catch((error) => {
-				});
+				.catch((error) => {});
 		},
 		//获取页码
 

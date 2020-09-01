@@ -230,7 +230,6 @@
 						<el-button
 							type="primary"
 							size="small"
-							style=""
 							@click="search"
 							>确定</el-button
 						>
