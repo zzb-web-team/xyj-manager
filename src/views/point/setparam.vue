@@ -148,7 +148,6 @@ export default {
 			}
 			set_earn_dot_value(params)
 				.then((res) => {
-					console.log(res);
 					this.tableData = [];
 					if (res.status == 0) {
 						if (get_type != 1) {
@@ -178,7 +177,6 @@ export default {
 					}
 				})
 				.catch((error) => {
-					console.log(error);
 				});
 		},
 		noset_earn() {

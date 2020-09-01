@@ -228,7 +228,6 @@ export default {
             var data = this.optionsAll.filter(function(item) {
               _this.first[item.type] = {};
               _this.first[item.type].name = item.name;
-              console.log(item.sub.length);
               _this.first[item.type].sub = {};
               for (var i = 0; i < item.sub.length; i++) {
                 _this.first[item.type].sub[item.sub[i].sub_type] =
@@ -240,12 +239,10 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     //详情
     toDetails(val) {
-      console.log(val);
       let linkappid = val.app_id;
       let pub_status = val.state;
 
@@ -335,8 +332,6 @@ export default {
     },
     //编辑
     handleButton(val) {
-      console.log(val);
-
       if (val.methods == "edit") {
       } else if (val.methods == "onapp") {
       } else if (val.methods == "offapp") {
@@ -452,7 +447,6 @@ export default {
       this.queryUserList();
     },
     // onChange2(item) {
-    //   console.log(item);
     //   if (item == 0) {
     //     this.form.sex = "全部";
     //     this.user_sex = "";
@@ -508,12 +502,10 @@ export default {
 
       get_all_app(paramactive)
         .then(res => {
-          console.log(res);
           if (res.status == 0) {
             this.pager.count = res.data.total;
             let tempArr = [];
             tempArr = res.data.appinfo;
-            console.log(tempArr.length);
             for (var i = 0; i < tempArr.length; i++) {
               if (tempArr[i].state == 0) {
                 tempArr[i].stateactive = "未发布";
@@ -553,7 +545,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
           this.$message({
             message: "后台服务无响应",
             type: "error",

@@ -1,10 +1,8 @@
 <template>
   <section class="myself-container">
     <div class="user-title user-title-active ">
-      <el-date-picker v-model="value2" type="datetimerange" :picker-options="pickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left">
-      </el-date-picker>
-      <el-button type="primary" @click="onQueryInfo">确定</el-button>
-      <el-row style="margin-top:20px;    display: flex;justify-content: space-between;">
+    
+      <el-row style="margin-top:20px;display: flex;justify-content:flex-start;">
         <el-col :span="4">
           <div class="user-item">
             <div class="item-count">{{total_user}}</div>
@@ -32,6 +30,11 @@
         </el-col>
       </el-row>
     </div>
+    <div style="width:100%;margin: 20px 0;">
+      <el-date-picker v-model="value2" size="small" type="datetimerange" :picker-options="pickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left">
+      </el-date-picker>
+      <el-button type="primary" size="small" @click="onQueryInfo" >确定</el-button>
+    </div>
     <div class="device_form">
       <div id="myEchart" style="width: 100%; height: 300px;"></div>
     </div>
@@ -41,7 +44,7 @@
           <tableBarActive2 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
         </el-col>
       </el-row>
-      <el-row type="flex" style="margin-top:10px;    float: right;">
+      <el-row type="flex" style="margin:20px 0px;text-align: right;">
         <el-col>
           <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
         </el-col>
@@ -282,7 +285,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     configure(x, y) {
@@ -396,6 +398,7 @@ export default {
 .user-title-active {
   .user-item {
     margin: 25px;
+    margin-left: 0;
   }
 }
 </style>

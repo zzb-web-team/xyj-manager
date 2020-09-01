@@ -58,7 +58,7 @@ export default {
             this.$emit("disable", val);
         },
         toChange(val) {
-            console.log(val)
+            // console.log(val)
             this.$emit("toChange", val);
         },
         changePassword(val) {

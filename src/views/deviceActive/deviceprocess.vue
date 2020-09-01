@@ -13,43 +13,35 @@
 					<el-row type="flex" class="row_active row_active_monitor">
 						<div>
 							<el-input
+								size="small"
 								v-model="dev_sn_active"
 								placeholder="请输入设备SN"
 								@keyup.enter.native="onSubmitKey"
 							></el-input>
 						</div>
-						<div class="seach_top_right" @click="option_display()">
-							筛选
-							<i
-								class="el-icon-caret-bottom"
-								:class="[
-									rotate
-										? 'fa fa-arrow-down go'
-										: 'fa fa-arrow-down aa',
-								]"
-							></i>
-						</div>
+						<span style="margin-left:10px;">状态：</span>
+						<el-select
+							size="small"
+							v-model="valuestate"
+							placeholder="请选择"
+							@change="onChange"
+						>
+							<el-option label="全部" value="-1"></el-option>
+							<el-option
+								v-for="item in optionstate"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							></el-option>
+						</el-select>
+
+						<el-button size="small" plain @click="setInfo()" style="margin-left:10px;"
+							>重置</el-button
+						>
 					</el-row>
 				</el-form>
 			</div>
-			<div v-if="optiondisplay" class="seach_bottom">
-				<span>状态：</span>
-				<el-select
-					v-model="valuestate"
-					placeholder="请选择"
-					@change="onChange"
-				>
-					<el-option label="全部" value="-1"></el-option>
-					<el-option
-						v-for="item in optionstate"
-						:key="item.value"
-						:label="item.label"
-						:value="item.value"
-					></el-option>
-				</el-select>
-
-				<el-button plain @click="setInfo()">重置</el-button>
-			</div>
+			<div v-if="optiondisplay" class="seach_bottom"></div>
 			<div class="devide_table">
 				<el-row type="flex" class="row_active">
 					<el-col :span="24">
@@ -384,7 +376,6 @@ export default {
 	},
 	methods: {
 		onclickprocess(data) {
-			console.log(data);
 			let param = new Object();
 			(param.login_token = '8vAmfX19fX1NeaggfX19fQ=='),
 				(param.dev_sn = this.snNum),
@@ -407,7 +398,6 @@ export default {
 					this.monitorDetails = false;
 				})
 				.catch((error) => {
-					console.log(error);
 				});
 		},
 		//获取页码
@@ -426,7 +416,6 @@ export default {
 
 			query_dev_pid_detail_list(param)
 				.then((res) => {
-					console.log(res);
 					if (res.status == 0 && res.err_code != 0) {
 						let errorId = res.err_code;
 						this.$message({
@@ -466,7 +455,6 @@ export default {
 			this.snNum = val.row.dev_sn;
 			query_dev_pid_detail_list(param)
 				.then((res) => {
-					console.log(res);
 					if (res.status == 0 && res.err_code != 0) {
 						let errorId = res.err_code;
 						this.$message({
@@ -552,7 +540,6 @@ export default {
 				(param.page = this.pager.page - 1);
 			query_dev_pid_general_list(param)
 				.then((res) => {
-					console.log(res);
 					if (res.status == 0 && res.err_code != 0) {
 						let errorId = res.err_code;
 						this.$message({

@@ -22,32 +22,32 @@
                             <div>1、筛选设备</div>
                         </el-col>
                     </el-row>
-                    <el-row type="flex" class="row_active row_active1">
-                        <el-form-item label="用户ID" style="display:block;word-break:keep-all;white-space:nowrap;">
-                            <el-input v-model="form.inputText" placeholder="请输入用户ID" style="width:60%;"></el-input>
+                    <el-row type="flex" class="row_active row_active1" justify="flex-start">
+                        
+                        <el-form-item label="用户ID">
+                            <el-input v-model="form.inputText"  size="small" placeholder="请输入用户ID"></el-input>
                         </el-form-item>
-                        <el-form-item label="设备SN区间" style="display:block;word-break:keep-all;white-space:nowrap;">
-                            <textarea placeholder="请输入SN号" v-model="form.inputText1" style="width:65%;"></textarea>
+                        
+                        <el-form-item label="设备SN区间">
+                            <el-input placeholder="请输入SN号"  size="small"v-model="form.inputText1"></el-input>
                         </el-form-item>
-
-                        <el-form-item label="设备型号" style="display:block;word-break:keep-all;white-space:nowrap;">
-                            <el-select v-model="form.selectedValue" style="width:80%;">
+                        
+                        <el-form-item label="设备型号">
+                            <el-select v-model="form.selectedValue"  size="small">
                                 <el-option v-for="item in form.optionArr" :key="item" :label="item.type_info" :value="item.type"></el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item label="设备状态" style="display:block;word-break:keep-all;white-space:nowrap;">
-
-                            <el-select v-model="form.selectedValue2" placeholder="请选择" @change="changeArr" style="width:80%;">
+                        
+                        <el-form-item label="设备状态">
+                            <el-select v-model="form.selectedValue2" placeholder="请选择" @change="changeArr"  size="small">
                                 <el-option v-for="item in form.optionArractive2" :key="item" :label="item.label" :value="item.value">
-
                                 </el-option>
                             </el-select>
                         </el-form-item>
+                        
                         <el-form-item label="">
-                            <el-button type="primary" @click="onClickQueryinfo()">确定</el-button>
-
+                            <el-button type="primary" @click="onClickQueryinfo()"  size="small" style="margin-left:10px;">确定</el-button>
                         </el-form-item>
-
                     </el-row>
                 </el-form>
             </div>
@@ -60,12 +60,12 @@
                     </el-row>
                     <el-row type="flex" class="row_active row_active1 row_active4" justify="start">
                         <el-form-item label="选择应用">
-                            <el-select v-model="form.selectedValue3" @change="change">
+                            <el-select v-model="form.selectedValue3" @change="change"  size="small">
                                 <el-option v-for="item in form.optionArr3" :key="item" :label="item.app_name" :value="item.id"></el-option>
                             </el-select>
                         </el-form-item>
                         <el-form-item label="选择版本" style="margin-left:50px;" v-if="inputStatus">
-                            <el-select v-model="form.selectedValue5">
+                            <el-select v-model="form.selectedValue5"  size="small">
                                 <el-option v-for="item in form.optionArr5" :key="item" :label="item.version" :value="item.version"></el-option>
                             </el-select>
                         </el-form-item>
@@ -81,7 +81,7 @@
                     </el-row>
                     <el-row type="flex" class="row_active row_active1 row_active2">
                         <el-form-item label="选择操作">
-                            <el-select v-model="form.selectedValue4" @change="changePerform">
+                            <el-select v-model="form.selectedValue4" @change="changePerform"  size="small">
                                 <el-option v-for="item in form.optionArr4" :key="item" :label="item.label" :value="item.value"></el-option>
                             </el-select>
                         </el-form-item>
@@ -751,7 +751,7 @@ export default {
   .row_active1 {
     margin-top: 20px;
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: center;
 
     .el-form-item__content {

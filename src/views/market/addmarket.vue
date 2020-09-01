@@ -239,7 +239,6 @@ export default {
       let param = {};
       get_apptype(param)
         .then(res => {
-          console.log(res);
           if (res.status == 0) {
             let temparr = [];
             let templist = res.data;
@@ -249,13 +248,11 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     //一级分类
     onChangeOne(item) {
       this.ruleForm.app_type1 = item;
-      console.log(item);
       if (item == "1") {
         this.options1 = this.optionsAll[0].sub;
       } else if (item == "2") {
@@ -290,7 +287,7 @@ export default {
       let param = {};
       param.data = this.imgdata;
       saveimagemore(param).then(function(res) {
-        console.log(res);
+        // console.log(res);
         if (res.status == 0) {
           let temp = res.msg;
           let tempArr = [];
@@ -312,7 +309,7 @@ export default {
     },
     //
     handseccess(response, file, fileList) {
-      console.log(fileList);
+    //   console.log(fileList);
       // console.log(response)
       // console.log(file)
     },
@@ -329,11 +326,11 @@ export default {
           if (res.status == 0) {
             //this.ruleForm.app_pic.push(res.data);
             this.ruleForm.app_icon = res.data;
-            console.log(this.ruleForm);
+            // console.log(this.ruleForm);
           }
         })
         .catch(error => {
-          console.log(error);
+        //   console.log(error);
         });
     },
     setImage(e) {
@@ -351,7 +348,7 @@ export default {
     },
     cropImage() {
       this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
-      console.log(this.$refs.cropper.getCroppedCanvas().toDataURL());
+    //   console.log(this.$refs.cropper.getCroppedCanvas().toDataURL());
       this.imgBase = this.$refs.cropper.getCroppedCanvas().toDataURL();
     },
     cancelCrop() {
@@ -514,7 +511,7 @@ export default {
       }
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(this.ruleForm);
+        //   console.log(this.ruleForm);
           this.ruleForm.app_score = parseFloat(this.ruleForm.app_score) * 10;
           this.ruleForm.create_time = parseInt(Date.now() / 1000);
           this.ruleForm.dl_count = parseInt(this.ruleForm.dl_count);
@@ -524,7 +521,7 @@ export default {
 
           add_app(param)
             .then(res => {
-              console.log(res);
+            //   console.log(res);
               if (res.status == 0) {
                 this.$message({
                   type: "success",
@@ -577,10 +574,10 @@ export default {
       return isJPG && isLt2M;
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+    //   console.log(file, fileList);
     },
     handlePreview(file) {
-      console.log(file);
+    //   console.log(file);
     },
     addImg: function(event) {
       var that = this;
@@ -780,7 +777,7 @@ export default {
       }
       var len = 2 * 1024 * 1024;
       var tota_temp = Math.ceil(totalSize / len);
-      console.log(tota_temp);
+    //   console.log(tota_temp);
 
       var start = 0;
       var end = start + len;
@@ -792,7 +789,7 @@ export default {
         File.prototype.slice;
 
       var fileReader = new FileReader();
-      console.log(index);
+    //   console.log(index);
       //  return false
       function sliceandpost() {
         //if (start >= totalSize)return;
@@ -820,7 +817,7 @@ export default {
             if (xhr.status == 200) {
               //var headers =  JSON.parse(xhr.responseText);
               var headers = JSON.parse(xhr.response);
-              console.log(headers);
+            //   console.log(headers);
               //分片上传成功
               if (headers.status == 0) {
                 index = index + 1;

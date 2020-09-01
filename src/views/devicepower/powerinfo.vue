@@ -171,7 +171,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     getInfo() {
@@ -215,7 +214,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     //导出

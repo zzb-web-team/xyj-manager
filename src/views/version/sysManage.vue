@@ -5,57 +5,50 @@
 				<el-row type="flex" class="row_active row_active_monitor">
 					<div>
 						<el-input
+							size="small"
 							v-model="packageName"
 							placeholder="请输入系统包名"
 						></el-input>
 					</div>
-					<div class="seach_top_right" @click="option_display()">
-						筛选
-						<i
-							class="el-icon-caret-bottom"
-							:class="[
-								rotate
-									? 'fa fa-arrow-down go'
-									: 'fa fa-arrow-down aa',
-							]"
-						></i>
-					</div>
+					<span style="margin-left: 20px">适用设备:</span>
+					<el-select
+						size="small"
+						v-model="valuestate"
+						placeholder="请选择"
+						@change="onChange"
+					>
+						<el-option
+							v-for="item in optionstate"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value"
+						></el-option>
+					</el-select>
+					<span style="margin-left: 20px">选择日期：</span>
+
+					<el-date-picker
+						size="small"
+						v-model="value2"
+						type="datetimerange"
+						:picker-options="pickerOptions"
+						range-separator="至"
+						start-placeholder="开始日期"
+						end-placeholder="结束日期"
+						align="right"
+					></el-date-picker>
+
+					<el-button
+						size="small"
+						type="primary"
+						style="margin-left: 10px"
+						@click="toQueryInfo()"
+						>确定</el-button
+					>
+					<el-button type="primary" size="small" @click="setInfo()"
+						>重置</el-button
+					>
 				</el-row>
 			</el-form>
-		</div>
-		<div v-if="optiondisplay" class="seach_bottom">
-			<span>适用设备:</span>
-			<el-select
-				v-model="valuestate"    
-				placeholder="请选择"
-				@change="onChange"
-			>
-				<el-option
-					v-for="item in optionstate"
-					:key="item.value"
-					:label="item.label"
-					:value="item.value"
-				></el-option>
-			</el-select>
-			<span style="margin-left: 20px">选择日期：</span>
-
-			<el-date-picker
-				v-model="value2"
-				type="datetimerange"
-				:picker-options="pickerOptions"
-				range-separator="至"
-				start-placeholder="开始日期"
-				end-placeholder="结束日期"
-				align="right"
-			></el-date-picker>
-
-			<el-button
-				type="primary"
-				style="margin-left: 10px"
-				@click="toQueryInfo()"
-				>确定</el-button
-			>
-			<el-button type="primary" @click="setInfo()">重置</el-button>
 		</div>
 		<div class="devide_table">
 			<el-row
@@ -787,7 +780,6 @@ export default {
 				this.onload = (e) => {
 					//在this.onload函数中，完成公共处理
 					let rs = this.reading();
-					console.log(rs);
 				};
 			this.readAsArrayBuffer(f); //内部会回调this.onload方法
 		};
@@ -824,15 +816,12 @@ export default {
 			param.md5 = this.arrMd5;
 			uploadmd5(param)
 				.then((res) => {
-					console.log(res);
 				})
 				.error((error) => {
-					console.log(error);
 				});
 		},
 		beforeUpload(file) {
 			this.fileList = [file];
-			console.log('选择了文件beforeUpload');
 			// 读取数据
 			this.read(file);
 			return false;
@@ -842,8 +831,6 @@ export default {
 			rd.onload = (e) => {
 				//this.readAsArrayBuffer函数内，会回调this.onload函数。在这里处理结果
 				let cont = rd.reading({ encode: 'GBK' });
-				// console.log(cont);
-				// console.log(JSON.parse(cont).data)
 				this.arrMd5 = JSON.parse(cont).data;
 				let formerData = this.textData;
 				this.textData = formerData + '\n' + cont;
@@ -906,12 +893,10 @@ export default {
 			})
 				.then(() => {
 					let param = new Object();
-					console.log(val);
 					param.rom_version = val.rom_version;
 					param.rom_type = val.rom_type;
 					deleteRom(param)
 						.then((res) => {
-							console.log(res);
 							if (res.status != 0) {
 								this.$message({
 									message: `${res.msg}`,
@@ -963,7 +948,6 @@ export default {
 			getpacketbyversion(param)
 				.then((res) => {
 					//this.updateFrom = res.result
-					console.log(res);
 					this.releaseVersion = val.rom_version;
 					this.releaseInfo = res.result.cols;
 				})
@@ -1136,11 +1120,9 @@ export default {
 						}
 						this.tableData = nowarr;
 						this.tableData11 = nowarractive;
-						//console.log(this.tableData11);
 					}
 				})
 				.catch((error) => {
-					console.log(error);
 					this.$message({
 						message: '网络出错，请重新请求',
 						type: 'error',
@@ -1149,7 +1131,6 @@ export default {
 		},
 		//确定上传
 		onUpload() {
-			console.log(this.uploadList);
 			let param = new Object();
 			let data = [];
 			for (var i = 0; i < this.uploadList.length; i++) {
@@ -1176,8 +1157,6 @@ export default {
 			//     data.push(this.newObject3);
 			//   }
 			param.data = data;
-			console.log(param);
-
 			this.dialogFormState = false;
 			this.dialogUpdate = false;
 			this.uploadsize = 1;
@@ -1310,7 +1289,6 @@ export default {
 						if (xhr.status == 200) {
 							//var headers =  JSON.parse(xhr.responseText);
 							var headers = JSON.parse(xhr.response);
-							console.log(headers);
 							//分片上传成功
 							if (headers.status == 0) {
 								index = index + 1;
@@ -1348,15 +1326,9 @@ export default {
 								).innerHTML = '上传成功:' + headers.msg;
 								let itemActive = item - 1;
 								_this.uploadList[itemActive].showType = true;
-								console.log(_this.uploadList[itemActive]);
 								_this.uploadList[itemActive].info = headers;
-
-								console.log(_this.uploadList);
 								_this.sdkUrl = headers.url;
 								_this.disableStatus = false;
-								// _this.uploadinfoState1 = true
-								// console.log(headers)
-
 								_this.uploadList[itemActive].info.equip_type =
 									headers.type;
 								_this.uploadList[itemActive].info.rom_version =
@@ -1449,7 +1421,6 @@ export default {
 						if (xhr.status == 200) {
 							//var headers =  JSON.parse(xhr.responseText);
 							var headers = JSON.parse(xhr.response);
-							console.log(headers);
 							//分片上传成功
 							if (headers.status == 0) {
 								index = index + 1;
@@ -1476,10 +1447,8 @@ export default {
 								_this.sdkUrl = headers.url;
 								_this.disableStatus = false;
 								_this.uploadinfoState2 = true;
-								console.log(headers);
 								_this.newObject2.equip_type = headers.type;
 								_this.newObject2.rom_version = headers.version;
-
 								_this.newObject2.version_name = headers.name;
 								_this.newObject2.rom_url = headers.url;
 								_this.newObject2.rom_size = headers.size;

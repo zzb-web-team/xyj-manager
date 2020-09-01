@@ -14,11 +14,11 @@
                 <tableBar :tableData="tableData" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @handleButton="handleButton" @handleSelectionChange="handleSelectionChange"></tableBar>
             </el-col>
         </el-row>
-        <el-row type="flex" class="row_active">
+        <!-- <el-row type="flex" class="row_active">
             <el-col :span="24">
                 <myDatanums :dataNum="dataNum"></myDatanums>
             </el-col>
-        </el-row>
+        </el-row> -->
 
     </div>
     <div class="devide_pageNation">
@@ -261,13 +261,10 @@ export default {
     };
   },
   mounted: function() {
-    console.log(this.item_echarslength.length + "*****");
-
     var _index5 = 0;
     $(" .but_right").click(function() {
       _index5++;
       var len = $(".flashBg ul.mobile li").length;
-      console.log(_index5, len);
       if (_index5 + 5 > len) {
         $("#four_flash .flashBg ul.mobile")
           .stop()
@@ -295,7 +292,6 @@ export default {
     $(" .but_left ").click(function() {
       _index5--;
       var len = $(".flashBg ul.mobile li").length;
-      console.log(_index5, len);
       if (_index5 < 0) {
         $("#four_flash .flashBg ul.mobile")
           .stop()
@@ -335,7 +331,6 @@ export default {
       getappstatistics(param)
         .then(res => {
           if (res.status == 0) {
-            // console.log(res)
             if (res.data.length > 0) {
               if (res.data.length > 5) {
                 this.lengthStatus = false;
@@ -380,14 +375,12 @@ export default {
       var form = new FormData();
       // 文件对象
       form.append("file", fileObj);
-      console.log(fileObj);
       uploadapk(form)
         .then(res => {
           if (res.status == 0) {
             this.loading2 = false;
           }
           var arr = Object.keys(res);
-          console.log(res);
           if (arr.length > 0) {
             this.newFrom.app_version = res.version;
             this.newFrom.app_name = res.name;
@@ -412,11 +405,9 @@ export default {
       })
         .then(() => {
           let param = new Object();
-          console.log(val);
           param.rom_version = val.rom_version;
           deleteRom(param)
             .then(res => {
-              console.log(res);
               if (res.status != 0) {
                 this.$message({
                   message: `${res.msg}`,
@@ -506,16 +497,13 @@ export default {
     //点击上传
 
     handlePreview(file) {
-      console.log(file);
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
     },
     //c上传前验证
     beforeAvatarUpload(file) {
       var fileName = new Array();
       fileName = file.name.split(".");
-      // console.log(fileName)
       // if(fileName[1]!= "apk"){
       //       this.$message({
       //     message: "上传文件只能是.apk格式的压缩包",
@@ -562,7 +550,6 @@ export default {
             this.loading2 = false;
           }
           var arr = Object.keys(res);
-          console.log(res);
           if (arr.length > 0) {
             this.uploadinfoState1 = true;
             this.newObject1.equip_type = res.type;
@@ -587,7 +574,6 @@ export default {
     dialogFormVisible() {
        this.disableStatus = false;
          if(this.$refs.test==undefined){
-        console.log("***")
       }else{
         this.$refs.test.value=""
       document.getElementById("result").innerText=""
@@ -661,7 +647,6 @@ export default {
               }
               this.tableData = nowarr;
               this.tableData11 = nowarractive;
-              console.log(this.tableData1);
             }
           }
         })
@@ -788,7 +773,6 @@ export default {
             if (xhr.status == 200) {
               //var headers =  JSON.parse(xhr.responseText);
               var headers = JSON.parse(xhr.response);
-              console.log(headers);
               //分片上传成功
               if (headers.status == 0) {
                 index = index + 1;
@@ -949,12 +933,6 @@ export default {
   margin: 0 auto;
   background: #f4f4f5;
 }
-
-.el-carousel__item {
-  //     display: flex;
-  // align-items: center;
-}
-
 .el-carousel__indicators--outside {
   display: none;
 }
@@ -1042,12 +1020,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-#four_flash .but_left:hover {
-}
-
-#four_flash .but_right:hover {
 }
 .myself-container.myself-container-add .my_dialogForm .dialog_item {
     width: 90%;

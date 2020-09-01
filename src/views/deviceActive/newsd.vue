@@ -12,25 +12,18 @@
         <el-form ref="form" :model="form">
           <el-row type="flex" class="row_active row_active_monitor">
             <div>
-              <el-input v-model="form.dev_sn" placeholder="请输入设备SN,节点ID" @keyup.enter.native="onSumitKey"></el-input>
+              <el-input v-model="form.dev_sn" size="small" placeholder="请输入设备SN,节点ID" @keyup.enter.native="onSumitKey"></el-input>
             </div>
-            <div class="seach_top_right" @click="option_display()">
-              筛选
-              <i class="el-icon-caret-bottom" :class="[
-                  rotate ? 'fa fa-arrow-down go' : 'fa fa-arrow-down aa'
-                ]"></i>
-            </div>
-          </el-row>
-        </el-form>
-      </div>
-      <div v-if="optiondisplay" class="seach_bottom">
-        <span>状态：</span>
-        <el-select v-model="valuestate" placeholder="请选择" @change="onChange">
+        <span style="margin-left:10px;">状态：</span>
+        <el-select size="small" v-model="valuestate" placeholder="请选择" @change="onChange">
           <el-option label="全部" value="-1"></el-option>
           <el-option v-for="item in optionstate" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
 
-        <el-button plain @click="setInfo()">重置</el-button>
+        <el-button size="small" plain @click="setInfo()" style="margin-left:10px;">重置</el-button>
+
+          </el-row>
+        </el-form>
       </div>
       <div class="devide_table" style="width: 100%;">
         <el-row type="flex" class="row_active">
@@ -131,7 +124,7 @@
               <el-form ref="form" :model="form">
                 <el-row type="flex" class="row_active row_active_monitor">
                   <el-form-item label="问题筛选" style="display: flex;">
-                    <el-select v-model="value" placeholder="请选择" @change="onChangeActive">
+                    <el-select v-model="value" placeholder="请选择" size="small" @change="onChangeActive">
                       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                   </el-form-item>
@@ -431,8 +424,6 @@ export default {
 
      //排序
     tableSortChange(column) {
-      console.log(column);
-
      this.pager.page = 1;
       if (column.order == "descending") {
         this.order = 0;
@@ -792,6 +783,9 @@ export default {
     // background: #f0f5f5;
     // padding: 15px 30px;
     box-sizing: border-box;
+    margin-top: 0 !important;
+    box-shadow:0 0 0 0 !important;
+    padding: 0 !important;
 
     .el-form-item {
       margin-bottom: 0px;

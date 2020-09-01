@@ -658,7 +658,6 @@ export default {
 
                         }
                         this.tableData = nowarractive
-                        console.log(this.tableData)
                     }
 
                 })
@@ -774,8 +773,6 @@ export default {
             width: 100%;
             height: auto;
             overflow: hidden;
-
-            .item {}
         }
 
         .el-form-item {

@@ -1,40 +1,25 @@
 <template>
 <section class="myself-container">
     <div class="device_form">
-        <el-form ref="form" :model="form">
+        <el-form ref="form" :model="form" style="margin-top: 20px">
             <el-row type="flex">
-                <!-- <mySearch :searchText="searchText" @searchInfo="searchInfo" :placeholder="placeholder" ref="numberInput"></mySearch> -->
-                <!-- <div class="search-con">
-                    <i class="el-icon-search" @click="searchInfo" style="color:#606266"></i>
-                    <el-input class="search-input" v-model="searchText" placeholder="请输入账号" @keyup.enter.native="onSubmitKey"></el-input>
-                </div> -->
-                 <el-col :span="4">
-          <el-input
-  v-model="searchText" placeholder="请输入账号" @keyup.enter.native="onSubmitKey"
-    >
-    <i slot="prefix" class="el-input__icon el-icon-search"  @click="onSubmitKey"></i>
-  </el-input>
-            </el-col>
-                <div @click="getShow()" class="div_show" style="color:#606266">筛选
-                    <i
-                class="el-icon-caret-bottom"
-                :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"
-              ></i>
-                </div>
-            </el-row>
-            <el-row type="flex" class="row_activess" v-show="showState">
+                 <el-form-item>
+          <el-input size="small" v-model="searchText" placeholder="请输入账号" @keyup.enter.native="onSubmitKey"><i slot="prefix" class="el-input__icon el-icon-search"  @click="onSubmitKey"></i></el-input>
+            </el-form-item>
+            <el-row type="flex">
                 <el-form-item label="状态" style="display: flex;">
-                    <el-select v-model="value" placeholder="请选择" @change="onChange2">
+                    <el-select v-model="value" placeholder="请选择" size="small" @change="onChange2">
                         <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="searchInfo">确定</el-button>
+                    <el-button type="primary" size="small" @click="searchInfo">确定</el-button>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="resetInfo">重置</el-button>
+                    <el-button type="primary" size="small" @click="resetInfo">重置</el-button>
                 </el-form-item>
+            </el-row>
             </el-row>
         </el-form>
     </div>
@@ -828,7 +813,6 @@ export default {
       this.$refs.ruleForm2.validate(valid => {
         if (valid) {
           this.logining = true;
-          console.log(this.ruleForm2)
           var loginParams = {
             username: this.ruleForm2.username,
             nickname: "aa",
@@ -1109,10 +1093,6 @@ export default {
   justify-content: flex-start;
   align-items: center;
   border-bottom: 1px solid #999999;
-
-  i {
-  }
-
   .search-input {
     .el-input__inner {
       border: none;

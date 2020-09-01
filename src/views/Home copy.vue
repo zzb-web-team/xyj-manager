@@ -122,7 +122,6 @@ export default {
             return v ? v[2] : null;
         },
         onSubmit() {
-            console.log("submit!");
         },
         handleopen() {},
         handleclose() {},

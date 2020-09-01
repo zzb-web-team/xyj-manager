@@ -58,7 +58,6 @@ export default {
         };
     },
     mounted: function () {
-        console.log(this.$store.state.userRouter)
     },
     methods: {
         handleReset2() {
@@ -93,8 +92,6 @@ export default {
                         //         path: '/userinformation'
                         //     });
                         //NProgress.done();
-                        console.log(data)
-                        console.log(data.status)
                         let {
                             msg,
                             status,
@@ -112,7 +109,6 @@ export default {
                             //     path: '/userinformation'
                             // });
                             window.location.href = "./"
-                            //console.log(JSON.stringify(msg))
                             this.set('userInfo', JSON.stringify(msg), 1000)
 
                         }

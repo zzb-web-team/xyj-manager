@@ -577,8 +577,6 @@ export default {
         //上传到PTFS
         Reonload(val, indexTab) {
             let param = new Object()
-            console.log(val.rom_url[indexTab])
-            console.log(val.md5[indexTab])
             param.rom_url = val.rom_url[indexTab]
             param.md5 = val.md5[indexTab]
             alert(JSON.stringify(param))
@@ -614,11 +612,9 @@ export default {
                 type: 'warning'
             }).then(() => {
                 let param = new Object()
-                console.log(val)
                 param.rom_version = val.rom_version
                 deleteRom(param)
                     .then(res => {
-                        console.log(res)
                         if (res.status != 0) {
                             this.$message({
                                 message: `${res.msg}`,
@@ -671,8 +667,6 @@ export default {
             param.version = val.rom_version
             getpacketbyversion(param)
                 .then(res => {
-                    //this.updateFrom = res.result
-                    console.log(res)
                     this.releaseVersion = val.rom_version
                     this.releaseInfo = res.result.cols
                 })
@@ -755,10 +749,8 @@ export default {
         //点击上传
 
         handlePreview(file) {
-            console.log(file);
         },
         handleRemove(file, fileList) {
-            console.log(file, fileList);
         },
         //c上传前验证
         beforeAvatarUpload(file) {
@@ -849,7 +841,6 @@ export default {
                         this.loading2 = false
                     }
                     var arr = Object.keys(res)
-                    console.log(res)
                     if (arr.length > 0) {
                         this.uploadinfoState1 = true
                         this.newObject1.equip_type = res.type
@@ -1005,7 +996,6 @@ export default {
                         }
                         this.tableData = nowarr
                         this.tableData11 = nowarractive
-                        console.log(this.tableData1)
                     }
                 })
                 .catch(error => {
@@ -1169,7 +1159,6 @@ export default {
                         if (xhr.status == 200) {
                             //var headers =  JSON.parse(xhr.responseText);
                             var headers = JSON.parse(xhr.response);
-                            console.log(headers);
                             //分片上传成功
                             if (headers.status == 0) {
                                 index = index + 1;
@@ -1193,7 +1182,6 @@ export default {
                                 _this.sdkUrl = headers.url
                                 _this.disableStatus = false
                                 _this.uploadinfoState1 = true
-                                console.log(headers)
                                 _this.newObject1.equip_type = headers.type
                                 _this.newObject1.rom_version = headers.version
                                 _this.newObject1.version_name = headers.name
@@ -1273,7 +1261,6 @@ export default {
                         if (xhr.status == 200) {
                             //var headers =  JSON.parse(xhr.responseText);
                             var headers = JSON.parse(xhr.response);
-                            console.log(headers);
                             //分片上传成功
                             if (headers.status == 0) {
                                 index = index + 1;
@@ -1293,7 +1280,6 @@ export default {
                                 _this.sdkUrl = headers.url
                                 _this.disableStatus = false
                                 _this.uploadinfoState2 = true
-                                console.log(headers)
                                 _this.newObject2.equip_type = headers.type
                                 _this.newObject2.rom_version = headers.version
                                 _this.newObject2.version_name = headers.name
@@ -1373,7 +1359,6 @@ export default {
                         if (xhr.status == 200) {
                             //var headers =  JSON.parse(xhr.responseText);
                             var headers = JSON.parse(xhr.response);
-                            console.log(headers);
                             //分片上传成功
                             if (headers.status == 0) {
                                 index = index + 1;
@@ -1393,7 +1378,6 @@ export default {
                                 _this.sdkUrl = headers.url
                                 _this.disableStatus = false
                                 _this.uploadinfoState3 = true
-                                console.log(headers)
                                 _this.newObject3.equip_type = headers.type
                                 _this.newObject3.rom_version = headers.version
                                 _this.newObject3.version_name = headers.name

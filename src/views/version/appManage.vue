@@ -197,7 +197,6 @@ export default {
       };
       editDescription(param)
         .then(res => {
-          console.log(res);
           if (res.status == 0) {
             this.dialogEdit = false;
             this.$message({
@@ -215,13 +214,11 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     //APP删除
     handleDelete(row) {
       // this.dialogEdit = true
-      console.log(row);
       this.deleteId = row.id;
       this.$confirm("确定执行该操作吗", "提示", {
         type: "warning",
@@ -253,19 +250,16 @@ export default {
     //APP修改
     handleEdit(row) {
       this.dialogEdit = true;
-      console.log(row);
       this.editInfo = row.packet_description;
       this.editId = row.id;
     },
     //APP 文件上传到节点
     uploadApp(row) {
-      console.log(row);
       let param = {
         url: row.packet_url,
       };
       uploadpftsNew(param)
         .then(res => {
-          console.log(res);
           if (res.status == 0) {
             this.$message({
               message: "正在上传至IPFS",
@@ -396,7 +390,6 @@ export default {
             if (xhr.status == 200) {
               //var headers =  JSON.parse(xhr.responseText);
               var headers = JSON.parse(xhr.response);
-              console.log(headers);
               //分片上传成功
               if (headers.status == 0) {
                 index = index + 1;
@@ -442,7 +435,6 @@ export default {
       param.page = this.pager.page - 1;
       queryPacket(param)
         .then(res => {
-          console.log(res);
           if (res.status != 0) {
             this.$message({
               message: `${res.msg}`,
@@ -492,7 +484,6 @@ export default {
     },
     upload() {
       if(this.$refs.test==undefined){
-        console.log("***")
       }else{
         this.$refs.test.value=""
       document.getElementById("result").innerText=""
@@ -517,8 +508,6 @@ export default {
           path: "/userInfo",
         });
       }
-      console.log(val);
-      console.log(rows);
     },
     addAccout() {
       this.dialogVisible = true;

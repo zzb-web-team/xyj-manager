@@ -136,7 +136,6 @@ export default {
             var data = this.optionsAll.filter(function(item) {
               _this.first[item.type] = {};
               _this.first[item.type].name = item.name;
-              console.log(item.sub.length);
               _this.first[item.type].sub = {};
               for (var i = 0; i < item.sub.length; i++) {
                 _this.first[item.type].sub[item.sub[i].sub_type] =
@@ -148,7 +147,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     //删除
@@ -191,7 +189,6 @@ export default {
       param.app_id = this.$route.query.linkappid;
       get_app_by_appid(param)
         .then(res => {
-          console.log(res);
           if (res.status == 0) {
             this.cropImg = res.data.app_icon;
             this.imgs = res.data.app_pic;
@@ -207,7 +204,6 @@ export default {
               ];
             }
 
-            console.log(this.ruleForm.app_name);
           }
         })
         .catch(error => {});

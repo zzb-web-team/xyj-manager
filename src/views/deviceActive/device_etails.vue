@@ -7,6 +7,7 @@
 				<div class="seach">
 					<div class="seach_top">
 						<el-input
+                        size="small"
 							placeholder="设备SN，节点ID"
 							v-model="input"
 							@keyup.enter.native="seachuser()"
@@ -18,21 +19,9 @@
 								@click="seachuser()"
 							></i>
 						</el-input>
-						<div class="seach_top_right" @click="option_display()">
-							筛选
-							<i
-								class="el-icon-caret-bottom"
-								:class="[
-									rotate
-										? 'fa fa-arrow-down go'
-										: 'fa fa-arrow-down aa',
-								]"
-							></i>
-						</div>
-					</div>
-					<div v-if="optiondisplay" class="seach_bottom">
-						<span>异常类型：</span>
+						<span style="margin-left:10px;">异常类型：</span>
 						<el-select
+                        size="small"
 							v-model="value"
 							placeholder="请选择"
 							@change="seachuser"
@@ -45,9 +34,10 @@
 								:value="item.value"
 							></el-option>
 						</el-select>
-						<span>选择日期：</span>
+						<span style="margin-left:10px;">选择日期：</span>
 
 						<el-date-picker
+                        size="small"
 							@change="queryHardware()"
 							v-model="value1"
 							type="datetimerange"
@@ -57,12 +47,7 @@
 							end-placeholder="结束日期"
 							align="right"
 						></el-date-picker>
-						<el-button plain @click="reset()">重置</el-button>
-						<div class="seach_bottom_btn">
-							<!-- <el-button type="primary" plain size="mini" @click="seachuser()"
-            >确定</el-button
-          > -->
-						</div>
+						<el-button plain @click="reset()"  size="small" style="margin-left:10px;">重置</el-button>
 					</div>
 				</div>
 
@@ -185,6 +170,7 @@
 				<div class="seach">
 					<div class="seach_top">
 						<el-input
+                        size="small"
 							placeholder="设备SN"
 							v-model="inputsn"
 							@keyup.enter.native="seachuser1()"
@@ -196,21 +182,9 @@
 								@click="seachuser1()"
 							></i>
 						</el-input>
-						<div class="seach_top_right" @click="option_display()">
-							筛选
-							<i
-								class="el-icon-caret-bottom"
-								:class="[
-									rotate
-										? 'fa fa-arrow-down go'
-										: 'fa fa-arrow-down aa',
-								]"
-							></i>
-						</div>
-					</div>
-					<div v-if="optiondisplay" class="seach_bottom">
-						<span>异常类型：</span>
+						<span style="margin-left:10px;">异常类型：</span>
 						<el-select
+                        size="small"
 							v-model="valuess"
 							placeholder="请选择"
 							@change="seachProcess"
@@ -223,9 +197,10 @@
 								:value="item.value"
 							></el-option>
 						</el-select>
-						<span>选择日期：</span>
+						<span style="margin-left:10px;">选择日期：</span>
 
 						<el-date-picker
+                        size="small"
 							@change="queryProcess()"
 							v-model="value1"
 							type="datetimerange"
@@ -235,11 +210,8 @@
 							end-placeholder="结束日期"
 							align="right"
 						></el-date-picker>
-						<el-button plain @click="reset1()">重置</el-button>
+						<el-button plain @click="reset1()"  size="small" style="margin-left:10px;">重置</el-button>
 						<div class="seach_bottom_btn">
-							<!-- <el-button type="primary" plain size="mini" @click="seachuser()"
-            >确定</el-button
-          > -->
 						</div>
 					</div>
 				</div>

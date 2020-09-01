@@ -525,7 +525,6 @@ export default {
 				(param.cur_page = this.pager.page - 1),
 				ptfs_query_user_store_list(param)
 					.then((res) => {
-						console.log(res);
 						if (res.data.store_list) {
 							this.sum_profit1 =
 								res.data.store_list[0].sum_profit / 100;
@@ -558,7 +557,6 @@ export default {
 
 			ptfs_query_user_profit_list(param)
 				.then((res) => {
-					console.log(res);
 					this.dialogVisible2 = true;
 					if (res.data.profit_detail_list) {
 						this.tableData1 = [];
@@ -770,7 +768,6 @@ export default {
 			devicelist(param)
 				.then((res) => {
 					this.dialogVisible4 = true;
-					console.log(res);
 					if (res.status === 0) {
 						let nowarr = [];
 						nowarr = res.data.dev_list;
@@ -812,7 +809,6 @@ export default {
 					}
 				})
 				.catch((error) => {
-					console.log(error);
 				});
 		},
 		getQueryInfo2Active() {
@@ -849,7 +845,6 @@ export default {
 			let param = data;
 			devicelist(param)
 				.then((res) => {
-					console.log(res);
 					if (res.status === 0) {
 						let nowarr = [];
 						nowarr = res.data.dev_list;
@@ -891,7 +886,6 @@ export default {
 					}
 				})
 				.catch((error) => {
-					console.log(error);
 				});
 		},
 		searchInfo() {},
@@ -902,8 +896,6 @@ export default {
 			if (val == 'edit') {
 				this.dialogVisible2 = true;
 			}
-			console.log(val);
-			console.log(rows);
 		},
 		addAccout() {
 			this.dialogVisible = true;

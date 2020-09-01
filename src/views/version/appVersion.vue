@@ -340,7 +340,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     //查询灰度发布
@@ -504,8 +503,6 @@ export default {
         })
         .catch(error => {
           this.common.monitoringLogs("发布", "发布app安装包", 0);
-
-          console.log(error);
         });
     },
     //         //获取历史发布记录
@@ -601,7 +598,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
 
@@ -677,8 +673,6 @@ export default {
       this.message = [];
       this.title = "";
       if (res.status == 0) {
-        console.log(res);
-
         this.tableType = true;
         var resID = /^1[34578]\d{9}$/;
         this.errorcount = 0;
@@ -703,7 +697,6 @@ export default {
         }
 
         this.tableList = res.data;
-        console.log(this.tableList);
       } else {
         this.$message({
           showClose: true,
@@ -744,11 +737,6 @@ export default {
 .el-button {
   padding: 8px 20px;
 }
-
-.upload-demo {
-  // height: 400px;
-}
-
 .version_active {
   .el-form-item {
     margin-bottom: 10px;

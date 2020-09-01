@@ -86,7 +86,6 @@ export default {
     },
     methods: {
         handleButton(val) {
-            console.log(val);
             if (val.methods == "editOnchange") {
                 this.$router.push({
                     path: "/deviceinformation",
@@ -114,7 +113,6 @@ export default {
             param.page = this.pager.page - 1
             actionlog(param)
                 .then(res => {
-                    console.log(res)
                     if (res.status != 0) {
                         this.$message({
                             message: `${res.msg}`,
@@ -131,7 +129,6 @@ export default {
 
                         }
                         this.tableData = nowarractive
-                        console.log(this.tableData)
                     }
 
                 })

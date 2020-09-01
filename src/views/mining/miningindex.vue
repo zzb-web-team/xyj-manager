@@ -260,8 +260,6 @@ export default {
 
     //跳转至详情
     toDetails(val) {
-      console.log(val);
-
       this.$router.push({
         path: "/userInfo",
         query: {
@@ -273,7 +271,6 @@ export default {
     },
     //冻结，解冻
     disable(val) {
-      console.log(val);
       let param = new Object();
       if (val.account_status == "正常") {
         param.forbid_status = 1;
@@ -349,7 +346,6 @@ export default {
         });
     },
     onChange(item) {
-      console.log(item);
       this.nodegrade = item;
       this.queryUserList();
     },
@@ -364,7 +360,6 @@ export default {
       }
     },
     onChange2(item) {
-      console.log(item);
       if (item == 0) {
         this.form.sex = "全部";
         this.user_sex = "";
@@ -421,9 +416,7 @@ export default {
 
       ptfs_query_node_grade(paramactive)
         .then(res => {
-          console.log(res);
           if (res.status == 0) {
-            console.log(res);
             if (res.data.con_value_list) {
               if ((res.data.con_value_list.length == 0)) {
                 this.exportStatus = true;
@@ -468,7 +461,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
           this.$message({
             message: "后台服务无响应",
             type: "error",

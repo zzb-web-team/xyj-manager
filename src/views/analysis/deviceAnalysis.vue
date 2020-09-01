@@ -16,9 +16,9 @@
 				<!-- <el-button style="margin-left:20px;" type="text" @click="toexportExcel">导出</el-button> -->
 			</el-radio-group>
 		</div>
-		<div class="user-title" style="margin-bottom: 20px;">
+		<div class="user-title" style="margin-bottom: 20px">
 			<el-date-picker
-				style="margin-left: 10px;"
+				size="small"
 				placeholder="选择日期时间"
 				v-model="valueActive"
 				type="date"
@@ -27,7 +27,8 @@
 			></el-date-picker>
 
 			<el-date-picker
-				style="margin-left: 10px;"
+				size="small"
+				style="margin-left: 10px"
 				v-model="valueele"
 				type="dates"
 				placeholder="时间对比"
@@ -35,6 +36,7 @@
 			>
 			</el-date-picker>
 			<el-select
+				size="small"
 				v-model="versointime1"
 				placeholder="时段对比"
 				@change="changePeriod"
@@ -49,6 +51,7 @@
 				</el-option>
 			</el-select>
 			<el-select
+				size="small"
 				v-model="devicetype"
 				placeholder="请选择"
 				@change="changeType"
@@ -62,6 +65,7 @@
 				</el-option>
 			</el-select>
 			<el-select
+				size="small"
 				v-model="versointype"
 				placeholder="请选择"
 				:disabled="disableTab"
@@ -76,8 +80,9 @@
 				</el-option>
 			</el-select>
 			<el-button
+				size="small"
 				type="primary"
-				style="margin-left: 20px;"
+				style="margin-left: 20px"
 				@click="onsumbit()"
 				>确定</el-button
 			>
@@ -87,7 +92,7 @@
 				<div class="device_form" style="display: flex;space-between">
 					<div
 						id="myEchart"
-						style="width: 100%; height: 500px; margin-top: 50px;"
+						style="width: 100%; height: 500px; margin-top: 50px"
 					></div>
 					<div
 						style="
@@ -103,7 +108,7 @@
 					<div
 						v-if="bin_show"
 						id="myEchart_bin"
-						style="width: 100%; height: 300px; margin-top: 50px;"
+						style="width: 100%; height: 300px; margin-top: 50px"
 					></div>
 				</div>
 				<div class="devide_table">
@@ -131,7 +136,7 @@
 						style="
 							display: flex;
 							justify-content: flex-end;
-							margin-top: 10px;
+							margin: 20px 0;
 						"
 					>
 						<el-col :span="6">
@@ -151,7 +156,7 @@
 				>
 					<div
 						id="myEchart1"
-						style="width: 90%; height: 500px; margin-top: 50px;"
+						style="width: 90%; height: 500px; margin-top: 50px"
 					></div>
 					<div
 						style="
@@ -190,7 +195,7 @@
 						style="
 							display: flex;
 							justify-content: flex-end;
-							margin-top: 10px;
+							margin: 20px 0;
 						"
 					>
 						<el-col :span="6">
@@ -374,7 +379,6 @@ export default {
 		//选这类型过滤版本
 		changeType(val) {
 			this.versointype = '全部版本';
-			console.log(val);
 			this.options = [];
 
 			if (val == -1) {
@@ -396,7 +400,6 @@ export default {
 			//     this.options.splice(index, 1);
 			//   }
 			// });
-			console.log(this.options.length);
 		},
 		//查询西柚机所有版本
 		queryTypeInfo() {
@@ -433,7 +436,6 @@ export default {
 						this.options11.push(obj);
 					}
 
-					console.log(this.options11);
 				})
 				.catch((error) => {});
 		},
@@ -571,16 +573,15 @@ export default {
 					if (res.status == 0) {
 						if (paramActive.dayList.length <= 1) {
 							res.data.totalList.forEach((item) => {
-                                console.log(item);
-								if (item.type == "1") {
+								if (item.type == '1') {
 									this.bin_list[0].value = item.num;
-								} else if (item.type == "2") {
+								} else if (item.type == '2') {
 									this.bin_list[1].value = item.num;
-								} else if (item.type == "3") {
+								} else if (item.type == '3') {
 									this.bin_list[2].value = item.num;
-								} else if (item.type == "4") {
+								} else if (item.type == '4') {
 									this.bin_list[3].value = item.num;
-								} else if (item.type == "5") {
+								} else if (item.type == '5') {
 									this.bin_list[4].value = item.num;
 								}
 							});
@@ -624,8 +625,6 @@ export default {
 							}
 						}
 						let echarsArr = [];
-
-						console.log(list1.length);
 						for (var i = 0; i < list1.length; i++) {
 							let obj = {
 								type: 'bar',
@@ -633,13 +632,11 @@ export default {
 							};
 							echarsArr.push(obj);
 						}
-						console.log(echarsArr);
 						this.drawLine(echarsArr);
 						this.drawLine_bin();
 					}
 				})
 				.catch((error) => {
-					console.log(error);
 				});
 		},
 		querydeviceOffline() {
@@ -740,7 +737,6 @@ export default {
 					}
 				})
 				.catch((error) => {
-					console.log(error);
 				});
 		},
 
@@ -902,7 +898,7 @@ export default {
 			//myChart1.setOption(options);
 		},
 		drawLine_bin() {
-            let　_this=this;
+			let _this = this;
 			let myChart_bin = echarts.init(
 				document.getElementById('myEchart_bin')
 			); //这里是为了获得容器所在位置
@@ -936,8 +932,8 @@ export default {
 						type: 'pie',
 						radius: '55%',
 						center: ['50%', '60%'],
-                        data: _this.bin_list,
-                        // [
+						data: _this.bin_list,
+						// [
 						// 	{ value: 335, name: 'OT<=1h' },
 						// 	{ value: 310, name: '1h<OT<=5h' },
 						// 	{ value: 234, name: '5h<OT<=10h' },

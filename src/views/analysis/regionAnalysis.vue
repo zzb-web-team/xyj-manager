@@ -2,13 +2,13 @@
 
   <div>
     <div style="margin-top:30px;">
-      <el-date-picker v-model="valueTime" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left">
+      <el-date-picker v-model="valueTime" size="small" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left">
       </el-date-picker>
-      <el-select v-model="deviceType" placeholder="请选择" @change="onChange">
+      <el-select v-model="deviceType" placeholder="请选择" size="small" @change="onChange">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-button type="primary" @click="onQueryInfo" style="margin-left:20px;">确定</el-button>
+      <el-button type="primary" @click="onQueryInfo" size="small" style="margin-left:20px;">确定</el-button>
     </div>
     <div class="rank_con" style="margin-top:30px;display: flex;justify-content: space-around">
       <div style='width:800px;height:800px;' id="myEchart"></div>
@@ -103,8 +103,6 @@ export default {
             }
             this.options.push(obj);
           }
-
-          console.log(this.options);
         })
         .catch(error => {});
     },
@@ -141,7 +139,6 @@ export default {
       (paramActive.end_ts = parseInt(endTime) ), (paramActive.type = this.deviceType);
       app_usage_region_dist(paramActive)
         .then(res => {
-          // console.log(res);
           if (res.status == 0) {
             let tempArr = res.data;
             //             tempArr.forEach((element) => {
@@ -175,12 +172,10 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
 
     chinaConfigure(a) {
-      console.log(a);
       let myChart = echarts.init(document.getElementById("myEchart")); //这里是为了获得容器所在位置
       window.onresize = myChart.resize;
       myChart.setOption({

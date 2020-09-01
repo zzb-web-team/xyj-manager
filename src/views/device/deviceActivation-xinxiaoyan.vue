@@ -566,7 +566,6 @@ export default {
           //通过验证执行
         } else {
           //验证失败执行
-          console.log("error submit!!");
           return false;
         }
       });
@@ -625,7 +624,6 @@ export default {
     beforeUpload(file) {
       let tempName = file.name;
       let nowName = tempName.split(".");
-      console.log(nowName[1]);
       if (nowName[1] !== "xls") {
         this.$message({
           message: "请上传.xls的文件",
@@ -633,7 +631,6 @@ export default {
         });
         return false;
       }
-      //console.log(file.name)
     },
     //文件批量导入
     submitUpload() {
@@ -641,7 +638,6 @@ export default {
     },
     //上传成功回调
     handleSuccess(response) {
-      console.log(response);
       if (response.status == 0) {
         this.$message({
           message: `总条数:+${response.data.total}+上传至数据库:+${response.data.success}+成功条数:+${response.data.right}`,
@@ -700,7 +696,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     //导出
@@ -758,8 +753,6 @@ export default {
         })
         .catch(error => {
           this.common.monitoringLogs("导出", "导出设备激活表", 0);
-
-          console.log(error);
         });
     },
     getOverview() {
@@ -776,7 +769,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     editBasicinfo() {
@@ -790,7 +782,6 @@ export default {
         dev_sn: this.rowsData.dev_sn,
         info: this.ruleForm1
       };
-      console.log(param);
       edit_device_basicinfo(param)
         .then(res => {
           this.$message({
@@ -801,7 +792,6 @@ export default {
           this.dialogVisible2 = false;
         })
         .catch(error => {
-          console.log(error);
         });
     },
      add(formName) {
@@ -810,7 +800,6 @@ export default {
           //通过验证执行
         } else {
           //验证失败执行
-          console.log("error submit!!");
           return false;
         }
       });
@@ -822,7 +811,6 @@ export default {
              this.ruleForm2.dev_type = this.ruleForm2.dev_type === "RK3328" ? 1 : 2;
       this.ruleForm2.total_cap = Number(this.ruleForm2.total_cap);
       this.ruleForm2.login_token = "";
-      console.log(this.ruleForm2);
       import_node_basicinfo(this.ruleForm2)
         .then(res => {
           if (res.status === 0) {
@@ -836,12 +824,10 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
         } 
          else {
           //验证失败执行
-          console.log("error submit!!");
           return false;
         }
           });
@@ -867,7 +853,6 @@ export default {
           is_activated: 101
         }
       };
-      console.log(param);
       edit_device_basicinfo(param)
         .then(res => {
           this.$message({
@@ -879,7 +864,6 @@ export default {
           this.dialogVisible2 = false;
         })
         .catch(error => {
-          console.log(error);
         });
     },
        closeRestore(type, sn) {
@@ -947,7 +931,6 @@ export default {
     // open(rows) {},
     // restart(rows) {},
     edit(rows) {
-      console.log(rows);
       this.dialogVisible2 = true;
       this.ruleForm1 = rows;
       this.rowsData = rows;
@@ -1015,7 +998,6 @@ export default {
         login_token: "",
         dev_sn: rows.dev_sn
       };
-      console.log(param);
       delete_device_basicinfo(param)
         .then(res => {
           if (res.status === 0) {
@@ -1029,7 +1011,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     addDev() {

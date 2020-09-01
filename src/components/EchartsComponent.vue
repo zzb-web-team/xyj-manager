@@ -38,13 +38,13 @@ export default {
     // vm.$nextTick(() => {
     //   vm.drawChart();
     // });
-    console.log(this.chartData)
+    // console.log(this.chartData)
     this.drawChart1();
   },
   methods: {
     drawChart1() {
-        console.log(this.chartData)
-      console.log(1);
+        // console.log(this.chartData)
+    //   console.log(1);
       const vm = this;
       // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(this.echarts));

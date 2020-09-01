@@ -29,62 +29,47 @@
       </el-row>
     </div>
     <div class="device_form">
-      <el-form ref="form" :model="form">
+      <el-form ref="form" :model="form" style="margin-top:20px;">
         <el-row type="flex">
-          <!-- <div class="search-con">
-            <i class="el-icon-search" style="color:#606266"></i>
-            <el-input class="search-input" v-model="searchText" placeholder="设备SN、CPU-ID" @keyup.enter.native="onSubmitKey"></el-input>
-          </div> -->
-
-           <el-col :span="4">
-          <el-input
-  v-model="searchText" placeholder="设备SN、CPU-ID" @keyup.enter.native="onSubmitKey"
-    >
-    <i slot="prefix" class="el-input__icon el-icon-search"  @click="onSubmitKey"></i>
-  </el-input>
-            </el-col>
-          <div @click="getShow()" class="div_show" style="color:#606266">筛选
-            <i class="el-icon-caret-bottom" :class="[rotate?'fa fa-arrow-down go':'fa fa-arrow-down aa']"></i>
-          </div>
+                 <el-form-item  style="display: flex;">
+                <el-input v-model="searchText" size="small" placeholder="设备SN、CPU-ID" @keyup.enter.native="onSubmitKey">
+                        <i slot="prefix" class="el-input__icon el-icon-search"  @click="onSubmitKey"></i>
+                </el-input>
+                  </el-form-item>
+                <el-row type="flex">
+                    <el-form-item label="设备激活：">
+                        <el-select v-model="is_activated" size="small" placeholder="请选择" style="width:180px;">
+                            <el-option v-for="item in actives" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="新建时间：" style="display: flex;">
+                        <el-date-picker
+                        size="small"
+                        v-model="import_time_value"
+                        type="datetimerange"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"></el-date-picker>
+                        </el-form-item>
+                    <el-form-item label="激活时间：" style="display: flex;">
+                        <el-date-picker
+                        size="small"
+                            v-model="time_value"
+                            type="datetimerange"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item>
+                    <el-button type="primary" size="small" style="margin-left:10px;" @click="search">确定</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                    <el-button type="primary" size="small" @click="resetInfo">重置</el-button>
+                    </el-form-item>
+                </el-row>
         </el-row>
         <div v-show="showState">
-          <el-row type="flex" class="row_activess">
-            <el-form-item label="设备激活：" style="display: flex;">
-              <el-select v-model="is_activated" placeholder="请选择" style="width:180px;">
-                <el-option v-for="item in actives" :key="item.value" :label="item.label" :value="item.value"></el-option>
-              </el-select>
-            </el-form-item>
-<!-- 
-            <el-form-item label="新建时间：" style="display: flex;">
-              <el-date-picker style="width: 160px;" v-model="import_start_ts" type="datetime" placeholder="选择开始日期时间"></el-date-picker> -
-              <el-date-picker style="width: 160px;" v-model="import_end_ts" type="datetime" placeholder="选择结束日期时间"></el-date-picker>
-            </el-form-item> -->
-
- <el-form-item label="新建时间：" style="display: flex;">
-      <el-date-picker
-      v-model="import_time_value"
-      type="datetimerange"
-      range-separator="至"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期"></el-date-picker>
- </el-form-item>
-
-            <el-form-item label="激活时间：" style="display: flex;">
-                 <el-date-picker
-      v-model="time_value"
-      type="datetimerange"
-      range-separator="至"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期">
-    </el-date-picker>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" style="margin-left:10px;" @click="search">确定</el-button>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="resetInfo">重置</el-button>
-            </el-form-item>
-          </el-row>
         </div>
       </el-form>
     </div>
@@ -105,17 +90,17 @@
             <el-table-column fixed prop="dev_sn" label="设备SN" width="300"></el-table-column>
             <el-table-column prop="dev_type" :formatter="formatDevType" label="设备类型" width="120"></el-table-column>
             <el-table-column prop="rom_version" label="ROM"></el-table-column>
-            <el-table-column prop="dev_mac" label="MAC地址" width="200"></el-table-column>
+            <el-table-column prop="dev_mac" label="MAC地址"></el-table-column>
             <el-table-column prop="cpu_id" label="CPU-ID" width="300"></el-table-column>
-            <el-table-column prop="total_cap" label="总容量" :formatter="formatDevCap" width="120"></el-table-column>
-            <el-table-column prop="import_ts" label="新建时间" :sortable="'custom'" :formatter="formatterImport" width="170"></el-table-column>
-            <el-table-column prop="is_activated" label="设备激活状态" :formatter="formatterType" width="120"></el-table-column>
+            <el-table-column prop="total_cap" label="总容量" :formatter="formatDevCap" width="150"></el-table-column>
+            <el-table-column prop="import_ts" label="创建时间" :sortable="'custom'" :formatter="formatterImport" width="170"></el-table-column>
             <el-table-column prop="activate_ts" label="激活时间" :sortable="'custom'" width="150" :formatter="formatterActive"></el-table-column>
-            <el-table-column label="操作" width="350">
+            <el-table-column prop="is_activated" label="设备激活状态" :formatter="formatterType" width="120"></el-table-column>
+            <el-table-column label="操作" width="200">
               <template slot-scope="scope">
-                <div style="    display: flex;justify-content: flex-start;">
-                  <el-button v-show="scope.row.is_activated!==100" @click="shut(scope.row)" type="text" size="small">关机</el-button>
-                  <el-button v-show="scope.row.is_activated!==100" type="text" @click="restart(scope.row)" size="small">重启</el-button>
+                <div style="display: flex;justify-content: flex-start;">
+                  <!-- <el-button v-show="scope.row.is_activated!==100" @click="shut(scope.row)" type="text" size="small">关机</el-button>
+                  <el-button v-show="scope.row.is_activated!==100" type="text" @click="restart(scope.row)" size="small">重启</el-button> -->
                   <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
                   <el-button v-show="(scope.row.bind_flag==0 || scope.row.bind_flag==102) && scope.row.is_activated!=99" type="text" @click="tieactive(scope.row)" size="small">绑定</el-button>
                   <el-button type="text" @click="del(scope.row)" :disabled="scope.row.is_activatedss==true" size="small">删除</el-button>
@@ -498,7 +483,6 @@ export default {
 
     },
     onChange2Type(val) {
-      console.log(val);
       this.dev_type_active = val;
       // if (val == "RK3328") {
       //   this.dev_type_active = val;
@@ -660,7 +644,6 @@ export default {
     beforeUpload(file) {
       let tempName = file.name;
       let nowName = tempName.split(".");
-      console.log(nowName[1]);
       if (nowName[1] !== "xls") {
         this.$message({
           message: "请上传.xls的文件",
@@ -668,7 +651,6 @@ export default {
         });
         return false;
       }
-      //console.log(file.name)
     },
     //文件批量导入
     submitUpload() {
@@ -676,7 +658,6 @@ export default {
     },
     //上传成功回调
     handleSuccess(response) {
-      console.log(response);
       if (response.status == 0) {
         this.$message({
           message: `总条数:+${response.data.total}+上传至数据库:+${
@@ -770,7 +751,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
 
@@ -886,8 +866,6 @@ export default {
         })
         .catch(error => {
           this.common.monitoringLogs("导出", "导出设备激活表", 0);
-
-          console.log(error);
         });
     },
     getOverview() {
@@ -904,7 +882,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     editBasicinfo() {
@@ -962,7 +939,6 @@ export default {
           this.dialogVisible2 = false;
         })
         .catch(error => {
-          console.log(error);
         });
     },
 
@@ -991,7 +967,6 @@ export default {
           this.ruleForm2.total_cap =
             parseInt(this.ruleForm2.total_capss) * 1024 * 1024 * 1024;
           this.ruleForm2.login_token = "";
-          console.log(this.ruleForm2);
           import_node_basicinfo(this.ruleForm2)
             .then(res => {
               if (res.status === 0 && res.err_code == 0) {
@@ -1010,11 +985,9 @@ export default {
               }
             })
             .catch(error => {
-              console.log(error);
             });
         } else {
           //验证失败执行
-          console.log("error submit!!");
           return false;
         }
       });
@@ -1037,7 +1010,6 @@ export default {
           is_activated: 101,
         },
       };
-      console.log(param);
       edit_device_basicinfo(param)
         .then(res => {
           this.$message({
@@ -1049,7 +1021,6 @@ export default {
           this.dialogVisible2 = false;
         })
         .catch(error => {
-          console.log(error);
         });
     },
     activationactive(row) {
@@ -1077,7 +1048,6 @@ export default {
           this.dialogVisible2 = false;
         })
         .catch(error => {
-          console.log(error);
         });
     },
     closeRestore(type, sn) {
@@ -1258,7 +1228,6 @@ export default {
         login_token: "",
         dev_sn: rows.dev_sn,
       };
-      console.log(param);
       delete_device_basicinfo(param)
         .then(res => {
           if (res.status === 0) {
@@ -1271,7 +1240,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     addDev() {
@@ -1371,6 +1339,7 @@ export default {
   }
 
   .device_form {
+      margin-top: 20px;
     .el-form-item__label {
       white-space: nowrap;
     }

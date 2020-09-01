@@ -1,7 +1,9 @@
 <template>
 	<section class="myself-container">
 		<div style="margin-top: 30px">
+            <div style="margin-bottom:20px;">
 			<el-date-picker
+				size="small"
 				v-model="valueTime"
 				type="datetimerange"
 				range-separator="至"
@@ -11,6 +13,7 @@
 			>
 			</el-date-picker>
 			<el-select
+				size="small"
 				v-model="versointype"
 				placeholder="请选择"
 				@change="onChange"
@@ -25,11 +28,13 @@
 				</el-option>
 			</el-select>
 			<el-button
+				size="small"
 				type="primary"
 				@click="onQueryInfo"
 				style="margin-left: 20px"
 				>确定</el-button
 			>
+            </div>
 
 			<div
 				class="device_form"
@@ -75,10 +80,9 @@
 			</div>
 			<div
 				class="devide_pageNation"
-				style="display: flex; justify-content: space-between"
 			>
-				<el-row type="flex">
-					<el-col :span="6">
+				<el-row type="flex" justify="flex-end">
+					<el-col :span="24">
 						<pageNation
 							:pager="pager"
 							@handleSizeChange="handleSizeChange"
@@ -333,7 +337,6 @@ export default {
 			};
 			device_version_day(paramActive)
 				.then((res) => {
-					// console.log(res);
 					if (res.status == 0) {
 						this.pager.count = res.totalCnt;
 						// this.pager.count = res.data.total_num;
@@ -357,7 +360,6 @@ export default {
 					}
 				})
 				.catch((error) => {
-					console.log(error);
 					this.$message({
 						message: '服务出错',
 						type: 'error',
@@ -516,13 +518,8 @@ export default {
 
 	.devide_pageNation {
 		width: 100%;
-		height: auto;
-		overflow: hidden;
-		margin-top: 20px;
-
-		.devide_pageNation_active {
-			float: right;
-		}
+        margin-top: 20px;
+        text-align: right;
 	}
 }
 

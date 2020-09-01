@@ -289,7 +289,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
 
@@ -361,7 +360,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     setImage(e) {
@@ -423,7 +421,6 @@ export default {
     beforeAvatarUpload(file) {
       var fileName = new Array();
       fileName = file.name.split(".");
-      // console.log(fileName)
       // if(fileName[1]!= "apk"){
       //       this.$message({
       //     message: "上传文件只能是.apk格式的压缩包",

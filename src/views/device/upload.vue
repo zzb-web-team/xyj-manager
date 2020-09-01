@@ -140,7 +140,6 @@ export default {
     //     add_url(param).then(res => {
 
     //         if (res.status == 0) {
-    //             console.log(res)
     //             if (res.data.res_data.length > 0) {
     //                 let nowarr = res.data.res_data
     //                 for (var i = 0; i < nowarr.length; i++) {
@@ -295,7 +294,6 @@ export default {
       this.message = [];
       this.title = "";
       if (res.status == 0) {
-        console.log(res.data);
         if (res.err_code == 0) {
           this.tableType = true;
           // let obj={
@@ -384,7 +382,6 @@ export default {
               dev_type: res.data[i].url_name,
             };
             temp1[i] = obj;
-            //     console.log(res.data[i].url_type)
             temp[i].dev_sn = res.data[i].url_type;
             temp[i].dev_mac = res.data[i].buser_id;
             temp[i].cpu_id = res.data[i].label;

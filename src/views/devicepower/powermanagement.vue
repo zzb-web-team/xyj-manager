@@ -374,8 +374,6 @@ export default {
     handleButtonscale(val) {
       this.scaleindex = val.row;
       this.scalevalue = val.methods.earn_pensent.replace("%", "");
-      console.log(this.scalevalue);
-
       this.dialogVisible = true;
     },
     ////增长设置
@@ -652,11 +650,6 @@ export default {
 .el-button {
   padding: 8px 20px;
 }
-
-.upload-demo {
-  // height: 400px;
-}
-
 .version_active {
   .el-form-item {
     margin-bottom: 10px;

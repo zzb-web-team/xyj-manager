@@ -17,10 +17,11 @@
       </el-row>
     </div> -->
 		<div class="device_form">
-			<el-form ref="form" :model="form">
+			<el-form ref="form" :model="form" style="margin-top:20px;">
 				<el-row type="flex">
 					<el-col :span="4">
 						<el-input
+							size="small"
 							placeholder="设备SN、名称、IP、MAC地址或节点ID"
 							v-model="searchText"
 							@keyup.enter.native="onSubmitKey"
@@ -32,195 +33,218 @@
 							></i>
 						</el-input>
 					</el-col>
-					<div
-						@click="getShow()"
-						class="div_show"
-						style="color: #606266"
-					>
-						筛选
-						<i
-							class="el-icon-caret-bottom"
-							:class="[
-								rotate
-									? 'fa fa-arrow-down go'
-									: 'fa fa-arrow-down aa',
-							]"
-						></i>
-					</div>
+					<el-col :span="20">
+						<el-row type="flex">
+							<el-form-item
+								label="一级渠道商"
+								style="display: flex; width: 270px"
+							>
+								<el-select
+									size="small"
+									v-model="pri_chan_prv"
+									placeholder="请选择"
+								>
+									<el-option
+										label="全部"
+										value=""
+									></el-option>
+									<el-option
+										v-for="item in pri_chan_prvs"
+										:key="item"
+										:label="item.label"
+										:value="item.value"
+									></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item
+								label="二级渠道商"
+								style="display: flex; width: 270px"
+							>
+								<el-select
+									size="small"
+									v-model="scd_chan_prv"
+									placeholder="请选择"
+								>
+									<el-option
+										label="全部"
+										value=""
+									></el-option>
+
+									<el-option
+										v-for="item in scd_chan_prvs"
+										:key="item"
+										:label="item.label"
+										:value="item.value"
+									></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item
+								label="设备品牌"
+								style="display: flex; width: 270px"
+							>
+								<el-select
+									size="small"
+									v-model="eqp_brd"
+									placeholder="请选择"
+								>
+									<el-option
+										v-for="item in eqp_brds"
+										:key="item"
+										:label="item"
+										:value="item"
+									></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item
+								label="设备类型"
+								style="display: flex; width: 270px"
+							>
+								<el-select
+									size="small"
+									v-model="eqp_type"
+									placeholder="请选择"
+								>
+									<el-option
+										label="全部"
+										value=""
+									></el-option>
+									<el-option
+										v-for="item in eqp_types"
+										:key="item"
+										:label="item"
+										:value="item"
+									></el-option>
+								</el-select>
+							</el-form-item>
+							<el-form-item
+								label="设备型号"
+								style="display: flex; width: 270px"
+							>
+								<el-select
+									size="small"
+									v-model="dev_type"
+									placeholder="请选择"
+								>
+									<el-option
+										v-for="item in dev_types"
+										:key="item.value"
+										:label="item.label"
+										:value="item.value"
+									></el-option>
+								</el-select>
+							</el-form-item>
+
+							<el-form-item
+								label="操作系统"
+								style="display: flex; width: 290px"
+							>
+								<el-select
+									size="small"
+									v-model="op_sys"
+									placeholder="请选择"
+								>
+									<el-option
+										v-for="item in op_syss"
+										:key="item.value"
+										:label="item.label"
+										:value="item.value"
+									></el-option>
+								</el-select>
+							</el-form-item>
+						</el-row>
+					</el-col>
 				</el-row>
-				<div v-show="showState">
-					<el-row type="flex" class="row_activess">
-						<el-form-item
-							label="一级渠道商"
-							style="display: flex; width: 270px"
+				<el-row type="flex" class="row_activess">
+					<el-form-item
+						label="ROM"
+						style="display: flex; width: 230px"
+					>
+						<el-select
+							v-model="rom_version"
+							size="small"
+							placeholder="请选择"
 						>
-							<el-select
-								v-model="pri_chan_prv"
-								placeholder="请选择"
-							>
-								<el-option label="全部" value=""></el-option>
-								<el-option
-									v-for="item in pri_chan_prvs"
-									:key="item"
-									:label="item.label"
-									:value="item.value"
-								></el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item
-							label="二级渠道商"
-							style="display: flex; width: 270px"
+							<el-option
+								v-for="item in roms"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item
+						label="设备状态"
+						style="display: flex; width: 270px"
+					>
+						<el-select
+							v-model="online_state"
+							size="small"
+							placeholder="请选择"
 						>
-							<el-select
-								v-model="scd_chan_prv"
-								placeholder="请选择"
-							>
-								<el-option label="全部" value=""></el-option>
+							<el-option label="全部" value="-1"></el-option>
 
-								<el-option
-									v-for="item in scd_chan_prvs"
-									:key="item"
-									:label="item.label"
-									:value="item.value"
-								></el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item
-							label="设备品牌"
-							style="display: flex; width: 270px"
+							<el-option
+								v-for="item in onlineStates"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item
+						label="绑定"
+						style="display: flex; width: 230px"
+					>
+						<el-select
+							size="small"
+							v-model="bind_flag"
+							placeholder="请选择"
+							@change="onChange2"
 						>
-							<el-select v-model="eqp_brd" placeholder="请选择">
-								<el-option
-									v-for="item in eqp_brds"
-									:key="item"
-									:label="item"
-									:value="item"
-								></el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item
-							label="设备类型"
-							style="display: flex; width: 270px"
+							<el-option
+								v-for="item in bindFlags"
+								:key="item.value"
+								:label="item.label"
+								:value="item.value"
+							></el-option>
+						</el-select>
+					</el-form-item>
+					<el-form-item label="注册时间" style="display: flex">
+						<el-date-picker
+							size="small"
+							v-model="bind_start_ts"
+							style="width: 200px"
+							type="datetime"
+							placeholder="选择开始日期时间"
+						></el-date-picker
+						>-
+						<el-date-picker
+							size="small"
+							v-model="bind_end_ts"
+							style="width: 200px"
+							type="datetime"
+							placeholder="选择结束日期时间"
+						></el-date-picker>
+					</el-form-item>
+					<el-form-item>
+						<el-button
+							type="primary"
+							size="small"
+							style=""
+							@click="search"
+							>确定</el-button
 						>
-							<el-select v-model="eqp_type" placeholder="请选择">
-								<el-option label="全部" value=""></el-option>
-								<el-option
-									v-for="item in eqp_types"
-									:key="item"
-									:label="item"
-									:value="item"
-								></el-option>
-							</el-select>
-						</el-form-item>
-
-						<el-form-item
-							label="设备型号"
-							style="display: flex; width: 270px"
+					</el-form-item>
+					<el-form-item>
+						<el-button
+							type="primary"
+							size="small"
+							@click="resetInfo"
+							>重置</el-button
 						>
-							<el-select v-model="dev_type" placeholder="请选择">
-								<el-option
-									v-for="item in dev_types"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value"
-								></el-option>
-							</el-select>
-						</el-form-item>
-
-						<el-form-item
-							label="操作系统"
-							style="display: flex; width: 290px"
-						>
-							<el-select v-model="op_sys" placeholder="请选择">
-								<el-option
-									v-for="item in op_syss"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value"
-								></el-option>
-							</el-select>
-						</el-form-item>
-
-						<el-form-item
-							label="ROM"
-							style="display: flex; width: 230px"
-						>
-							<el-select
-								v-model="rom_version"
-								placeholder="请选择"
-							>
-								<el-option
-									v-for="item in roms"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value"
-								></el-option>
-							</el-select>
-						</el-form-item>
-					</el-row>
-					<el-row type="flex" class="row_activess">
-						<el-form-item
-							label="设备状态"
-							style="display: flex; width: 270px"
-						>
-							<el-select
-								v-model="online_state"
-								placeholder="请选择"
-							>
-								<el-option label="全部" value="-1"></el-option>
-
-								<el-option
-									v-for="item in onlineStates"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value"
-								></el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item
-							label="绑定"
-							style="display: flex; width: 230px"
-						>
-							<el-select
-								v-model="bind_flag"
-								placeholder="请选择"
-								@change="onChange2"
-							>
-								<el-option
-									v-for="item in bindFlags"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value"
-								></el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="注册时间" style="display: flex">
-							<el-date-picker
-								v-model="bind_start_ts"
-								style="width: 200px"
-								type="datetime"
-								placeholder="选择开始日期时间"
-							></el-date-picker
-							>-
-							<el-date-picker
-								v-model="bind_end_ts"
-								style="width: 200px"
-								type="datetime"
-								placeholder="选择结束日期时间"
-							></el-date-picker>
-						</el-form-item>
-						<el-form-item>
-							<el-button type="primary" style="" @click="search"
-								>确定</el-button
-							>
-						</el-form-item>
-						<el-form-item>
-							<el-button type="primary" @click="resetInfo"
-								>重置</el-button
-							>
-						</el-form-item>
-					</el-row>
-				</div>
+					</el-form-item>
+				</el-row>
+				<div></div>
 			</el-form>
 		</div>
 		<div class="devide_table">
@@ -763,7 +787,6 @@ export default {
 			this.multipleSelection.forEach(function (item, index) {
 				_this.snId.push(item.dev_sn);
 			});
-			console.log(this.snId);
 		},
 		//批量重启
 		allOff() {
@@ -1251,7 +1274,6 @@ export default {
 					}
 				})
 				.catch((error) => {
-					console.log(error);
 					this.common.monitoringLogs('导出', '导出设备信息表', 0);
 					// this.$message({
 					//     message: "网络出错，请重新请求",
@@ -1382,7 +1404,6 @@ export default {
 					this.comfirmUntiedactive();
 				})
 				.catch((error) => {
-					console.log(error);
 					this.$message({
 						type: 'info',
 						message: '已取消解绑',

@@ -188,7 +188,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     getInfo() {
@@ -243,7 +242,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     //导出
@@ -333,7 +331,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
           this.common.monitoringLogs("导出", "导出算力系数表", 0);
         });
     },

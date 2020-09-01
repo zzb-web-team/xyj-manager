@@ -89,7 +89,6 @@ export default {
                                 type: "error"
                             });
                         } else {
-                            //   console.log(data);
                             //   sessionStorage.setItem("id", JSON.stringify(data.msg.id));
                             //   sessionStorage.setItem("id", JSON.stringify(data.msg.username));
                             //   this.$cookies.set("adminuser", data.msg.username, 7 * 24 * 60 * 60);
@@ -103,12 +102,10 @@ export default {
                             //     path: '/accountManagement'
                             // });
                             window.location.href = "./"
-                            //console.log(JSON.stringify(msg))
                             this.set('userInfo', JSON.stringify(userInfo), 1000)
                         }
                     });
                 } else {
-                    console.log("error !!");
                     return false;
                 }
             });

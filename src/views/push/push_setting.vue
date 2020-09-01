@@ -204,7 +204,6 @@ export default {
     },
     getData() {
       this.data = JSON.stringify(this.$refs.cropper.getData(), null, 4);
-      console.log(this.data);
     },
     setImage(e) {
       const file = e.target.files[0];
@@ -221,7 +220,6 @@ export default {
     },
     cropImage() {
       this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL();
-      console.log(this.$refs.cropper.getCroppedCanvas().toDataURL());
       this.imgBase = this.$refs.cropper.getCroppedCanvas().toDataURL();
     },
     cancelCrop() {
@@ -229,7 +227,6 @@ export default {
       this.cropImg = this.defaultSrc;
     },
     imageuploaded(res) {
-      console.log(res);
     },
     handleError() {
       this.$notify.error({
@@ -241,8 +238,6 @@ export default {
       this.saveClick();
     },
     saveClick(val, render) {
-      console.log(val);
-      console.log(render);
       this.htmlText = render;
       let tempHtml = "";
       tempHtml =
@@ -287,7 +282,6 @@ export default {
       }
       let param = new Object();
       param = this.form;
-      console.log(param);
       param.schedule_time = parseInt(param.schedule_time / 1000);
       param.query_type = 1;
       param.seq_no = "";
@@ -308,7 +302,6 @@ export default {
         this.loading = true;
         pushImmediate(param)
           .then(res => {
-            console.log(res);
             if (res.status == 0) {
               this.seqNo = res.data.seqno;
 
@@ -317,7 +310,6 @@ export default {
             }
           })
           .catch(error => {
-            console.log(error);
             this.common.monitoringLogs("发布", "发布通知", 0);
           });
       } else {
@@ -333,7 +325,6 @@ export default {
         this.loading = true;
         pushOntimer(param)
           .then(res => {
-            console.log(res);
             if (res.status == 0) {
               this.seqNo = res.data.seqno;
 
@@ -342,7 +333,6 @@ export default {
             }
           })
           .catch(error => {
-            console.log(error);
             this.common.monitoringLogs("发布", "发布通知", 0);
           });
       }
@@ -365,7 +355,6 @@ export default {
       }
       let param = new Object();
       param = this.form;
-      console.log(param);
       //param.schedule_time = parseInt(param.schedule_time/1000);
       param.query_type = 2;
       param.seq_no = this.seqNo;
@@ -384,7 +373,6 @@ export default {
         // 立即发送
         pushImmediate(param)
           .then(res => {
-            console.log(res);
             if (res.status == 0) {
               this.loading = false;
               this.$message({
@@ -406,7 +394,6 @@ export default {
           })
           .catch(error => {
             this.loading = false;
-            console.log(error);
             this.common.monitoringLogs("发布", "发布通知", 0);
           });
       } else {
@@ -421,7 +408,6 @@ export default {
         }
         pushOntimer(param)
           .then(res => {
-            console.log(res);
             if (res.status == 0) {
               this.loading = false;
 
@@ -446,7 +432,6 @@ export default {
           .catch(error => {
             this.loading = false;
 
-            console.log(error);
             this.common.monitoringLogs("发布", "发布通知", 0);
           });
       }
@@ -465,7 +450,6 @@ export default {
         .catch(error => {});
     },
     htmlCode() {
-      console.log();
     }
   },
   components: {

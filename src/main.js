@@ -693,9 +693,7 @@ if (user) {
             store,
             render: h => h(App)
         }).$mount('#app')
-    }).catch(error => {
-        console.log(error)
-    })
+    }).catch(error => {})
 
 } else {
     new Vue({

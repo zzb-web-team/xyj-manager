@@ -5,20 +5,9 @@
 				<div class="device_form">
 					<el-form ref="form" :model="form">
 						<el-row type="flex">
-							<!-- <div class="search-con">
-								<i
-									class="el-icon-search"
-									style="color: #606266"
-								></i>
+							<el-form-item>
 								<el-input
-									class="search-input"
-									v-model="searchText"
-									placeholder="用户ID、用户昵称"
-									@keyup.enter.native="onSubmitKey"
-								></el-input>
-							</div> -->
-							<el-col :span="4">
-								<el-input
+									size="small"
 									v-model="searchText"
 									placeholder="用户ID、用户昵称"
 									@keyup.enter.native="onSubmitKey"
@@ -29,30 +18,14 @@
 										@click="onSubmitKey"
 									></i>
 								</el-input>
-							</el-col>
-							<div
-								@click="getShow()"
-								class="div_show"
-								style="color: #606266"
-							>
-								筛选
-								<i
-									class="el-icon-caret-bottom"
-									:class="[
-										rotate
-											? 'fa fa-arrow-down go'
-											: 'fa fa-arrow-down aa',
-									]"
-								></i>
-							</div>
-						</el-row>
-						<div v-show="showState">
-							<el-row type="flex" class="row_activess">
+							</el-form-item>
+							<el-row type="flex">
 								<el-form-item
 									label="类型"
 									style="display: flex"
 								>
 									<el-select
+										size="small"
 										v-model="profit_type"
 										placeholder="请选择"
 									>
@@ -70,6 +43,7 @@
 									style="display: flex"
 								>
 									<el-date-picker
+										size="small"
 										v-model="start_time"
 										style="width: 160px"
 										type="datetime"
@@ -78,6 +52,7 @@
 									></el-date-picker>
 									-
 									<el-date-picker
+										size="small"
 										v-model="end_time"
 										style="width: 160px"
 										type="datetime"
@@ -87,19 +62,17 @@
 								</el-form-item>
 								<el-form-item>
 									<el-button
+										size="small"
 										type="primary"
-										style="margin-left: 68px"
 										@click="search"
 										>确定</el-button
 									>
-								</el-form-item>
-								<el-form-item>
 									<el-button type="primary" @click="onReset"
 										>重置</el-button
 									>
 								</el-form-item>
 							</el-row>
-						</div>
+						</el-row>
 					</el-form>
 				</div>
 				<div class="devide_table">
@@ -182,20 +155,9 @@
 				<div class="device_form">
 					<el-form ref="form" :model="form">
 						<el-row type="flex">
-							<!-- <div class="search-con">
-								<i
-									class="el-icon-search"
-									style="color: #606266"
-								></i>
+							<el-form-item>
 								<el-input
-									class="search-input"
-									v-model="searchText"
-									placeholder="用户ID、用户昵称"
-									@keyup.enter.native="onSubmitKey"
-								></el-input>
-							</div> -->
-							<el-col :span="4">
-								<el-input
+                                size="small"
 									v-model="searchText"
 									placeholder="用户ID、用户昵称"
 									@keyup.enter.native="onSubmitKey"
@@ -206,37 +168,14 @@
 										@click="onSubmitKey"
 									></i>
 								</el-input>
-							</el-col>
-
-							<div
-								@click="getShow()"
-								class="div_show"
-								style="color: #606266"
-							>
-								筛选
-								<i
-									class="el-icon-caret-bottom"
-									:class="[
-										rotate
-											? 'fa fa-arrow-down go'
-											: 'fa fa-arrow-down aa',
-									]"
-								></i>
-							</div>
-						</el-row>
-						<div v-show="showState">
-							<el-row type="flex" class="row_activess">
-								<!-- <el-form-item label="类型" style="display: flex;">
-              <el-select v-model="profit_type" placeholder="请选择">
-                <el-option v-for="item in profit_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
-              </el-select>
-            </el-form-item> -->
-
+							</el-form-item>
+							<el-row type="flex">
 								<el-form-item
 									label="时间"
 									style="display: flex"
 								>
 									<el-date-picker
+                                    size="small"
 										v-model="start_time"
 										style="width: 160px"
 										type="datetime"
@@ -245,6 +184,7 @@
 									></el-date-picker>
 									-
 									<el-date-picker
+                                    size="small"
 										v-model="end_time"
 										style="width: 160px"
 										type="datetime"
@@ -254,19 +194,17 @@
 								</el-form-item>
 								<el-form-item>
 									<el-button
+                                    size="small"
 										type="primary"
-										style="margin-left: 68px"
 										@click="search(2)"
 										>确定</el-button
 									>
-								</el-form-item>
-								<el-form-item>
-									<el-button type="primary" @click="onReset"
+									<el-button type="primary" size="small" @click="onReset"
 										>重置</el-button
 									>
 								</el-form-item>
 							</el-row>
-						</div>
+						</el-row>
 					</el-form>
 				</div>
 				<div class="devide_table">
@@ -548,7 +486,6 @@ export default {
 					}
 				})
 				.catch((error) => {
-					console.log(error);
 				});
 		},
 		getInfo(num) {
@@ -619,7 +556,6 @@ export default {
 					}
 				})
 				.catch((error) => {
-					console.log(error);
 				});
 		},
 
@@ -655,7 +591,6 @@ export default {
 					if (res.status === 0) {
 						this.pageActive = res.data.cur_page;
 						if (res.data.cur_page >= res.data.total_page) {
-							console.log(this.tableData2);
 							this.exportExcel();
 							this.common.monitoringLogs(
 								'导出',
@@ -690,7 +625,6 @@ export default {
 					}
 				})
 				.catch((error) => {
-					console.log(error);
 				});
 		},
 		search(num) {

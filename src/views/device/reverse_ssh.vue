@@ -5,6 +5,7 @@
 			<el-row type="flex" :gutter="20">
 				<el-col :span="3"
 					><el-input
+                    size="small"
 						v-model="input"
 						placeholder="请输入设备SN"
 						@keyup.enter.native="search_data"
@@ -17,6 +18,7 @@
 					<el-col :span="5">
 						<!-- <span>地区：</span> -->
 						<el-select
+                        size="small"
 							v-model="area_value"
 							placeholder="请选择地区"
 							@change="search_data"
@@ -33,6 +35,7 @@
 					<el-col :span="5">
 						<!-- <span>ipv格式：</span> -->
 						<el-select
+                        size="small"
 							v-model="ipv_value"
 							placeholder="请选择ipv格式"
 							@change="search_data"
@@ -45,6 +48,7 @@
 					<el-col :span="5">
 						<!-- <span>设备品牌：</span> -->
 						<el-select
+                        size="small"
 							v-model="brand_value"
 							placeholder="请选择设备品牌"
 							@change="search_devtype"
@@ -60,6 +64,7 @@
 					><el-col :span="5">
 						<!-- <span>设备型号：</span> -->
 						<el-select
+                        size="small"
 							v-model="devtype_value"
 							placeholder="请选择设备型号"
 							@change="search_data"
@@ -76,6 +81,7 @@
 					<el-col :span="5">
 						<!-- <span>ROM版本：</span> -->
 						<el-select
+                        size="small"
 							v-model="rom_value"
 							placeholder="请选择ROM版本"
 							@change="search_data"
@@ -90,10 +96,10 @@
 					></el-col>
 				</el-row>
                  </el-col>
-					<el-button @click="search_data" size="medium"
+					<el-button @click="search_data" size="small"
 						>搜索</el-button
 					>
-					<el-button @click="reset" size="medium">重置</el-button>
+					<el-button @click="reset" size="small">重置</el-button>
 			</el-row>
 		</div>
 		<!--  -->
@@ -389,7 +395,6 @@ export default {
 					}
 				})
 				.catch((error) => {
-					console.log(error);
 				});
 		},
 		search_data() {
@@ -421,12 +426,10 @@ export default {
 		},
 		//操作
 		handleDelete(index, row) {
-			console.log(index, row);
 			this.dialogVisible = true;
 			this.$refs.el_set_cmd.$el.firstChild.style.height = '80%';
 			this.cmdsrc =
 				'http://106.15.189.182:9999' + '?dev_sn=' + row.dev_sn;
-			console.log(this.cmdsrc);
 		},
 		handleSizeChange() {},
 		//翻页

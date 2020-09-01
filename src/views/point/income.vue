@@ -310,7 +310,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     // toexportExcel() {
@@ -338,7 +337,6 @@ export default {
     //       if (res.status === 0) {
     //         this.pageActive = res.data.cur_page;
     //         if (res.data.cur_page >= res.data.total_page) {
-    //           console.log(this.tableData2);
     //           this.exportExcel();
     //           this.common.monitoringLogs("导出", "导出收益明细", 1);
     //         } else {
@@ -361,7 +359,6 @@ export default {
     //       }
     //     })
     //     .catch(error => {
-    //       console.log(error);
     //     });
     // },
     getShow() {

@@ -12,7 +12,7 @@
         </el-col>
       </el-row>
     </div>
-    <div class="devide_pageNation" style="display: flex;justify-content: space-between;">
+    <div class="devide_pageNation" style="display: flex;justify-content: flex-end;">
       <el-row type="flex">
         <el-col :span="6">
           <pageNation :pager="pager" @handleSizeChange="handleSizeChange1" @handleCurrentChange="handleCurrentChange1"></pageNation>
@@ -408,7 +408,6 @@ export default {
           this.queryUserList();
         })
         .catch(error => {
-          console.log(error);
         });
     },
     //查询应用数目
@@ -418,19 +417,16 @@ export default {
       param.page = 0;
       query_group(param)
         .then(res => {
-          console.log(res);
           if (res.status == 0) {
             let tempAppId = res.data.result;
             let tempArrName = [];
             for (var i = 0; i < tempAppId.length; i++) {
               tempArrName.push(tempAppId[i].app_name);
             }
-            console.log(tempArrName);
             this.app_arrayname = tempArrName.join(",");
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     //操作

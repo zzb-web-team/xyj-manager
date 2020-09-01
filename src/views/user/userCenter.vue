@@ -17,14 +17,11 @@
 			</el-row>
 		</div>
 		<div class="device_form">
-			<el-form ref="form" :model="form">
+			<el-form ref="form" :model="form" style="margin-top: 20px">
 				<el-row type="flex">
-					<!-- <div class="search-con">
-                    <i class="el-icon-search" style="color:#606266"></i>
-                    <el-input class="search-input" ></el-input>
-                </div> -->
-					<el-col :span="4">
+					<el-form-item>
 						<el-input
+							size="small"
 							v-model="searchText"
 							placeholder="用户ID、用户昵称、手机号"
 							@keyup.enter.native="onSubmitKey"
@@ -35,27 +32,11 @@
 								@click="onSubmitKey"
 							></i>
 						</el-input>
-					</el-col>
-					<div
-						@click="getShow()"
-						class="div_show"
-						style="color: #606266"
-					>
-						筛选
-						<i
-							class="el-icon-caret-bottom"
-							:class="[
-								rotate
-									? 'fa fa-arrow-down go'
-									: 'fa fa-arrow-down aa',
-							]"
-						></i>
-					</div>
-				</el-row>
-				<div v-show="showState">
-					<el-row type="flex" class="row_activess">
+					</el-form-item>
+					<el-row type="flex">
 						<el-form-item label="状态" style="display: flex">
 							<el-select
+								size="small"
 								v-model="form.statusText"
 								placeholder="请选择"
 								@change="onChange"
@@ -69,7 +50,7 @@
 								</el-option>
 							</el-select>
 						</el-form-item>
-						<el-form-item label="性别" style="display: flex">
+						<!-- <el-form-item label="性别" style="display: flex">
 							<el-select
 								v-model="form.sex"
 								placeholder="请选择"
@@ -83,9 +64,10 @@
 								>
 								</el-option>
 							</el-select>
-						</el-form-item>
+						</el-form-item> -->
 						<el-form-item label="注册时间" style="display: flex">
 							<el-date-picker
+								size="small"
 								v-model="value1"
 								type="daterange"
 								range-separator="至"
@@ -99,6 +81,7 @@
 							style="display: flex"
 						>
 							<el-date-picker
+								size="small"
 								v-model="value2"
 								type="daterange"
 								range-separator="至"
@@ -108,22 +91,26 @@
 							</el-date-picker>
 						</el-form-item>
 					</el-row>
-					<el-row type="flex" class="row_activess">
+					<el-row type="flex">
 						<el-form-item>
 							<el-button
+								size="small"
 								type="primary"
-								style="margin-left: 68px"
 								@click="onSumit()"
 								>确定</el-button
 							>
 						</el-form-item>
 						<el-form-item>
-							<el-button type="primary" @click="resetInfo"
+							<el-button
+								type="primary"
+								size="small"
+								@click="resetInfo"
 								>重置</el-button
 							>
 						</el-form-item>
 					</el-row>
-				</div>
+				</el-row>
+				<div></div>
 			</el-form>
 		</div>
 		<div class="devide_table">
@@ -271,15 +258,15 @@ export default {
 					label: '性别',
 				},
 				{
-					prop: 'sex',
+					prop: 'xiyouji_income',
 					label: '累计西柚机收益（gfm）',
 				},
 				{
-					prop: 'sex',
+					prop: 'node_income',
 					label: '累计节点收益（积分）',
 				},
 				{
-					prop: 'sex',
+					prop: 'node_num',
 					label: '节点数',
 				},
 				// {
@@ -317,12 +304,12 @@ export default {
 				options: [
 					{
 						label: '详情',
-						type: 'primary',
+						type: 'text',
 						methods: 'freeze',
 					},
 					{
 						label: '冻结',
-						type: 'danger',
+						type: 'text',
 						methods: 'clickOff',
 					},
 				],
@@ -458,8 +445,6 @@ export default {
 		},
 		//跳转至详情
 		toDetails(val) {
-			console.log(val);
-
 			this.$router.push({
 				path: '/userInfo',
 				query: {
@@ -471,7 +456,6 @@ export default {
 		},
 		//冻结，解冻
 		disable(val) {
-			console.log(val);
 			let param = new Object();
 			if (val.account_status == '正常') {
 				param.forbid_status = 1;
@@ -570,7 +554,6 @@ export default {
 			}
 		},
 		onChange2(item) {
-			console.log(item);
 			if (item == 0) {
 				this.form.sex = '全部';
 				this.user_sex = '';
@@ -667,7 +650,6 @@ export default {
 			ptfs_query_list_user_store_list(param)
 				.then((res) => {
 					if (res.status == 0 && res.err_code == 0) {
-						console.log(res);
 						let tempArr = [];
 
 						tempArr = res.data.store_list;
@@ -699,6 +681,12 @@ export default {
 							} else {
 								tempArr[i].account_status = '冻结';
 							}
+							if (tempArr[i].sex == '') {
+								tempArr[i].sex = '--';
+							}
+							tempArr[i].xiyouji_income = '--';
+							tempArr[i].node_income = '--';
+							tempArr[i].node_num = '--';
 						}
 						this.tableData = tempArr;
 						this.pager.count = res.data.total_num;
@@ -815,7 +803,6 @@ export default {
 						this.tableData2 = this.tableData2.concat(tempArr);
 
 						if (this.pageActives >= res.data.total_page) {
-							console.log(this.pageActives);
 							this.common.monitoringLogs(
 								'导出',
 								'导出注册用户信息表',
@@ -839,7 +826,6 @@ export default {
 					}
 				})
 				.catch((error) => {
-					console.log(error);
 					this.$message({
 						message: '后台服务无响应',
 						type: 'error',
@@ -937,8 +923,6 @@ export default {
 		width: 100%;
 		height: auto;
 		overflow: hidden;
-		margin-top: 20px;
-
 		.el-table td,
 		.el-table th {
 			padding: 6px 0px;

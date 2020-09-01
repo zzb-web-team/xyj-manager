@@ -3,30 +3,30 @@
     <!-- <div class="top_title">设备流量分析</div> -->
     <div class="user-title" style="display: flex;flex-flow: column;">
       <div class="resources_con">
-        <div style="display: flex;flex-flow: row;margin-top: 20px;padding:20px 37px;background:rgba(255,255,255,1);box-shadow:0px 2px 3px 0px rgba(6,17,36,0.14);border-radius:2px;">
-          <el-input v-model="value1Activechanid" placeholder="设备SN" @change="onchanidChange" style="width:160px;margin-right: 10px;"></el-input>
+        <div style="display: flex;flex-flow: row;margin-top: 0;padding:20px 0px;background:rgba(255,255,255,1);border-radius:2px;">
+          <el-input size="small" v-model="value1Activechanid" placeholder="设备SN" @change="onchanidChange" style="width:160px;margin-right: 10px;"></el-input>
 
-          <el-select v-model="pri_chan_prv" placeholder="请选择一级渠道商" style="width:200px;margin-left:10px;">
+          <el-select size="small" v-model="pri_chan_prv" placeholder="请选择一级渠道商" style="width:200px;margin-left:10px;">
             <el-option label="全部" value=""></el-option>
             <el-option v-for="item in pri_chan_prvs" :key="item" :label="item.label" :value="item.value"></el-option>
           </el-select>
-          <el-select v-model="scd_chan_prv" placeholder="请选择二级渠道商" style="width:200px;margin-left:20px;">
+          <el-select size="small" v-model="scd_chan_prv" placeholder="请选择二级渠道商" style="width:200px;margin-left:20px;">
             <el-option label="全部" value=""></el-option>
 
             <el-option v-for="item in scd_chan_prvs" :key="item" :label="item.label" :value="item.value" ></el-option>
           </el-select>
-          <el-select v-model="eqp_brd" placeholder="请选择设备品牌" style="width:200px;margin-left:20px;">
+          <el-select size="small" v-model="eqp_brd" placeholder="请选择设备品牌" style="width:200px;margin-left:20px;">
             <el-option label="全部" value=""></el-option>
 
             <el-option v-for="item in eqp_brds" :key="item" :label="item" :value="item" ></el-option>
           </el-select>
-          <el-select v-model="dev_type" placeholder="请选择设备型号" style="width:200px;margin-left:20px;margin-right:20px;">
+          <el-select size="small" v-model="dev_type" placeholder="请选择设备型号" style="width:200px;margin-left:20px;margin-right:20px;">
             <el-option label="全部" value=""></el-option>
 
             <el-option v-for="item in dev_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
 
-          <el-radio-group v-model="radio1" @change="onchangeTab">
+          <el-radio-group size="small" v-model="radio1" @change="onchangeTab">
             <el-radio-button @click="today()" label="one">今天</el-radio-button>
             <el-radio-button @click="yesterday()" label="two">昨天</el-radio-button>
             <el-radio-button @click="sevendat()" label="three">近7天</el-radio-button>
@@ -36,9 +36,9 @@
             </el-radio-button>
           </el-radio-group>
           <el-date-picker v-show="shoudzyx" style="margin-left:10px;" v-model="val2" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left" @change="gettimes"></el-date-picker>
-          <el-button style="margin-left:10px;" type="primary" @click="seachtu(1)">确定</el-button>
+          <el-button size="small" style="margin-left:10px;" type="primary" @click="seachtu(1)">确定</el-button>
         </div>
-        <div class="user_item">
+        <div class="user_item" style="box-shadow:0px 2px 3px 0px rgba(6,17,36,0.14);">
           <div class="item_left" style="width:100%;border:none;">
             <div class="item_text" style="text-align:center;">
               总流量
@@ -387,7 +387,6 @@ export default {
       this.querychanId(this.search);
     },
     handleSelectionChange(val) {
-      console.log(val);
       let arrlist = [];
       if (val.length > 0) {
         val.forEach(item => {
@@ -409,7 +408,6 @@ export default {
     },
     //终端查询信息
     getdata2(val) {
-      console.log(val);
       this.value1acce1 = val;
       this.gettable1();
       this.gettable2();
@@ -419,7 +417,6 @@ export default {
       this.chanIds = event;
     },
     querychanIds() {
-      console.log(this.valuess);
       this.gettable1(this.valuess);
       this.gettable2(this.valuess);
     },
@@ -607,7 +604,6 @@ export default {
             this.drawLine(nowarr, this.timeArray, childlist);
           })
           .catch(err => {
-            console.log(err);
           });
     },
 
@@ -659,7 +655,6 @@ export default {
             }
           })
           .catch(err => {
-            console.log(err);
           });
     },
 
@@ -881,7 +876,6 @@ export default {
         tooltip: {
           trigger: "axis",
           //     formatter: function(params) {
-          // 		console.log(params[0])
           //     return (
           //     //   params[0].name +
           //     //   "<br>" +

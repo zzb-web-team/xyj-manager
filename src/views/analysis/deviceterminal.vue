@@ -5,14 +5,14 @@
         <el-radio-button label="设备类型"></el-radio-button>
         <el-radio-button label="设备ROM"></el-radio-button>
       </el-radio-group>
-      <el-select v-model="versointype" placeholder="请选择" @change="onChange" v-if="!showType">
+      <el-select v-model="versointype" size="small" placeholder="请选择" @change="onChange" v-if="!showType">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
 
-      <el-date-picker v-model="valueTime4" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left">
+      <el-date-picker v-model="valueTime4" size="small" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left">
       </el-date-picker>
-      <el-button type="primary" style="margin-left:20px;" @click="onsumbit()">确定</el-button>
+      <el-button type="primary" style="margin-left:20px;" size="small" @click="onsumbit()">确定</el-button>
 
     </div>
     <div class="devive_tab">
@@ -29,7 +29,7 @@
               <tableBarActive2 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData" :clomnSelection="clomnSelection" :rowHeader="rowHeader" :tableOption="tableOption" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
             </el-col>
           </el-row>
-          <el-row type="flex" style="   display: flex;justify-content: flex-end;margin-top:10px;">
+          <el-row type="flex" style="   display: flex;justify-content: flex-end;margin: 20px 0;">
             <el-col :span="6">
               <pageNation :pager="pager" @handleSizeChange="handleSizeChange" @handleCurrentChange="handleCurrentChange"></pageNation>
             </el-col>
@@ -48,7 +48,7 @@
               <tableBarActive2 id="rebateSetTable" ref="table1" tooltip-effect="dark" :tableData="tableData1" :clomnSelection="clomnSelection" :rowHeader="rowHeader1" :tableOption="tableOption1" @handleButton="handleButton" :operatingStatus="operatingStatus" @toOperating="toOperating" @handleSelectionChange="handleSelectionChange" @selectCheckBox="selectCheckBox" @selectAll="selectAll"></tableBarActive2>
             </el-col>
           </el-row>
-          <el-row type="flex" style="   display: flex;justify-content: flex-end;margin-top:10px;">
+          <el-row type="flex" style="   display: flex;justify-content: flex-end;margin: 20px 0;">
             <el-col :span="6">
               <pageNation :pager="pager1" @handleSizeChange1="handleSizeChange1" @handleCurrentChange1="handleCurrentChange1"></pageNation>
             </el-col>
@@ -286,7 +286,6 @@ export default {
       device_type(paramActive)
         .then(res => {
           if (res.status == 0) {
-            console.log(res);
             this.offLineX = [];
             this.offLineY = [];
             let tempArr = res.data;
@@ -309,7 +308,6 @@ export default {
               this.offLineY.push(tempArr[i].incNum);
             }
             this.tableData = tempArr;
-              console.log(this.tableData);
              this.pager.count = res.totalCnt;
 
             this.drawLine(this.offLineX, this.offLineY);
@@ -323,7 +321,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
 
@@ -354,7 +351,6 @@ export default {
 
       device_rom(paramActive)
         .then(res => {
-          console.log(res);
           this.tableData1 = [];
           if (res.status == 0) {
             let tempArr = res.data;
@@ -375,7 +371,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
 

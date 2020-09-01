@@ -308,8 +308,6 @@ export default {
 
     //跳转至详情
     toDetails(val) {
-      console.log(val);
-
       this.$router.push({
         path: "/userInfo",
         query: {
@@ -339,7 +337,6 @@ export default {
       }
     },
     onChange2(item) {
-      console.log(item);
       if (item == 0) {
         this.form.sex = "全部";
         this.user_sex = "";
@@ -401,8 +398,6 @@ export default {
       }
 
       if (!this.value1) {
-        // console.log(parseInt(new Date().getTime()/1000) )
-        // console.log(parseInt(new Date().getTime()/1000)-86400*7)
         paramactive.start_time =
           parseInt(new Date().getTime() / 1000) - 86400 * 90;
         paramactive.end_time = parseInt(new Date().getTime() / 1000);
@@ -447,7 +442,6 @@ export default {
               tempArr[i].time_stamp = this.common.getTimes(
                 tempArr[i].time_stamp * 1000
               );
-              console.log(tempArr[i].type);
               switch (tempArr[i].type) {
                 case 101:
                   tempArr[i].type = "绑定";

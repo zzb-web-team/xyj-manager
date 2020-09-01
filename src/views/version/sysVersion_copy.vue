@@ -566,7 +566,6 @@ export default {
             this.pubUser = this.pubUser.concat(tempArr);
 
             if (res.result.les_count == 0) {
-              console.log(this.pubUser);
               return false;
             } else {
               this.pagePublic++;
@@ -575,7 +574,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     //发布清单
@@ -592,7 +590,6 @@ export default {
             this.pubUser = this.pubUser.concat(tempArr);
 
             if (res.result.les_count == 0) {
-              console.log(this.pubUser);
               return false;
             } else {
               this.pagePublic++;
@@ -601,7 +598,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     //查询灰度发布
@@ -682,7 +678,6 @@ export default {
           return false;
         }
       }
-      console.log(this.form.type)
       if (this.form.type == "正式发布") {
         user_list = [];
       } else {
@@ -753,7 +748,6 @@ export default {
         timing: timeNums,
         sn_list: user_list,
       };
-      console.log(param);
       publishRom(param)
         .then(res => {
           if (res.status == 0) {
@@ -775,7 +769,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
           this.common.monitoringLogs("发布", "发布ROM系统包", 0);
         });
     },
@@ -917,7 +910,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
 
@@ -937,7 +929,6 @@ export default {
       this.showState = !this.showState;
     },
     handleButton(val, rows) {
-      console.log(rows);
       this.newsRom = rows.rom_version;
 
       this.backPushkey = rows.push_key;
@@ -1010,7 +1001,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     //灰度撤回
@@ -1073,7 +1063,6 @@ export default {
                 ].value;
               }
             });
-            ///console.log(this.versionsListActive[0].value)
             if (res.result.les_count == 0) {
               return false;
             } else {
@@ -1088,7 +1077,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     add() {
@@ -1133,8 +1121,6 @@ export default {
       this.message = [];
       this.title = "";
       if (res.status == 0) {
-        console.log(res);
-
         this.tableType = true;
         var resID = /^1[34578]\d{9}$/;
         this.errorcount = 0;
@@ -1159,7 +1145,6 @@ export default {
         }
 
         this.tableList = res.data;
-        console.log(this.tableList);
       } else {
         this.$message({
           showClose: true,

@@ -331,7 +331,6 @@ export default {
       this.queryOnlineTable();
     },
     handleClick(tab) {
-      console.log(tab.index);
       if (tab.index == 0) {
         this.queryOnlineinfo();
         this.queryOnlineTable();
@@ -366,7 +365,6 @@ export default {
       device_online_table(param)
         .then(res => {
           if (res.status == 0) {
-            console.log(res);
 
             let tempArr = res.data.list;
             for (var i = 0; i < tempArr.length; i++) {
@@ -377,7 +375,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     //离线线table
@@ -406,13 +403,11 @@ export default {
       device_online_table(param)
         .then(res => {
           if (res.status == 0) {
-            console.log(res);
             this.tableData1 = res.data.list;
             this.pager1.count = res.data.totalCnt;
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     queryOnlineinfo() {
@@ -437,7 +432,6 @@ export default {
       };
       device_online_curve(param)
         .then(res => {
-          console.log(res);
           if (res.status == 0) {
             this.onlinePer = res.data.onlinePer;
             this.avgOnlineTimeInSec = res.data.avgOnlineTimeInSec;
@@ -455,7 +449,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
     //离线
@@ -481,7 +474,6 @@ export default {
       };
       device_online_curve(param)
         .then(res => {
-          console.log(res);
           if (res.status == 0) {
             this.offlinePer = res.data.onlinePer;
             this.avgofflineTimeInSec = res.data.avgOnlineTimeInSec;
@@ -499,7 +491,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
         });
     },
 

@@ -158,8 +158,6 @@ export default {
           path: "/userInfo"
         });
       }
-      console.log(val);
-      console.log(rows);
     },
     addAccout() {
       this.dialogVisible = true;
