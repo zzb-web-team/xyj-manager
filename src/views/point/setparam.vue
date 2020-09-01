@@ -1,6 +1,6 @@
 <template>
 	<section class="myself-container">
-		<div class="goback" style="width: 100%; line-height: 50px">
+		<!-- <div class="goback" style="width: 100%; line-height: 50px">
 			<div style="margin-top: 20px">
 				<el-button
 					type="primary"
@@ -9,7 +9,7 @@
 					>返回</el-button
 				>
 			</div>
-		</div>
+		</div> -->
 		<div style="height: 40px; line-height: 40px">硬件收益配置</div>
 		<el-button type="primary" @click="addList">添加</el-button>
 		<div style="width: 600px">
