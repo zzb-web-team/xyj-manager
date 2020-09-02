@@ -598,7 +598,7 @@ export default {
 						}
 					} else {
 						this.$message({
-							message: '服务出错',
+							message: res.err_msg,
 							type: 'error',
 						});
 					}
