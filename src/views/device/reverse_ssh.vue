@@ -5,101 +5,107 @@
 			<el-row type="flex" :gutter="20">
 				<el-col :span="3"
 					><el-input
-                    size="small"
+						size="small"
 						v-model="input"
 						placeholder="请输入设备SN"
 						@keyup.enter.native="search_data"
 					></el-input
 				></el-col>
-                <el-col :span="12">
-
-               
-				<el-row type="flex" :gutter="20" justify="space-between">
-					<el-col :span="5">
-						<!-- <span>地区：</span> -->
-						<el-select
-                        size="small"
-							v-model="area_value"
-							placeholder="请选择地区"
-							@change="search_data"
-						>
-							<el-option label="全部" value="-1"></el-option>
-							<el-option
-								v-for="item in options"
-								:key="item.id"
-								:label="item.label"
-								:value="item.label"
+				<el-col :span="12">
+					<el-row type="flex" :gutter="20" justify="space-between">
+						<el-col :span="5">
+							<!-- <span>地区：</span> -->
+							<el-select
+								size="small"
+								v-model="area_value"
+								placeholder="请选择地区"
+								@change="search_data"
 							>
-							</el-option> </el-select
-					></el-col>
-					<el-col :span="5">
-						<!-- <span>ipv格式：</span> -->
-						<el-select
-                        size="small"
-							v-model="ipv_value"
-							placeholder="请选择ipv格式"
-							@change="search_data"
-						>
-							<el-option label="全部" value="-1"></el-option>
-							<el-option label="ipv4" value="ipv4"></el-option>
-							<el-option label="ipv6" value="ipv6"></el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="5">
-						<!-- <span>设备品牌：</span> -->
-						<el-select
-                        size="small"
-							v-model="brand_value"
-							placeholder="请选择设备品牌"
-							@change="search_devtype"
-						>
-							<el-option label="全部" value="-1"></el-option>
-							<el-option
-								v-for="(item, idnex) in eqp_brds"
-								:key="item.name"
-								:label="item.name"
-								:value="item.name"
+								<el-option label="全部" value="-1"></el-option>
+								<el-option
+									v-for="item in options"
+									:key="item.id"
+									:label="item.label"
+									:value="item.label"
+								>
+								</el-option> </el-select
+						></el-col>
+						<el-col :span="5">
+							<!-- <span>ipv格式：</span> -->
+							<el-select
+								size="small"
+								v-model="ipv_value"
+								placeholder="请选择ipv格式"
+								@change="search_data"
 							>
-							</el-option> </el-select></el-col
-					><el-col :span="5">
-						<!-- <span>设备型号：</span> -->
-						<el-select
-                        size="small"
-							v-model="devtype_value"
-							placeholder="请选择设备型号"
-							@change="search_data"
-						>
-							<el-option label="全部" value="-1"></el-option>
-							<el-option
-								v-for="item in dev_types"
-								:key="item"
-								:label="item"
-								:value="item"
+								<el-option label="全部" value="-1"></el-option>
+								<el-option
+									label="ipv4"
+									value="ipv4"
+								></el-option>
+								<el-option
+									label="ipv6"
+									value="ipv6"
+								></el-option>
+							</el-select>
+						</el-col>
+						<el-col :span="5">
+							<!-- <span>设备品牌：</span> -->
+							<el-select
+								size="small"
+								v-model="brand_value"
+								placeholder="请选择设备品牌"
+								@change="search_devtype"
 							>
-							</el-option> </el-select
-					></el-col>
-					<el-col :span="5">
-						<!-- <span>ROM版本：</span> -->
-						<el-select
-                        size="small"
-							v-model="rom_value"
-							placeholder="请选择ROM版本"
-							@change="search_data"
-						>
-							<el-option
-								v-for="item in roms"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value"
+								<el-option label="全部" value="-1"></el-option>
+								<el-option
+									v-for="(item, idnex) in eqp_brds"
+									:key="item.name"
+									:label="item.name"
+									:value="item.name"
+								>
+								</el-option> </el-select></el-col
+						><el-col :span="5">
+							<!-- <span>设备型号：</span> -->
+							<el-select
+								size="small"
+								v-model="devtype_value"
+								placeholder="请选择设备型号"
+								@change="search_data"
 							>
-							</el-option> </el-select
-					></el-col>
-				</el-row>
-                 </el-col>
-					<el-button @click="search_data" size="small" type="primary"
-						>搜索</el-button
-					>
-					<el-button @click="reset" size="small" type="primary">重置</el-button>
+								<el-option label="全部" value="-1"></el-option>
+								<el-option
+									v-for="item in dev_types"
+									:key="item"
+									:label="item"
+									:value="item"
+								>
+								</el-option> </el-select
+						></el-col>
+						<el-col :span="5">
+							<!-- <span>ROM版本：</span> -->
+							<el-select
+								size="small"
+								v-model="rom_value"
+								placeholder="请选择ROM版本"
+								@change="search_data"
+							>
+								<el-option
+									v-for="item in roms"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value"
+								>
+								</el-option> </el-select
+						></el-col>
+					</el-row>
+				</el-col>
+				<el-button @click="search_data" size="small" type="primary"
+					>确定</el-button
+				>
+				<el-button @click="reset" size="small" type="primary"
+					>重置</el-button
+				>
 			</el-row>
 		</div>
 		<!--  -->
@@ -132,7 +138,7 @@
 			<el-table-column prop="dev_brand" label="设备品牌"
 				><template slot-scope="scope">{{
 					scope.row.dev_brand ? scope.row.dev_brand : '--'
-				}}</template></el-table-column  
+				}}</template></el-table-column
 			>
 			<el-table-column prop="dev_model" label="设备型号"
 				><template slot-scope="scope">{{
@@ -394,8 +400,7 @@ export default {
 						this.$message.errro(res.message);
 					}
 				})
-				.catch((error) => {
-				});
+				.catch((error) => {});
 		},
 		search_data() {
 			this.pager.page = 1;

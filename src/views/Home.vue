@@ -129,7 +129,7 @@
 						</template>
 					</el-menu>
 				</aside>
-				<section class="content-container">
+				<section class="content-container" ref="con_body">
 					<div class="grid-content bg-purple-light">
 						<el-col
 							:span="24"
@@ -162,7 +162,12 @@
 
 </el-breadcrumb> -->
 						</el-col>
-						<el-col :span="24" class="content-wrapper">
+						<el-col
+							:span="24"
+							class="content-wrapper"
+							:style="{ minHeight: con_height }"
+                            style="margin-bottom:35px;"
+						>
 							<transition name="fade" mode="out-in">
 								<router-view></router-view>
 							</transition>
@@ -191,12 +196,13 @@ export default {
 				type: [],
 				resource: '',
 				desc: '',
+				con_height: '',
 			},
 		};
 	},
 	mounted: function () {
+		this.con_height = this.$refs.con_body.offsetHeight - 130 + 'px';
 		var user = JSON.parse(this.get('userInfo'));
-
 		this.sysUserName = user.username || '';
 	},
 	methods: {

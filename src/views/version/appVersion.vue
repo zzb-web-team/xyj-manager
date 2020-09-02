@@ -1,21 +1,46 @@
 <template>
 	<section class="myself-container version_active version_active_new">
 		<el-row type="flex" justify="space-between">
-			<el-col :span="11" >
-				<el-table :data="tableData3" border :cell-style="rowClass" :header-cell-style="headClass">
-                    <el-table-column  label="当前发布版本（全网）">
-                        <el-table-column prop="packet_version" label="版本号" width="250"></el-table-column>
-                        <el-table-column prop="high_version_info" label="版本描述"></el-table-column>
-                    </el-table-column>
-					
+			<el-col :span="11">
+				<el-table
+					:data="tableData3"
+					class="release_version"
+					border
+					:cell-style="rowClass"
+					:header-cell-style="headClass"
+				>
+					<el-table-column label="当前发布版本（全网）">
+						<el-table-column
+							prop="packet_version"
+							label="版本号"
+							width="250"
+						></el-table-column>
+						<el-table-column
+							prop="high_version_info"
+							label="版本描述"
+						></el-table-column>
+					</el-table-column>
 				</el-table>
 			</el-col>
 			<el-col :span="11">
-				<el-table :data="tableData2" border :cell-style="rowClass" :header-cell-style="headClass">
-                     <el-table-column  label="当前发布版本（灰度）">
-					<el-table-column prop="packet_version" label="版本号" width="250"></el-table-column>
-                    <el-table-column prop="description" label="版本描述"></el-table-column>
-                     </el-table-column>
+				<el-table
+					:data="tableData2"
+					class="release_version"
+					border
+					:cell-style="rowClass"
+					:header-cell-style="headClass"
+				>
+					<el-table-column label="当前发布版本（灰度）">
+						<el-table-column
+							prop="packet_version"
+							label="版本号"
+							width="250"
+						></el-table-column>
+						<el-table-column
+							prop="description"
+							label="版本描述"
+						></el-table-column>
+					</el-table-column>
 				</el-table>
 			</el-col>
 		</el-row>
@@ -854,8 +879,8 @@ export default {
 			var url = hostUrl + '/static/app_user.xls';
 			// window.location.href = url;
 			window.open(url, '_blank');
-        },
-        // 表头样式设置
+		},
+		// 表头样式设置
 		headClass() {
 			return 'text-align: center;background:#F3F6FB;';
 		},
@@ -874,6 +899,10 @@ export default {
 </script>
 
 <style lang="less">
+.release_version .el-table_1_column_1,
+.release_version .el-table_2_column_4 {
+	background: #fff !important;
+}
 .version_active_new .dialog_active2 {
 	.el-dialog__body {
 		height: 550px;
@@ -890,7 +919,7 @@ export default {
 	padding: 8px 20px;
 }
 .version_active {
-    padding-top: 35px;
+	padding-top: 35px;
 	.el-form-item {
 		margin-bottom: 10px;
 	}
@@ -940,8 +969,8 @@ export default {
 		width: 100%;
 		height: auto;
 		overflow: hidden;
-        margin-top: 20px;
-        box-shadow:none !important;
+		margin-top: 20px;
+		box-shadow: none !important;
 
 		.el-table td,
 		.el-table th {
