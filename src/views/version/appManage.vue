@@ -220,7 +220,7 @@ export default {
     handleDelete(row) {
       // this.dialogEdit = true
       this.deleteId = row.id;
-      this.$confirm("确定执行该操作吗", "提示", {
+      this.$confirm("即将删除该安装包，是否继续？", "提示", {
         type: "warning",
       })
         .then(res => {

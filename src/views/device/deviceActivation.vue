@@ -1174,7 +1174,7 @@ export default {
         : (this.ruleForm1.is_activated = "已激活");
     },
     del(rows) {
-      this.$confirm("确定删除?", "提示", {
+      this.$confirm("即将删除该设备，是否继续", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
