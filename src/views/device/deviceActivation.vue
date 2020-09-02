@@ -94,8 +94,18 @@
             <el-table-column prop="cpu_id" label="CPU-ID" width="300"></el-table-column>
             <el-table-column prop="total_cap" label="总容量" :formatter="formatDevCap" width="150"></el-table-column>
             <el-table-column prop="import_ts" label="创建时间" :sortable="'custom'" :formatter="formatterImport" width="170"></el-table-column>
-            <el-table-column prop="activate_ts" label="激活时间" :sortable="'custom'" width="150" :formatter="formatterActive"></el-table-column>
-            <el-table-column prop="is_activated" label="设备激活状态" :formatter="formatterType" width="120"></el-table-column>
+            <el-table-column prop="activate_ts" label="激活时间" :sortable="'custom'" width="150" :formatter="formatterActive">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.bind_flag!=0">{{scope.row.bind_flag}}</span>
+                    <span v-else>--</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="is_activated" label="设备激活状态" :formatter="formatterType" width="120">
+                <template slot-scope="scope">
+                <span v-if="scope.row.is_activated!=99">已激活</span>
+                <span v-else style="color:#F59A23">未激活</span>
+                </template>
+            </el-table-column>
             <el-table-column label="操作" width="200">
               <template slot-scope="scope">
                 <div style="display: flex;justify-content: flex-start;">
@@ -103,8 +113,8 @@
                   <el-button v-show="scope.row.is_activated!==100" type="text" @click="restart(scope.row)" size="small">重启</el-button> -->
                   <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
                   <el-button v-show="(scope.row.bind_flag==0 || scope.row.bind_flag==102) && scope.row.is_activated!=99" type="text" @click="tieactive(scope.row)" size="small">绑定</el-button>
-                  <el-button type="text" @click="del(scope.row)" :disabled="scope.row.is_activatedss==true" size="small">删除</el-button>
-                  <el-button v-if="scope.row.is_activated==99" type="text" @click="activationactive(scope.row)" size="small">激活</el-button>
+                  <el-button v-if="scope.row.is_activated==99" type="text" @click="activationactive(scope.row)" size="small" style="color:#F59A23">激活</el-button>
+                  <el-button type="text" @click="del(scope.row)"  size="small">删除</el-button>
                 </div>
               </template>
             </el-table-column>
@@ -122,33 +132,33 @@
     </div>
     <el-dialog :visible.sync="dialogVisible1" width="30%" :before-close="handleClose" @close="handleCloseDefail">
       <div class="addaccout addaccout_add">
-        <el-form :model="ruleForm2" :rules="rules" ref="ruleForm2" label-width="100px" class="demo-valiForm">
+        <el-form :model="ruleForm2" :rules="rules" ref="ruleForm2" class="demo-valiForm">
           <h3 class="title">新建设备</h3>
           <el-form-item label="设备SN：" prop="dev_sn">
-            <el-input v-model="ruleForm2.dev_sn" placeholder="请输入设备SN" style="width:200px;"></el-input>
+            <el-input v-model="ruleForm2.dev_sn" placeholder="请输入设备SN" style="width:250px;"></el-input>
           </el-form-item>
           <el-form-item label="设备型号：">
-            <el-select v-model="ruleForm2.dev_type" placeholder="请选择" @change="onChange2Type1" style="width:200px;">
+            <el-select v-model="ruleForm2.dev_type" placeholder="请选择" @change="onChange2Type1" style="width:250px;">
               <el-option v-for="item in dev_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="ROM：">
-            <el-select v-model="ruleForm2.rom_version" placeholder="请选择" @change="onChange2" style="width:200px;">
+          <!-- <el-form-item label="ROM：">
+            <el-select v-model="ruleForm2.rom_version" placeholder="请选择" @change="onChange2" style="width:250px;">
               <el-option v-for="item in roms" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="MAC地址:" prop="dev_mac">
-            <el-input v-model="ruleForm2.dev_mac" placeholder="请输入MAC地址" style="width:200px;"></el-input>
+            <el-input v-model="ruleForm2.dev_mac" placeholder="请输入MAC地址" style="width:250px;"></el-input>
           </el-form-item>
           <el-form-item label="CPU-ID:" prop="cpu_id">
-            <el-input v-model="ruleForm2.cpu_id" placeholder="请输入CPU-ID" style="width:200px;"></el-input>
+            <el-input v-model="ruleForm2.cpu_id" placeholder="请输入CPU-ID" style="width:250px;"></el-input>
           </el-form-item>
-          <el-form-item label="总容量:">
+          <!-- <el-form-item label="总容量:">
             <div style="display: flex; justify-content: flex-start; align-items: center;">
-              <el-input v-model="ruleForm2.total_capss" placeholder="请输入总容量" style="width:200px;"></el-input>
+              <el-input v-model="ruleForm2.total_capss" placeholder="请输入总容量" style="width:250px;"></el-input>
               <div style="white-space:nowrap;margin-left:10px;">GB</div>
             </div>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item style="width:100%;display: flex;justify-content:center;">
             <el-button type="primary" @click="importDevice('ruleForm2')">确定</el-button>
             <el-button type="primary" @click.native.prevent="handleSubmit3">取消</el-button>
@@ -160,44 +170,36 @@
       <div class="addaccout addaccout_add">
         <el-form :model="ruleForm1" :rules="rules1" ref="ruleForm2" label-position="left" class="demo-ruleForm">
           <h3 class="title">修改设备</h3>
-          <el-form-item prop="username">
-            <el-form-item label="设备SN:">
+            <el-form-item label="设备SN:" prop="username">
               <el-input v-model="ruleForm1.new_dev_sn" placeholder="请输入设备SN" style="width:300px;"></el-input>
-            </el-form-item>
           </el-form-item>
-          <el-form-item label="设备型号：" style="display: flex;">
+          <el-form-item label="设备型号：">
             <el-select v-model="ruleForm1.dev_type" placeholder="请选择" @change="onChange2Type" style="width:300px;">
               <el-option v-for="item in dev_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="ROM：" style="display: flex;">
+          <el-form-item label="ROM：">
             <el-select v-model="ruleForm1.rom_version" placeholder="请选择" @change="onChange2" style="width:300px;">
               <el-option v-for="item in roms" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item prop="nickname">
             <el-form-item label="MAC地址:">
               <el-input v-model="ruleForm1.dev_mac" placeholder="请输入MAC地址" style="width:300px;"></el-input>
-            </el-form-item>
           </el-form-item>
-          <el-form-item prop="nickname">
             <el-form-item label="CPU-ID:">
               <el-input v-model="ruleForm1.cpu_id" placeholder="请输入CPU-ID" style="width:300px;"></el-input>
-            </el-form-item>
           </el-form-item>
-          <el-form-item prop="nickname">
             <el-form-item label="总容量:">
               <div style="display: flex; justify-content: flex-start; align-items: center;">
-                <el-input v-model="ruleForm1.total_cap" placeholder="请输入总容量" style="width:300px;"></el-input>
+                <el-input v-model="ruleForm1.total_cap" placeholder="请输入总容量" style="width:270px;"></el-input>
                 <div style="white-space:nowrap;margin-left:10px;">GB</div>
               </div>
-            </el-form-item>
           </el-form-item>
-          <el-form-item label="设备激活：" style="display: flex;">
+          <!-- <el-form-item label="设备激活：">
             <el-select v-model="ruleForm1.is_activated" placeholder="请选择" style="width:300px;" :disabled="true">
               <el-option v-for="item in active" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item style="width:100%;display: flex;justify-content:center;">
             <el-button type="primary" @click="editBasicinfo">确定</el-button>
             <el-button type="primary" @click="dialogVisible2=false">取消</el-button>
@@ -207,13 +209,11 @@
     </el-dialog>
     <el-dialog :visible.sync="dialogVisibleactive" width="20%" :before-close="handleClose">
       <el-form ref="form">
-        <el-form-item label="" style="dispaly:flex;justify-content:center;">
-          <div style="float:left;width:150px;text-align:right;">请输入需要绑定ID:</div>
-          <el-input v-model="user_id_active" style="float:left;width:200px;margin-left:10px;"></el-input>
+        <el-form-item label="绑定ID:" style="dispaly:flex;justify-content:center;">
+          <el-input v-model="user_id_active" style="margin-left:10px;"></el-input>
         </el-form-item>
-        <el-form-item label="">
-          <div style="float:left;width:150px;text-align:right;">请输入需要绑定昵称</div>
-          <el-input v-model="active_dev_name" style="float:left;width:200px;margin-left:10px;" maxlength="10"></el-input>
+        <el-form-item label="设备昵称:" style="dispaly:flex;justify-content:center;">
+          <el-input v-model="active_dev_name" style="margin-left:10px;" maxlength="10"></el-input>
         </el-form-item>
         <div style="text-align: center;">
           <el-button type="primary" @click="onSubmitBind">确定</el-button>
@@ -525,7 +525,7 @@ export default {
       }
       if (this.active_dev_name.length == 0) {
         this.$message({
-          message: "昵称不能为空",
+          message: "设备昵称不能为空",
           type: "error",
         });
         return false;
@@ -1395,10 +1395,10 @@ export default {
   }
 }
 
-.addaccout.addaccout_add {
+.addaccout,.addaccout_add {
   .title {
     width: 100%;
-    text-align: center;
+    text-align: left;
   }
 
   .el-dialog__body {
@@ -1407,11 +1407,17 @@ export default {
 
   .el-form-item {
     display: flex;
+    justify-content: center;
+    text-align: left;
+    .el-form-item__label{
+        width: 100px;
+        text-align: left;
+    }
   }
 
   .el-form--label-left .el-form-item__label {
-    text-align: right;
-    width: 90px;
+      width:100px;
+    text-align: left;
   }
 
   .el-form-item__error {

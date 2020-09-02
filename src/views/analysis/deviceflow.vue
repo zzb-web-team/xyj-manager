@@ -1,141 +1,165 @@
 <template>
-	<section  @click="closeSel">
+	<section @click="closeSel">
 		<!-- <div class="top_title">设备流量分析</div> -->
-				<el-row type="flex" justify="start" :gutter="20">
-					<el-col :span="4">
-						<el-input
-							size="small"
-							v-model="value1Activechanid"
-							placeholder="设备SN"
-							@change="onchanidChange"
-						></el-input>
-					</el-col>
-					<el-col :span="4">
-						<el-select
-							size="small"
-							v-model="pri_chan_prv"
-							placeholder="请选择一级渠道商"
-						>
-							<el-option label="全部" value=""></el-option>
-							<el-option
-								v-for="item in pri_chan_prvs"
-								:key="item"
-								:label="item.label"
-								:value="item.value"
-							></el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="4">
-						<el-select
-							size="small"
-							v-model="eqp_brd"
-							placeholder="请选择设备品牌"
-						>
-							<el-option label="全部" value=""></el-option>
-							<el-option
-								v-for="item in eqp_brds"
-								:key="item"
-								:label="item"
-								:value="item"
-							></el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="4">
-						<el-select
-							size="small"
-							v-model="scd_chan_prv"
-							placeholder="请选择二级渠道商"
-						>
-							<el-option label="全部" value=""></el-option>
-							<el-option
-								v-for="item in scd_chan_prvs"
-								:key="item"
-								:label="item.label"
-								:value="item.value"
-							></el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="4">
-						<el-select
-							size="small"
-							v-model="dev_type"
-							placeholder="请选择设备型号"
-						>
-							<el-option label="全部" value=""></el-option>
-							<el-option
-								v-for="item in dev_types"
-								:key="item.value"
-								:label="item.label"
-								:value="item.value"
-							></el-option>
-						</el-select>
-					</el-col>
-					<el-col :span="6">
-						<el-radio-group
-							size="small"
-							v-model="radio1"
-							@change="onchangeTab"
-						>
-							<el-radio-button @click="today()" label="one"
-								>今天</el-radio-button
-							>
-							<el-radio-button @click="yesterday()" label="two"
-								>昨天</el-radio-button
-							>
-							<el-radio-button @click="sevendat()" label="three"
-								>近7天</el-radio-button
-							>
-							<el-radio-button @click="thirtyday()" label="four"
-								>近30天</el-radio-button
-							>
-							<el-radio-button @click="showzdyx"
-								>自定义
-								<i class="el-icon-date"></i>
-							</el-radio-button>
-						</el-radio-group>
-						<el-date-picker
-							v-show="shoudzyx"
-							style="margin-left: 10px"
-							v-model="val2"
-							type="datetimerange"
-							range-separator="至"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期"
-							align="left"
-							@change="gettimes"
-						></el-date-picker>
-					</el-col>
-					<el-col :span="3">
-						<el-button
-							size="small"
-							style="margin-left: 10px"
-							type="primary"
-							@click="seachtu(1)"
-							>确定</el-button
-						>
-					</el-col>
-				</el-row>
-				<!-- <div style="display: flex;flex-flow: row;margin-top: 0;padding:20px 0px;background:rgba(255,255,255,1);border-radius:2px;">
+		<el-row
+			type="flex"
+			class="deviceflow_title"
+			:gutter="30"
+			justify="start"
+		>
+			<el-col :span="3" class="title_overview">
+				<div class="title_overview_top">
+					<div>上行总流量：{{ totalYl | setbytes }}</div>
+					<div>下行总流量：{{ totalYl | setbytes }}</div>
+				</div>
+				<div class="title_overview_center">
+					{{ totalYl | setbytes }}
+				</div>
+				<div class="title_overview_bottom">今日总流量</div>
+			</el-col>
+			<el-col :span="3" class="title_overview">
+				<div class="title_overview_top">
+					<div>上行总流量：{{ totalYl | setbytes }}</div>
+					<div>下行总流量：{{ totalYl | setbytes }}</div>
+				</div>
+				<div class="title_overview_center">
+					{{ totalYl | setbytes }}
+				</div>
+				<div>昨日总流量</div>
+			</el-col>
+			<el-col :span="3" class="title_overview">
+				<div class="title_overview_top">
+					<div>上行总流量：{{ totalYl | setbytes }}</div>
+					<div>下行总流量：{{ totalYl | setbytes }}</div>
+				</div>
+				<div class="title_overview_center">
+					{{ totalYl | setbytes }}
+				</div>
+				<div>本月总流量</div>
+			</el-col>
+		</el-row>
+		<!--  -->
 
-
-        </div> -->
-
-				<div
-					class="user_item"
-					style="box-shadow: 0px 2px 3px 0px rgba(6, 17, 36, 0.14)"
+		<el-row type="flex" justify="start" :gutter="20">
+			<el-col :span="3">
+				<el-input
+					size="small"
+					v-model="value1Activechanid"
+					placeholder="设备SN"
+					@change="onchanidChange"
+				></el-input>
+			</el-col>
+			<el-col :span="3">
+				<el-select
+					size="small"
+					v-model="pri_chan_prv"
+					placeholder="请选择一级渠道商"
 				>
-					<div class="item_left" style="width: 100%; border: none">
-						<div class="item_text" style="text-align: center">
-							总流量
-						</div>
-						<div class="item_count" style="text-align: center">
-							<span>{{ totalYl | setbytes }}</span>
-						</div>
-					</div>
-				</div>
-				<div class="device_form">
-					<div id="myChartMap" :style="{ height: '607px' }"></div>
-				</div>
+					<el-option label="全部" value=""></el-option>
+					<el-option
+						v-for="item in pri_chan_prvs"
+						:key="item"
+						:label="item.label"
+						:value="item.value"
+					></el-option>
+				</el-select>
+			</el-col>
+			<el-col :span="3">
+				<el-select
+					size="small"
+					v-model="eqp_brd"
+					placeholder="请选择设备品牌"
+				>
+					<el-option label="全部" value=""></el-option>
+					<el-option
+						v-for="item in eqp_brds"
+						:key="item"
+						:label="item"
+						:value="item"
+					></el-option>
+				</el-select>
+			</el-col>
+			<el-col :span="3">
+				<el-select
+					size="small"
+					v-model="scd_chan_prv"
+					placeholder="请选择二级渠道商"
+				>
+					<el-option label="全部" value=""></el-option>
+					<el-option
+						v-for="item in scd_chan_prvs"
+						:key="item"
+						:label="item.label"
+						:value="item.value"
+					></el-option>
+				</el-select>
+			</el-col>
+			<el-col :span="3">
+				<el-select
+					size="small"
+					v-model="dev_type"
+					placeholder="请选择设备型号"
+				>
+					<el-option label="全部" value=""></el-option>
+					<el-option
+						v-for="item in dev_types"
+						:key="item.value"
+						:label="item.label"
+						:value="item.value"
+					></el-option>
+				</el-select>
+			</el-col>
+			<el-col :span="5">
+				<el-radio-group
+					size="small"
+					v-model="radio1"
+					@change="onchangeTab"
+				>
+					<el-radio-button @click="today()" label="one"
+						>今天</el-radio-button
+					>
+					<el-radio-button @click="yesterday()" label="two"
+						>昨天</el-radio-button
+					>
+					<el-radio-button @click="sevendat()" label="three"
+						>近7天</el-radio-button
+					>
+					<el-radio-button @click="thirtyday()" label="four"
+						>近30天</el-radio-button
+					>
+					<el-radio-button @click="showzdyx"
+						>自定义
+						<i class="el-icon-date"></i>
+					</el-radio-button>
+				</el-radio-group>
+				<el-date-picker
+					v-show="shoudzyx"
+					style="margin-left: 10px"
+					v-model="val2"
+					type="datetimerange"
+					range-separator="至"
+					start-placeholder="开始日期"
+					end-placeholder="结束日期"
+					align="left"
+					@change="gettimes"
+				></el-date-picker>
+			</el-col>
+			<el-col :span="3">
+				<el-button
+					size="small"
+					style="margin-left: 10px"
+					type="primary"
+					@click="seachtu(1)"
+					>确定</el-button
+				>
+			</el-col>
+		</el-row>
+
+		<!--  -->
+
+		<div class="device_form">
+			<div id="myChartMap" :style="{ height: '607px' }"></div>
+		</div>
 	</section>
 </template>
 
@@ -422,6 +446,7 @@ export default {
 		pageNation,
 	},
 	mounted() {
+		this.drawLine();
 		let monitorUrlname = this.$route.query.monitorUrlname;
 		if (monitorUrlname) {
 			this.value1 = monitorUrlname;
@@ -1009,12 +1034,12 @@ export default {
 					},
 				},
 				legend: {
-					data: idlist,
-					bottom: 50,
+					data: ['上行', '下行'],
+					top: 0,
 				},
 				grid: {
 					left: '3%', // 默认10%，给24就挺合适的。
-					top: 60, // 默认60
+					top: 80, // 默认60
 					right: 35, // 默认10%
 					bottom: 150, // 默认60
 				},
@@ -1023,25 +1048,48 @@ export default {
 						type: 'category',
 						axisTick: { show: false },
 						data: y,
+						// data: [
+						// 	'3-18',
+						// 	'3-19',
+						// 	'3-20',
+						// 	'3-21',
+						// 	'3-22',
+						// 	'3-23',
+						// 	'3-24',
+						// ],
 					},
 				],
 				yAxis: [
 					{
-						name: _this.flowunit,
 						type: 'value',
+						name: '流量',
 					},
 				],
-				dataZoom: [
+				// series: x,
+				series: [
 					{
-						type: 'slider',
-						xAxisIndex: 0,
-						filterMode: 'empty',
-						start: 0,
-						end: 8,
-						zoomLock: true,
+						name: '上行',
+						type: 'bar',
+						barGap: 0,
+						label: {
+							show: false,
+						},
+						barMaxWidth: 30,
+						data: x,
+						// data: [320, 332, 301, 334, 390, 461, 140],
+					},
+					{
+						name: '下行',
+						type: 'bar',
+						label: {
+							show: false,
+						},
+						show: false,
+						barMaxWidth: 30,
+						data: x,
+						// data: [220, 182, 191, 234, 290, 140, 369],
 					},
 				],
-				series: x,
 			};
 			myChart.clear();
 			myChart.setOption(options);
@@ -1052,135 +1100,122 @@ export default {
 };
 </script>
 
-<style lang="scss">
-// .el-table /deep/.disabledCheck .cell .el-checkbox__inner {
-// 	display: none !important;
-// }
-// .el-table /deep/.disabledCheck .cell:before {
-// 	content: '';
-// 	position: absolute;
-// 	right: 11px;
-// }
-.myself-container {
+<style lang="scss" scoped>
+.device_form {
 	width: 100%;
-	//min-width: 1600px;
+	height: auto;
+	margin-top: 40px;
+	background: #ffffff;
+	padding: 15px 30px;
+	box-sizing: border-box;
+	// box-shadow: 0px 2px 3px 0px rgba(6, 17, 36, 0.14);
+	border-radius: 2px;
 
-	.device_form {
+	.bottom {
+		margin-top: 20px;
+	}
+
+	.el-form-item__label {
+		white-space: nowrap;
+	}
+
+	.el-form-item {
+		margin-bottom: 0px;
+		margin-left: 10px;
+	}
+
+	.row_activess {
+		margin-top: 20px;
+		display: flex;
+		justify-content: flex-start;
+	}
+
+	.div_show {
 		width: auto;
-		height: auto;
-		margin-top: 20px;
-		background: #ffffff;
-		padding: 15px 30px;
-		box-sizing: border-box;
-		box-shadow: 0px 2px 3px 0px rgba(6, 17, 36, 0.14);
+		display: flex;
+		height: 40px;
+		justify-content: center;
+		align-items: center;
+		color: #409eff;
+		cursor: pointer;
+		margin-left: 20px;
+	}
+	.user_item {
+		width: auto;
+		height: 130px;
+		background: rgba(255, 255, 255, 1);
+		// box-shadow: 0px 2px 3px 0px rgba(6, 17, 36, 0.14);
 		border-radius: 2px;
+		margin-top: 20px;
 
-		.bottom {
-			margin-top: 20px;
-		}
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		text-align: left;
+		padding: 36px 71px;
 
-		.el-form-item__label {
-			white-space: nowrap;
-		}
+		.item_left {
+			width: 49%;
+			height: 58px;
+			border-right: 1px solid #e6e9ed;
 
-		.el-form-item {
-			margin-bottom: 0px;
-			margin-left: 10px;
-		}
-
-		.row_activess {
-			margin-top: 20px;
-			display: flex;
-			justify-content: flex-start;
-		}
-
-		.div_show {
-			width: auto;
-			display: flex;
-			height: 40px;
-			justify-content: center;
-			align-items: center;
-			color: #409eff;
-			cursor: pointer;
-			margin-left: 20px;
-		}
-		.user_item {
-			width: auto;
-			height: 130px;
-			background: rgba(255, 255, 255, 1);
-			box-shadow: 0px 2px 3px 0px rgba(6, 17, 36, 0.14);
-			border-radius: 2px;
-			margin-top: 20px;
-
-			display: flex;
-			justify-content: flex-start;
-			align-items: center;
-			text-align: left;
-			padding: 36px 71px;
-
-			.item_left {
-				width: 49%;
-				height: 58px;
-				border-right: 1px solid #e6e9ed;
-
-				.item_text {
-					font-size: 14px;
-					color: #333333;
-				}
-
-				.item_count {
-					line-height: 55px;
-
-					span {
-						font-size: 34px;
-					}
-				}
+			.item_text {
+				font-size: 14px;
+				color: #333333;
 			}
 
-			.item_right {
-				height: 48px;
-				width: 49%;
-				padding-left: 40px;
+			.item_count {
+				line-height: 55px;
 
-				.item_text {
-					font-size: 14px;
-					color: #333333;
+				span {
+					font-size: 34px;
 				}
+			}
+		}
 
-				.item_count {
-					line-height: 55px;
+		.item_right {
+			height: 48px;
+			width: 49%;
+			padding-left: 40px;
 
-					span {
-						font-size: 34px;
-					}
+			.item_text {
+				font-size: 14px;
+				color: #333333;
+			}
+
+			.item_count {
+				line-height: 55px;
+
+				span {
+					font-size: 34px;
 				}
 			}
 		}
 	}
+}
 
-	.devide_table {
-		height: auto;
-		margin-top: 20px;
-		background: #ffffff;
-		border-radius: 2px;
-		box-shadow: 0px 2px 3px 0px rgba(6, 17, 36, 0.14);
-		border-radius: 2px;
+.devide_table {
+	height: auto;
+	margin-top: 20px;
+	background: #ffffff;
+	border-radius: 2px;
+	// box-shadow: 0px 2px 3px 0px rgba(6, 17, 36, 0.14);
+	border-radius: 2px;
 
-		.el-table td,
-		.el-table th {
-			padding: 6px 0px;
-		}
+	.el-table td,
+	.el-table th {
+		padding: 6px 0px;
 	}
+}
 
-	.devide_pageNation {
-		width: 100%;
-		height: auto;
-		// overflow: hidden;
-		margin-top: 20px;
+.devide_pageNation {
+	width: 100%;
+	height: auto;
+	// overflow: hidden;
+	margin-top: 20px;
 
-		.devide_pageNation_active {
-			float: right;
-		}
+	.devide_pageNation_active {
+		float: right;
 	}
 }
 
@@ -1198,7 +1233,7 @@ export default {
 	width: auto;
 	height: 130px;
 	background: rgba(255, 255, 255, 1);
-	box-shadow: 0px 2px 3px 0px rgba(6, 17, 36, 0.14);
+	// box-shadow: 0px 2px 3px 0px rgba(6, 17, 36, 0.14);
 	border-radius: 2px;
 	margin-top: 20px;
 
@@ -1243,6 +1278,29 @@ export default {
 			span {
 				font-size: 34px;
 			}
+		}
+	}
+}
+.deviceflow_title {
+	margin: 25px 0 !important;
+	background-color: #ffffff;
+	.title_overview {
+		background-color: #f2f2f2;
+		border-radius: 5px;
+		height: 140px;
+		text-align: center;
+		margin-right: 25px;
+		.title_overview_top {
+			text-align: right;
+			margin-top: 10px;
+		}
+		.title_overview_center {
+			font-size: 20px;
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+		.title_overview_bottom {
+			height: 60px;
 		}
 	}
 }

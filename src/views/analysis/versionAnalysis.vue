@@ -1,40 +1,40 @@
 <template>
 	<section class="myself-container">
 		<div style="margin-top: 30px">
-            <div style="margin-bottom:20px;">
-			<el-date-picker
-				size="small"
-				v-model="valueTime"
-				type="datetimerange"
-				range-separator="至"
-				start-placeholder="开始日期"
-				end-placeholder="结束日期"
-				align="left"
-			>
-			</el-date-picker>
-			<el-select
-				size="small"
-				v-model="versointype"
-				placeholder="请选择"
-				@change="onChange"
-			>
-				<el-option label="全部" value="*"> </el-option>
-				<el-option
-					v-for="item in options"
-					:key="item.value"
-					:label="item.label"
-					:value="item.value"
+			<div style="margin-bottom: 20px">
+				<el-date-picker
+					size="small"
+					v-model="valueTime"
+					type="datetimerange"
+					range-separator="至"
+					start-placeholder="开始日期"
+					end-placeholder="结束日期"
+					align="left"
 				>
-				</el-option>
-			</el-select>
-			<el-button
-				size="small"
-				type="primary"
-				@click="onQueryInfo"
-				style="margin-left: 20px"
-				>确定</el-button
-			>
-            </div>
+				</el-date-picker>
+				<el-select
+					size="small"
+					v-model="versointype"
+					placeholder="请选择"
+					@change="onChange"
+				>
+					<el-option label="全部" value="*"> </el-option>
+					<el-option
+						v-for="item in options"
+						:key="item.value"
+						:label="item.label"
+						:value="item.value"
+					>
+					</el-option>
+				</el-select>
+				<el-button
+					size="small"
+					type="primary"
+					@click="onQueryInfo"
+					style="margin-left: 20px"
+					>确定</el-button
+				>
+			</div>
 
 			<div
 				class="device_form"
@@ -78,9 +78,7 @@
 					</el-col>
 				</el-row>
 			</div>
-			<div
-				class="devide_pageNation"
-			>
+			<div class="devide_pageNation">
 				<el-row type="flex" justify="flex-end">
 					<el-col :span="24">
 						<pageNation
@@ -372,7 +370,7 @@ export default {
 			window.onresize = myChart.resize;
 			let options = {
 				title: {
-					text: '版本安装用户',
+					text: '',
 					x: 'left',
 				},
 				tooltip: {
@@ -383,10 +381,12 @@ export default {
 				},
 				xAxis: {
 					type: 'category',
-					data: a,
+                    data: a,
+                    // name:"版本号",
 				},
 				yAxis: {
 					type: 'value',
+					name: '人数',
 				},
 				series: [
 					{
@@ -396,7 +396,7 @@ export default {
 						// data: [120, 132, 101, 134, 90, 230, 210]
 						// // data: [820, 932, 901, 934, 1290, 1330, 1320],
 						data: b,
-						type: 'line',
+						type: 'bar',
 					},
 				],
 			};
@@ -518,8 +518,8 @@ export default {
 
 	.devide_pageNation {
 		width: 100%;
-        margin-top: 20px;
-        text-align: right;
+		margin-top: 20px;
+		text-align: right;
 	}
 }
 

@@ -13,7 +13,7 @@
     .el-menu-item,
     .el-submenu__title {
         color: #BBBBBB;
-        background:#283049;
+        background: #283049;
     }
     .container .main {
         top: 80px;
@@ -32,7 +32,7 @@
         align-items: center;
     }
     .container .main aside .el-menu {
-        background:#283049;
+        background: #283049;
         box-shadow: 3px 0px 7px 0px rgba(0, 0, 0, 0.12);
         width: 250px;
         overflow: auto;
@@ -40,24 +40,25 @@
     .el-submenu .el-menu {
         box-shadow: 3px 0px 7px 0px rgba(0, 0, 0, 0.12);
         background-color: none;
-     
-        background:#283049;
+        background: #283049;
     }
     .el-submenu .el-menu-item {
         background-blend-mode: normal, normal;
         box-shadow: 3px 0px 7px 0px rgba(0, 0, 0, 0.12);
         color: #BBBBBB;
         &:hover {
-            background:#161E36;
-           
+            background: #161E36;
         }
     }
     .el-submenu .el-menu-item.is-active {
         color: #20a0ff;
     }
 }
+
 .myself-container {
     padding-bottom: 30px;
 }
 
-
+.device_form {
+    background: #fff !important;
+}
