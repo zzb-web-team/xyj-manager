@@ -95,10 +95,6 @@
             <el-table-column prop="total_cap" label="总容量" :formatter="formatDevCap" width="150"></el-table-column>
             <el-table-column prop="import_ts" label="创建时间" :sortable="'custom'" :formatter="formatterImport" width="170"></el-table-column>
             <el-table-column prop="activate_ts" label="激活时间" :sortable="'custom'" width="150" :formatter="formatterActive">
-                <template slot-scope="scope">
-                    <span v-if="scope.row.bind_flag!=0">{{scope.row.bind_flag}}</span>
-                    <span v-else>--</span>
-                </template>
             </el-table-column>
             <el-table-column prop="is_activated" label="设备激活状态" :formatter="formatterType" width="120">
                 <template slot-scope="scope">
@@ -760,6 +756,8 @@ export default {
         dev_sn: "",
         cpu_id: "",
         page_no: this.pageActive,
+        order_type: this.order_type,
+        order_item: this.order_item,
         page_size: 10,
         login_token: "",
         is_activated: this.is_activated === "" ? -1 : Number(this.is_activated),
@@ -1118,7 +1116,7 @@ export default {
     },
     formatterActive(row) {
       if (row.activate_ts == 0) {
-        return 0;
+        return "--";
       } else {
         return this.common.getTimes(row.activate_ts * 1000);
       }

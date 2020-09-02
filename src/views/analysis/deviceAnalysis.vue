@@ -108,7 +108,7 @@
 					<div
 						v-if="bin_show"
 						id="myEchart_bin"
-						style="width: 100%; height: 300px; margin-top: 50px"
+						style="width: 100%; height: 400px; margin-top: 50px"
 					></div>
 				</div>
 				<div class="devide_table">
