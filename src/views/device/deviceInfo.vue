@@ -1034,14 +1034,14 @@ export default {
 			}
 		},
 		formatOne(data) {
-			if (data.pri_chan_prv == '') {
+			if (data.pri_chan_prv == '' || data.pri_chan_prv == 0) {
 				return '--';
 			}
 			let nowstr = data.pri_chan_prv + '';
 			return nowstr.split('|')[1];
 		},
 		formatTwo(data) {
-			if (data.scd_chan_prv == '') {
+			if (data.scd_chan_prv == '' || data.scd_chan_prv == 0) {
 				return '--';
 			}
 			let nowstr = data.scd_chan_prv + '';
