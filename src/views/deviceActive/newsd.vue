@@ -71,7 +71,7 @@
           </el-row>
         </div>
       </div>
-      <el-dialog :visible.sync="monitorDetails" class="monitor-details" :close-on-click-modal="false">
+      <el-dialog :visible.sync="monitorDetails" class="monitor-details"  @close='onClose'>
         <div class="monitor-con">
           <div class="monitorDetails-top">
 
@@ -444,6 +444,7 @@ export default {
       // this.queryDevInfo();
     },
     onClose() {
+        this.pagerActive.page=1;
       this.monitorDetails = false;
     },
     onChange(item) {
