@@ -105,11 +105,11 @@
                     <tableBar :tableData="tableData" :clomnSelection="clomnSelection" :operatingStatus="operatingStatus" :rowHeader="rowHeader" :tableOption="tableOption" @handleButton="handleButton" @handleSelectionChange="handleSelectionChange"></tableBar>
                 </el-col>
             </el-row>
-            <el-row type="flex" class="row_active">
+            <!-- <el-row type="flex" class="row_active">
                 <el-col :span="24">
                     <myDatanums :dataNum="dataNum"></myDatanums>
                 </el-col>
-            </el-row>
+            </el-row> -->
 
         </div>
         <div class="devide_pageNation">

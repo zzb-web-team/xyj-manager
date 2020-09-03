@@ -353,6 +353,7 @@
 						<el-table-column
 							prop="bind_user_id"
 							label="绑定用户ID"
+							:formatter="formatBindUserId"
 						></el-table-column>
 						<el-table-column
 							label="操作"
@@ -1046,6 +1047,13 @@ export default {
 			}
 			let nowstr = data.scd_chan_prv + '';
 			return nowstr.split('|')[1];
+		},
+		formatBindUserId(row) {
+			if (row.bind_user_id == 0 || row.bind_user_id == '') {
+				return '--';
+			} else {
+				return row.bind_user_id;
+			}
 		},
 		getInfo() {
 			var data = {

@@ -13,13 +13,14 @@
         <el-col :span="24">
           <el-table :data="tableData" border style="width: 100%">
 
-            <el-table-column prop="packet_name" label="应用包名" width="150">
+            <el-table-column prop="packet_name" label="应用包名" >
             </el-table-column>
-            <el-table-column prop="packet_size" label="文件大小" width="90">
+            <el-table-column prop="packet_size" label="文件大小">
             </el-table-column>
-            <el-table-column prop="packet_md5" label="MD5" width="300">
+            <el-table-column prop="packet_md5" label="MD5">
             </el-table-column>
-            <el-table-column prop="packet_hash" label="hashid" width="400">
+            <el-table-column prop="packet_hash" label="hashid">
+                <template slot-scope="scope">{{scope.row.packet_hash |show_hash}}</template>
             </el-table-column>
             <el-table-column prop="ptfs_file_upload_status" label="是否上传到IPFS节点" width="150px">
               <template slot-scope="scope">
@@ -37,9 +38,9 @@
             </el-table-column>
             <el-table-column prop="packet_version" label="版本号">
             </el-table-column>
-            <el-table-column label="文件描述">
+            <el-table-column label="文件描述" width="250">
               <template slot-scope="scope">
-                <div style="overflow:hidden;text-overflow:ellipsis;white-space: nowrap;width:280px;margin:0 auto;">{{scope.row.packet_description}}</div>
+                <div>{{scope.row.packet_description | show_description}}</div>
               </template>
             </el-table-column>
             <el-table-column prop="time_create" label="上传日期" width="170">
@@ -177,6 +178,15 @@ export default {
       editId: "",
       deleteId: "",
     };
+  },
+  filters:{
+      show_hash(data){
+          if(data==""||data==0){
+              return "--"
+          }else{
+              return data;
+          }
+      }
   },
   mounted: function() {
     this.queryInfo();
