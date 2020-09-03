@@ -659,7 +659,7 @@ export default {
 								tempArr[i].sum_profit / 100
 							).toFixed(2);
 							if (tempArr[i].first_bind_time == 0) {
-								tempArr[i].first_bind_time = 0;
+								tempArr[i].first_bind_time = "--";
 							} else {
 								tempArr[
 									i
@@ -668,7 +668,7 @@ export default {
 								);
 							}
 							if (tempArr[i].first_login_time == 0) {
-								tempArr[i].first_login_time = 0;
+								tempArr[i].first_login_time = "--";
 							} else {
 								tempArr[
 									i

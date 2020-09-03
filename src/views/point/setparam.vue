@@ -56,9 +56,10 @@
 					</template>
 				</el-table-column>
 			</el-table>
-            <p style="color:#d9001b;">
-                *  在线时间（单位：小时），仅支持整数；   奖励：1≦x≦100区间，仅支持整数
-            </p>
+			<p style="color: #d9001b">
+				* 在线时间（单位：小时），仅支持整数；
+				奖励：1≦x≦100区间，仅支持整数
+			</p>
 		</div>
 
 		<el-dialog
@@ -158,8 +159,18 @@ export default {
 						}
 						if (type && type == 1) {
 							this.$message.success('设置成功');
+							this.common.monitoringLogs(
+								'修改',
+								'修改收益参数',
+								1
+							);
 						} else if (type && type == 2) {
 							this.$message.success('删除成功');
+							this.common.monitoringLogs(
+								'删除',
+								'删除收益参数',
+								1
+							);
 						}
 						let tempArr = res.data.reward_list;
 						tempArr.forEach((item, idnex) => {
@@ -176,11 +187,25 @@ export default {
 							// province_list.push(item.reward);
 						});
 					} else {
+						if (type && type == 1) {
+							this.$message.success('设置成功');
+							this.common.monitoringLogs(
+								'修改',
+								'修改收益参数',
+								0
+							);
+						} else if (type && type == 2) {
+							this.$message.success('删除成功');
+							this.common.monitoringLogs(
+								'删除',
+								'删除收益参数',
+								0
+							);
+						}
 						this.$message.error(res.err_msg);
 					}
 				})
-				.catch((error) => {
-				});
+				.catch((error) => {});
 		},
 		noset_earn() {
 			this.dialogFormVisible = false;

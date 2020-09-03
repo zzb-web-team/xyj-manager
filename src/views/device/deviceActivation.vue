@@ -138,23 +138,23 @@
               <el-option v-for="item in dev_types" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
           </el-form-item>
-          <!-- <el-form-item label="ROM：">
+          <el-form-item label="ROM：">
             <el-select v-model="ruleForm2.rom_version" placeholder="请选择" @change="onChange2" style="width:250px;">
               <el-option v-for="item in roms" :key="item.value" :label="item.label" :value="item.value"></el-option>
             </el-select>
-          </el-form-item> -->
+          </el-form-item>
           <el-form-item label="MAC地址:" prop="dev_mac">
             <el-input v-model="ruleForm2.dev_mac" placeholder="请输入MAC地址" style="width:250px;"></el-input>
           </el-form-item>
           <el-form-item label="CPU-ID:" prop="cpu_id">
             <el-input v-model="ruleForm2.cpu_id" placeholder="请输入CPU-ID" style="width:250px;"></el-input>
           </el-form-item>
-          <!-- <el-form-item label="总容量:">
+          <el-form-item label="总容量:" prop="total_capss">
             <div style="display: flex; justify-content: flex-start; align-items: center;">
-              <el-input v-model="ruleForm2.total_capss" placeholder="请输入总容量" style="width:250px;"></el-input>
+              <el-input v-model="ruleForm2.total_capss" placeholder="请输入总容量" style="width:220px;"></el-input>
               <div style="white-space:nowrap;margin-left:10px;">GB</div>
             </div>
-          </el-form-item> -->
+          </el-form-item>
           <el-form-item style="width:100%;display: flex;justify-content:center;">
             <el-button type="primary" @click="importDevice('ruleForm2')">确定</el-button>
             <el-button type="primary" @click.native.prevent="handleSubmit3">取消</el-button>
@@ -323,11 +323,11 @@ export default {
       ],
       dev_types: [
         {
-          value: "1",
+          value: 1,
           label: "RK3328",
         },
         {
-          value: "0",
+          value: 0,
           label: "AMS805",
         },
       ],
@@ -450,8 +450,8 @@ export default {
           // },
           // { validator: nameRule3, trigger: "blur" },
         ],
-        total_cap: [
-          { required: true, message: "请输入名称", trigger: "blur" },
+        total_capss: [
+          { required: true, message: "请输入总容量", trigger: "blur" },
           {
             // min: 3,
             // max: 10,
@@ -961,7 +961,6 @@ export default {
           }
           //通过验证执行
           this.ruleForm2.dev_type = parseInt(this.ruleForm2.dev_type);
-
           this.ruleForm2.total_cap =
             parseInt(this.ruleForm2.total_capss) * 1024 * 1024 * 1024;
           this.ruleForm2.login_token = "";
@@ -980,6 +979,11 @@ export default {
                   message: "设备已存在，请勿重复上传",
                   type: "error",
                 });
+              }else{
+                  this.$message({
+                  message: res.msg,
+                  type: "error",
+                }); 
               }
             })
             .catch(error => {

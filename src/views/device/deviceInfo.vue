@@ -17,7 +17,7 @@
       </el-row>
     </div> -->
 		<div class="device_form">
-			<el-form ref="form" :model="form" style="margin-top:20px;">
+			<el-form ref="form" :model="form" style="margin-top: 20px">
 				<el-row type="flex">
 					<el-col :span="4">
 						<el-input
@@ -227,10 +227,7 @@
 						></el-date-picker>
 					</el-form-item>
 					<el-form-item>
-						<el-button
-							type="primary"
-							size="small"
-							@click="search"
+						<el-button type="primary" size="small" @click="search"
 							>确定</el-button
 						>
 					</el-form-item>
@@ -370,9 +367,9 @@
 									"
 								>
 									<el-button
-										v-if="
-											scope.row.online_state == 1 ||
-											scope.row.online_state == 101
+										:disabled="
+											scope.row.online_state != 1 &&
+											scope.row.online_state != 101
 										"
 										@click="shut(scope.row)"
 										type="text"
@@ -380,9 +377,9 @@
 										>关机</el-button
 									>
 									<el-button
-										v-if="
-											scope.row.online_state == 1 ||
-											scope.row.online_state == 101
+										:disabled="
+											scope.row.online_state != 1 &&
+											scope.row.online_state != 101
 										"
 										type="text"
 										@click="restart(scope.row)"
@@ -1145,22 +1142,19 @@ export default {
 		},
 		toexportExcel() {
 			var data = {
-				dev_ip: '',
-				dev_mac: '',
-				dev_name: '',
-				dev_sn: '',
+				pri_chan_prv: this.pri_chan_prv,
+				scd_chan_prv: this.scd_chan_prv,
+				op_sys: this.op_sys,
+				hd_type: '',
+				eqp_brd: this.eqp_brd,
+				eqp_type: this.eqp_type,
 				ipfs_id: '',
 				bind_user_id: 0,
+				order_type: this.order_type,
 				page_no: this.pageActive,
 				page_size: 10,
-				dev_type:
-					this.dev_type === '-1'
-						? -1
-						: this.dev_type === 'RK3328'
-						? 1
-						: 2,
-				online_state:
-					this.online_state === '-1' ? -1 : Number(this.online_state),
+				dev_type: this.dev_type,
+				online_state: parseInt(this.online_state),
 				rom_version: this.rom_version === '' ? '' : this.rom_version,
 				bind_flag:
 					this.bind_flag === '-1' ? -1 : Number(this.bind_flag),
@@ -1178,18 +1172,39 @@ export default {
 						? -1
 						: new Date(this.bind_end_ts).getTime() / 1000,
 			};
-			if (this.judgeString(this.searchText)) {
-				var param = Object.assign(
-					this.judgeString(this.searchText),
-					data
-				);
+			let SME = /^SME[0-9a-zA-Z]{1}[0-9]{4}[0-9a-zA-Z]{7}$/;
+			// let cpuid = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{9}$/;
+			let macaddress = /^([0-9a-f]{2}:){5}[0-9a-f]{2}$/;
+			let devip = /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/;
+			if (this.searchText != '') {
+				if (SME.test(this.searchText) == true) {
+					data.dev_sn = this.searchText;
+					data.dev_name = '';
+					data.dev_ip = '';
+					data.dev_mac = '';
+				} else if (macaddress.test(this.searchText) == true) {
+					data.dev_sn = '';
+					data.dev_name = '';
+					data.dev_ip = '';
+					data.dev_mac = this.searchText;
+				} else if (devip.test(this.searchText) == true) {
+					data.dev_sn = '';
+					data.dev_name = '';
+					data.dev_ip = this.searchText;
+					data.dev_mac = '';
+				} else {
+					data.dev_sn = '';
+					data.dev_name = this.searchText;
+					data.dev_ip = '';
+					data.dev_mac = '';
+				}
 			} else {
-				this.$message.error(
-					'请输入正确的设备SN、设备名称、MAC地址、设备IP、节点ID'
-				);
-				return;
+				data.dev_sn = '';
+				data.dev_name = '';
+				data.dev_ip = '';
+				data.dev_mac = '';
 			}
-			devicelist(param)
+			devicelist(data)
 				.then((res) => {
 					if (res.status === 0) {
 						//this.tableData2 = res.data.dev_list;
@@ -1374,10 +1389,26 @@ export default {
 						});
 						this.getInfo();
 					} else {
-						this.$message({
-							message: `${res.err_msg}`,
-							type: 'error',
-						});
+						if (res.err_msg.indexOf('不在线，无法操作') != -1) {
+							let err_message = res.err_msg.replace(
+								/不在线，无法操作;/gi,
+								`,\n`
+							);
+							this.$alert(
+								err_message + '<p>不在线，无法操作</p>',
+								'警告',
+								{
+									dangerouslyUseHTMLString: true,
+									confirmButtonText: '确定',
+									callback: (action) => {},
+								}
+							);
+						} else {
+							this.$message({
+								message: `${err_message}`,
+								type: 'error',
+							});
+						}
 					}
 				})
 				.catch((error) => {

@@ -240,14 +240,22 @@ export default {
 			valuestate: '-1',
 			snNum: '',
 			optionstate: [
-				{
-					value: 1,
+				// {
+				// 	value: 1,
+				// 	label: '在线',
+				// },
+				// {
+				// 	value: 0,
+				// 	label: '离线',
+                // },
+                {
+					value: 0,
 					label: '在线',
 				},
-				{
-					value: 0,
-					label: '离线',
-				},
+				// {
+				// 	value: 1,
+				// 	label: '离线',
+				// },
 				{
 					value: 1000,
 					label: '重启中',
