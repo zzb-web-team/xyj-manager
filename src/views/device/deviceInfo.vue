@@ -19,7 +19,7 @@
 		<div class="device_form">
 			<el-form ref="form" :model="form" style="margin-top: 20px">
 				<el-row type="flex">
-					<el-col :span="4">
+                        <el-form-item>
 						<el-input
 							size="small"
 							placeholder="设备SN、名称、IP、MAC地址或节点ID"
@@ -32,7 +32,7 @@
 								@click="onSubmitKey"
 							></i>
 						</el-input>
-					</el-col>
+                        </el-form-item>
 					<el-col :span="20">
 						<el-row type="flex">
 							<el-form-item
