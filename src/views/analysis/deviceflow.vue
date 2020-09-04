@@ -1285,14 +1285,16 @@ export default {
 	margin: 25px 0 !important;
 	background-color: #ffffff;
 	.title_overview {
-		background-color: #f2f2f2;
+        // background-color: #f2f2f2;
+        border: 2px solid #f2f2f2;
 		border-radius: 5px;
 		height: 140px;
 		text-align: center;
 		margin-right: 25px;
 		.title_overview_top {
-			text-align: right;
-			margin-top: 10px;
+			text-align: center;
+            margin-top: 10px;
+            font-size: 12px;
 		}
 		.title_overview_center {
 			font-size: 20px;

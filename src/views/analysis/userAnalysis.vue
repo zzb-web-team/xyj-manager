@@ -1,6 +1,6 @@
 <template>
 	<section class="myself-container">
-		<div class="user-title user-title-active">
+		<div class="user_title">
 			<el-row
 				style="
 					margin-top: 20px;
@@ -462,6 +462,24 @@ export default {
 	.user-item {
 		margin: 25px;
 		margin-left: 0;
+	}
+}
+.user_title {
+	.user-item {
+		border: 2px solid #ebeef5;
+		box-sizing: border-box;
+		height: 120px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+        padding-top: 40px;
+        margin-right: 25px;
+		.item-count {
+			font-size: 20px;
+		}
+		.item-text {
+			font-size: 16px;
+		}
 	}
 }
 </style>

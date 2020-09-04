@@ -1,26 +1,26 @@
 <template>
   <section class="myself-container deviceAvtive">
-    <div class="user-title">
+    <div class="user_title">
       <el-row>
-        <el-col :span="5">
+        <el-col :span="4">
           <div class="user-item">
             <div class="item-count">{{total_dev_cnt}}</div>
             <div class="item-text">总设备</div>
           </div>
         </el-col>
-        <el-col :span="5" style="margin-left:30px;">
+        <el-col :span="4" style="margin-left:30px;">
           <div class="user-item">
             <div class="item-count">{{activated_dev_cnt}}</div>
             <div class="item-text">已激活设备</div>
           </div>
         </el-col>
-        <el-col :span="5" style="margin-left:30px;">
+        <el-col :span="4" style="margin-left:30px;">
           <div class="user-item">
             <div class="item-count">{{today_import_dev_cnt}}</div>
             <div class="item-text">今日新建</div>
           </div>
         </el-col>
-        <el-col :span="5" style="margin-left:30px;">
+        <el-col :span="4" style="margin-left:30px;">
           <div class="user-item">
             <div class="item-count">{{today_activated_dev_cnt}}</div>
             <div class="item-text">今日激活</div>
@@ -1454,6 +1454,23 @@ export default {
 .deviceAvtive {
   .el-button {
     padding: 8px 8px !important;
+  }
+  .user_title{
+      .user-item{
+          border:2px solid #ebeef5;
+          box-sizing: border-box;
+          height: 120px;
+          display: flex;
+          flex-direction:column;
+          align-items: center;
+          padding-top: 40px;
+          .item-count{
+              font-size: 20px;
+          }
+          .item-text{
+              font-size: 16px;
+          }
+      }
   }
 }
 </style>

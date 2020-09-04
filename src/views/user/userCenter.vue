@@ -1,14 +1,14 @@
 <template>
 	<section class="myself-container">
-		<div class="user-title">
+		<div class="user_title">
 			<el-row>
-				<el-col :span="5">
+				<el-col :span="4">
 					<div class="user-item">
 						<div class="item-count">{{ user_form.total_num }}</div>
 						<div class="item-text">注册用户</div>
 					</div>
 				</el-col>
-				<el-col :span="5" style="margin-left: 30px">
+				<el-col :span="4" style="margin-left: 30px">
 					<div class="user-item">
 						<div class="item-count">{{ user_form.normal_num }}</div>
 						<div class="item-text">绑定用户</div>
@@ -847,24 +847,23 @@ export default {
 </script>
 
 <style lang="less">
-.user-title {
-	margin-top: 30px;
-
-	.user-item {
-		background: #f2f2f2;
-		padding: 25px;
-		border-radius: 5px;
-		display: flex;
-		justify-content: center;
-		flex-direction: column;
-
-		.item-count,
-		.item-text {
-			display: flex;
-			justify-content: center;
-		}
-	}
-}
+ .user_title{
+      .user-item{
+          border:2px solid #ebeef5;
+          box-sizing: border-box;
+          height: 120px;
+          display: flex;
+          flex-direction:column;
+          align-items: center;
+          padding-top: 40px;
+          .item-count{
+              font-size: 20px;
+          }
+          .item-text{
+              font-size: 16px;
+          }
+      }
+  }
 
 .myself-container {
 	.el-table th > .cell {
