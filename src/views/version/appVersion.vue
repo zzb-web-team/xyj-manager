@@ -894,10 +894,10 @@ export default {
 </script>
 
 <style lang="less">
-.release_version .el-table_1_column_1,
-.release_version .el-table_2_column_4 {
-	background: #fff !important;
-}
+// .release_version .el-table_1_column_1,
+// .release_version .el-table_2_column_4 {
+// 	background: #fff !important;
+// }
 .version_active_new .dialog_active2 {
 	.el-dialog__body {
 		height: 550px;

@@ -105,10 +105,10 @@ export default {
                         } else {
                             let userInfo = data.msg
                             this.$store.commit('setUserInfo', userInfo) //sessionStorage.setItem('user', JSON.stringify(msg));
-                            // this.$router.push({
-                            //     path: '/userinformation'
-                            // });
-                            window.location.href = "./"
+                            this.$router.push({
+                                path: '/userCenter'
+                            });
+                            // window.location.href = "./"
                             this.set('userInfo', JSON.stringify(msg), 1000)
 
                         }
