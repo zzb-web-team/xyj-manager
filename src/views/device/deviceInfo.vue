@@ -807,10 +807,10 @@ export default {
 					this.closeRestore(2, this.snId);
 				})
 				.catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消',
-					});
+					// this.$message({
+					// 	type: 'info',
+					// 	message: '已取消',
+					// });
 				});
 		},
 		//批量关机
@@ -832,10 +832,10 @@ export default {
 					this.closeRestore(1, this.snId);
 				})
 				.catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消',
-					});
+					// this.$message({
+					// 	type: 'info',
+					// 	message: '已取消',
+					// });
 				});
 		},
 		//排序w
@@ -1479,10 +1479,10 @@ export default {
 					this.closeRestore(2, this.snId);
 				})
 				.catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消关机',
-					});
+					// this.$message({
+					// 	type: 'info',
+					// 	message: '已取消关机',
+					// });
 				});
 		},
 		restart(rows) {
@@ -1498,10 +1498,10 @@ export default {
 					this.closeRestore(1, this.snId);
 				})
 				.catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消重启',
-					});
+					// this.$message({
+					// 	type: 'info',
+					// 	message: '已取消重启',
+					// });
 				});
 		},
 		search() {
