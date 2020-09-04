@@ -263,6 +263,8 @@
 						width="100%"
 						@sort-change="changeTableSort"
 						@selection-change="handleSelectionChange"
+						:cell-style="rowClass"
+						:header-cell-style="headClass"
 					>
 						<el-table-column type="selection" width="55">
 						</el-table-column>
@@ -1530,6 +1532,14 @@ export default {
 			} else {
 				return false;
 			}
+		},
+		// 表头样式设置
+		headClass() {
+			return 'text-align: center;background:#F3F6FB;height:58px;';
+		},
+		// 表格样式设置
+		rowClass() {
+			return 'text-align: center;';
 		},
 	},
 	components: {

@@ -78,6 +78,8 @@
 						style="width: 100%; margin-bottom: 20px"
 						border
 						row-key="id"
+						:cell-style="rowClass"
+						:header-cell-style="headClass"
 					>
 						<el-table-column
 							prop="version_name"
@@ -815,10 +817,8 @@ export default {
 			param.rom_version = this.md5Version;
 			param.md5 = this.arrMd5;
 			uploadmd5(param)
-				.then((res) => {
-				})
-				.error((error) => {
-				});
+				.then((res) => {})
+				.error((error) => {});
 		},
 		beforeUpload(file) {
 			this.fileList = [file];
@@ -1471,6 +1471,14 @@ export default {
 				}
 			}
 			sliceandpost();
+		},
+		// 表头样式设置
+		headClass() {
+			return 'text-align: center;background:#F3F6FB;height:58px;';
+		},
+		// 表格样式设置
+		rowClass() {
+			return 'text-align: center;';
 		},
 	},
 

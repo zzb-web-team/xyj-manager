@@ -444,7 +444,7 @@ export default {
 		},
 		// 表头样式设置
 		headClass() {
-			return 'text-align: center;background:#F3F6FB;';
+			return 'text-align: center;background:#F3F6FB;height:58px;';
 		},
 		// 表格样式设置
 		rowClass() {

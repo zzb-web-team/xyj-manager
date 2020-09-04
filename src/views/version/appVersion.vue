@@ -358,11 +358,6 @@ export default {
 			],
 			rowHeader1: [
 				{
-					prop: 'id',
-					label: 'ID',
-					width: '100px',
-				},
-				{
 					prop: 'time_create',
 					label: '发布日期',
 				},

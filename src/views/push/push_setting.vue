@@ -463,6 +463,9 @@ export default {
 </script>
 
 <style lang="less">
+.el-tabs--border-card{
+    box-shadow: none;
+}
 .myself-container {
   &.pushing {
     .push-active {
@@ -533,6 +536,7 @@ export default {
   .crop-demo {
     display: flex;
     align-items: flex-end;
+    margin-bottom: 20px;
   }
 
   .crop-demo-btn {

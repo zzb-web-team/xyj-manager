@@ -7,7 +7,7 @@
 				<div class="seach">
 					<div class="seach_top">
 						<el-input
-                        size="small"
+							size="small"
 							placeholder="设备SN，节点ID"
 							v-model="input"
 							@keyup.enter.native="seachuser()"
@@ -19,9 +19,9 @@
 								@click="seachuser()"
 							></i>
 						</el-input>
-						<span style="margin-left:10px;">异常类型：</span>
+						<span style="margin-left: 10px">异常类型：</span>
 						<el-select
-                        size="small"
+							size="small"
 							v-model="value"
 							placeholder="请选择"
 							@change="seachuser"
@@ -34,10 +34,10 @@
 								:value="item.value"
 							></el-option>
 						</el-select>
-						<span style="margin-left:10px;">选择日期：</span>
+						<span style="margin-left: 10px">选择日期：</span>
 
 						<el-date-picker
-                        size="small"
+							size="small"
 							@change="queryHardware()"
 							v-model="value1"
 							type="datetimerange"
@@ -47,14 +47,20 @@
 							end-placeholder="结束日期"
 							align="right"
 						></el-date-picker>
-                        <el-button
+						<el-button
 							size="small"
 							type="primary"
 							@click="seachuser()"
 							style="margin-left: 10px"
 							>确定</el-button
 						>
-						<el-button type="primary" @click="reset()"  size="small" style="margin-left:10px;">重置</el-button>
+						<el-button
+							type="primary"
+							@click="reset()"
+							size="small"
+							style="margin-left: 10px"
+							>重置</el-button
+						>
 					</div>
 				</div>
 
@@ -68,7 +74,12 @@
 							>导出</el-button
 						>
 					</div>
-					<el-table :data="tableData" border :cell-style="rowClass">
+					<el-table
+						:data="tableData"
+						border
+						:cell-style="rowClass"
+						:header-cell-style="headClass"
+					>
 						<el-table-column
 							prop="now_date"
 							label="日期"
@@ -177,7 +188,7 @@
 				<div class="seach">
 					<div class="seach_top">
 						<el-input
-                        size="small"
+							size="small"
 							placeholder="设备SN"
 							v-model="inputsn"
 							@keyup.enter.native="seachuser1()"
@@ -189,9 +200,9 @@
 								@click="seachuser1()"
 							></i>
 						</el-input>
-						<span style="margin-left:10px;">异常类型：</span>
+						<span style="margin-left: 10px">异常类型：</span>
 						<el-select
-                        size="small"
+							size="small"
 							v-model="valuess"
 							placeholder="请选择"
 							@change="seachProcess"
@@ -204,10 +215,10 @@
 								:value="item.value"
 							></el-option>
 						</el-select>
-						<span style="margin-left:10px;">选择日期：</span>
+						<span style="margin-left: 10px">选择日期：</span>
 
 						<el-date-picker
-                        size="small"
+							size="small"
 							@change="queryProcess()"
 							v-model="value1"
 							type="datetimerange"
@@ -217,16 +228,21 @@
 							end-placeholder="结束日期"
 							align="right"
 						></el-date-picker>
-                         <el-button
+						<el-button
 							size="small"
 							type="primary"
 							@click="seachuser1()"
 							style="margin-left: 10px"
 							>确定</el-button
 						>
-						<el-button type="primary" @click="reset1()"  size="small" style="margin-left:10px;">重置</el-button>
-						<div class="seach_bottom_btn">
-						</div>
+						<el-button
+							type="primary"
+							@click="reset1()"
+							size="small"
+							style="margin-left: 10px"
+							>重置</el-button
+						>
+						<div class="seach_bottom_btn"></div>
 					</div>
 				</div>
 
@@ -244,6 +260,7 @@
 						:data="tableDataProcess"
 						border
 						:cell-style="rowClass"
+						:header-cell-style="headClass"
 						@sort-change="tableSortChange"
 					>
 						<el-table-column
@@ -760,7 +777,7 @@ export default {
 		},
 		// 表头样式设置
 		headClass() {
-			return 'text-align: center;background:#eef1f6;';
+			return 'text-align: center;background:#F3F6FB;height:58px;';
 		},
 		// 表格样式设置
 		rowClass() {

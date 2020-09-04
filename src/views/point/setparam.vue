@@ -18,6 +18,8 @@
 				border
 				width="100%"
 				style="margin-top: 20px"
+				:cell-style="rowClass"
+				:header-cell-style="headClass"
 			>
 				<!-- <el-table-column prop="date_value" label="在线时间（h）">
 					<template slot-scope="scope">
@@ -281,6 +283,14 @@ export default {
 				reward: 0,
 			};
 			this.tableData.push(obj);
+		},
+		// 表头样式设置
+		headClass() {
+			return 'text-align: center;background:#F3F6FB;height:58px;';
+		},
+		// 表格样式设置
+		rowClass() {
+			return 'text-align: center;';
 		},
 	},
 	components: {

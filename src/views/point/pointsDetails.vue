@@ -67,7 +67,10 @@
 										@click="search"
 										>确定</el-button
 									>
-									<el-button type="primary" @click="onReset" 	size="small"
+									<el-button
+										type="primary"
+										@click="onReset"
+										size="small"
 										>重置</el-button
 									>
 								</el-form-item>
@@ -98,6 +101,8 @@
 								border
 								style="width: 100%"
 								@sort-change="tableSortChange"
+								:cell-style="rowClass"
+								:header-cell-style="headClass"
 							>
 								<el-table-column type="index" label="序号">
 								</el-table-column>
@@ -240,6 +245,8 @@
 								border
 								style="width: 100%"
 								@sort-change="tableSortChange"
+								:cell-style="rowClass"
+								:header-cell-style="headClass"
 							>
 								<el-table-column type="index" label="序号">
 								</el-table-column>
@@ -659,22 +666,28 @@ export default {
 			// const reg1 = /^\d{8}$/;
 			const reg1 = /^(\d{7}|\d{8})$/;
 			const reg2 = /^[\u4E00-\u9FA5A-Za-z0-9-_./\/]{4,20}$/;
-            const reg7 = /^\d+$/;
+			const reg7 = /^\d+$/;
 			if (reg1.test(str)) {
 				return {
 					user_id: Number(str),
 				};
-            } 
-            else if (reg2.test(str)) {
+			} else if (reg2.test(str)) {
 				return {
 					nick_name: str,
 				};
 			} else if (str === '') {
 				return {};
-            }
-             else {
+			} else {
 				return false;
 			}
+		},
+		// 表头样式设置
+		headClass() {
+			return 'text-align: center;background:#F3F6FB;height:58px;';
+		},
+		// 表格样式设置
+		rowClass() {
+			return 'text-align: center;';
 		},
 	},
 	components: {

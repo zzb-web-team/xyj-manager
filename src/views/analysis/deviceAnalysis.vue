@@ -7,7 +7,6 @@
 				style="
 					display: flex;
 					justify-content: flex-start;
-					margin-top: 50px;
 				"
 			>
 				<el-radio-button label="在线时长"></el-radio-button>

@@ -2,8 +2,8 @@
 <section class="myself-container myself-container-add">
     
 
-    <div class="devide_table">
-        <el-row type="flex" class="row_active">
+    <div class="devide_table" >
+        <el-row type="flex" style="margin-bottom:25px;">
             <el-col :span="2">
                 <el-button type="primary" @click="dialogFormVisible">新增应用</el-button>
             </el-col>

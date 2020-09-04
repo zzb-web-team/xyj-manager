@@ -735,14 +735,14 @@ export default {
           });
         });
     },
-    // 表头样式设置
-    headClass() {
-      return "text-align: center;background:#eef1f6;";
-    },
-    // 表格样式设置
-    rowClass() {
-      return "text-align: center;";
-    },
+   // 表头样式设置
+		headClass() {
+			return 'text-align: center;background:#F3F6FB;height:58px;';
+		},
+		// 表格样式设置
+		rowClass() {
+			return 'text-align: center;';
+		},
     //筛选按钮
     option_display() {
       this.optiondisplay = !this.optiondisplay;
@@ -781,8 +781,7 @@ export default {
     width: 100%;
     height: auto;
     overflow: hidden;
-    // background: #f0f5f5;
-    // padding: 15px 30px;
+   margin-bottom: 25px;
     box-sizing: border-box;
     margin-top: 0 !important;
     box-shadow:0 0 0 0 !important;
@@ -801,9 +800,7 @@ export default {
         .el-form-item__label {
           white-space: nowrap;
         }
-
         justify-content: flex-start;
-
         .el-form-item {
           margin-left: 30px;
         }

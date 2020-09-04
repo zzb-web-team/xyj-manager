@@ -86,7 +86,8 @@
       </el-row>
       <el-row type="flex" class="row_active">
         <el-col :span="24">
-          <el-table :data="tableData" border style="width: 100%" @sort-change="changeTableSort">
+          <el-table :data="tableData" border style="width: 100%" :cell-style="rowClass"
+			:header-cell-style="headClass" @sort-change="changeTableSort">
             <el-table-column fixed prop="dev_sn" label="设备SN" width="300"></el-table-column>
             <el-table-column prop="dev_type" :formatter="formatDevType" label="设备类型" width="120"></el-table-column>
             <el-table-column prop="rom_version" label="ROM"></el-table-column>
@@ -1277,6 +1278,14 @@ export default {
         return false;
       }
     },
+    // 表头样式设置
+		headClass() {
+			return 'text-align: center;background:#F3F6FB;height:58px;';
+		},
+		// 表格样式设置
+		rowClass() {
+			return 'text-align: center;';
+		},
   },
   components: {
     pageNation: pageNation,

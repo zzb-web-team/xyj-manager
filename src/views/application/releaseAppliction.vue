@@ -125,7 +125,7 @@
             <el-row type="flex" class="row_active">
                 <el-col :span="24">
                     <template>
-                        <el-table :data="tableDataActive" border style="width: 100%">
+                        <el-table :data="tableDataActive"  border style="width: 100%">
                             <el-table-column prop="app_name" label="应用名称">
                             </el-table-column>
                             <el-table-column prop="app_version" label="应用版本">
@@ -644,6 +644,14 @@ export default {
           });
         });
     },
+    // 表头样式设置
+		headClass() {
+			return 'text-align: center;background:#F3F6FB;height:58px;';
+		},
+		// 表格样式设置
+		rowClass() {
+			return 'text-align: center;';
+		},
   },
 
   components: {

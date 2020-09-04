@@ -247,8 +247,8 @@ export default {
 				// {
 				// 	value: 0,
 				// 	label: '离线',
-                // },
-                {
+				// },
+				{
 					value: 0,
 					label: '在线',
 				},
@@ -586,7 +586,7 @@ export default {
 		},
 		// 表头样式设置
 		headClass() {
-			return 'text-align: center;background:#eef1f6;';
+			return 'text-align: center;background:#F3F6FB;height:58px;';
 		},
 		// 表格样式设置
 		rowClass() {

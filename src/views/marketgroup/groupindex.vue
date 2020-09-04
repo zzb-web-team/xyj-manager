@@ -1,7 +1,7 @@
 <template>
   <section class="myself-container">
     <div class="devide_table">
-      <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-start;">
+      <el-row type="flex" class="row_active" style="display: flex;justify-content: flex-start;margin-bottom:25px;">
         <el-col style="display: flex;justify-content: flex-start;">
           <el-button type="primary" @click="addmarket">新增应用分组</el-button>
         </el-col>

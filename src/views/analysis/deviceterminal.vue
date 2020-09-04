@@ -1,6 +1,6 @@
 <template>
   <section class="myself-container">
-    <div class="user-title" style="margin-bottom:20px;">
+    <div style="margin-bottom:20px;">
       <el-radio-group v-model="radio1" @change="onchangeTab" style="display: flex;justify-content: flex-start;margin-bottom:20px;">
         <el-radio-button label="设备类型"></el-radio-button>
         <el-radio-button label="设备ROM"></el-radio-button>
