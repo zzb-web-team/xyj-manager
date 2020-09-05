@@ -16,44 +16,76 @@
 
 		<el-row type="flex" justify="space-between">
 			<el-col :span="11">
-                <div style="margin-bottom:20px;">当前发布版本(全网)</div>
-				<tableBarActive2
-					id="rebateSetTable"
-					ref="table"
-					tooltip-effect="dark"
-					:tableData="tableData3"
-					:clomnSelection="clomnSelection"
-					:rowHeader="rowHeader3"
-					:tableOption="tableOption"
-					@handleButton="handleButton"
-					:operatingStatus="operatingStatus1"
-					@toOperating="toOperating"
-					@handleSelectionChange="handleSelectionChange"
-					@selectCheckBox="selectCheckBox"
-					@selectAll="selectAll"
-				></tableBarActive2>
+				<el-table
+					:data="tableData3"
+					class="release_version"
+					border
+					:cell-style="rowClass"
+					:header-cell-style="headClass"
+				>
+					<el-table-column label="当前发布版本（全网）">
+						<el-table-column
+							prop="rom_version"
+							label="版本号"
+							width="250"
+						></el-table-column>
+						<el-table-column
+							prop="description"
+							label="版本描述"
+						></el-table-column>
+						<el-table-column label="操作" width="120">
+							<template slot-scope="scope">
+								<el-button
+									@click="
+										handleButton(scope.$index, scope.row)
+									"
+									type="text"
+									size="small"
+								>
+									撤回
+								</el-button>
+							</template></el-table-column
+						>
+					</el-table-column>
+				</el-table>
 			</el-col>
 			<el-col :span="11">
-                <div style="margin-bottom:20px;">当前发布版本(灰度)</div>
-				<tableBarActive2
-					id="rebateSetTable1"
-					ref="table1"
-					tooltip-effect="dark"
-					:tableData="tableData2"
-					:clomnSelection="clomnSelection"
-					:rowHeader="rowHeader2"
-					:tableOption="tableOption1"
-					@handleButton="handleButton1"
-					:operatingStatus="operatingStatus1"
-					@toOperating="toOperating"
-					@handleSelectionChange="handleSelectionChange"
-					@selectCheckBox="selectCheckBox"
-					@selectAll="selectAll"
-				></tableBarActive2>
+				<el-table
+					:data="tableData2"
+					class="release_version"
+					border
+					:cell-style="rowClass"
+					:header-cell-style="headClass"
+				>
+					<el-table-column label="当前发布版本（灰度）">
+						<el-table-column
+							prop="rom_version"
+							label="版本号"
+							width="250"
+						></el-table-column>
+						<el-table-column
+							prop="description"
+							label="版本描述"
+						></el-table-column>
+						<el-table-column label="操作" width="120">
+							<template slot-scope="scope">
+								<el-button
+									@click="
+										handleButton1(scope.$index, scope.row)
+									"
+									type="text"
+									size="small"
+								>
+									撤回
+								</el-button>
+							</template></el-table-column
+						>
+					</el-table-column>
+				</el-table>
 			</el-col>
 		</el-row>
 
-		<div style="display: flex; justify-content: end">
+		<div style="display: flex; justify-content: end;margin-bottom:20px;">
 			<el-button
 				type="primary"
 				style="margin: 15px 0px 0px 0px"
@@ -63,7 +95,6 @@
 		</div>
 
 		<div class="devide_table">
-			<div class="item_title">历史发布</div>
 			<el-row type="flex" class="row_active">
 				<el-col :span="24">
 					<tableBarActive2pub
@@ -95,7 +126,7 @@
 						:pager="pager"
 						@handleSizeChange="handleSizeChange"
 						@handleCurrentChange="handleCurrentChange"
-                        style="margin: 10px 0;"
+						style="margin: 10px 0"
 					></pageNation>
 				</el-col>
 			</el-row>
@@ -1110,6 +1141,9 @@ export default {
 			this.showState = !this.showState;
 		},
 		handleButton(val, rows) {
+
+             console.log(val,rows);
+            return false;
 			this.newsRom = rows.rom_version;
 
 			this.backPushkey = rows.push_key;
@@ -1187,6 +1221,7 @@ export default {
 		//灰度撤回
 
 		handleButton1(val, rows) {
+           
 			this.newsRom = rows.rom_version;
 			this.backPushkey = rows.push_key;
 			this.userType = '指定设备';
@@ -1475,16 +1510,5 @@ export default {
 	max-height: 500px;
 	text-align: center;
 	overflow: auto;
-}
-#title_btn {
-	.devide_table {
-		.item_title {
-			margin-bottom: 20px;
-			margin-top: 20px;
-		}
-		.first_item_title {
-			margin-top: 0;
-		}
-	}
 }
 </style>
