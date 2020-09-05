@@ -85,7 +85,7 @@
 			</el-col>
 		</el-row>
 
-		<div style="display: flex; justify-content: end;margin-bottom:20px;">
+		<div style="display: flex; justify-content: end; margin-bottom: 20px">
 			<el-button
 				type="primary"
 				style="margin: 15px 0px 0px 0px"
@@ -136,9 +136,18 @@
 			:visible.sync="dialogVisible"
 			width="40%"
 			:before-close="handleClose"
+            @close="close_creat_release"
 		>
 			<el-form ref="form" :model="form" label-width="80px">
-				<el-form-item label="发布类型">
+				<el-form-item
+					label="发布类型"
+					prop="type"
+					:rules="{
+						required: true,
+						message: '发布类型不能为空',
+						trigger: 'change',
+					}"
+				>
 					<el-select
 						v-model="form.type"
 						placeholder="请选择发布类型"
@@ -160,7 +169,15 @@
                     <el-option label="AMS805" value="1"></el-option>
                 </el-select>
             </el-form-item> -->
-				<el-form-item label="发布版本">
+				<el-form-item
+					label="发布版本"
+					prop="versions"
+					:rules="{
+						required: true,
+						message: '发布版本不能为空',
+						trigger: 'change',
+					}"
+				>
 					<el-select
 						v-model="form.versions"
 						placeholder="请选择发布版本"
@@ -175,7 +192,15 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="发布渠道">
+				<el-form-item
+					label="发布渠道"
+					prop="modelType"
+					:rules="{
+						required: true,
+						message: '发布渠道不能为空',
+						trigger: 'change',
+					}"
+				>
 					<el-radio-group
 						v-model="form.modelType"
 						@change="changeAssign"
@@ -184,7 +209,15 @@
 						<el-radio label="PTFS" border></el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item label="发布描述">
+				<el-form-item
+					label="发布描述"
+					prop="desc"
+					:rules="{
+						required: true,
+						message: '发布描述不能为空',
+						trigger: 'blur',
+					}"
+				>
 					<el-input
 						type="textarea"
 						v-model="form.desc"
@@ -192,7 +225,15 @@
 						show-word-limit
 					></el-input>
 				</el-form-item>
-				<el-form-item label="发布设备">
+				<el-form-item
+					label="发布设备"
+					prop="user"
+					:rules="{
+						required: true,
+						message: '发布设备不能为空',
+						trigger: 'change',
+					}"
+				>
 					<el-radio-group v-model="form.user" @change="changeAssign">
 						<el-radio
 							label="全网用户"
@@ -206,7 +247,7 @@
 						></el-radio>
 					</el-radio-group>
 				</el-form-item>
-				<el-form-item label="      " v-if="allType">
+				<el-form-item label="设备" v-show="allType">
 					<el-radio-group v-model="form.assign">
 						<el-radio label="指定账号"></el-radio>
 						<!-- <el-button type="text" @click="onclickimport">批量导入</el-button> -->
@@ -235,10 +276,10 @@
 					</el-col>
 				</el-form-item>
 				<div style="text-align: center">
-					<el-button type="primary" @click="onSubmitApp"
+					<el-button type="primary" @click="onSubmitApp('form')"
 						>立即创建</el-button
 					>
-					<el-button @click="dialogVisible = false">取消</el-button>
+					<el-button @click="resetForm('form')">取消</el-button>
 				</div>
 			</el-form>
 		</el-dialog>
@@ -869,119 +910,110 @@ export default {
 			if (this.errorcount == 0) {
 				this.noClick = false;
 			}
-		},
+        },
+        //关闭新建发布弹窗
+        close_creat_release(){
+            this.resetForm('form');
+        },
+        //取消发布app
+        resetForm(formName){
+            this.$refs[formName].resetFields();
+            this.dialogVisible=false;
+        },
 		//发布APP
-		onSubmitApp() {
-			let timetype = 1;
-			let timeNums = 0;
-			let user_list = [];
-			if (this.form.time == '立即发布') {
-				timetype = 1;
-				timeNums = 0;
-			} else {
-				timetype = 0;
-				timeNums = parseInt(this.form.date / 1000);
-				if (timeNums <= Date.parse(new Date()) / 1000) {
-					this.$message({
-						message: '指定时间不能小于当前时间',
-						type: 'error',
-					});
-					return false;
-				}
-			}
-			if (this.form.type == '正式发布') {
-				user_list = [];
-			} else {
-				user_list = this.form.version.split(',');
-			}
-			if (this.form.type == '') {
-				this.$message({
-					message: '请选择发布类型',
-					type: 'error',
-				});
-				return false;
-			}
-			// if (this.form.tab == "") {
-			//     this.$message({
-			//         message: "请选择设备类型",
-			//         type: "error"
-			//     });
-			//     return false;
-			// }
-			if (this.form.versions == '') {
-				this.$message({
-					message: '请选择发布版本',
-					type: 'error',
-				});
-				return false;
-			}
-			if (this.form.desc == '') {
-				this.$message({
-					message: '发布描述不可为空',
-					type: 'error',
-				});
-				return false;
-			}
-			if (this.form.user == '指定设备') {
-				if (this.form.version == '') {
-					this.$message({
-						message: '请输入指定账号',
-						type: 'error',
-					});
-					return false;
-				}
-			}
-			if (user_list.length > 0) {
-				for (var i = 0; i < user_list.length; i++) {
-					let nowstr = '';
-					if (user_list[i].substring(3, 5) == 'X') {
-						nowstr = 88;
+		onSubmitApp(formName) {
+			this.$refs[formName].validate((valid) => {
+				if (valid) {
+					let timetype = 1;
+					let timeNums = 0;
+					let user_list = [];
+					if (this.form.time == '立即发布') {
+						timetype = 1;
+						timeNums = 0;
 					} else {
-						nowstr = user_list[i].substring(3, 4);
+						timetype = 0;
+						timeNums = parseInt(this.form.date / 1000);
+						if (timeNums <= Date.parse(new Date()) / 1000) {
+							this.$message({
+								message: '指定时间不能小于当前时间',
+								type: 'error',
+							});
+							return false;
+						}
 					}
-					if (nowstr != this.dev_type) {
-						this.$message({
-							message: '请检查输入的SN号是否和设备品牌匹配',
-							type: 'error',
-						});
-						return false;
+					if (this.form.type == '正式发布') {
+						user_list = [];
+					} else {
+						user_list = this.form.version.split(',');
 					}
-				}
-			}
+					if (user_list.length > 0) {
+						for (var i = 0; i < user_list.length; i++) {
+							let nowstr = '';
+							if (user_list[i].substring(3, 5) == 'X') {
+								nowstr = 88;
+							} else {
+								nowstr = user_list[i].substring(3, 4);
+							}
+							if (nowstr != this.dev_type) {
+								this.$message({
+									message:
+										'请检查输入的SN号是否和设备品牌匹配',
+									type: 'error',
+								});
+								return false;
+							}
+						}
+					}
 
-			let param = {
-				rom_version: this.form.versions,
-				push_type: this.form.type,
-				dev_type: parseInt(this.dev_type),
-				push_mod: this.form.modelType,
-				description: this.form.desc,
-				atonce: timetype,
-				timing: timeNums,
-				sn_list: user_list,
-			};
-			publishRom(param)
-				.then((res) => {
-					if (res.status == 0) {
-						this.$message({
-							message: '发布成功',
-							type: 'success',
+					let param = {
+						rom_version: this.form.versions,
+						push_type: this.form.type,
+						dev_type: parseInt(this.dev_type),
+						push_mod: this.form.modelType,
+						description: this.form.desc,
+						atonce: timetype,
+						timing: timeNums,
+						sn_list: user_list,
+					};
+					publishRom(param)
+						.then((res) => {
+							if (res.status == 0) {
+								this.$message({
+									message: '发布成功',
+									type: 'success',
+								});
+								this.common.monitoringLogs(
+									'发布',
+									'发布ROM系统包',
+									1
+								);
+								this.dialogVisible = false;
+								this.queryPublishlistRom();
+								this.queryversionlistRom();
+							} else {
+								this.$message({
+									message: `${res.msg}`,
+									type: 'error',
+								});
+								this.common.monitoringLogs(
+									'发布',
+									'发布ROM系统包',
+									0
+								);
+								this.dialogVisible = false;
+							}
+						})
+						.catch((error) => {
+							this.common.monitoringLogs(
+								'发布',
+								'发布ROM系统包',
+								0
+							);
 						});
-						this.common.monitoringLogs('发布', '发布ROM系统包', 1);
-						this.dialogVisible = false;
-						this.queryPublishlistRom();
-						this.queryversionlistRom();
-					} else {
-						this.$message({
-							message: `${res.msg}`,
-							type: 'error',
-						});
-						this.common.monitoringLogs('发布', '发布ROM系统包', 0);
-						this.dialogVisible = false;
-					}
-				})
-				.catch((error) => {
-					this.common.monitoringLogs('发布', '发布ROM系统包', 0);
-				});
+				} else {
+					return false;
+				}
+			});
 		},
 		//         //获取历史发布记录
 		queryPublishlistRom() {
@@ -1141,9 +1173,8 @@ export default {
 			this.showState = !this.showState;
 		},
 		handleButton(val, rows) {
-
-             console.log(val,rows);
-            return false;
+			console.log(val, rows);
+			return false;
 			this.newsRom = rows.rom_version;
 
 			this.backPushkey = rows.push_key;
@@ -1221,7 +1252,6 @@ export default {
 		//灰度撤回
 
 		handleButton1(val, rows) {
-           
 			this.newsRom = rows.rom_version;
 			this.backPushkey = rows.push_key;
 			this.userType = '指定设备';

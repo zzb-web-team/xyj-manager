@@ -38,7 +38,7 @@
                 </el-table-column>
                 <el-table-column label="MAC地址">
                     <template slot-scope="scope">
-                        <span v-if="scope.row.idType===false" style="color:red">{{scope.row.dev_mac}}</span>
+                        <span v-if="scope.row.urllabel2===false" style="color:red">{{scope.row.dev_mac}}</span>
                         <span v-else style="color:green">{{scope.row.dev_mac}}</span>
                     </template>
                 </el-table-column>
@@ -50,7 +50,7 @@
                 </el-table-column>
                 <el-table-column  label="总容量">
                       <template slot-scope="scope">
-                        <span v-if="scope.row.urllabel2===false" style="color:red">{{scope.row.total_cap}}</span>
+                        <span v-if="scope.row.idType===false" style="color:red">{{scope.row.total_cap}}</span>
                         <span v-else style="color:green">{{scope.row.total_cap}}</span>
                     </template>
                 </el-table-column>
@@ -311,8 +311,9 @@ export default {
           var resyzm = /^SME[0-9a-zA-Z]{1}[0-9]{4}[0-9a-zA-Z]{7}$/;
           var resType = /^[0-2]{1}$/;
           var resName = /^([0-9a-f]{2}:){5}[0-9a-f]{2}$/;
-          var resID = /^\d{12}$/;
-          var reslabel2 = /^\d+(?=\.{0,1}\d+$|$)/;
+          var resID = /^[0-9]*$/;
+        //   var reslabel2 = /^\d+(?=\.{0,1}\d+$|$)/;
+          var reslabel2=/^([0-9a-fA-F]{2})(([/\s:-][0-9a-fA-F]{2}){5})$/;
           var versionss =/\d+(\.\d+)+/;
           this.errorcount = 0;
           for (var i = 0; i < res.data.length; i++) {
@@ -324,13 +325,13 @@ export default {
               res.data[i].urlstatus = true;
             }
 
-            if (resType.test(res.data[i].url_name) === false) {
+            if (resType.test(res.data[i].domain) === false) {
               res.data[i].urlName = false;
               err++;
             } else {
               res.data[i].urlName = true;
             }
-            if (versionss.test(res.data[i].url) === false) {
+            if (versionss.test(res.data[i].url_name) === false) {
                 res.data[i].romststus = false
                 err++;
             } else {
@@ -343,13 +344,13 @@ export default {
             // } else {
             //     res.data[i].urllabel = true
             // }
-            if (reslabel2.test(res.data[i].label2) === false) {
+            if (reslabel2.test(res.data[i].host_url) === false) {
               res.data[i].urllabel2 = false;
               err++;
             } else {
               res.data[i].urllabel2 = true;
             }
-            if (resName.test(res.data[i].buser_id) === false) {
+            if (resID.test(res.data[i].buser_id) === false) {
               res.data[i].idType = false;
               res.data[i].busercheck = "格式错误";
               if (!res.data[i].buser_id) {
@@ -375,19 +376,19 @@ export default {
           for (var i = 0; i < res.data.length; i++) {
             let obj = {
               dev_sn: res.data[i].url_type,
-              dev_mac: res.data[i].buser_id,
-              cpu_id: res.data[i].label,
-              rom_version: res.data[i].url,
-              total_cap: res.data[i].label2,
-              dev_type: res.data[i].url_name,
+              dev_mac: res.data[i].host_url,
+              cpu_id: res.data[i].url,
+              rom_version: res.data[i].url_name,
+              total_cap: res.data[i].buser_id,
+              dev_type: res.data[i].domain,
             };
             temp1[i] = obj;
             temp[i].dev_sn = res.data[i].url_type;
-            temp[i].dev_mac = res.data[i].buser_id;
-            temp[i].cpu_id = res.data[i].label;
-            temp[i].rom_version = res.data[i].url;
-            temp[i].total_cap = res.data[i].label2;
-            temp[i].dev_type = res.data[i].url_name;
+            temp[i].dev_mac = res.data[i].host_url;
+            temp[i].cpu_id = res.data[i].url;
+            temp[i].rom_version = res.data[i].url_name;
+            temp[i].total_cap = res.data[i].buser_id;
+            temp[i].dev_type = res.data[i].domain;
           }
           this.tableList = [];
           this.tableList = temp;
