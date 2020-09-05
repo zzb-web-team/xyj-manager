@@ -87,6 +87,7 @@ var routes = [{
     },
     {
         path: "*",
+        hidden: true,
         redirect: "/"
     },
     {
