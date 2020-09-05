@@ -62,3 +62,8 @@
 .device_form {
     background: #fff !important;
 }
+
+.el-input--small .el-input__inner,
+.el-range-editor--small.el-input__inner {
+    height: 36px !important;
+}

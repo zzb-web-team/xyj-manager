@@ -19,7 +19,7 @@
 								@keyup.enter.native="onSubmitKey"
 							></el-input>
 						</div>
-						<span style="margin-left: 10px">状态：</span>
+						<!-- <span style="margin-left: 10px">状态：</span>
 						<el-select
 							size="small"
 							v-model="valuestate"
@@ -33,7 +33,7 @@
 								:label="item.label"
 								:value="item.value"
 							></el-option>
-						</el-select>
+						</el-select> -->
 						<el-button
 							size="small"
 							type="primary"

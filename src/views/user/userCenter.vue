@@ -684,7 +684,7 @@ export default {
 							if (tempArr[i].sex == '') {
 								tempArr[i].sex = '--';
 							}
-							tempArr[i].xiyouji_income = '--';
+							tempArr[i].xiyouji_income =tempArr[i].sum_profit;
 							tempArr[i].node_income = '--';
 							tempArr[i].node_num = '--';
 						}
@@ -857,10 +857,10 @@ export default {
           align-items: center;
           padding-top: 40px;
           .item-count{
-              font-size: 20px;
+              font-size: 34px !important;
           }
           .item-text{
-              font-size: 16px;
+              font-size: 14px !important;
           }
       }
   }

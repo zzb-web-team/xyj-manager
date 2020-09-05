@@ -370,7 +370,7 @@ export default {
 			if (this.activeName == 'first') {
 				this.get_data();
 			} else {
-				this.getInfo(2);
+				this.getInfo();
 			}
 		},
 		setparam() {
@@ -408,7 +408,7 @@ export default {
 			if (this.activeName == 'first') {
 				this.get_data();
 			} else {
-				this.getInfo(2);
+				this.getInfo();
 			}
 		},
 		//input按钮搜索
@@ -506,8 +506,8 @@ export default {
 				query_type: 0,
 				cur_page: this.pager.page - 1,
 				order: this.order,
-				profit_type:
-					this.profit_type === '' ? 0 : Number(this.profit_type),
+				// profit_type:
+				// 	this.profit_type === '' ? 0 : Number(this.profit_type),
 				start_time:
 					this.start_time === ''
 						? parseInt(new Date().getTime() / 1000) - 86400 * 90
@@ -518,6 +518,9 @@ export default {
 						: new Date(this.end_time).getTime() / 1000,
 			};
 			if (num) {
+				data.query_type = 1;
+				data.profit_type = 0;
+			} else {
 				data.query_type = 0;
 				data.profit_type = 0;
 			}
@@ -538,7 +541,13 @@ export default {
 					type: 'error',
 				});
 				return false;
-			}
+            }
+			// if (this.end_time != ''||this.searchText!="") {
+			// 	param.query_type = 1;
+			// } else {
+			// 	param.query_type = 0;
+			// }
+			console.log(this.end_time);
 			ptfs_query_user_profit_list(param)
 				.then((res) => {
 					if (res.status === 0) {

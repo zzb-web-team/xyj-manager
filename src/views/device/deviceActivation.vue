@@ -1450,6 +1450,9 @@ export default {
       }
     }
   }
+  .el-form-item__error{
+      margin-left: 0 !important;
+  }
 }
 .deviceAvtive {
   .el-button {
