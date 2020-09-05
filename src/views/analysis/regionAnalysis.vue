@@ -1,6 +1,13 @@
 <template>
 	<div>
-		<div style="margin-top: 30px">
+		<div
+			style="
+				margin-top: 30px;
+				display: flex;
+				justify-content: flex-start;
+				align-items: center;
+			"
+		>
 			<el-date-picker
 				v-model="valueTime"
 				size="small"
@@ -16,6 +23,7 @@
 				placeholder="请选择"
 				size="small"
 				@change="onChange"
+                style="margin-left: 20px"
 			>
 				<el-option
 					v-for="item in options"
