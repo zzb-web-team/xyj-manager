@@ -545,7 +545,7 @@ export default {
 			param.user_name = this.user_name;
 			param.tel_num = this.user_tel;
 			param.cur_page = this.pager1.page - 1;
-			param.query_type = 0;
+			param.query_type = 1;
 			// param.profit_type = 0;
 			// param.nick_name = "",
 			// param.order = this.order
