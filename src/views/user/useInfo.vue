@@ -685,48 +685,14 @@ export default {
 			ptfs_query_user_total_profit_everyday(param)
 				.then((res) => {
 					this.dialogVisible3 = true;
-					if (res.data.profit_detail_list) {
+					if (res.data.total_profit_list) {
 						this.tableData = [];
-						let nowarr = res.data.profit_detail_list;
+						let nowarr = res.data.total_profit_list;
 						for (var i = 0; i < nowarr.length; i++) {
-							nowarr[i].profit = nowarr[i].profit / 100;
-							nowarr[i].store = nowarr[i].store / 100;
-							nowarr[i].store_value = nowarr[i].store_value / 100;
-							nowarr[i].ip_value = nowarr[i].ip_value / 100;
-							nowarr[i].com_power = nowarr[i].com_power / 100;
-
+							nowarr[i].profit = nowarr[i].total_profit / 100;
 							nowarr[i].time_stamp = this.common.getTimes(
 								nowarr[i].time_stamp * 1000
 							);
-							if (nowarr[i].up_bandwidth == 0) {
-								nowarr[i].up_bandwidth == 0;
-							} else {
-								// nowarr[i].up_bandwidth=((nowarr[i].up_bandwidth/1024/1024).toFixed(2))+"Mbps"
-								nowarr[
-									i
-								].up_bandwidth = this.common.formatByteActive(
-									nowarr[i].up_bandwidth
-								);
-							}
-							if (nowarr[i].down_bandwidth == 0) {
-								nowarr[i].down_bandwidth == 0;
-							} else {
-								// nowarr[i].down_bandwidth=((nowarr[i].down_bandwidth/1024/1024).toFixed(2))+"Mbps"
-								nowarr[
-									i
-								].down_bandwidth = this.common.formatByteActive(
-									nowarr[i].down_bandwidth
-								);
-							}
-							if (nowarr[i].total_cap == 0) {
-								nowarr[i].total_cap == 0;
-							} else {
-								nowarr[
-									i
-								].total_cap = this.common.formatByteActive(
-									nowarr[i].total_cap
-								);
-							}
 						}
 						this.tableData = nowarr;
 						this.pager.count = res.data.total_num;
