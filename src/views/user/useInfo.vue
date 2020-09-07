@@ -563,8 +563,12 @@ export default {
 						res.data.profit_detail_list.forEach((item) => {
 							item.time_stamp = this.common.getTimes(
 								item.time_stamp * 1000
-							);
-							item.cur_profit = parseInt(item.profit / 100);
+                            );
+                            if(item.com_power==654321){
+                                item.cur_profit=parseInt(item.profit / 100)+" (绑定设备奖励)"
+                            }else{
+                                item.cur_profit = parseInt(item.profit / 100);
+                            }
 							item.total_profit = this.getDuration(
 								item.v210_online_time
 							);
