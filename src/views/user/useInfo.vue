@@ -705,7 +705,7 @@ export default {
 			let data = {
 				page_no: this.pager2.page - 1,
 				page_size: 10,
-				dev_type:"",
+				dev_type: '',
 				online_state:
 					this.online_state === '' ? -1 : Number(this.online_state),
 				rom_version: this.rom_version === '' ? '' : this.rom_version,
@@ -782,14 +782,9 @@ export default {
 		},
 		getQueryInfo2Active() {
 			let data = {
-				page_no: this.pager.page - 1,
+				page_no: this.pager2.page - 1,
 				page_size: 10,
-				dev_type:
-					this.dev_type === ''
-						? -1
-						: this.dev_type === 'RK3328'
-						? 1
-						: 2,
+				dev_type: '',
 				online_state:
 					this.online_state === '' ? -1 : Number(this.online_state),
 				rom_version: this.rom_version === '' ? '' : this.rom_version,
@@ -809,6 +804,13 @@ export default {
 				ipfs_id: '',
 				dev_sn: '',
 				order: this.order,
+				order_type: -1,
+				pri_chan_prv: '', //一级渠道商，小米、玩客云、西柚机
+				scd_chan_prv: '', //二级渠道商
+				hd_type: '', //硬件类型     arm64、x86
+				eqp_brd: '', //设备品牌
+				eqp_type: '', //设备类型
+				op_sys: '', //操作系统  linux、android、windows
 			};
 
 			let param = data;

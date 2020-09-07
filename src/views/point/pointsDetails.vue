@@ -389,7 +389,7 @@ export default {
 			if (this.activeName == 'first') {
 				this.get_data();
 			} else {
-				this.getInfo(2);
+				this.getInfo();
 			}
 		},
 		//导出的方法
@@ -668,7 +668,7 @@ export default {
 			if (this.activeName == 'first') {
 				this.get_data();
 			} else {
-				this.getInfo(2);
+				this.getInfo();
 			}
 		},
 		judgeString(str) {
