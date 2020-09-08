@@ -296,7 +296,7 @@
 							label="硬件类型"
 						></el-table-column>
 						<el-table-column
-							:formatter="formatDevType"
+							
 							prop="dev_type"
 							label="设备型号"
 						></el-table-column>

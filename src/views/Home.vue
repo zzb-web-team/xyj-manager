@@ -198,7 +198,8 @@ export default {
 	},
 	mounted: function () {
 		this.con_height = this.$refs.con_body.offsetHeight - 130 + 'px';
-		var user = JSON.parse(this.get('userInfo'));
+        var user = JSON.parse(this.get('userInfo'));
+        console.log(user);
 		this.sysUserName = user.username || '';
 	},
 	methods: {

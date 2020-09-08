@@ -54,7 +54,7 @@
 
                     </el-form>
                     <div class="bottom" style="text-align: center;">
-                        <el-button type="primary" @click="onSubmit" >发布</el-button>
+                        <el-button type="primary" @click="onSubmitResult" >发布</el-button>
                         <el-button>取消</el-button>
                     </div>
                 </div>
@@ -117,7 +117,7 @@
                     </div>
                 </el-form>
                 <div class="bottom" style="text-align: center;">
-                    <el-button type="primary" @click="onSubmit">发布</el-button>
+                    <el-button type="primary" @click="onSubmitResult">发布</el-button>
                     <el-button>取消</el-button>
                 </div>
             </el-tab-pane>
