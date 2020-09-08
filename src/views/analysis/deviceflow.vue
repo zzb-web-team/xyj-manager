@@ -109,30 +109,32 @@
 					></el-option>
 				</el-select>
 			</el-col>
-			<el-col :span="5">
+			<el-col :span="10">
 				<el-radio-group
+					v-show="shoudzyx == false"
 					size="small"
 					v-model="radio1"
 					@change="onchangeTab"
 				>
-					<el-radio-button @click="today()" label="one"
-						>今天</el-radio-button
-					>
-					<el-radio-button @click="yesterday()" label="two"
-						>昨天</el-radio-button
-					>
-					<el-radio-button @click="sevendat()" label="three"
-						>近7天</el-radio-button
-					>
-					<el-radio-button @click="thirtyday()" label="four"
-						>近30天</el-radio-button
-					>
-					<el-radio-button @click="showzdyx"
+					<el-radio-button label="one">今天</el-radio-button>
+					<el-radio-button label="two">昨天</el-radio-button>
+					<el-radio-button label="three">近7天</el-radio-button>
+					<el-radio-button label="four">近30天</el-radio-button>
+					<el-radio-button label="five"
 						>自定义
 						<i class="el-icon-date"></i>
 					</el-radio-button>
 				</el-radio-group>
+				<el-button
+					size="small"
+					@click="showpickerfs"
+					v-show="shoudzyx"
+					style="margin-right: 10px; margin-left: 10px"
+					type="primary"
+					>自定义</el-button
+				>
 				<el-date-picker
+					size="medium"
 					v-show="shoudzyx"
 					style="margin-left: 10px"
 					v-model="val2"
@@ -142,9 +144,8 @@
 					end-placeholder="结束日期"
 					align="left"
 					@change="gettimes"
+					:picker-options="pickerOptions"
 				></el-date-picker>
-			</el-col>
-			<el-col :span="3">
 				<el-button
 					size="small"
 					style="margin-left: 10px"
@@ -153,6 +154,7 @@
 					>确定</el-button
 				>
 			</el-col>
+			<el-col :span="3"> </el-col>
 		</el-row>
 
 		<!--  -->
@@ -164,19 +166,48 @@
 </template>
 
 <script>
-// import { dateToMs, getymdtime, getymdtime1 } from "../../servers/sevdate";
+import { dateToMs, getymdtime, getymdtime1 } from '../../servers/sevdate';
 import pageNation from '@/components/pageNation';
-// import {
-//   manage_dataflow_curve,
-//   manage_dataflow_table,
-//   export_manage_dataflow_table_file,
-// } from "../../servers/api";
+import {
+	manage_dataflow_curve,
+	manage_dataflow_table,
+	export_manage_dataflow_table_file,
+} from '../../api/api';
 import echarts from 'echarts';
 import common from '../../common/js/util';
 
 export default {
 	data() {
+		let that = this;
+		let _minTime = null;
+		let _maxTime = null;
 		return {
+			pickerOptions: {
+				onPick(time) {
+					if (!time.maxDate) {
+						let timeRange = 89 * 24 * 3600 * 1000;
+						_minTime = time.minDate.getTime() - timeRange; // 最小时间
+						_maxTime = time.minDate.getTime() + timeRange; // 最大时间
+					} else {
+						_minTime = _maxTime = null;
+					}
+				},
+				disabledDate(time) {
+					let afterToday = Date.now() - 3600 * 1000 * 24;
+					if (_maxTime) {
+						_maxTime =
+							_maxTime <= afterToday ? _maxTime : afterToday;
+					} else {
+						return time.getTime() > Date.now() - 3600 * 1000 * 24;
+					}
+					if (_minTime && _maxTime) {
+						return (
+							time.getTime() < _minTime ||
+							time.getTime() > _maxTime
+						);
+					}
+				},
+			},
 			dev_type: '',
 			dev_types: [
 				{
@@ -344,73 +375,6 @@ export default {
 			valuea4: '',
 			tablecdn: [],
 			activeName: 'first',
-			pickerOptions: {
-				shortcuts: [
-					{
-						text: '昨天',
-						onClick(picker) {
-							const end = new Date(
-								new Date(
-									new Date().toLocaleDateString()
-								).getTime()
-							);
-							const start =
-								new Date(
-									new Date(
-										new Date().toLocaleDateString()
-									).getTime()
-								) -
-								3600 * 1000 * 24 * 1;
-							picker.$emit('pick', [start, end]);
-						},
-					},
-					{
-						text: '今天',
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date(
-								new Date(
-									new Date().toLocaleDateString()
-								).getTime()
-							);
-							picker.$emit('pick', [start, end]);
-						},
-					},
-					{
-						text: '最近一周',
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date(
-								new Date(
-									new Date().toLocaleDateString()
-								).getTime()
-							);
-							start.setTime(
-								start.getTime() - 3600 * 1000 * 24 * 6
-							);
-							picker.$emit('pick', [start, end]);
-						},
-					},
-					{
-						text: '最近一个月',
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date(
-								new Date(
-									new Date().toLocaleDateString()
-								).getTime()
-							);
-							start.setTime(
-								start.getTime() - 3600 * 1000 * 24 * 29
-							);
-							picker.$emit('pick', [start, end]);
-						},
-					},
-				],
-				disabledDate(time) {
-					return time.getTime() > Date.now();
-				},
-			},
 			// value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
 			val2: [],
 
@@ -464,10 +428,8 @@ export default {
 			new Date(new Date().toLocaleDateString()).getTime() / 1000;
 		this.endtime = Date.parse(new Date()) / 1000;
 
-		// this.gettable1();
-		// this.gettable2();
-
-		// this.configure()
+		this.gettable1();
+		this.gettable2();
 	},
 	filters: {
 		settimes(data) {
@@ -629,6 +591,7 @@ export default {
 			this.showzdyz = !this.showzdyz;
 		},
 		showzdyx() {
+			console.log(this.shoudzyx, '1111111');
 			this.shoudzyx = !this.shoudzyx;
 		},
 		//获取页码
@@ -813,10 +776,14 @@ export default {
 			} else if (val == 'four') {
 				this.thirtyday();
 			} else if (val == 'five') {
-				this.gettimes();
+				this.shoudzyx = true;
 			}
 		},
-
+		//自定义按钮
+		showpickerfs() {
+			this.shoudzyx = !this.shoudzyx;
+			this.radio1 = 'one';
+		},
 		today(data) {
 			this.plain = 'plain';
 			let times =
@@ -864,6 +831,8 @@ export default {
 		},
 		//自定义时间
 		gettimes(cal) {
+			this.shoudzyx = !this.shoudzyx;
+			console.log(this.shoudzyx);
 			this.starttime = dateToMs(this.val2[0]);
 			this.endtime = dateToMs(this.val2[1]);
 			if (this.endtime - this.starttime < 21600) {
@@ -1285,16 +1254,16 @@ export default {
 	margin: 25px 0 !important;
 	background-color: #ffffff;
 	.title_overview {
-        // background-color: #f2f2f2;
-        border: 2px solid #f2f2f2;
+		// background-color: #f2f2f2;
+		border: 2px solid #f2f2f2;
 		border-radius: 5px;
 		height: 140px;
 		text-align: center;
 		margin-right: 25px;
 		.title_overview_top {
 			text-align: center;
-            margin-top: 10px;
-            font-size: 12px;
+			margin-top: 10px;
+			font-size: 12px;
 		}
 		.title_overview_center {
 			font-size: 20px;

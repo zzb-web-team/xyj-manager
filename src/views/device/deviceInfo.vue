@@ -19,7 +19,7 @@
 		<div class="device_form">
 			<el-form ref="form" :model="form" style="margin-top: 20px">
 				<el-row type="flex">
-                        <el-form-item>
+					<el-form-item>
 						<el-input
 							size="small"
 							placeholder="设备SN、名称、IP、MAC地址或节点ID"
@@ -32,7 +32,7 @@
 								@click="onSubmitKey"
 							></i>
 						</el-input>
-                        </el-form-item>
+					</el-form-item>
 					<el-col :span="20">
 						<el-row type="flex">
 							<el-form-item
@@ -213,18 +213,13 @@
 						<el-date-picker
 							size="small"
 							v-model="bind_start_ts"
-							style="width: 200px"
-							type="datetime"
-							placeholder="选择开始日期时间"
-						></el-date-picker
-						>-
-						<el-date-picker
-							size="small"
-							v-model="bind_end_ts"
-							style="width: 200px"
-							type="datetime"
-							placeholder="选择结束日期时间"
-						></el-date-picker>
+							type="datetimerange"
+							range-separator="至"
+							start-placeholder="开始日期"
+							end-placeholder="结束日期"
+							:picker-options="pickerOptions"
+						>
+						</el-date-picker>
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" size="small" @click="search"
@@ -296,7 +291,6 @@
 							label="硬件类型"
 						></el-table-column>
 						<el-table-column
-							
 							prop="dev_type"
 							label="设备型号"
 						></el-table-column>
@@ -491,7 +485,36 @@ import {
 import common from '../../common/js/util.js';
 export default {
 	data() {
+		let that = this;
+		let _minTime = null;
+		let _maxTime = null;
 		return {
+            pickerOptions: {
+				onPick(time) {
+					if (!time.maxDate) {
+						let timeRange = 89 * 24 * 3600 * 1000;
+						_minTime = time.minDate.getTime() - timeRange; // 最小时间
+						_maxTime = time.minDate.getTime() + timeRange; // 最大时间
+					} else {
+						_minTime = _maxTime = null;
+					}
+				},
+				disabledDate(time) {
+					let afterToday = Date.now() - 3600 * 1000 * 24;
+					if (_maxTime) {
+						_maxTime =
+							_maxTime <= afterToday ? _maxTime : afterToday;
+					} else {
+						return time.getTime() > Date.now() - 3600 * 1000 * 24;
+					}
+					if (_minTime && _maxTime) {
+						return (
+							time.getTime() < _minTime ||
+							time.getTime() > _maxTime
+						);
+					}
+				},
+			},
 			pri_chan_prv: '',
 			pri_chan_prvs: [
 				{
@@ -1081,13 +1104,13 @@ export default {
 						? -1
 						: this.bind_start_ts == null
 						? -1
-						: new Date(this.bind_start_ts).getTime() / 1000,
+						: new Date(this.bind_start_ts[0]).getTime() / 1000,
 				bind_end_ts:
-					this.bind_end_ts === ''
+					this.bind_start_ts === ''
 						? -1
-						: this.bind_end_ts == null
+						: this.bind_start_ts == null
 						? -1
-						: new Date(this.bind_end_ts).getTime() / 1000,
+						: new Date(this.bind_start_ts[1]).getTime() / 1000,
 			};
 			let SME = /^SME[0-9a-zA-Z]{1}[0-9]{4}[0-9a-zA-Z]{7}$/;
 			// let cpuid = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{9}$/;

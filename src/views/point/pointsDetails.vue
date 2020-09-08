@@ -42,7 +42,7 @@
 									label="时间"
 									style="display: flex"
 								>
-									<el-date-picker
+									<!-- <el-date-picker
 										size="small"
 										v-model="start_time"
 										style="width: 160px"
@@ -58,7 +58,19 @@
 										type="datetime"
 										placeholder="选择结束日期时间"
 										:picker-options="pickerOptions"
-									></el-date-picker>
+									></el-date-picker> -->
+	                            <el-date-picker
+									size="small"
+									v-model="start_time"
+									type="daterange"
+									range-separator="至"
+									start-placeholder="开始日期"
+									end-placeholder="结束日期"
+                                    :picker-options="pickerOptions"
+								>
+								</el-date-picker>
+
+
 								</el-form-item>
 								<el-form-item>
 									<el-button
@@ -181,7 +193,7 @@
 									label="时间"
 									style="display: flex"
 								>
-									<el-date-picker
+									<!-- <el-date-picker
 										size="small"
 										v-model="start_time"
 										style="width: 160px"
@@ -197,7 +209,18 @@
 										type="datetime"
 										placeholder="选择结束日期时间"
 										:picker-options="pickerOptions"
-									></el-date-picker>
+									></el-date-picker> -->
+                                     <el-date-picker
+									size="small"
+									v-model="start_time"
+									type="daterange"
+									range-separator="至"
+									start-placeholder="开始日期"
+									end-placeholder="结束日期"
+                                    :picker-options="pickerOptions"
+								>
+								</el-date-picker>
+                                    
 								</el-form-item>
 								<el-form-item>
 									<el-button
@@ -444,11 +467,11 @@ export default {
 				start_time:
 					this.start_time === ''
 						? parseInt(new Date().getTime() / 1000) - 86400 * 90
-						: new Date(this.start_time).getTime() / 1000,
+						: new Date(this.start_time[0]).getTime() / 1000,
 				end_time:
-					this.end_time === ''
+					this.start_time === ''
 						? parseInt(new Date().getTime() / 1000)
-						: new Date(this.end_time).getTime() / 1000,
+						: new Date(this.start_time[1]).getTime() / 1000,
 			};
 			if (this.judgeString(this.searchText)) {
 				var arr = Object.keys(this.judgeString(this.searchText));
@@ -511,11 +534,11 @@ export default {
 				start_time:
 					this.start_time === ''
 						? parseInt(new Date().getTime() / 1000) - 86400 * 90
-						: new Date(this.start_time).getTime() / 1000,
+						: new Date(this.start_time[0]).getTime() / 1000,
 				end_time:
-					this.end_time === ''
+					this.start_time === ''
 						? parseInt(new Date().getTime() / 1000)
-						: new Date(this.end_time).getTime() / 1000,
+						: new Date(this.start_time[1]).getTime() / 1000,
 			};
 			if (num) {
 				data.query_type = 1;
@@ -589,11 +612,11 @@ export default {
 				start_time:
 					this.start_time === ''
 						? 0
-						: new Date(this.start_time).getTime() / 1000,
+						: new Date(this.start_time[0]).getTime() / 1000,
 				end_time:
-					this.end_time === ''
+					this.start_time === ''
 						? 0
-						: new Date(this.end_time).getTime() / 1000,
+						: new Date(this.start_time[1]).getTime() / 1000,
 			};
 			if (this.judgeString(this.searchText)) {
 				var arr = Object.keys(this.judgeString(this.searchText));

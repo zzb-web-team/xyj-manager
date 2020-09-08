@@ -67,3 +67,12 @@
 .el-range-editor--small.el-input__inner {
     height: 36px !important;
 }
+
+.el-submenu__title:focus,
+.el-submenu__title:hover {
+    background: #161E36 !important;
+}
+
+// .myownStyle .el-submenu .el-menu-item.is-active {
+//     color: #20a0ff;
+// }

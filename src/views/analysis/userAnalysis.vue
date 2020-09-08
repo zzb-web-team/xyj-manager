@@ -100,71 +100,35 @@ import common from '../../common/js/util.js';
 
 export default {
 	data() {
+		let that = this;
+		let _minTime = null;
+		let _maxTime = null;
 		return {
 			pickerOptions: {
-				shortcuts: [
-					{
-						text: '昨天',
-
-						onClick(picker) {
-							const end = new Date(
-								new Date().toLocaleDateString()
-							);
-							const start = new Date(
-								new Date(
-									new Date().toLocaleDateString()
-								).getTime()
-							);
-							start.setTime(
-								start.getTime() - 3600 * 1000 * 24 * 1
-							);
-							picker.$emit('pick', [start, end]);
-						},
-					},
-					{
-						text: '今天',
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date();
-							start.setTime(
-								new Date(
-									new Date().setHours(0, 0, 0, 0)
-								).getTime()
-							);
-							picker.$emit('pick', [start, end]);
-						},
-					},
-					{
-						text: '最近一周',
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date(
-								new Date(
-									new Date().toLocaleDateString()
-								).getTime()
-							);
-							start.setTime(
-								start.getTime() - 3600 * 1000 * 24 * 6
-							);
-							picker.$emit('pick', [start, end]);
-						},
-					},
-					{
-						text: '最近一个月',
-						onClick(picker) {
-							const end = new Date();
-							const start = new Date(
-								new Date(
-									new Date().toLocaleDateString()
-								).getTime()
-							);
-							start.setTime(
-								start.getTime() - 3600 * 1000 * 24 * 29
-							);
-							picker.$emit('pick', [start, end]);
-						},
-					},
-				],
+				onPick(time) {
+					if (!time.maxDate) {
+						let timeRange = 89 * 24 * 3600 * 1000;
+						_minTime = time.minDate.getTime() - timeRange; // 最小时间
+						_maxTime = time.minDate.getTime() + timeRange; // 最大时间
+					} else {
+						_minTime = _maxTime = null;
+					}
+				},
+				disabledDate(time) {
+					let afterToday = Date.now() - 3600 * 1000 * 24;
+					if (_maxTime) {
+						_maxTime =
+							_maxTime <= afterToday ? _maxTime : afterToday;
+					} else {
+						return time.getTime() > Date.now() - 3600 * 1000 * 24;
+					}
+					if (_minTime && _maxTime) {
+						return (
+							time.getTime() < _minTime ||
+							time.getTime() > _maxTime
+						);
+					}
+				},
 			},
 			value2: [new Date(new Date().setHours(0, 0, 0, 0)), new Date()],
 			// value2: "",
@@ -472,8 +436,8 @@ export default {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-        padding-top: 40px;
-        margin-right: 25px;
+		padding-top: 40px;
+		margin-right: 25px;
 		.item-count {
 			font-size: 20px;
 		}

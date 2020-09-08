@@ -549,12 +549,10 @@ export default {
 			// param.profit_type = 0;
 			// param.nick_name = "",
 			// param.order = this.order
-			param.start_time = parseInt(
-				new Date(this.reg_time).getTime() / 1000
-			);
-			param.end_time =
-				new Date(new Date().toLocaleDateString()).getTime() / 1000;
-
+			const start = new Date(new Date().toLocaleDateString());
+			start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+			param.start_time = parseInt(start.getTime() / 1000);
+			param.end_time = parseInt(new Date().getTime() / 1000);
 			ptfs_query_user_profit_list(param)
 				.then((res) => {
 					this.dialogVisible2 = true;
@@ -563,12 +561,14 @@ export default {
 						res.data.profit_detail_list.forEach((item) => {
 							item.time_stamp = this.common.getTimes(
 								item.time_stamp * 1000
-                            );
-                            if(item.com_power==654321){
-                                item.cur_profit=parseInt(item.profit / 100)+" (绑定设备奖励)"
-                            }else{
-                                item.cur_profit = parseInt(item.profit / 100);
-                            }
+							);
+							if (item.com_power == 654321) {
+								item.cur_profit =
+									parseInt(item.profit / 100) +
+									' (绑定设备奖励)';
+							} else {
+								item.cur_profit = parseInt(item.profit / 100);
+							}
 							item.total_profit = this.getDuration(
 								item.v210_online_time
 							);

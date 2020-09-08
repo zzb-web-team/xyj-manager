@@ -73,6 +73,7 @@
 								range-separator="至"
 								start-placeholder="开始日期"
 								end-placeholder="结束日期"
+								:picker-options="pickerOptions"
 							>
 							</el-date-picker>
 						</el-form-item>
@@ -87,6 +88,7 @@
 								range-separator="至"
 								start-placeholder="开始日期"
 								end-placeholder="结束日期"
+								:picker-options="pickerOptions"
 							>
 							</el-date-picker>
 						</el-form-item>
@@ -180,7 +182,36 @@ import common from '../../common/js/util.js';
 
 export default {
 	data() {
+		let that = this;
+		let _minTime = null;
+		let _maxTime = null;
 		return {
+			pickerOptions: {
+				onPick(time) {
+					if (!time.maxDate) {
+						let timeRange = 89 * 24 * 3600 * 1000;
+						_minTime = time.minDate.getTime() - timeRange; // 最小时间
+						_maxTime = time.minDate.getTime() + timeRange; // 最大时间
+					} else {
+						_minTime = _maxTime = null;
+					}
+				},
+				disabledDate(time) {
+					let afterToday = Date.now() - 3600 * 1000 * 24;
+					if (_maxTime) {
+						_maxTime =
+							_maxTime <= afterToday ? _maxTime : afterToday;
+					} else {
+						return time.getTime() > Date.now() - 3600 * 1000 * 24;
+					}
+					if (_minTime && _maxTime) {
+						return (
+							time.getTime() < _minTime ||
+							time.getTime() > _maxTime
+						);
+					}
+				},
+			},
 			dialogVisible: false,
 			dialogVisible2: false,
 			searchText: '',
@@ -659,7 +690,7 @@ export default {
 								tempArr[i].sum_profit / 100
 							).toFixed(2);
 							if (tempArr[i].first_bind_time == 0) {
-								tempArr[i].first_bind_time = "--";
+								tempArr[i].first_bind_time = '--';
 							} else {
 								tempArr[
 									i
@@ -668,7 +699,7 @@ export default {
 								);
 							}
 							if (tempArr[i].first_login_time == 0) {
-								tempArr[i].first_login_time = "--";
+								tempArr[i].first_login_time = '--';
 							} else {
 								tempArr[
 									i
@@ -684,7 +715,7 @@ export default {
 							if (tempArr[i].sex == '') {
 								tempArr[i].sex = '--';
 							}
-							tempArr[i].xiyouji_income =tempArr[i].sum_profit;
+							tempArr[i].xiyouji_income = tempArr[i].sum_profit;
 							tempArr[i].node_income = '--';
 							tempArr[i].node_num = '--';
 						}
@@ -847,23 +878,23 @@ export default {
 </script>
 
 <style lang="less">
- .user_title{
-      .user-item{
-          border:2px solid #ebeef5;
-          box-sizing: border-box;
-          height: 120px;
-          display: flex;
-          flex-direction:column;
-          align-items: center;
-          padding-top: 40px;
-          .item-count{
-              font-size: 34px !important;
-          }
-          .item-text{
-              font-size: 14px !important;
-          }
-      }
-  }
+.user_title {
+	.user-item {
+		border: 2px solid #ebeef5;
+		box-sizing: border-box;
+		height: 120px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding-top: 40px;
+		.item-count {
+			font-size: 34px !important;
+		}
+		.item-text {
+			font-size: 14px !important;
+		}
+	}
+}
 
 .myself-container {
 	.el-table th > .cell {

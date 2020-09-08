@@ -49,7 +49,9 @@
                         type="datetimerange"
                         range-separator="至"
                         start-placeholder="开始日期"
-                        end-placeholder="结束日期"></el-date-picker>
+                        end-placeholder="结束日期"
+                        :picker-options="pickerOptions"
+                        ></el-date-picker>
                         </el-form-item>
                     <el-form-item label="激活时间：" style="display: flex;">
                         <el-date-picker
@@ -58,7 +60,9 @@
                             type="datetimerange"
                             range-separator="至"
                             start-placeholder="开始日期"
-                            end-placeholder="结束日期">
+                            end-placeholder="结束日期"
+                            :picker-options="pickerOptions"
+                            >
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item>
@@ -249,6 +253,9 @@ import { log } from "util";
 import common from "../../common/js/util.js";
 export default {
   data() {
+     let that = this;
+		let _minTime = null;
+		let _maxTime = null; 
     let nameRule1 = (rule, value, callback) => {
       let regExp = new RegExp(/^SME[0-9a-zA-Z]{1}[0-9]{4}[0-9a-zA-Z]{7}$/);
       if (regExp.test(value) === false) {
@@ -282,6 +289,32 @@ export default {
       }
     };
     return {
+         pickerOptions: {
+				onPick(time) {
+					if (!time.maxDate) {
+						let timeRange = 89 * 24 * 3600 * 1000;
+						_minTime = time.minDate.getTime() - timeRange; // 最小时间
+						_maxTime = time.minDate.getTime() + timeRange; // 最大时间
+					} else {
+						_minTime = _maxTime = null;
+					}
+				},
+				disabledDate(time) {
+					let afterToday = Date.now() - 3600 * 1000 * 24;
+					if (_maxTime) {
+						_maxTime =
+							_maxTime <= afterToday ? _maxTime : afterToday;
+					} else {
+						return time.getTime() > Date.now() - 3600 * 1000 * 24;
+					}
+					if (_minTime && _maxTime) {
+						return (
+							time.getTime() < _minTime ||
+							time.getTime() > _maxTime
+						);
+					}
+				},
+			},
       dialogVisibleactive: false,
       dialogVisible1: false,
       dialogVisible2: false,

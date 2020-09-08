@@ -16,6 +16,7 @@
 				start-placeholder="开始日期"
 				end-placeholder="结束日期"
 				align="left"
+                :picker-options="pickerOptions"
 			>
 			</el-date-picker>
 			<el-select
@@ -92,7 +93,36 @@ export default {
 	name: 'echarts',
 	props: ['userJson'],
 	data() {
+        let that = this;
+		let _minTime = null;
+		let _maxTime = null;
 		return {
+             pickerOptions: {
+				onPick(time) {
+					if (!time.maxDate) {
+						let timeRange = 89 * 24 * 3600 * 1000;
+						_minTime = time.minDate.getTime() - timeRange; // 最小时间
+						_maxTime = time.minDate.getTime() + timeRange; // 最大时间
+					} else {
+						_minTime = _maxTime = null;
+					}
+				},
+				disabledDate(time) {
+					let afterToday = Date.now() - 3600 * 1000 * 24;
+					if (_maxTime) {
+						_maxTime =
+							_maxTime <= afterToday ? _maxTime : afterToday;
+					} else {
+						return time.getTime() > Date.now() - 3600 * 1000 * 24;
+					}
+					if (_minTime && _maxTime) {
+						return (
+							time.getTime() < _minTime ||
+							time.getTime() > _maxTime
+						);
+					}
+				},
+			},
 			valueTime: [new Date(new Date().setHours(0, 0, 0, 0)), new Date()],
 			chart: null,
 			tableData: [],

@@ -246,7 +246,7 @@ export default {
       },
       rowHeader: [
         {
-          prop: "user_id",
+          prop: "userId",
           label: "绑定用户ID",
         },
         {
@@ -268,7 +268,7 @@ export default {
           label: "设备状态",
         },
         {
-          prop: "user_phone",
+          prop: "userPhone",
           label: "绑定用户手机号",
         },
         {
@@ -570,6 +570,16 @@ export default {
             this.pager.count = nowarrLength;
             this.dataNum = nowarrLength;
             for (var i = 0; i < nowarr.length; i++) {
+                if(nowarr[i].user_id==0){
+                    nowarr[i].userId="未绑定";
+                }else{
+                    nowarr[i].userId=nowarr[i].user_id;
+                }
+                if(nowarr[i].user_phone==0){
+                    nowarr[i].user_phone="";
+                }else{
+                    nowarr[i].userPhone=nowarr[i].user_phone;
+                }
               switch (nowarr[i].dev_type) {
                 case 1:
                   nowarr[i].dev_type = "RK33228";

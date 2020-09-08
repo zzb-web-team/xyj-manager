@@ -162,7 +162,7 @@
 							:span="24"
 							class="content-wrapper"
 							:style="{ minHeight: con_height }"
-                            style="margin-bottom:35px;"
+							style="margin-bottom: 35px"
 						>
 							<transition name="fade" mode="out-in">
 								<router-view></router-view>
@@ -198,8 +198,8 @@ export default {
 	},
 	mounted: function () {
 		this.con_height = this.$refs.con_body.offsetHeight - 130 + 'px';
-        var user = JSON.parse(this.get('userInfo'));
-        console.log(user);
+		var user = JSON.parse(this.get('userInfo'));
+		console.log(user);
 		this.sysUserName = user.username || '';
 	},
 	methods: {
