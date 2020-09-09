@@ -267,10 +267,10 @@ export default {
           prop: "status",
           label: "设备状态",
         },
-        {
-          prop: "userPhone",
-          label: "绑定用户手机号",
-        },
+        // {
+        //   prop: "userPhone",
+        //   label: "绑定用户手机号",
+        // },
         {
           prop: "app_count",
           label: "应用数量",
@@ -570,6 +570,7 @@ export default {
             this.pager.count = nowarrLength;
             this.dataNum = nowarrLength;
             for (var i = 0; i < nowarr.length; i++) {
+                nowarr[i].ip=nowarr[i].ip==""?"--":nowarr[i].ip;
                 if(nowarr[i].user_id==0){
                     nowarr[i].userId="未绑定";
                 }else{

@@ -327,72 +327,23 @@ export default {
 			valuedomian: '',
 			value1acce1: '',
 			duibi: false,
-			hashidSets: [
-				{
-					value: '1',
-					label: 'iOS',
-				},
-				{
-					value: '0',
-					label: 'android',
-				},
-				{
-					value: '2',
-					label: '其他',
-				},
-			],
 			chanIds: [],
-			optionssearch1: [],
-			optionssearch: [],
-			valuess: '',
-			value1acce: '*',
-			valueacce: '*',
-			hashidSet: [],
 			value1Activechanid: '',
-			value1Activechanid1: '',
-			value1Active: '',
-			options1Active: [],
 			shoudzyx: false,
-			showzdyz: false,
-			options1: [],
-			options1chanid: [],
-
-			options3: [],
-			options4: [],
-			optionsa1: [],
-			optionsa2: [],
-			valuea2chanid: '',
-			optionsa2chanid: [],
-			optionsa3: [],
-			optionsa4: [],
 			value1: '',
-			value2: '*',
-			value3: '*',
-			value4: '',
-			valuea1: '',
-			valuea2: '*',
-			valuea3: '*',
-			valuea4: '',
 			tablecdn: [],
-			activeName: 'first',
-			// value1: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
 			val2: [],
-
 			timeUnit: 60,
 			starttime: '',
 			endtime: '',
 			dataFlowArray: [], //图1
 			timeArray: [], //图1
-			dataFlowArray2: [], //图2
-			timeArray2: [], //图2
 			pageSize: 10, //每页数量
 			pageNo: 1, //当前页码
 			total_cnt: 1, //数据总量
 			chanid: '',
 			pageActive: 0,
 			pageActive1: 0,
-			dataFlownum: 0,
-			dataFlownum1: 0,
 			flowunit: '',
 			totalYl: 0,
 		};
@@ -404,7 +355,7 @@ export default {
 		},
 		setbytes(data) {
 			return common.formatByteActive(data);
-		},
+		}
 	},
 	components: {
 		pageNation,
@@ -430,15 +381,6 @@ export default {
 
 		this.gettable1();
 		this.gettable2();
-	},
-	filters: {
-		settimes(data) {
-			var stat = getymdtime(data);
-			return stat;
-		},
-		setbytes(data) {
-			return common.formatByteActive(data);
-		},
 	},
 	beforeDestroy() {
 		if (!this.chart) {
@@ -468,7 +410,6 @@ export default {
 		},
 		searchid() {
 			this.pageActive1 = 0;
-			this.optionssearch = [];
 			this.querychanId(this.search);
 		},
 		handleSelectionChange(val) {
@@ -500,10 +441,6 @@ export default {
 		//失去焦点事件
 		onblurs(event) {
 			this.chanIds = event;
-		},
-		querychanIds() {
-			this.gettable1(this.valuess);
-			this.gettable2(this.valuess);
 		},
 		//获取页码
 		handleCurrentChange(pages) {
@@ -539,17 +476,6 @@ export default {
 				let nowstr = this.chanIds.join(',');
 				params.channelId = nowstr;
 			}
-
-			//   if (this.value1Activechanid == "" && this.chanIds.length==0) {
-			//     params.channelId = "*";
-			//     params.channelId.push(this.value1Activechanid);
-			//   } else if(this.value1Activechanid1!=="" && this.chanIds.length==0) {
-			//     params.channelId = this.value1Activechanid1;
-			//   }else if(this.value1Activechanid1!=="" && this.chanIds.length>0){
-			// 	  let nowstr=this.chanIds.join("")
-			// 	   params.channelId = nowstr
-
-			//   }
 			if (this.valuedomian !== '') {
 				params.domain = this.valuedomian;
 			} else {
@@ -577,22 +503,12 @@ export default {
 
 		//输入渠道ID查询
 		onchanidChange() {
-			this.options1chanid = [];
 			this.pageActive = 0;
 			if (this.value1Activechanid.length != 12) {
 				return false;
 			}
 			this.pageNo = 1;
 			this.queryInfoVideo();
-		},
-
-		getdataActive() {},
-		showzdyzs() {
-			this.showzdyz = !this.showzdyz;
-		},
-		showzdyx() {
-			console.log(this.shoudzyx, '1111111');
-			this.shoudzyx = !this.shoudzyx;
 		},
 		//获取页码
 		getpage(pages) {
@@ -613,8 +529,6 @@ export default {
 		},
 
 		/** 请求数据 */
-
-		//用量查询图表
 		gettable1(data) {
 			this.dataFlowArray = [];
 			this.timeArray = [];
@@ -640,7 +554,6 @@ export default {
 					params.channelId = [];
 				}
 			}
-
 			if (this.valuedomian !== '') {
 				params.domain = this.valuedomian;
 			} else {
@@ -664,11 +577,9 @@ export default {
 						let nowtemp = res.data.data;
 						let nowarr = [];
 						let childlist = [];
-
 						var num = res.data.data[0].dataflowArray;
 						var max = Math.max.apply(null, num);
 						this.flowunit = this.common.formatByteActiveunit(max);
-
 						for (var i = 0; i < nowlengh; i++) {
 							childlist.push(res.data.data[i].channelid);
 							let obj = {};
@@ -697,7 +608,6 @@ export default {
 					})
 					.catch((err) => {});
 		},
-
 		//用量查询列表
 		gettable2(data) {
 			this.dataFlowArray = [];
@@ -711,7 +621,6 @@ export default {
 			} else {
 				params.urlName = '*';
 			}
-
 			if (data) {
 				params.channelId = data;
 			} else {
@@ -747,7 +656,6 @@ export default {
 					})
 					.catch((err) => {});
 		},
-
 		seachtu(data) {
 			if (this.endtime - this.starttime > 7776000) {
 				this.$message({
@@ -759,11 +667,6 @@ export default {
 			this.pageNo = 1;
 			this.gettable1();
 			this.gettable2();
-			//   if (data == 1) {
-			//     this.getseachlabel1();
-			//   } else {
-			//     this.getseachlabel2();
-			//   }
 		},
 		//今天
 		onchangeTab(val) {
@@ -847,10 +750,9 @@ export default {
 			}
 			this.$refs.multipleTable.clearSelection();
 		},
-
 		// 表头样式设置
 		headClass() {
-			return 'text-align: center;background:#F3F6FB;';
+			return 'text-align: center;background:#F3F6FB;height:58px;';
 		},
 		// 表格样式设置
 		rowClass() {
@@ -858,9 +760,8 @@ export default {
 		},
 		drawLine(x, y, idlist) {
 			let _this = this;
-			let myChart = echarts.init(document.getElementById('myChartMap')); //这里是为了获得容器所在位置
+			let myChart = echarts.init(document.getElementById('myChartMap')); //获得容器所在位置
 			window.onresize = myChart.resize;
-
 			var posList = [
 				'left',
 				'right',
@@ -1062,9 +963,7 @@ export default {
 			};
 			myChart.clear();
 			myChart.setOption(options);
-		},
-
-		//选项卡
+		}
 	},
 };
 </script>
@@ -1077,28 +976,22 @@ export default {
 	background: #ffffff;
 	padding: 15px 30px;
 	box-sizing: border-box;
-	// box-shadow: 0px 2px 3px 0px rgba(6, 17, 36, 0.14);
 	border-radius: 2px;
-
 	.bottom {
 		margin-top: 20px;
 	}
-
 	.el-form-item__label {
 		white-space: nowrap;
 	}
-
 	.el-form-item {
 		margin-bottom: 0px;
 		margin-left: 10px;
 	}
-
 	.row_activess {
 		margin-top: 20px;
 		display: flex;
 		justify-content: flex-start;
 	}
-
 	.div_show {
 		width: auto;
 		display: flex;
@@ -1113,35 +1006,28 @@ export default {
 		width: auto;
 		height: 130px;
 		background: rgba(255, 255, 255, 1);
-		// box-shadow: 0px 2px 3px 0px rgba(6, 17, 36, 0.14);
 		border-radius: 2px;
 		margin-top: 20px;
-
 		display: flex;
 		justify-content: flex-start;
 		align-items: center;
 		text-align: left;
 		padding: 36px 71px;
-
 		.item_left {
 			width: 49%;
 			height: 58px;
 			border-right: 1px solid #e6e9ed;
-
 			.item_text {
 				font-size: 14px;
 				color: #333333;
 			}
-
 			.item_count {
 				line-height: 55px;
-
 				span {
 					font-size: 34px;
 				}
 			}
 		}
-
 		.item_right {
 			height: 48px;
 			width: 49%;
@@ -1162,21 +1048,17 @@ export default {
 		}
 	}
 }
-
 .devide_table {
 	height: auto;
 	margin-top: 20px;
 	background: #ffffff;
 	border-radius: 2px;
-	// box-shadow: 0px 2px 3px 0px rgba(6, 17, 36, 0.14);
 	border-radius: 2px;
-
 	.el-table td,
 	.el-table th {
 		padding: 6px 0px;
 	}
 }
-
 .devide_pageNation {
 	width: 100%;
 	height: auto;
@@ -1187,7 +1069,6 @@ export default {
 		float: right;
 	}
 }
-
 .addaccout {
 	.el-form--label-left .el-form-item__label {
 		text-align: right;
@@ -1202,26 +1083,21 @@ export default {
 	width: auto;
 	height: 130px;
 	background: rgba(255, 255, 255, 1);
-	// box-shadow: 0px 2px 3px 0px rgba(6, 17, 36, 0.14);
 	border-radius: 2px;
 	margin-top: 20px;
-
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
 	text-align: left;
 	padding: 36px 71px;
-
 	.item_left {
 		width: 49%;
 		height: 58px;
 		border-right: 1px solid #e6e9ed;
-
 		.item_text {
 			font-size: 14px;
 			color: #333333;
 		}
-
 		.item_count {
 			line-height: 55px;
 
@@ -1230,20 +1106,16 @@ export default {
 			}
 		}
 	}
-
 	.item_right {
 		height: 48px;
 		width: 49%;
 		padding-left: 40px;
-
 		.item_text {
 			font-size: 14px;
 			color: #333333;
 		}
-
 		.item_count {
 			line-height: 55px;
-
 			span {
 				font-size: 34px;
 			}
@@ -1254,7 +1126,6 @@ export default {
 	margin: 25px 0 !important;
 	background-color: #ffffff;
 	.title_overview {
-		// background-color: #f2f2f2;
 		border: 2px solid #f2f2f2;
 		border-radius: 5px;
 		height: 140px;
