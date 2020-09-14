@@ -428,7 +428,8 @@ var routes = [{
                         component: VersionAnalysis,
                         icon: 'iconfont icon-dian',
                         meta: {
-                            requireAuth: true
+                            requireAuth: true,
+                            title_show: false
                         }
                     },
 

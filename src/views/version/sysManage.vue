@@ -44,7 +44,7 @@
 						@click="toQueryInfo()"
 						>确定</el-button
 					>
-					<el-button type="primary" size="small" @click="setInfo()"
+					<el-button  size="small" @click="setInfo()"
 						>重置</el-button
 					>
 				</el-row>
@@ -110,7 +110,7 @@
 						</el-table-column>
 						<el-table-column prop="md5" label="md5" width="250">
 						</el-table-column>
-						<el-table-column
+						<!-- <el-table-column
 							prop="hashid"
 							label="hashid"
 							width="200"
@@ -118,8 +118,8 @@
 							<template slot-scope="scope">{{
 								scope.row.hashid != '' ? scope.row.hashid : '--'
 							}}</template>
-						</el-table-column>
-						<el-table-column
+						</el-table-column> -->
+						<!-- <el-table-column
 							prop="ptfs_file_upload_status"
 							label="是否上传到PTFS节点"
 							width="150"
@@ -152,7 +152,7 @@
 									</div>
 								</div>
 							</template>
-						</el-table-column>
+						</el-table-column> -->
 						<el-table-column
 							prop="rom_version"
 							label="版本号"
@@ -1148,7 +1148,8 @@ export default {
 							}
 						}
 						this.tableData = nowarr;
-						this.tableData11 = nowarractive;
+                        this.tableData11 = nowarractive;
+                        // console.log(this.tableData11);
 					}
 				})
 				.catch((error) => {

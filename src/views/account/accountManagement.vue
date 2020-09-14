@@ -17,7 +17,7 @@
                     <el-button type="primary" size="small" @click="searchInfo">确定</el-button>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" size="small" @click="resetInfo">重置</el-button>
+                    <el-button  size="small" @click="resetInfo">重置</el-button>
                 </el-form-item>
             </el-row>
             </el-row>

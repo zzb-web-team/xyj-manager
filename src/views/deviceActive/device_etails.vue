@@ -55,7 +55,6 @@
 							>确定</el-button
 						>
 						<el-button
-							type="primary"
 							@click="reset()"
 							size="small"
 							style="margin-left: 10px"
@@ -69,6 +68,7 @@
 					<div style="text-align: right; margin: 10px 0">
 						<el-button
 							type="primary"
+                            size="small"
 							@click="geydata2()"
 							:disabled="showdisabled"
 							>导出</el-button
@@ -237,7 +237,6 @@
 							>确定</el-button
 						>
 						<el-button
-							type="primary"
 							@click="reset1()"
 							size="small"
 							style="margin-left: 10px"
@@ -252,6 +251,7 @@
 					<div style="text-align: right; margin: 10px 0">
 						<el-button
 							type="primary"
+                            size="small"
 							@click="toExport"
 							:disabled="showdisabled"
 							>导出</el-button

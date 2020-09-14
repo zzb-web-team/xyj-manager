@@ -80,7 +80,6 @@
 										>确定</el-button
 									>
 									<el-button
-										type="primary"
 										@click="onReset"
 										size="small"
 										>重置</el-button
@@ -230,7 +229,6 @@
 										>确定</el-button
 									>
 									<el-button
-										type="primary"
 										size="small"
 										@click="onReset"
 										>重置</el-button

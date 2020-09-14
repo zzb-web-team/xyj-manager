@@ -9,30 +9,30 @@
 				"
 			>
 				<el-col :span="4">
-					<div class="user-item">
+					<div class="user-item all_user">
 						<div class="item-count">{{ total_user }}</div>
 						<div class="item-text">注册用户(总)</div>
 					</div>
 				</el-col>
 				<el-col :span="4" style="">
-					<div class="user-item">
+					<div class="user-item band_user">
 						<div class="item-count">{{ total_bind_num }}</div>
 						<div class="item-text">绑定用户(总)</div>
 					</div>
 				</el-col>
 				<el-col :span="4" style="">
-					<div class="user-item">
+					<div class="user-item new_user">
 						<div class="item-count">{{ range_total_user }}</div>
 						<div class="item-text">新用户</div>
 					</div>
 				</el-col>
 
-				<el-col :span="4" style="">
+				<!-- <el-col :span="4" style="">
 					<div class="user-item">
 						<div class="item-count">{{ percentage }}%</div>
 						<div class="item-text">新用户占比</div>
 					</div>
-				</el-col>
+				</el-col> -->
 			</el-row>
 		</div>
 		<div style="width: 100%; margin: 20px 0">
@@ -47,7 +47,7 @@
 				align="left"
 			>
 			</el-date-picker>
-			<el-button type="primary" size="small" @click="onQueryInfo"
+			<el-button type="primary" size="small" @click="onQueryInfo" style="margin-left:10px;hright:92px;"
 				>确定</el-button
 			>
 		</div>
@@ -334,7 +334,7 @@ export default {
 						type: 'bar',
 						barMaxWidth: 50,
 						itemStyle: {
-							color: '#81d3f8',
+							color: '#0a7cff',
 						},
 					},
 				],
@@ -444,6 +444,18 @@ export default {
 		.item-text {
 			font-size: 16px;
 		}
-	}
+    }
+    .all_user{
+        background:  url(../../assets/all_user.png) no-repeat;
+        background-size: 100% 100%;
+    }
+     .band_user{
+        background:  url(../../assets/bind_user.png) no-repeat;
+        background-size: 100% 100%;
+    }
+     .new_user{
+        background:  url(../../assets/new_user.png) no-repeat;
+        background-size: 100% 100%;
+    }
 }
 </style>

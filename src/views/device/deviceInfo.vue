@@ -223,12 +223,11 @@
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" size="small" @click="search"
-							>确定</el-button
+							>搜索</el-button
 						>
 					</el-form-item>
 					<el-form-item>
 						<el-button
-							type="primary"
 							size="small"
 							@click="resetInfo"
 							>重置</el-button
@@ -245,7 +244,7 @@
 				style="display: flex; justify-content: flex-end"
 			>
 				<el-col style="display: flex; justify-content: flex-end">
-					<el-button type="primary" @click="toexportExcel"
+					<el-button type="primary" @click="toexportExcel" size="small"
 						>导出</el-button
 					>
 				</el-col>
@@ -1694,11 +1693,6 @@ export default {
 
 	.el-form-item__error {
 		margin-left: 80px;
-	}
-}
-.deviceinfo {
-	.el-button {
-		padding: 8px 8px !important;
 	}
 }
 </style>

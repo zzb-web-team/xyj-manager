@@ -11,6 +11,7 @@
 				"
 			>
 				<el-radio-button label="设备类型"></el-radio-button>
+				<el-radio-button label="设备型号"></el-radio-button>
 				<el-radio-button label="设备ROM"></el-radio-button>
 			</el-radio-group>
 			<el-select
@@ -18,7 +19,7 @@
 				size="small"
 				placeholder="请选择"
 				@change="onChange"
-				v-if="!showType"
+				v-if="radio1 == '设备ROM'"
 			>
 				<el-option
 					v-for="item in options"
@@ -37,7 +38,7 @@
 				start-placeholder="开始日期"
 				end-placeholder="结束日期"
 				align="left"
-                :picker-options="pickerOptions"
+				:picker-options="pickerOptions"
 			>
 			</el-date-picker>
 			<el-button
@@ -49,7 +50,7 @@
 			>
 		</div>
 		<div class="devive_tab">
-			<div class="device_tab_on" v-if="showType">
+			<div class="device_tab_on" v-if="radio1 == '设备类型'">
 				<div class="device_form">
 					<div
 						id="myEchart"
@@ -94,7 +95,52 @@
 					</el-row>
 				</div>
 			</div>
-			<div class="device_tab_on" v-if="!showType">
+			<div class="device_tab_on" v-if="radio1 == '设备型号'">
+				<div class="device_form device_form_active">
+					<div
+						id="myEchart1"
+						style="width: 100%; height: 300px; margin-top: 50px"
+					></div>
+				</div>
+				<div class="devide_table">
+					<el-row type="flex" class="row_active">
+						<el-col :span="24">
+							<tableBarActive2
+								id="rebateSetTable"
+								ref="table1"
+								tooltip-effect="dark"
+								:tableData="tableData2"
+								:clomnSelection="clomnSelection"
+								:rowHeader="rowHeader2"
+								:tableOption="tableOption"
+								@handleButton="handleButton"
+								:operatingStatus="operatingStatus"
+								@toOperating="toOperating"
+								@handleSelectionChange="handleSelectionChange"
+								@selectCheckBox="selectCheckBox"
+								@selectAll="selectAll"
+							></tableBarActive2>
+						</el-col>
+					</el-row>
+					<el-row
+						type="flex"
+						style="
+							display: flex;
+							justify-content: flex-end;
+							margin: 20px 0;
+						"
+					>
+						<el-col :span="6">
+							<pageNation
+								:pager="pager"
+								@handleSizeChange="handleSizeChange"
+								@handleCurrentChange="handleCurrentChange"
+							></pageNation>
+						</el-col>
+					</el-row>
+				</div>
+			</div>
+			<div class="device_tab_on" v-if="radio1 == '设备ROM'">
 				<div class="device_form device_form_active">
 					<div
 						id="myEchart1"
@@ -159,11 +205,11 @@ import common from '../../common/js/util.js';
 
 export default {
 	data() {
-        let that = this;
+		let that = this;
 		let _minTime = null;
 		let _maxTime = null;
 		return {
-            pickerOptions: {
+			pickerOptions: {
 				onPick(time) {
 					if (!time.maxDate) {
 						let timeRange = 89 * 24 * 3600 * 1000;
@@ -224,7 +270,6 @@ export default {
 					label: '18:00:00-23:59:59',
 				},
 			],
-			showType: true,
 			shoudzyx: false,
 			showzdyz: false,
 
@@ -238,11 +283,11 @@ export default {
 			rowHeader: [
 				{
 					prop: 'devType',
-					label: '设备类型',
+					label: '设备品牌',
 				},
 				{
 					prop: 'incNum',
-					label: '设备增长',
+					label: '新增设备',
 				},
 				{
 					prop: 'percent',
@@ -253,6 +298,20 @@ export default {
 				{
 					prop: 'romType',
 					label: '设备ROM',
+				},
+				{
+					prop: 'incNum',
+					label: '新增设备',
+				},
+				{
+					prop: 'percent',
+					label: '占比(%)',
+				},
+			],
+			rowHeader2: [
+				{
+					prop: 'devType',
+					label: '设备型号',
 				},
 				{
 					prop: 'incNum',
@@ -339,7 +398,6 @@ export default {
 		},
 		onchangeTab(val) {
 			if (val == '设备类型') {
-				this.showType = true;
 				this.querydeviceType();
 				this.flag = 1;
 				this.valueTime4 = [
@@ -347,9 +405,14 @@ export default {
 					new Date(),
 				];
 				// this.queryOnlineTable();
+			} else if (val == '设备型号') {
+				this.valueTime4 = [
+					new Date(new Date().setHours(0, 0, 0, 0)),
+					new Date(),
+				];
+				this.drawLine2();
 			} else {
 				this.flag = 0;
-				this.showType = false;
 				this.valueTime4 = [
 					new Date(new Date().setHours(0, 0, 0, 0)),
 					new Date(),
@@ -513,33 +576,10 @@ export default {
 			let myChart = echarts.init(document.getElementById('myEchart')); //这里是为了获得容器所在位置
 			// let myChart1 = echarts.init(document.getElementById('myEchart1'));
 			window.onresize = myChart.resize;
-			//   let options = {
-			//     title: {
-			//       text: "设备类型",
-			//       left: "left"
-			//     },
-			//     xAxis: {
-			//       type: "category",
-			//       data: arry
-			//     },
-			//     yAxis: {
-			//       type: "value"
-			//     },
-			//     series: [
-			//       {
-			//         data: arrx,
-			//         type: "line"
-			//       }
-			//     ]
-			//   };
 			let options = {
 				color: ['#3398DB'],
 				tooltip: {
 					trigger: 'axis',
-					axisPointer: {
-						// 坐标轴指示器，坐标轴触发有效
-						type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
-					},
 				},
 				grid: {
 					left: '3%',
@@ -559,14 +599,34 @@ export default {
 				yAxis: [
 					{
 						type: 'value',
+                        name:"设备数量",
+                        minInterval: 1,
 					},
 				],
 				series: [
 					{
-						name: '新增设备',
+						name: '设备数量',
 						type: 'bar',
-						barWidth: '10%',
+                        barWidth: '10%',
+                        barMaxWidth: 30,
 						data: y,
+						itemStyle: {
+							normal: {
+								color: function (params) {
+									let colorList = [
+										'#0A7CFF',
+										'#FF7264',
+										'#FFB04A',
+										'#5CD63E',
+									];
+									if (params.dataIndex > 3) {
+										return colorList[params.dataIndex % 4];
+									} else {
+										return colorList[params.dataIndex];
+									}
+								},
+							},
+						},
 					},
 				],
 			};
@@ -587,25 +647,6 @@ export default {
 			let myChart = echarts.init(document.getElementById('myEchart1')); //这里是为了获得容器所在位置
 			// let myChart1 = echarts.init(document.getElementById('myEchart1'));
 			window.onresize = myChart.resize;
-			//   let options = {
-			//     title: {
-			//       text: "设备ROM",
-			//       left: "left"
-			//     },
-			//     xAxis: {
-			//       type: "category",
-			//       data: arry
-			//     },
-			//     yAxis: {
-			//       type: "value"
-			//     },
-			//     series: [
-			//       {
-			//         data: arrx,
-			//         type: "line"
-			//       }
-			//     ]
-			//   };
 			let options = {
 				title: {
 					text: '设备ROM',
@@ -613,9 +654,6 @@ export default {
 				color: ['#3398DB'],
 				tooltip: {
 					trigger: 'axis',
-					axisPointer: {
-						type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
-					},
 				},
 				grid: {
 					left: '3%',
@@ -631,14 +669,102 @@ export default {
 				},
 				yAxis: {
 					type: 'value',
-					name: '新增设备',
+                    name: '设备数量',
+                    minInterval: 1,
 				},
 				series: [
 					{
-						name: '新增设备',
+						name: '设备数量',
 						type: 'bar',
 						barMaxWidth: 30,
 						data: y,
+						itemStyle: {
+							normal: {
+								color: function (params) {
+									let colorList = [
+										'#0A7CFF',
+										'#FF7264',
+										'#FFB04A',
+										'#5CD63E',
+									];
+									// console.log(params.dataIndex);
+									if (params.dataIndex > 3) {
+										return colorList[params.dataIndex % 4];
+									} else {
+										return colorList[params.dataIndex];
+									}
+								},
+							},
+						},
+					},
+				],
+			};
+			myChart.setOption(options);
+			//myChart1.setOption(options);
+		},
+		drawLine2(x, y) {
+			var arrx = [];
+			var arry = [];
+			for (let i in x) {
+				arrx.push(x[i]); //属性
+				//arr.push(obj[i]); //值
+			}
+			for (let i in y) {
+				arry.push(y[i]); //属性
+				//arr.push(obj[i]); //值
+			}
+			let myChart = echarts.init(document.getElementById('myEchart1')); //这里是为了获得容器所在位置
+			// let myChart1 = echarts.init(document.getElementById('myEchart1'));
+			window.onresize = myChart.resize;
+			let options = {
+				title: {
+					text: '设备型号',
+				},
+				color: ['#3398DB'],
+				tooltip: {
+					trigger: 'axis'
+				},
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true,
+				},
+				xAxis: {
+					type: 'category',
+					// boundaryGap: [0, 0.01],
+					data: x,
+					name: '设备型号',
+				},
+				yAxis: {
+					type: 'value',
+                    name: '设备数量',
+                    minInterval: 1,
+				},
+				series: [
+					{
+						name: '设备数量',
+						type: 'bar',
+						barMaxWidth: 30,
+						data: y,
+						itemStyle: {
+							normal: {
+								color: function (params) {
+									let colorList = [
+										'#0A7CFF',
+										'#FF7264',
+										'#FFB04A',
+										'#5CD63E',
+									];
+									// console.log(params.dataIndex);
+									if (params.dataIndex > 3) {
+										return colorList[params.dataIndex % 4];
+									} else {
+										return colorList[params.dataIndex];
+									}
+								},
+							},
+						},
 					},
 				],
 			};

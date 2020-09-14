@@ -43,7 +43,6 @@
 						>
 						<el-button
 							size="small"
-							type="primary"
 							@click="setInfo()"
 							style="margin-left: 10px"
 							>重置</el-button

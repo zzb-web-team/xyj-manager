@@ -16,7 +16,7 @@
 				start-placeholder="开始日期"
 				end-placeholder="结束日期"
 				align="left"
-                :picker-options="pickerOptions"
+				:picker-options="pickerOptions"
 			>
 			</el-date-picker>
 			<el-select
@@ -24,7 +24,7 @@
 				placeholder="请选择"
 				size="small"
 				@change="onChange"
-                style="margin-left: 20px"
+				style="margin-left: 20px"
 			>
 				<el-option
 					v-for="item in options"
@@ -39,7 +39,10 @@
 				@click="onQueryInfo"
 				size="small"
 				style="margin-left: 20px"
-				>确定</el-button
+				>搜索</el-button
+			>
+			<el-button @click="reset" size="small" style="margin-left: 20px"
+				>重置</el-button
 			>
 		</div>
 		<div
@@ -93,11 +96,11 @@ export default {
 	name: 'echarts',
 	props: ['userJson'],
 	data() {
-        let that = this;
+		let that = this;
 		let _minTime = null;
 		let _maxTime = null;
 		return {
-             pickerOptions: {
+			pickerOptions: {
 				onPick(time) {
 					if (!time.maxDate) {
 						let timeRange = 89 * 24 * 3600 * 1000;
@@ -191,6 +194,16 @@ export default {
 		//确定查询
 		onQueryInfo() {
 			this.queryInfo();
+		},
+		//重置
+		reset() {
+			this.valueTime = [
+				new Date(new Date().setHours(0, 0, 0, 0)),
+				new Date(),
+			];
+			this.deviceType = '-1';
+			this.queryInfo();
+			this.queryTypeInfo();
 		},
 		//查询数据
 		queryInfo() {

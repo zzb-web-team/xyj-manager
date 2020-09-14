@@ -19,8 +19,8 @@
           <el-option label="全部" value="-1"></el-option>
           <el-option v-for="item in optionstate" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
-        <el-button size="small" type="primary" @click="onSumitKey()" style="margin-left:10px;">确定</el-button>
-        <el-button size="small" type="primary" @click="setInfo()" style="margin-left:10px;">重置</el-button>
+        <el-button size="small" type="primary" @click="onSumitKey()" style="margin-left:10px;">搜索</el-button>
+        <el-button size="small"  @click="setInfo()" style="margin-left:10px;">重置</el-button>
 
           </el-row>
         </el-form>

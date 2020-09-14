@@ -47,6 +47,7 @@
                         
                         <el-form-item label="">
                             <el-button type="primary" @click="onClickQueryinfo()"  size="small" style="margin-left:10px;">确定</el-button>
+                            <el-button  @click="reset()"  size="small" style="margin-left:10px;">重置</el-button>
                         </el-form-item>
                     </el-row>
                 </el-form>
@@ -210,6 +211,10 @@ export default {
         selectedlabel1: "",
         selectedlabel2: "",
         optionArractive2: [
+          {
+            label: "全部",
+            value: -1,
+          },
           {
             label: "在线",
             value: 1,
@@ -435,6 +440,12 @@ export default {
     //确认查询
     onClickQueryinfo() {
       this.getinfo();
+    },
+    reset(){
+        this.form.inputText="";
+        this.form.inputText1="";
+        this.form.selectedValue="";
+        this.form.selectedValue2="";
     },
     //确认执行操作
     onClickPerform() {

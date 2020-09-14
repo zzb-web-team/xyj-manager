@@ -99,12 +99,11 @@
 								size="small"
 								type="primary"
 								@click="onSumit()"
-								>确定</el-button
+								>搜索</el-button
 							>
 						</el-form-item>
 						<el-form-item>
 							<el-button
-								type="primary"
 								size="small"
 								@click="resetInfo"
 								>重置</el-button
@@ -122,7 +121,7 @@
 				style="display: flex; justify-content: flex-end"
 			>
 				<el-col style="display: flex; justify-content: flex-end">
-					<el-button type="primary" @click="toexportExcel"
+					<el-button type="primary" size="small" @click="toexportExcel"
 						>导出</el-button
 					>
 				</el-col>

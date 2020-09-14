@@ -73,6 +73,44 @@
     background: #161E36 !important;
 }
 
-// .myownStyle .el-submenu .el-menu-item.is-active {
-//     color: #20a0ff;
-// }
+.el-button--primary {
+    color: #FFF;
+    background-color: #0A7CFF !important;
+    border-color: #0A7CFF !important;
+}
+
+.el-radio-button__orig-radio:checked+.el-radio-button__inner {
+    background-color: #0A7CFF !important;
+    border-color: #0A7CFF !important;
+}
+
+.el-button--small {
+    padding: 8px 35px !important;
+    height: 32px;
+}
+
+.el-table--border:after,
+.el-table--group:after,
+.el-table:before {
+    background-color: #dedede;
+}
+
+.el-table--border,
+.el-table--group {
+    border-color: #dedede;
+}
+
+.el-table td,
+.el-table th.is-leaf {
+    border-bottom: 1px solid #dedede;
+}
+
+.el-table--border th,
+.el-table--border th.gutter:last-of-type {
+    border-bottom: 1px solid #dedede;
+}
+
+.el-table--border td,
+.el-table--border th {
+    border-right: 1px solid #dedede;
+}

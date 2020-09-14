@@ -132,6 +132,7 @@
 				<section class="content-container" ref="con_body">
 					<div class="grid-content bg-purple-light">
 						<el-col
+							v-show="$route.meta.title_show != false"
 							:span="24"
 							class="breadcrumb-container"
 							style="
@@ -147,7 +148,7 @@
 									display: inline-block;
 									width: 4px;
 									height: 16px;
-									background: #409eef;
+									background: #0a7cff;
 									margin-right: 5px;
 								"
 							></span>

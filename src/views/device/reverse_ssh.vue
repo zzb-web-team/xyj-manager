@@ -90,6 +90,7 @@
 								placeholder="请选择ROM版本"
 								@change="search_data"
 							>
+								<el-option label="全部" value="-1"></el-option>
 								<el-option
 									v-for="item in roms"
 									:key="item.value"
@@ -103,7 +104,7 @@
 				<el-button @click="search_data" size="small" type="primary"
 					>确定</el-button
 				>
-				<el-button @click="reset" size="small" type="primary"
+				<el-button @click="reset" size="small"
 					>重置</el-button
 				>
 			</el-row>
@@ -192,7 +193,7 @@
 
 <script>
 import pageNation from '../../components/pageNation';
-import { upload } from '../../api/api';
+import { upload, publishlistRom } from '../../api/api';
 import common from '../../common/js/util.js';
 export default {
 	data() {
@@ -244,62 +245,58 @@ export default {
 				{ id: '82', label: '澳门' },
 			],
 			roms: [
-				{
-					value: '-1',
-					label: '全部',
-				},
-				{
-					value: '1.2.21',
-					label: '1.2.21',
-				},
-				{
-					value: '1.2.20',
-					label: '1.2.20',
-				},
-				{
-					value: '1.2.19',
-					label: '1.2.19',
-				},
-				{
-					value: '1.2.18',
-					label: '1.2.18',
-				},
-				{
-					value: '1.2.17',
-					label: '1.2.17',
-				},
-				{
-					value: '1.2.16',
-					label: '1.2.16',
-				},
-				{
-					value: '1.2.11',
-					label: '1.2.11',
-				},
-				{
-					value: '1.2.10',
-					label: '1.2.10',
-				},
-				{
-					value: '1.1.9',
-					label: '1.1.9',
-				},
-				{
-					value: '1.0.56',
-					label: '1.0.56',
-				},
-				{
-					value: '1.0.5',
-					label: '1.0.5',
-				},
-				{
-					value: '1.0.3',
-					label: '1.0.3',
-				},
-				{
-					value: '1.0.1',
-					label: '1.0.1',
-				},
+				// {
+				// 	value: '1.2.21',
+				// 	label: '1.2.21',
+				// },
+				// {
+				// 	value: '1.2.20',
+				// 	label: '1.2.20',
+				// },
+				// {
+				// 	value: '1.2.19',
+				// 	label: '1.2.19',
+				// },
+				// {
+				// 	value: '1.2.18',
+				// 	label: '1.2.18',
+				// },
+				// {
+				// 	value: '1.2.17',
+				// 	label: '1.2.17',
+				// },
+				// {
+				// 	value: '1.2.16',
+				// 	label: '1.2.16',
+				// },
+				// {
+				// 	value: '1.2.11',
+				// 	label: '1.2.11',
+				// },
+				// {
+				// 	value: '1.2.10',
+				// 	label: '1.2.10',
+				// },
+				// {
+				// 	value: '1.1.9',
+				// 	label: '1.1.9',
+				// },
+				// {
+				// 	value: '1.0.56',
+				// 	label: '1.0.56',
+				// },
+				// {
+				// 	value: '1.0.5',
+				// 	label: '1.0.5',
+				// },
+				// {
+				// 	value: '1.0.3',
+				// 	label: '1.0.3',
+				// },
+				// {
+				// 	value: '1.0.1',
+				// 	label: '1.0.1',
+				// },
 			],
 			tableData: [
 				// {
@@ -323,6 +320,7 @@ export default {
 				page: 1,
 				rows: 100,
 			},
+			page: 0,
 			dialogVisible: false,
 			smdsrc: '',
 		};
@@ -378,6 +376,7 @@ export default {
 	},
 	mounted() {
 		this.get_data_list();
+		this.get_rom_list();
 	},
 	components: { pageNation },
 	methods: {
@@ -398,6 +397,50 @@ export default {
 						this.pager.count = res.total_item;
 					} else {
 						this.$message.errro(res.message);
+					}
+				})
+				.catch((error) => {});
+		},
+		//获取rom版本
+		get_rom_list() {
+			let params = new Object();
+			params.dev_type = 0;
+			if (this.brand_value == '' || this.brand_value == '-1') {
+				return false;
+			} else if (this.brand_value == 'linux') {
+				params.dev_type = 88;
+			} else if (this.brand_value == 'grapefruit') {
+				params.dev_type = 0;
+			} else if (this.brand_value == '迅雷') {
+				params.dev_type = 1;
+			} else if (this.brand_value == '小米') {
+				params.dev_type = 2;
+			} else if (this.brand_value == '创维') {
+				return false;
+			} else if (this.brand_value == '斐讯') {
+				return false;
+			} else {
+				return false;
+			}
+			params.page = this.page;
+			if (this.page == 0) {
+				this.roms = [];
+			}
+			publishlistRom(params)
+				.then((res) => {
+					if (res.status == 0) {
+						res.result.cols.forEach((item, index) => {
+							let obj = {};
+							obj.value = item.rom_version;
+							obj.label = item.rom_version;
+							this.roms.push(obj);
+						});
+						if (res.result.les_count != 0) {
+							this.page++;
+							this.get_rom_list();
+						} else {
+							return false;
+						}
 					}
 				})
 				.catch((error) => {});
@@ -428,6 +471,7 @@ export default {
 				this.dev_types = this.eqp_brds[indexOf_child].childen;
 			}
 			this.get_data_list();
+			this.get_rom_list();
 		},
 		//操作
 		handleDelete(index, row) {

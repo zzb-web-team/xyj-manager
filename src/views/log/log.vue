@@ -83,7 +83,6 @@
 							</el-form-item>
 							<el-form-item>
 								<el-button
-									type="primary"
 									size="small"
 									@click="reset()"
 									>重置</el-button

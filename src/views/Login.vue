@@ -63,6 +63,7 @@ export default {
         handleReset2() {
             this.$refs.ruleForm2.resetFields();
         },
+
         handleSubmit2(ev) {
             var _this = this;
                     var loginParams = {
@@ -93,23 +94,23 @@ export default {
                         //     });
                         //NProgress.done();
                         let {
-                            msg,
+                            err_msg,
                             status,
 
                         } = data;
                         if (status !== 0) {
                             this.$message({
-                                message: msg,
+                                message: err_msg,
                                 type: 'error'
                             });
                         } else {
                             let userInfo = data.msg
+                                this.set('userInfo', JSON.stringify(userInfo), 1000);
                             this.$store.commit('setUserInfo', userInfo) //sessionStorage.setItem('user', JSON.stringify(msg));
                             this.$router.push({
                                 path: '/userCenter'
                             });
                             // window.location.href = "./"
-                            this.set('userInfo', JSON.stringify(msg), 1000)
 
                         }
                     })

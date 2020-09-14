@@ -64,10 +64,9 @@
 									type="primary"
 									size="small"
 									@click="onSumit"
-									>确定</el-button
+									>搜索</el-button
 								>
 								<el-button
-									type="primary"
 									size="small"
 									@click="onReset"
 									>重置</el-button
@@ -172,10 +171,9 @@
 								type="primary"
 								@click="onSumit"
 								size="small"
-								>确定</el-button
+								>搜索</el-button
 							>
 							<el-button
-								type="primary"
 								@click="onReset"
 								size="small"
 								>重置</el-button

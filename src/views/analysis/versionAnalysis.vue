@@ -1,8 +1,11 @@
 <template>
 	<section class="myself-container">
-		<div style="margin-top: 30px">
+		<div class="all_user_num">
+			总用户<span>{{ all_user_num }}</span>
+		</div>
+		<div style="margin-top: 30px; padding: 0 20px">
 			<div style="margin-bottom: 20px">
-				<el-date-picker
+				<!-- <el-date-picker
 					size="small"
 					v-model="valueTime"
 					type="datetimerange"
@@ -10,13 +13,13 @@
 					start-placeholder="开始日期"
 					end-placeholder="结束日期"
 					align="left"
-                    :picker-options="pickerOptions"
+					:picker-options="pickerOptions"
 				>
-				</el-date-picker>
+				</el-date-picker> -->
 				<el-select
 					size="small"
 					v-model="versointype"
-					placeholder="请选择"
+					placeholder="请选择版本号"
 					@change="onChange"
 				>
 					<el-option label="全部" value="*"> </el-option>
@@ -33,7 +36,10 @@
 					type="primary"
 					@click="onQueryInfo"
 					style="margin-left: 20px"
-					>确定</el-button
+					>搜索</el-button
+				>
+				<el-button size="small" @click="reset" style="margin-left: 20px"
+					>重置</el-button
 				>
 			</div>
 
@@ -41,10 +47,10 @@
 				class="device_form"
 				style="display: flex; justify-content: space-around"
 			>
-				<div id="myEchart" style="width: 100%; height: 300px"></div>
+				<div id="myEchart" style="width: 100%; height: 520px"></div>
 				<!-- <div id="myEchart1" style="width: 600px; height: 300px;"></div> -->
 			</div>
-			<div class="devide_table">
+			<!-- <div class="devide_table">
 				<el-row type="flex">
 					<el-button
 						:class="{ activebutton: isActive }"
@@ -78,8 +84,8 @@
 						></tableBarActive2>
 					</el-col>
 				</el-row>
-			</div>
-			<div class="devide_pageNation">
+			</div> -->
+			<!-- <div class="devide_pageNation">
 				<el-row type="flex" justify="flex-end">
 					<el-col :span="24">
 						<pageNation
@@ -89,7 +95,7 @@
 						></pageNation>
 					</el-col>
 				</el-row>
-			</div>
+			</div> -->
 		</div>
 	</section>
 </template>
@@ -112,11 +118,11 @@ import common from '../../common/js/util.js';
 
 export default {
 	data() {
-        let that = this;
+		let that = this;
 		let _minTime = null;
 		let _maxTime = null;
 		return {
-            pickerOptions: {
+			pickerOptions: {
 				onPick(time) {
 					if (!time.maxDate) {
 						let timeRange = 89 * 24 * 3600 * 1000;
@@ -142,10 +148,11 @@ export default {
 					}
 				},
 			},
+			all_user_num: 0,
 			isActive: true,
 			isActive1: false,
 			primaryActive: 'primary',
-			versointype: '*',
+			versointype: '',
 			valueTime: [new Date(new Date().setHours(0, 0, 0, 0)), new Date()],
 
 			options: [
@@ -285,7 +292,8 @@ export default {
 			paramActive.dayList = [];
 			paramActive.dayList[0] = startTime;
 			paramActive.dayList[1] = endTime;
-			paramActive.version = this.versointype;
+			paramActive.version =
+				this.versointype == '' ? '*' : this.versointype;
 			device_version(paramActive)
 				.then((res) => {
 					if (res.status == 0) {
@@ -320,6 +328,17 @@ export default {
 					}
 				})
 				.catch((error) => {});
+		},
+		//重置
+		reset() {
+			this.valueTime = [
+				new Date(new Date().setHours(0, 0, 0, 0)),
+				new Date(),
+			];
+			this.versointype = '';
+			this.queryDeviceversion();
+			this.querydeviceversionDay();
+			this.queryAppInfo();
 		},
 
 		//确定查询
@@ -406,17 +425,29 @@ export default {
 				tooltip: {
 					trigger: 'axis',
 				},
-				legend: {
-					data: ['版本安装用户数'],
+				// legend: {
+				// 	data: ['版本安装用户数'],
+				// },
+				grid: {
+					left: '3%',
+					right: '4%',
+					bottom: '3%',
+					containLabel: true,
 				},
 				xAxis: {
 					type: 'category',
-                    data: a,
-                    // name:"版本号",
+					data: a,
+					// name:"版本号",
 				},
 				yAxis: {
 					type: 'value',
 					name: '人数',
+					minInterval: 1, //设置成1保证坐标轴分割刻度显示成整数。
+					min: 0,
+					max: 500,
+					splitLine: {
+						show: false,
+					},
 				},
 				series: [
 					{
@@ -427,6 +458,7 @@ export default {
 						// // data: [820, 932, 901, 934, 1290, 1330, 1320],
 						data: b,
 						type: 'bar',
+						color: '#0A7BFF',
 					},
 				],
 			};
@@ -490,8 +522,27 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+.container .main .content-container .content-wrapper {
+	background: #eff3f5;
+}
 .myself-container {
+	// padding: 0 20px;
+	.all_user_num {
+		height: 88px;
+		background: url(../../assets/user_unm_bgc.png) no-repeat;
+		background-size: 100% 100%;
+
+		line-height: 88px;
+		color: #ffffff;
+		font-size: 14px;
+		box-sizing: border-box;
+		padding-left: 35px;
+		span {
+			font-size: 36px;
+			margin-left: 10px;
+		}
+	}
 	.activebutton {
 		border: 1px solid #409eff;
 	}

@@ -35,12 +35,12 @@
 						</el-table-column>
 						<el-table-column prop="packet_md5" label="MD5">
 						</el-table-column>
-						<el-table-column prop="packet_hash" label="hashid">
+						<!-- <el-table-column prop="packet_hash" label="hashid">
 							<template slot-scope="scope">{{
 								scope.row.packet_hash | show_hash
 							}}</template>
-						</el-table-column>
-						<el-table-column
+						</el-table-column> -->
+						<!-- <el-table-column
 							prop="ptfs_file_upload_status"
 							label="是否上传到IPFS节点"
 							width="150px"
@@ -53,7 +53,7 @@
 										align-items: center;
 									"
 								>
-									<!-- {{scope.row}} -->
+									
 									<div v-if="scope.row.packet_hash == ''">
 										未上传<br />
 										<el-button
@@ -73,11 +73,9 @@
 										正在上传
 									</div>
 									<div v-else>已上传</div>
-									<!-- <div>{{scope.row.ptfs_file_upload_status==0?'未上传':'已上传'}}</div> -->
-									<!-- <el-button size="mini" type="primary" v-if="scope.row.ptfs_file_upload_status==0" style="margin-left:10px;" @click="uploadApp(scope.row)">重新上传</el-button> -->
 								</div>
 							</template>
-						</el-table-column>
+						</el-table-column> -->
 						<el-table-column prop="packet_version" label="版本号">
 						</el-table-column>
 						<el-table-column label="文件描述" width="250">
@@ -102,7 +100,7 @@
 							width="170"
 						>
 						</el-table-column>
-						<el-table-column label="操作" width="200">
+						<el-table-column label="操作" width="260">
 							<template slot-scope="scope">
 								<el-button
 									@click="handleEdit(scope.row)"
