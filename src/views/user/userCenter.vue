@@ -103,9 +103,7 @@
 							>
 						</el-form-item>
 						<el-form-item>
-							<el-button
-								size="small"
-								@click="resetInfo"
+							<el-button size="small" @click="resetInfo"
 								>重置</el-button
 							>
 						</el-form-item>
@@ -121,7 +119,10 @@
 				style="display: flex; justify-content: flex-end"
 			>
 				<el-col style="display: flex; justify-content: flex-end">
-					<el-button type="primary" size="small" @click="toexportExcel"
+					<el-button
+						type="primary"
+						size="small"
+						@click="toexportExcel"
 						>导出</el-button
 					>
 				</el-col>
@@ -876,7 +877,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .user_title {
 	.user-item {
 		border: 2px solid #ebeef5;
@@ -885,12 +886,15 @@ export default {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		padding-top: 40px;
+		padding-top: 30px;
+		color: #333333;
+		padding-left: 0 !important;
+		
 		.item-count {
-			font-size: 34px !important;
+			font-size: 34px !important;text-align: center !important;
 		}
 		.item-text {
-			font-size: 14px !important;
+			font-size: 14px !important;text-align: center !important;
 		}
 	}
 }
