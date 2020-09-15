@@ -397,6 +397,7 @@
 							v-model="ruleForm1.new_dev_sn"
 							placeholder="请输入设备SN"
 							style="width: 300px"
+                            @change="set_dev_type"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="设备型号：">
@@ -686,12 +687,37 @@ export default {
 			dev_types: [
 				{
 					value: 1,
-					label: 'RK3328',
+					label: 'PCGRAPE',
 				},
 				{
-					value: 0,
-					label: 'AMS805',
+					value: 2,
+					label: 'RK33XX',
 				},
+                 {
+                    value: 3,
+					label: 'AMS805W',
+                },
+                {
+                    value: 4,
+					label: 'AMS905M4C',
+                },
+                {
+                    value: 5,
+					label: 'AMS905M4',
+                },
+                {
+                    value: 6,
+					label: 'AMS805QP1',
+                },
+                {
+                    value: 7,
+					label: 'AMS905N1',
+                },
+                {
+                    value: 8,
+					label: 'AMS905JG1S',
+                },
+               
 			],
 			roms: [
 				{
