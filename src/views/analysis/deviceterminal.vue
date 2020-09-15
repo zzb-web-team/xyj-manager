@@ -51,138 +51,150 @@
 		</div>
 		<div class="devive_tab">
 			<div class="device_tab_on" v-if="radio1 == '设备类型'">
-				<div class="device_form">
+				<div class="device_form" style="display: flex;space-between">
 					<div
 						id="myEchart"
 						style="width: 100%; height: 300px; margin-top: 50px"
 					></div>
-				</div>
-				<div class="devide_table">
-					<el-row type="flex" class="row_active">
-						<el-col :span="24">
-							<tableBarActive2
-								id="rebateSetTable"
-								ref="table1"
-								tooltip-effect="dark"
-								:tableData="tableData"
-								:clomnSelection="clomnSelection"
-								:rowHeader="rowHeader"
-								:tableOption="tableOption"
-								@handleButton="handleButton"
-								:operatingStatus="operatingStatus"
-								@toOperating="toOperating"
-								@handleSelectionChange="handleSelectionChange"
-								@selectCheckBox="selectCheckBox"
-								@selectAll="selectAll"
-							></tableBarActive2>
-						</el-col>
-					</el-row>
-					<el-row
-						type="flex"
-						style="
-							display: flex;
-							justify-content: flex-end;
-							margin: 20px 0;
-						"
-					>
-						<el-col :span="6">
-							<pageNation
-								:pager="pager"
-								@handleSizeChange="handleSizeChange"
-								@handleCurrentChange="handleCurrentChange"
-							></pageNation>
-						</el-col>
-					</el-row>
+					<div class="devide_table">
+						<el-row type="flex" class="row_active">
+							<el-col :span="24">
+								<tableBarActive2
+									id="rebateSetTable"
+									ref="table1"
+									tooltip-effect="dark"
+									:tableData="tableData"
+									:clomnSelection="clomnSelection"
+									:rowHeader="rowHeader"
+									:tableOption="tableOption"
+									@handleButton="handleButton"
+									:operatingStatus="operatingStatus"
+									@toOperating="toOperating"
+									@handleSelectionChange="
+										handleSelectionChange
+									"
+									@selectCheckBox="selectCheckBox"
+									@selectAll="selectAll"
+								></tableBarActive2>
+							</el-col>
+						</el-row>
+						<el-row
+							type="flex"
+							style="
+								display: flex;
+								justify-content: flex-end;
+								margin: 20px 0;
+							"
+						>
+							<el-col :span="6">
+								<pageNation
+									:pager="pager"
+									@handleSizeChange="handleSizeChange"
+									@handleCurrentChange="handleCurrentChange"
+								></pageNation>
+							</el-col>
+						</el-row>
+					</div>
 				</div>
 			</div>
 			<div class="device_tab_on" v-if="radio1 == '设备型号'">
-				<div class="device_form device_form_active">
+				<div
+					class="device_form device_form_active"
+					style="display: flex;space-between"
+				>
 					<div
 						id="myEchart1"
 						style="width: 100%; height: 300px; margin-top: 50px"
 					></div>
-				</div>
-				<div class="devide_table">
-					<el-row type="flex" class="row_active">
-						<el-col :span="24">
-							<tableBarActive2
-								id="rebateSetTable"
-								ref="table1"
-								tooltip-effect="dark"
-								:tableData="tableData2"
-								:clomnSelection="clomnSelection"
-								:rowHeader="rowHeader2"
-								:tableOption="tableOption"
-								@handleButton="handleButton"
-								:operatingStatus="operatingStatus"
-								@toOperating="toOperating"
-								@handleSelectionChange="handleSelectionChange"
-								@selectCheckBox="selectCheckBox"
-								@selectAll="selectAll"
-							></tableBarActive2>
-						</el-col>
-					</el-row>
-					<el-row
-						type="flex"
-						style="
-							display: flex;
-							justify-content: flex-end;
-							margin: 20px 0;
-						"
-					>
-						<el-col :span="6">
-							<pageNation
-								:pager="pager"
-								@handleSizeChange="handleSizeChange"
-								@handleCurrentChange="handleCurrentChange"
-							></pageNation>
-						</el-col>
-					</el-row>
+					<div class="devide_table">
+						<el-row type="flex" class="row_active">
+							<el-col :span="24">
+								<tableBarActive2
+									id="rebateSetTable"
+									ref="table1"
+									tooltip-effect="dark"
+									:tableData="tableData2"
+									:clomnSelection="clomnSelection"
+									:rowHeader="rowHeader2"
+									:tableOption="tableOption"
+									@handleButton="handleButton"
+									:operatingStatus="operatingStatus"
+									@toOperating="toOperating"
+									@handleSelectionChange="
+										handleSelectionChange
+									"
+									@selectCheckBox="selectCheckBox"
+									@selectAll="selectAll"
+								></tableBarActive2>
+							</el-col>
+						</el-row>
+						<el-row
+							type="flex"
+							style="
+								display: flex;
+								justify-content: flex-end;
+								margin: 20px 0;
+							"
+						>
+							<el-col :span="6">
+								<pageNation
+									:pager="pager"
+									@handleSizeChange="handleSizeChange"
+									@handleCurrentChange="handleCurrentChange"
+								></pageNation>
+							</el-col>
+						</el-row>
+					</div>
 				</div>
 			</div>
 			<div class="device_tab_on" v-if="radio1 == '设备ROM'">
-				<div class="device_form device_form_active">
+				<div
+					class="device_form device_form_active"
+					style="display: flex;space-between"
+				>
 					<div
 						id="myEchart1"
 						style="width: 100%; height: 300px; margin-top: 50px"
 					></div>
-				</div>
-				<div class="devide_table">
-					<el-row type="flex" class="row_active">
-						<el-col :span="24">
-							<tableBarActive2
-								id="rebateSetTable"
-								ref="table1"
-								tooltip-effect="dark"
-								:tableData="tableData1"
-								:clomnSelection="clomnSelection"
-								:rowHeader="rowHeader1"
-								:tableOption="tableOption1"
-								@handleButton="handleButton"
-								:operatingStatus="operatingStatus"
-								@toOperating="toOperating"
-								@handleSelectionChange="handleSelectionChange"
-								@selectCheckBox="selectCheckBox"
-								@selectAll="selectAll"
-							></tableBarActive2>
-						</el-col>
-					</el-row>
-					<el-row
-						type="flex"
-						style="
-							display: flex;
-							justify-content: flex-end;
-							margin: 20px 0;
-						"
-					>
-						<el-col :span="6">
-							<pageNation
-								:pager="pager1"
-								@handleSizeChange1="handleSizeChange1"
-								@handleCurrentChange1="handleCurrentChange1"
-							></pageNation>
-						</el-col>
-					</el-row>
+					<div class="devide_table">
+						<el-row type="flex" class="row_active">
+							<el-col :span="24">
+								<tableBarActive2
+									id="rebateSetTable"
+									ref="table1"
+									tooltip-effect="dark"
+									:tableData="tableData1"
+									:clomnSelection="clomnSelection"
+									:rowHeader="rowHeader1"
+									:tableOption="tableOption1"
+									@handleButton="handleButton"
+									:operatingStatus="operatingStatus"
+									@toOperating="toOperating"
+									@handleSelectionChange="
+										handleSelectionChange
+									"
+									@selectCheckBox="selectCheckBox"
+									@selectAll="selectAll"
+								></tableBarActive2>
+							</el-col>
+						</el-row>
+						<el-row
+							type="flex"
+							style="
+								display: flex;
+								justify-content: flex-end;
+								margin: 20px 0;
+							"
+						>
+							<el-col :span="6">
+								<pageNation
+									:pager="pager1"
+									@handleSizeChange1="handleSizeChange1"
+									@handleCurrentChange1="handleCurrentChange1"
+								></pageNation>
+							</el-col>
+						</el-row>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -599,16 +611,16 @@ export default {
 				yAxis: [
 					{
 						type: 'value',
-                        name:"设备数量",
-                        minInterval: 1,
+						name: '设备数量',
+						minInterval: 1,
 					},
 				],
 				series: [
 					{
 						name: '设备数量',
 						type: 'bar',
-                        barWidth: '10%',
-                        barMaxWidth: 30,
+						barWidth: '10%',
+						barMaxWidth: 30,
 						data: y,
 						itemStyle: {
 							normal: {
@@ -669,8 +681,8 @@ export default {
 				},
 				yAxis: {
 					type: 'value',
-                    name: '设备数量',
-                    minInterval: 1,
+					name: '设备数量',
+					minInterval: 1,
 				},
 				series: [
 					{
@@ -722,7 +734,7 @@ export default {
 				},
 				color: ['#3398DB'],
 				tooltip: {
-					trigger: 'axis'
+					trigger: 'axis',
 				},
 				grid: {
 					left: '3%',
@@ -738,8 +750,8 @@ export default {
 				},
 				yAxis: {
 					type: 'value',
-                    name: '设备数量',
-                    minInterval: 1,
+					name: '设备数量',
+					minInterval: 1,
 				},
 				series: [
 					{
@@ -779,7 +791,10 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+.devide_table {
+	width: 650px !important;
+}
 .myself-container {
 	.devive_tab {
 		width: 100%;
@@ -838,7 +853,7 @@ export default {
 		height: auto;
 		overflow: hidden;
 		margin-top: 20px;
-
+		margin-left: 50px;
 		.el-table td,
 		.el-table th {
 			padding: 6px 0px;

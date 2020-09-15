@@ -1,6 +1,6 @@
 <template>
 	<section class="myself-container">
-		<div class="switch_tab">
+		<!-- <div class="switch_tab">
 			<el-radio-group
 				v-model="radio1"
 				@change="onchangeTab"
@@ -11,10 +11,8 @@
 			>
 				<el-radio-button label="在线时长"></el-radio-button>
 				<el-radio-button label="离线次数"></el-radio-button>
-
-				<!-- <el-button style="margin-left:20px;" type="text" @click="toexportExcel">导出</el-button> -->
 			</el-radio-group>
-		</div>
+		</div> -->
 		<div class="user-title" style="margin-bottom: 20px">
 			<el-date-picker
 				size="small"
@@ -87,68 +85,70 @@
 			>
 		</div>
 		<div class="devive_tab">
-			<div class="device_tab_on" v-if="showType">
+			<div class="device_tab_on">
 				<div class="device_form" style="display: flex;space-between">
 					<div
 						id="myEchart"
-						style="width: 100%; height: 500px; margin-top: 50px"
+						style="width: 100%; height: 700px; margin-top: 50px"
 					></div>
-					<div
-						style="
-							height: 500px;
-							display: flex;
-							align-items: flex-end;
-							justify-content: flex-start;
-							white-space: nowrap;
-						"
-					>
-						日累计在线时长(OT)
-					</div>
 					<div
 						v-if="bin_show"
-						id="myEchart_bin"
-						style="width: 100%; height: 400px; margin-top: 50px"
-					></div>
-				</div>
-				<div class="devide_table">
-					<el-row type="flex" class="row_active">
-						<el-col :span="24">
-							<tableBarActive2
-								id="rebateSetTable"
-								ref="table1"
-								tooltip-effect="dark"
-								:tableData="tableDatanew11"
-								:clomnSelection="clomnSelection"
-								:rowHeader="rowHeader"
-								:tableOption="tableOption"
-								@handleButton="handleButton"
-								:operatingStatus="operatingStatus"
-								@toOperating="toOperating"
-								@handleSelectionChange="handleSelectionChange"
-								@selectCheckBox="selectCheckBox"
-								@selectAll="selectAll"
-							></tableBarActive2>
-						</el-col>
-					</el-row>
-					<el-row
-						type="flex"
 						style="
-							display: flex;
-							justify-content: flex-end;
-							margin: 20px 0;
+							width: 760px;
+							height: 700px;
+							margin-top: 50px;
+							margin-left: 50px;
 						"
 					>
-						<el-col :span="6">
-							<pageNation
-								:pager="pager"
-								@handleSizeChange="handleSizeChange"
-								@handleCurrentChange="handleCurrentChange"
-							></pageNation>
-						</el-col>
-					</el-row>
+						<div
+							id="myEchart_bin"
+							style="width: 100%; height: 260px; margin-top: 50px"
+						></div>
+						<div class="devide_table">
+							<el-row type="flex" class="row_active">
+								<el-col :span="24">
+									<tableBarActive2
+										id="rebateSetTable"
+										ref="table1"
+										tooltip-effect="dark"
+										:tableData="tableDatanew11"
+										:clomnSelection="clomnSelection"
+										:rowHeader="rowHeader"
+										:tableOption="tableOption"
+										@handleButton="handleButton"
+										:operatingStatus="operatingStatus"
+										@toOperating="toOperating"
+										@handleSelectionChange="
+											handleSelectionChange
+										"
+										@selectCheckBox="selectCheckBox"
+										@selectAll="selectAll"
+									></tableBarActive2>
+								</el-col>
+							</el-row>
+							<el-row
+								type="flex"
+								style="
+									display: flex;
+									justify-content: center;
+									margin: 20px 0;
+								"
+							>
+								<el-col :span="6">
+									<pageNation
+										:pager="pager"
+										@handleSizeChange="handleSizeChange"
+										@handleCurrentChange="
+											handleCurrentChange
+										"
+									></pageNation>
+								</el-col>
+							</el-row>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="device_tab_on" v-if="!showType">
+			<!-- <div class="device_tab_on" >
 				<div
 					class="device_form device_form_active"
 					style="display: flex;space-between"
@@ -206,7 +206,7 @@
 						</el-col>
 					</el-row>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</section>
 </template>
@@ -354,7 +354,8 @@ export default {
 				{ value: 0, name: '5h<OT<=10h' },
 				{ value: 0, name: '10h<OT<=15h' },
 				{ value: 0, name: '15h<OT<=20h' },
-				{ value: 0, name: '20h<OT<=24h' },
+				{ value: 0, name: '20h<OT<24h' },
+				{ value: 0, name: 'OT<=24h' },
 			],
 		};
 	},
@@ -434,7 +435,6 @@ export default {
 						}
 						this.options11.push(obj);
 					}
-
 				})
 				.catch((error) => {});
 		},
@@ -582,6 +582,8 @@ export default {
 									this.bin_list[3].value = item.num;
 								} else if (item.type == '5') {
 									this.bin_list[4].value = item.num;
+								} else if (item.type == '6') {
+									this.bin_list[5].value = item.num;
 								}
 							});
 						}
@@ -602,6 +604,7 @@ export default {
 							4: { timeStamp: '10h<OT<=15h', num: 0, percent: 0 },
 							5: { timeStamp: '15h<OT<=20h', num: 0, percent: 0 },
 							6: { timeStamp: '20h<OT<=24h', num: 0, percent: 0 },
+							7: { timeStamp: 'OT=24h', num: 0, percent: 0 },
 						};
 						for (var i = 0; i < tempArr.length; i++) {
 							list[tempArr[i].type].num = tempArr[i].num;
@@ -635,8 +638,7 @@ export default {
 						this.drawLine_bin();
 					}
 				})
-				.catch((error) => {
-				});
+				.catch((error) => {});
 		},
 		querydeviceOffline() {
 			let tempTime = new Date(new Date().toLocaleDateString()).getTime();
@@ -735,8 +737,7 @@ export default {
 						this.drawLine1(echarsArr);
 					}
 				})
-				.catch((error) => {
-				});
+				.catch((error) => {});
 		},
 
 		drawLine(list) {
@@ -870,18 +871,21 @@ export default {
 				3: { timeStamp: '5h<OT<=10h', num: 0, percent: 0 },
 				4: { timeStamp: '10h<OT<=15h', num: 0, percent: 0 },
 				5: { timeStamp: '15h<OT<=20h', num: 0, percent: 0 },
-				6: { timeStamp: '20h<OT<=24h', num: 0, percent: 0 },
+				6: { timeStamp: '20h<OT<24h', num: 0, percent: 0 },
+				7: { timeStamp: 'OT=24h', num: 0, percent: 0 },
 				xAxis: [
 					{
 						type: 'category',
 						axisTick: { show: false },
+						name: '日累计在线时长(OT)',
 						data: [
 							'OT<=1h',
 							'1h<OT<=5h',
 							'5h<OT<=10h',
 							'10h<OT<=15h',
 							'15h<OT<=20h',
-							'20h<OT<=24h',
+							'20h<OT<24h',
+							'OT=24h',
 						],
 					},
 				],
@@ -922,7 +926,8 @@ export default {
 						'5h<OT<=10h',
 						'10h<OT<=15h',
 						'15h<OT<=20h',
-						'20h<OT<=24h',
+						'20h<OT<24h',
+						'OT=24',
 					],
 				},
 				series: [
@@ -945,6 +950,28 @@ export default {
 								shadowBlur: 10,
 								shadowOffsetX: 0,
 								shadowColor: 'rgba(0, 0, 0, 0.5)',
+							},
+						},
+						itemStyle: {
+							emphasis: {
+								shadowBlur: 10,
+								shadowOffsetX: 0,
+								shadowColor: 'rgba(0, 0, 0, 0.5)',
+							},
+							normal: {
+								color: function (params) {
+									//自定义颜色
+									var colorList = [
+										'#5EA7FD',
+										'#F86656',
+										'#F8B256',
+										'#F8E356',
+										'#56F89C',
+										'#56F8F6',
+										'#57BDF8',
+									];
+									return colorList[params.dataIndex];
+								},
 							},
 						},
 					},

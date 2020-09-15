@@ -1,5 +1,5 @@
 <template>
-	<section @click="closeSel">
+	<section>
 		<!-- <div class="top_title">设备流量分析</div> -->
 		<el-row
 			type="flex"
@@ -7,62 +7,84 @@
 			:gutter="30"
 			justify="start"
 		>
-			<el-col :span="3" class="title_overview">
-				<div class="title_overview_top">
-					<div>上行总流量：{{ totalYl | setbytes }}</div>
-					<div>下行总流量：{{ totalYl | setbytes }}</div>
+			<el-col :span="6" class="title_overview today_income">
+				<div class="item_box">
+					<div class="title_overview_bottom">今日总流量</div>
+					<div class="title_overview_center">
+						{{ total_today | setbytes }}
+					</div>
+					<div class="title_overview_top">
+						<div>上行总流量：{{ up_today | setbytes }}</div>
+						<div>下行总流量：{{ down_today | setbytes }}</div>
+					</div>
 				</div>
-				<div class="title_overview_center">
-					{{ totalYl | setbytes }}
-				</div>
-				<div class="title_overview_bottom">今日总流量</div>
 			</el-col>
-			<el-col :span="3" class="title_overview">
-				<div class="title_overview_top">
-					<div>上行总流量：{{ totalYl | setbytes }}</div>
-					<div>下行总流量：{{ totalYl | setbytes }}</div>
+			<el-col :span="6" class="title_overview yesterday_income">
+				<div class="item_box">
+					<div class="title_overview_bottom">昨日总流量</div>
+					<div class="title_overview_center">
+						{{ total_yesterday | setbytes }}
+					</div>
+					<div class="title_overview_top">
+						<div>上行总流量：{{ up_yesterday | setbytes }}</div>
+						<div>下行总流量：{{ down_yesterday | setbytes }}</div>
+					</div>
 				</div>
-				<div class="title_overview_center">
-					{{ totalYl | setbytes }}
-				</div>
-				<div>昨日总流量</div>
 			</el-col>
-			<el-col :span="3" class="title_overview">
-				<div class="title_overview_top">
-					<div>上行总流量：{{ totalYl | setbytes }}</div>
-					<div>下行总流量：{{ totalYl | setbytes }}</div>
+			<el-col :span="6" class="title_overview month_income">
+				<div class="item_box">
+					<div class="title_overview_bottom">本月总流量</div>
+					<div class="title_overview_center">
+						{{ total_month | setbytes }}
+					</div>
+					<div class="title_overview_top">
+						<div>上行总流量：{{ up_month | setbytes }}</div>
+						<div>下行总流量：{{ down_month | setbytes }}</div>
+					</div>
 				</div>
-				<div class="title_overview_center">
-					{{ totalYl | setbytes }}
-				</div>
-				<div>本月总流量</div>
 			</el-col>
 		</el-row>
 		<!--  -->
-
+		<el-row type="flex" justify="start" style="margin-bottom: 24px">
+			<el-col>
+				<el-radio-group
+					v-show="shoudzyx == false"
+					v-model="radio1"
+					@change="onchangeTab"
+				>
+					<el-radio-button label="one">今天</el-radio-button>
+					<el-radio-button label="two">昨天</el-radio-button>
+					<el-radio-button label="three">自定义 </el-radio-button>
+				</el-radio-group>
+				<el-button
+					@click="showpickerfs"
+					v-show="shoudzyx"
+					style="margin-right: 10px; margin-left: 10px"
+					type="primary"
+					>自定义</el-button
+				>
+				<el-date-picker
+					v-show="shoudzyx"
+					style="margin-left: 10px"
+					v-model="val2"
+					type="datetimerange"
+					range-separator="至"
+					start-placeholder="开始日期"
+					end-placeholder="结束日期"
+					align="left"
+					@change="gettimes"
+					:picker-options="pickerOptions"
+				></el-date-picker>
+			</el-col>
+		</el-row>
 		<el-row type="flex" justify="start" :gutter="20">
 			<el-col :span="3">
 				<el-input
 					size="small"
 					v-model="value1Activechanid"
-					placeholder="设备SN"
+					placeholder="请输入设备SN"
 					@change="onchanidChange"
 				></el-input>
-			</el-col>
-			<el-col :span="3">
-				<el-select
-					size="small"
-					v-model="pri_chan_prv"
-					placeholder="请选择一级渠道商"
-				>
-					<el-option label="全部" value=""></el-option>
-					<el-option
-						v-for="item in pri_chan_prvs"
-						:key="item"
-						:label="item.label"
-						:value="item.value"
-					></el-option>
-				</el-select>
 			</el-col>
 			<el-col :span="3">
 				<el-select
@@ -70,7 +92,7 @@
 					v-model="eqp_brd"
 					placeholder="请选择设备品牌"
 				>
-					<el-option label="全部" value=""></el-option>
+					<el-option label="全部" value="*"></el-option>
 					<el-option
 						v-for="item in eqp_brds"
 						:key="item"
@@ -82,10 +104,25 @@
 			<el-col :span="3">
 				<el-select
 					size="small"
+					v-model="pri_chan_prv"
+					placeholder="请选择一级渠道"
+				>
+					<el-option label="全部" value="*"></el-option>
+					<el-option
+						v-for="item in pri_chan_prvs"
+						:key="item"
+						:label="item.label"
+						:value="item.value"
+					></el-option>
+				</el-select>
+			</el-col>
+			<el-col :span="3">
+				<el-select
+					size="small"
 					v-model="scd_chan_prv"
 					placeholder="请选择二级渠道商"
 				>
-					<el-option label="全部" value=""></el-option>
+					<el-option label="全部" value="*"></el-option>
 					<el-option
 						v-for="item in scd_chan_prvs"
 						:key="item"
@@ -100,7 +137,7 @@
 					v-model="dev_type"
 					placeholder="请选择设备型号"
 				>
-					<el-option label="全部" value=""></el-option>
+					<el-option label="全部" value="*"></el-option>
 					<el-option
 						v-for="item in dev_types"
 						:key="item.value"
@@ -109,52 +146,18 @@
 					></el-option>
 				</el-select>
 			</el-col>
-			<el-col :span="10">
-				<el-radio-group
-					v-show="shoudzyx == false"
-					size="small"
-					v-model="radio1"
-					@change="onchangeTab"
-				>
-					<el-radio-button label="one">今天</el-radio-button>
-					<el-radio-button label="two">昨天</el-radio-button>
-					<el-radio-button label="three">近7天</el-radio-button>
-					<el-radio-button label="four">近30天</el-radio-button>
-					<el-radio-button label="five"
-						>自定义
-						<i class="el-icon-date"></i>
-					</el-radio-button>
-				</el-radio-group>
-				<el-button
-					size="small"
-					@click="showpickerfs"
-					v-show="shoudzyx"
-					style="margin-right: 10px; margin-left: 10px"
-					type="primary"
-					>自定义</el-button
-				>
-				<el-date-picker
-					size="medium"
-					v-show="shoudzyx"
-					style="margin-left: 10px"
-					v-model="val2"
-					type="datetimerange"
-					range-separator="至"
-					start-placeholder="开始日期"
-					end-placeholder="结束日期"
-					align="left"
-					@change="gettimes"
-					:picker-options="pickerOptions"
-				></el-date-picker>
+			<el-col :span="3">
 				<el-button
 					size="small"
 					style="margin-left: 10px"
 					type="primary"
 					@click="seachtu(1)"
-					>确定</el-button
+					>搜索</el-button
+				>
+				<el-button size="small" style="margin-left: 10px" @click="reset"
+					>重置</el-button
 				>
 			</el-col>
-			<el-col :span="3"> </el-col>
 		</el-row>
 
 		<!--  -->
@@ -172,6 +175,7 @@ import {
 	manage_dataflow_curve,
 	manage_dataflow_table,
 	export_manage_dataflow_table_file,
+	device_dataflow_analyse_curve,
 } from '../../api/api';
 import echarts from 'echarts';
 import common from '../../common/js/util';
@@ -323,7 +327,6 @@ export default {
 			eqp_types: ['PC服务器', '硬盘盒子', '电视盒子', 'PC服务器'],
 			radio1: 'one',
 			plain: '',
-			search: '',
 			valuedomian: '',
 			value1acce1: '',
 			duibi: false,
@@ -331,7 +334,6 @@ export default {
 			value1Activechanid: '',
 			shoudzyx: false,
 			value1: '',
-			tablecdn: [],
 			val2: [],
 			timeUnit: 60,
 			starttime: '',
@@ -340,12 +342,17 @@ export default {
 			timeArray: [], //图1
 			pageSize: 10, //每页数量
 			pageNo: 1, //当前页码
-			total_cnt: 1, //数据总量
-			chanid: '',
 			pageActive: 0,
-			pageActive1: 0,
 			flowunit: '',
-			totalYl: 0,
+			total_today: 0,
+			up_today: 0,
+			down_today: 0,
+			total_yesterday: 0,
+			up_yesterday: 0,
+			down_yesterday: 0,
+			total_month: 0,
+			up_month: 0,
+			down_month: 0,
 		};
 	},
 	filters: {
@@ -355,104 +362,23 @@ export default {
 		},
 		setbytes(data) {
 			return common.formatByteActive(data);
-		}
+		},
 	},
 	components: {
 		pageNation,
 	},
 	mounted() {
-		this.drawLine();
-		let monitorUrlname = this.$route.query.monitorUrlname;
-		if (monitorUrlname) {
-			this.value1 = monitorUrlname;
-		} else {
-			this.value1 = '';
-		}
-		let monitorChanId = this.$route.query.monitorChanId;
-		if (monitorChanId) {
-			this.value1Activechanid = monitorChanId;
-		} else {
-			this.value1Activechanid = '';
-		}
-
 		this.starttime =
 			new Date(new Date().toLocaleDateString()).getTime() / 1000;
 		this.endtime = Date.parse(new Date()) / 1000;
-
 		this.gettable1();
-		this.gettable2();
-	},
-	beforeDestroy() {
-		if (!this.chart) {
-			return;
-		}
-		this.chart.dispose();
-		this.chart = null;
-		this.drawLine();
-		this.drawLine1();
+		// this.drawLine(
+		// 	[12, 15, 15, 16, 3],
+		// 	[64, 45, 12, 48, 12],
+		// 	['周一', '周二', '周三', '周四', '周五']
+		// );
 	},
 	methods: {
-		closeSel(event) {
-			var currentCli = document.getElementById('sellineName');
-			var shopw = document.getElementById('shopw');
-			if (currentCli || shopw) {
-				if (
-					!currentCli.contains(event.target) &&
-					!shopw.contains(event.target)
-				) {
-					//点击到了id为sellineName以外的区域，隐藏下拉框
-					this.duibi = false;
-				}
-			}
-		},
-		showduibi() {
-			this.duibi = !this.duibi;
-		},
-		searchid() {
-			this.pageActive1 = 0;
-			this.querychanId(this.search);
-		},
-		handleSelectionChange(val) {
-			let arrlist = [];
-			if (val.length > 0) {
-				val.forEach((item) => {
-					arrlist.push(item.value);
-				});
-				this.chanIds = arrlist;
-				this.gettable1(arrlist);
-				this.gettable2(arrlist);
-			} else {
-				this.gettable1(val);
-				this.gettable2(val);
-			}
-		},
-		cellClass(row) {
-			if (row.columnIndex === 0) {
-				//你需要判断的条件
-				return 'disabledCheck';
-			}
-		},
-		//终端查询信息
-		getdata2(val) {
-			this.value1acce1 = val;
-			this.gettable1();
-			this.gettable2();
-		},
-		//失去焦点事件
-		onblurs(event) {
-			this.chanIds = event;
-		},
-		//获取页码
-		handleCurrentChange(pages) {
-			this.pageNo = pages;
-			this.gettable2();
-		},
-
-		//获取每页数量
-		handleSizeChange(pagetol) {
-			//this.pagesize = pagetol;
-			// this.getuserlist();
-		},
 		//回源统计图表导出
 		exoprtant_Yl() {
 			this.dataFlowArray = [];
@@ -460,22 +386,12 @@ export default {
 			let params = new Object();
 			params.startTs = this.starttime;
 			params.endTs = this.endtime;
-			// params.chanId = this.chanid + "";
-			if (this.value1) {
-				params.urlName = this.value1;
+			if (this.value1Activechanid == '') {
+				params.channelId = '*';
 			} else {
-				params.urlName = '*';
+				params.channelId = this.value1Activechanid;
 			}
-			if (this.chanIds.length == 0) {
-				if (this.value1Activechanid == '') {
-					params.channelId = '*';
-				} else {
-					params.channelId = this.value1Activechanid;
-				}
-			} else {
-				let nowstr = this.chanIds.join(',');
-				params.channelId = nowstr;
-			}
+
 			if (this.valuedomian !== '') {
 				params.domain = this.valuedomian;
 			} else {
@@ -508,153 +424,70 @@ export default {
 				return false;
 			}
 			this.pageNo = 1;
-			this.queryInfoVideo();
 		},
-		//获取页码
-		getpage(pages) {
-			this.pageNo = pages;
-			this.getbot();
-		},
-		//获取每页数量
-		gettol(pagetol) {
-			this.pagesize = pagetol;
-			// this.getuserlist();
-		},
-		getdata() {
-			this.pageNo = 1;
-			this.gettable1();
-		},
-		getdata1() {
-			this.gettable2();
-		},
-
 		/** 请求数据 */
 		gettable1(data) {
 			this.dataFlowArray = [];
 			this.timeArray = [];
 			let params = new Object();
-			params.startTs = this.starttime;
-			params.endTs = this.endtime;
-			// params.chanId = this.chanid + "";
-			if (this.value1) {
-				params.urlName = this.value1;
-			} else {
-				params.urlName = '*';
-			}
-			if (data) {
-				// let temparr1 = [];
-				// temparr1 = data;
-				// temparr1.push(parseInt(this.value1Activechanid));
-				params.channelId = data;
-			} else {
-				if (this.value1Activechanid !== '') {
-					params.channelId = [];
-					params.channelId.push(this.value1Activechanid);
-				} else {
-					params.channelId = [];
-				}
-			}
-			if (this.valuedomian !== '') {
-				params.domain = this.valuedomian;
-			} else {
-				params.domain = '*';
-			}
-			if (this.value1acce1 !== '-1') {
-				params.terminalName = parseInt(this.value1acce1);
-			} else {
-				params.terminalName = -1;
-			}
-			params.timeUnit = this.common.timeUnitActive(
-				this.starttime,
-				this.endtime
-			);
-			(params.pageNo = 0),
-				(params.pageSize = 10),
-				manage_dataflow_curve(params)
-					.then((res) => {
-						this.totalYl = res.data.total;
-						let nowlengh = res.data.data.length;
-						let nowtemp = res.data.data;
-						let nowarr = [];
-						let childlist = [];
-						var num = res.data.data[0].dataflowArray;
-						var max = Math.max.apply(null, num);
-						this.flowunit = this.common.formatByteActiveunit(max);
-						for (var i = 0; i < nowlengh; i++) {
-							childlist.push(res.data.data[i].channelid);
-							let obj = {};
-							obj.type = 'bar';
-							obj.barGap = '6%';
-							(obj.barMaxWidth = 30),
-								(obj.name = res.data.data[i].channelid);
-							let nowarr1 = [];
-							nowtemp[i].dataflowArray.forEach((item, index) => {
-								nowarr1.push(
-									this.common.formatByteNum(
-										item,
-										this.flowunit
-									)
-								);
-							});
-							obj.data = nowarr1;
-							nowarr.push(obj);
-						}
+			params.startTime = this.starttime;
+			params.endTime = this.endtime;
 
-						res.data.data[0].timeArray.forEach((item, index) => {
-							this.timeArray.push(getymdtime1(item));
+			if (this.value1Activechanid == '') {
+				params.deviceSN = '*';
+			} else {
+				params.deviceSN = this.value1Activechanid;
+			}
+			if (this.eqp_brd == '') {
+				params.deviceName = '*';
+			} else {
+				params.deviceName = this.eqp_brd;
+			}
+			if (this.pri_chan_prv == '') {
+				params.firstChannel = '*';
+			} else {
+				params.firstChannel = this.pri_chan_prv;
+			}
+			if (this.scd_chan_prv == '') {
+				params.secondChannel = '*';
+			} else {
+				params.secondChannel = this.scd_chan_prv;
+			}
+
+			if (this.dev_type == '') {
+				params.deviceId = '*';
+			} else {
+				params.deviceId = this.dev_type;
+			}
+			if (params.endTime - params.startTime > 86399) {
+				params.timeUnit = 120;
+			} else {
+				params.timeUnit = 1440;
+			}
+			device_dataflow_analyse_curve(params)
+				.then((res) => {
+					if (res.status == 0) {
+						this.total_today = res.data.todayTotal;
+						this.up_today = res.data.todayUp;
+						this.down_today = res.data.todayDown;
+						this.total_yesterday = res.data.yesterdayTotal;
+						this.up_yesterday = res.data.yesterdayUp;
+						this.down_yesterday = res.data.yesterdayDown;
+						this.total_month = res.data.monthTotal;
+						this.up_month = res.data.monthUp;
+						this.down_month = res.data.monthDown;
+						this.$nextTick(() => {
+							this.drawLine(
+								res.data.upFlow,
+								res.data.downFlow,
+								res.data.timeArray
+							);
 						});
-						// this.getbot();
-						this.drawLine(nowarr, this.timeArray, childlist);
-					})
-					.catch((err) => {});
-		},
-		//用量查询列表
-		gettable2(data) {
-			this.dataFlowArray = [];
-			this.timeArray = [];
-			let params = new Object();
-			params.startTs = this.starttime;
-			params.endTs = this.endtime;
-			// params.chanId = this.chanid + "";
-			if (this.value1) {
-				params.urlName = this.value1;
-			} else {
-				params.urlName = '*';
-			}
-			if (data) {
-				params.channelId = data;
-			} else {
-				if (this.value1Activechanid !== '') {
-					params.channelId = [];
-					params.channelId.push(this.value1Activechanid);
-				} else {
-					params.channelId = [];
-				}
-			}
-			if (this.valuedomian !== '') {
-				params.domain = this.valuedomian;
-			} else {
-				params.domain = '*';
-			}
-			if (this.value1acce1 !== '-1') {
-				params.terminalName = parseInt(this.value1acce1);
-			} else {
-				params.terminalName = -1;
-			}
-			params.timeUnit = this.common.timeUnitActive(
-				this.starttime,
-				this.endtime
-			);
-			(params.pageNo = this.pageNo - 1),
-				(params.pageSize = 10),
-				manage_dataflow_table(params)
-					.then((res) => {
-						if (res.status == 0) {
-							this.tablecdn = res.data.list;
-							this.total_cnt = res.data.totalCnt;
-						}
-					})
-					.catch((err) => {});
+					} else {
+						this.$message.error(res.error_msg);
+					}
+				})
+				.catch((err) => {});
 		},
 		seachtu(data) {
 			if (this.endtime - this.starttime > 7776000) {
@@ -666,8 +499,9 @@ export default {
 			}
 			this.pageNo = 1;
 			this.gettable1();
-			this.gettable2();
 		},
+		//重置
+		reset() {},
 		//今天
 		onchangeTab(val) {
 			if (val == 'one') {
@@ -675,10 +509,6 @@ export default {
 			} else if (val == 'two') {
 				this.yesterday();
 			} else if (val == 'three') {
-				this.sevendat();
-			} else if (val == 'four') {
-				this.thirtyday();
-			} else if (val == 'five') {
 				this.shoudzyx = true;
 			}
 		},
@@ -695,7 +525,6 @@ export default {
 			this.endtime = Date.parse(new Date()) / 1000;
 			this.timeUnit = 60;
 			this.gettable1();
-			this.gettable2();
 			this.$refs.multipleTable.clearSelection();
 		},
 		//昨天
@@ -707,29 +536,6 @@ export default {
 			this.endtime = times;
 			this.timeUnit = 60;
 			this.gettable1();
-			this.gettable2();
-			this.$refs.multipleTable.clearSelection();
-		},
-		//七天
-		sevendat(data) {
-			this.plain = 'plain';
-			let times = parseInt(new Date(new Date()).getTime() / 1000);
-			this.starttime = times - 24 * 60 * 60 * 6;
-			this.endtime = times;
-			this.timeUnit = 60 * 24;
-			this.gettable1();
-			this.gettable2();
-			this.$refs.multipleTable.clearSelection();
-		},
-		//三十天
-		thirtyday(data) {
-			this.plain = 'plain';
-			let times = parseInt(new Date(new Date()).getTime() / 1000);
-			this.starttime = times - 24 * 60 * 60 * 29;
-			this.endtime = times;
-			this.timeUnit = 60 * 24;
-			this.gettable1();
-			this.gettable2();
 			this.$refs.multipleTable.clearSelection();
 		},
 		//自定义时间
@@ -758,120 +564,12 @@ export default {
 		rowClass() {
 			return 'text-align: center;';
 		},
-		drawLine(x, y, idlist) {
+		drawLine(x1, x2, y) {
 			let _this = this;
 			let myChart = echarts.init(document.getElementById('myChartMap')); //获得容器所在位置
 			window.onresize = myChart.resize;
-			var posList = [
-				'left',
-				'right',
-				'top',
-				'bottom',
-				'inside',
-				'insideTop',
-				'insideLeft',
-				'insideRight',
-				'insideBottom',
-				'insideTopLeft',
-				'insideTopRight',
-				'insideBottomLeft',
-				'insideBottomRight',
-			];
-
-			app.configParameters = {
-				rotate: {
-					min: -90,
-					max: 90,
-				},
-				align: {
-					options: {
-						left: 'left',
-						center: 'center',
-						right: 'right',
-					},
-				},
-				verticalAlign: {
-					options: {
-						top: 'top',
-						middle: 'middle',
-						bottom: 'bottom',
-					},
-				},
-				position: {
-					options: echarts.util.reduce(
-						posList,
-						function (map, pos) {
-							map[pos] = pos;
-							return map;
-						},
-						{}
-					),
-				},
-				distance: {
-					min: 0,
-					max: 100,
-				},
-			};
-
-			app.config = {
-				rotate: 90,
-				align: 'left',
-				verticalAlign: 'middle',
-				position: 'insideBottom',
-				distance: 15,
-				onChange: function () {
-					var labelOption = {
-						normal: {
-							rotate: app.config.rotate,
-							align: app.config.align,
-							verticalAlign: app.config.verticalAlign,
-							position: app.config.position,
-							distance: app.config.distance,
-						},
-					};
-					myChart.setOption({
-						series: [
-							{
-								label: labelOption,
-							},
-							{
-								label: labelOption,
-							},
-							{
-								label: labelOption,
-							},
-							{
-								label: labelOption,
-							},
-						],
-					});
-				},
-			};
-
-			var labelOption = {
-				show: true,
-				position: app.config.position,
-				distance: app.config.distance,
-				align: app.config.align,
-				verticalAlign: app.config.verticalAlign,
-				rotate: app.config.rotate,
-				formatter: '{c}  {name|{a}}',
-				fontSize: 16,
-				rich: {
-					name: {
-						textBorderColor: '#fff',
-					},
-				},
-			};
 			let options = {
-				color: [
-					'#42a6f5',
-					'#ffa726',
-					'#f65f54',
-					'#67bb6a',
-					'#42a6f5',
-					'#5eb2f6',
-				],
+				color: ['#0A7CFF', '#FF823E'],
 				tooltip: {
 					trigger: 'axis',
 					//     formatter: function(params) {
@@ -904,8 +602,9 @@ export default {
 					},
 				},
 				legend: {
-					data: ['上行', '下行'],
-					top: 0,
+					data: ['上行流量', '下行流量'],
+                    top: "7.5%",
+                    left:"5%"
 				},
 				grid: {
 					left: '3%', // 默认10%，给24就挺合适的。
@@ -938,32 +637,32 @@ export default {
 				// series: x,
 				series: [
 					{
-						name: '上行',
+						name: '上行流量',
 						type: 'bar',
 						barGap: 0,
 						label: {
 							show: false,
 						},
 						barMaxWidth: 30,
-						data: x,
+						data: x1,
 						// data: [320, 332, 301, 334, 390, 461, 140],
 					},
 					{
-						name: '下行',
+						name: '下行流量',
 						type: 'bar',
 						label: {
 							show: false,
 						},
 						show: false,
 						barMaxWidth: 30,
-						data: x,
+						data: x2,
 						// data: [220, 182, 191, 234, 290, 140, 369],
 					},
 				],
 			};
 			myChart.clear();
 			myChart.setOption(options);
-		}
+		},
 	},
 };
 </script>
@@ -1126,24 +825,49 @@ export default {
 	margin: 25px 0 !important;
 	background-color: #ffffff;
 	.title_overview {
-		border: 2px solid #f2f2f2;
-		border-radius: 5px;
-		height: 140px;
-		text-align: center;
+		border-radius: 12px;
+		height: 174px;
 		margin-right: 25px;
-		.title_overview_top {
-			text-align: center;
-			margin-top: 10px;
-			font-size: 12px;
+		color: #ffffff;
+		.item_box {
+			float: right;
+			width: 50%;
+			text-align: left;
+			height: 100%;
+			box-sizing: border-box;
+			padding: 28px 0;
+			.title_overview_top {
+				font-size: 14px;
+				font-weight: 400;
+				opacity: 0.8;
+				div {
+					line-height: 18px;
+				}
+			}
+			.title_overview_center {
+				font-size: 36px;
+				font-weight: 600;
+				margin-top: 8px;
+				margin-bottom: 13px;
+			}
+			.title_overview_bottom {
+				font-size: 18px;
+				opacity: 0.5;
+				font-weight: 800;
+			}
 		}
-		.title_overview_center {
-			font-size: 20px;
-			margin-top: 10px;
-			margin-bottom: 10px;
-		}
-		.title_overview_bottom {
-			height: 60px;
-		}
+	}
+	.today_income {
+		background: url(../../assets/today_income.png) no-repeat;
+		background-size: 100% 100%;
+	}
+	.yesterday_income {
+		background: url(../../assets/yesterday_income.png) no-repeat;
+		background-size: 100% 100%;
+	}
+	.month_income {
+		background: url(../../assets/month_incom.png) no-repeat;
+		background-size: 100% 100%;
 	}
 }
 </style>

@@ -10,7 +10,6 @@
 				>
 			</div>
 		</div> -->
-		<div style="height: 40px; line-height: 40px">硬件收益配置</div>
 		<el-button type="primary" @click="addList" size="small">添加</el-button>
 		<div style="width: 600px">
 			<el-table
@@ -51,6 +50,7 @@
 								@click.native.prevent="
 									deleteRow(scope.$index, tableData)
 								"
+                                style="color:#F85656;"
 							>
 								删除
 							</el-button>
@@ -58,7 +58,7 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<p style="color: #d9001b">
+			<p style="color: #F85656">
 				* 在线时间（单位：小时），仅支持整数；
 				奖励：1≦x≦100区间，仅支持整数
 			</p>

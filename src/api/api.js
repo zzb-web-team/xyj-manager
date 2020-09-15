@@ -1391,3 +1391,57 @@ export const set_earn_dot_value = (params) => {
         .post(`${ownbase}/miner_earn/set_earn_dot_value`, params)
         .then((res) => res.data);
 };
+//设备在线分析--图表
+export const device_online_analyse_curve = (params) => {
+    return axios
+        .post(`${ownbase}/grapefruit_manage/device_online_analyse_curve`, params)
+        .then((res) => res.data);
+};
+//设备在线分析--表格
+export const device_online_analyse_table = (params) => {
+    return axios
+        .post(`${ownbase}/grapefruit_manage/device_online_analyse_table`, params)
+        .then((res) => res.data);
+};
+//设备流量分析--图表
+export const device_dataflow_analyse_curve = (params) => {
+    return axios
+        .post(`${ownbase}/grapefruit_manage/device_dataflow_analyse_curve`, params)
+        .then((res) => res.data);
+};
+//设备终端--设备类型--图表
+export const device_name_analyse_curve = (params) => {
+    return axios
+        .post(`${ownbase}/grapefruit_manage/device_name_analyse_curve`, params)
+        .then((res) => res.data);
+};
+//设备终端--设备类型--表格
+export const device_name_analyse_table = (params) => {
+    return axios
+        .post(`${ownbase}/grapefruit_manage/device_name_analyse_table`, params)
+        .then((res) => res.data);
+};
+//设备终端--设备型号--图表
+export const device_type_analyse_curve = (params) => {
+    return axios
+        .post(`${ownbase}/grapefruit_manage/device_type_analyse_curve`, params)
+        .then((res) => res.data);
+};
+//设备终端--设备型号--表格
+export const device_type_analyse_tabl = (params) => {
+    return axios
+        .post(`${ownbase}/grapefruit_manage/device_type_analyse_tabl`, params)
+        .then((res) => res.data);
+};
+//设备终端--设备ROM--图表
+export const device_rom_analyse_curve = (params) => {
+    return axios
+        .post(`${ownbase}/grapefruit_manage/device_rom_analyse_curve`, params)
+        .then((res) => res.data);
+};
+//设备终端--设备ROM--表格
+export const device_rom_analyse_table = (params) => {
+    return axios
+        .post(`${ownbase}/grapefruit_manage/device_rom_analyse_table`, params)
+        .then((res) => res.data);
+};

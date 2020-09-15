@@ -89,12 +89,46 @@
 									{{ scope.row.dev_mem | formatBytes }}
 								</template>
 							</el-table-column>
-							<el-table-column label="使用流量">
+							<el-table-column label="磁盘空间">
 								<template slot-scope="scope">
-									{{ scope.row.dev_flow | formatBytes }}
+									{{ scope.row.dev_cap | formatBytes }}
 								</template>
 							</el-table-column>
-
+							<el-table-column label="使用流量">
+								<template slot-scope="scope">
+									{{
+										(scope.row.dev_up_flow +
+											scope.row.dev_up_flow)
+											| formatBytes
+									}}
+								</template>
+							</el-table-column>
+							<el-table-column
+								label="使用流量"
+								width="180 "
+								align="center"
+							>
+								<el-table-column
+									prop="dev_up_flow"
+									label="上行流量"
+									width="120"
+									align="center"
+								>
+                                  <template slot-scope="scope">
+									{{ scope.row.dev_up_flow | formatBytes }}
+								</template>
+								</el-table-column>
+								<el-table-column
+									prop="dev_down_flow"
+									label="下行流量"
+									width="120"
+									align="center"
+								>
+                                  <template slot-scope="scope">
+									{{ scope.row.dev_down_flow | formatBytes }}
+								</template>
+								</el-table-column>
+							</el-table-column>
 							<el-table-column label="操作">
 								<template slot-scope="scope">
 									<el-button
@@ -131,7 +165,9 @@
 					<div class="monitorDetails-bottom">
 						<div class="searach-con">
 							<el-form ref="form" :model="form">
-								' {{ snNum }} ' 设备进程监控详情
+								<strong>
+									【{{ snNum }}】设备进程监控详情
+								</strong>
 							</el-form>
 						</div>
 						<el-table
@@ -167,16 +203,46 @@
 									{{ scope.row.pid_cpu | formatCpu }}
 								</template>
 							</el-table-column>
-							<el-table-column prop="" label="内存占用">
+							<el-table-column prop="" label="内存容量">
 								<template slot-scope="scope">
 									{{ scope.row.pid_mem | formatBytes }}
 								</template>
 							</el-table-column>
-
+							<el-table-column prop="" label="磁盘空间">
+								<template slot-scope="scope">
+									{{ scope.row.pid_use_cap | formatBytes }}
+								</template>
+							</el-table-column>
 							<el-table-column prop="" label="使用流量">
 								<template slot-scope="scope">
-									{{ scope.row.pid_flow | formatBytes }}
+									{{( scope.row.pid_up_flow+scope.row.pid_down_flow) | formatBytes }}
 								</template>
+							</el-table-column>
+							<el-table-column
+								label="使用流量"
+								width="180 "
+								align="center"
+							>
+								<el-table-column
+									prop="up_width"
+									label="上行流量"
+									width="120"
+									align="center"
+								>
+                                <template slot-scope="scope">
+									{{ scope.row.pid_up_flow | formatBytes }}
+								</template>
+								</el-table-column>
+								<el-table-column
+									prop="down_width"
+									label="下行流量"
+									width="120"
+									align="center"
+								>
+                                <template slot-scope="scope">
+									{{ scope.row.pid_down_flow | formatBytes }}
+								</template>
+								</el-table-column>
 							</el-table-column>
 							<el-table-column prop="" label="进程状态">
 								<template slot-scope="scope">
@@ -345,7 +411,7 @@ export default {
 		formatBytes(data) {
 			let _this = this;
 			if (data == 0) {
-				return 0;
+				return 0+"B";
 			} else {
 				return common.formatByteActive(data);
 			}

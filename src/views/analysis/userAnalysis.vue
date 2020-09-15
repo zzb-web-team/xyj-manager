@@ -8,19 +8,19 @@
 					justify-content: flex-start;
 				"
 			>
-				<el-col :span="4">
+				<el-col :span="6">
 					<div class="user-item all_user">
 						<div class="item-count">{{ total_user }}</div>
 						<div class="item-text">注册用户(总)</div>
 					</div>
 				</el-col>
-				<el-col :span="4" style="">
+				<el-col :span="6" style="">
 					<div class="user-item band_user">
 						<div class="item-count">{{ total_bind_num }}</div>
 						<div class="item-text">绑定用户(总)</div>
 					</div>
 				</el-col>
-				<el-col :span="4" style="">
+				<el-col :span="6" style="">
 					<div class="user-item new_user">
 						<div class="item-count">{{ range_total_user }}</div>
 						<div class="item-text">新用户</div>
@@ -47,7 +47,11 @@
 				align="left"
 			>
 			</el-date-picker>
-			<el-button type="primary" size="small" @click="onQueryInfo" style="margin-left:10px;hright:92px;"
+			<el-button
+				type="primary"
+				size="small"
+				@click="onQueryInfo"
+				style="margin-left: 10px; hright: 92px"
 				>确定</el-button
 			>
 		</div>
@@ -107,8 +111,8 @@ export default {
 			pickerOptions: {
 				onPick(time) {
 					if (!time.maxDate) {
-						let timeRange = 89 * 24 * 3600 * 1000;
-						_minTime = time.minDate.getTime() - timeRange; // 最小时间
+						let timeRange = 29 * 24 * 3600 * 1000;
+						_minTime = time.minDate.getTime() - timeRange * 2; // 最小时间
 						_maxTime = time.minDate.getTime() + timeRange; // 最大时间
 					} else {
 						_minTime = _maxTime = null;
@@ -323,16 +327,22 @@ export default {
 					type: 'category',
 					data: x,
 					name: '注册时间',
+					splitLine: {
+						show: false,
+					},
 				},
 				yAxis: {
 					type: 'value',
 					name: '人数',
+					splitLine: {
+						show: false,
+					},
 				},
 				series: [
 					{
 						data: y,
 						type: 'bar',
-						barMaxWidth: 50,
+						barMaxWidth: 30,
 						itemStyle: {
 							color: '#0a7cff',
 						},
@@ -432,30 +442,38 @@ export default {
 	.user-item {
 		border: 2px solid #ebeef5;
 		box-sizing: border-box;
-		height: 120px;
+		height: 174px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		padding-top: 40px;
 		margin-right: 25px;
+		box-sizing: border-box;
+		padding-left: 41px;
+		color: #ffffff;
+		border-radius: 12px;
 		.item-count {
-			font-size: 20px;
+			width: 100%;
+			text-align: left;
+			font-size: 48px !important;
 		}
 		.item-text {
+			width: 100%;
 			font-size: 16px;
+			text-align: left;
 		}
-    }
-    .all_user{
-        background:  url(../../assets/all_user.png) no-repeat;
-        background-size: 100% 100%;
-    }
-     .band_user{
-        background:  url(../../assets/bind_user.png) no-repeat;
-        background-size: 100% 100%;
-    }
-     .new_user{
-        background:  url(../../assets/new_user.png) no-repeat;
-        background-size: 100% 100%;
-    }
+	}
+	.all_user {
+		background: url(../../assets/all_user.png) no-repeat;
+		background-size: 100% 100%;
+	}
+	.band_user {
+		background: url(../../assets/bind_user.png) no-repeat;
+		background-size: 100% 100%;
+	}
+	.new_user {
+		background: url(../../assets/new_user.png) no-repeat;
+		background-size: 100% 100%;
+	}
 }
 </style>

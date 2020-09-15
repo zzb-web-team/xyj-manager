@@ -71,9 +71,9 @@
 									></el-option>
 
 									<el-option
-										v-for="item in scd_chan_prvs"
+										v-for="item in pri_chan_prvs"
 										:key="item"
-										:label="item.label"
+										:label="item.second_label"
 										:value="item.value"
 									></el-option>
 								</el-select>
@@ -227,9 +227,7 @@
 						>
 					</el-form-item>
 					<el-form-item>
-						<el-button
-							size="small"
-							@click="resetInfo"
+						<el-button size="small" @click="resetInfo"
 							>重置</el-button
 						>
 					</el-form-item>
@@ -244,7 +242,10 @@
 				style="display: flex; justify-content: flex-end"
 			>
 				<el-col style="display: flex; justify-content: flex-end">
-					<el-button type="primary" @click="toexportExcel" size="small"
+					<el-button
+						type="primary"
+						@click="toexportExcel"
+						size="small"
 						>导出</el-button
 					>
 				</el-col>
@@ -488,7 +489,7 @@ export default {
 		let _minTime = null;
 		let _maxTime = null;
 		return {
-            pickerOptions: {
+			pickerOptions: {
 				onPick(time) {
 					if (!time.maxDate) {
 						let timeRange = 89 * 24 * 3600 * 1000;
@@ -517,52 +518,64 @@ export default {
 			pri_chan_prv: '',
 			pri_chan_prvs: [
 				{
-					value: 'f.computer.unknown.pcgrapefruit',
+					value: 'pc.linux.pcgrapefruit.pcgrapefruit',
 					label: 'PC版西柚机',
+					second_label: 'PC版西柚机',
 				},
 				{
-					value: 'f.harddiskbox.grapefruit.grapefruit',
+					value: 'harddiskbox.grapefruit.grapefruit.grapefruit',
 					label: '西柚机',
+					second_label: '西柚机',
 				},
 				{
-					value: 'f.harddiskbox.xunlei.onethingcloud',
+					value: 'harddiskbox.xunlei.nethingcloud.onethingcloud',
 					label: '玩客云',
+					second_label: '玩客云',
 				},
 				{
-					value: 'f.tvbox.xiaomi.xiaomi4c',
-					label: '小米盒子4C',
+					value: 'tvbox.xiaomi.xiaomi.xiaomi4c',
+					label: '小米',
+					second_label: '小米盒子4C',
 				},
 				{
-					value: 'f.tvbox.xiaomi.xiaomi4',
-					label: '小米盒子4',
+					value: 'tvbox.xiaomi.xiaomi.xiaomi4',
+					label: '小米',
+					second_label: '小米盒子4',
 				},
 				{
-					value: 'f.tvbox.skyworth.skyworthqplus1',
-					label: '创维Q+一代',
+					value: 'tvbox.skyworth.kyworth.skyworthqplus1',
+					label: '创维',
+					second_label: '创维Q+一代',
 				},
 				{
-					value: 'f.tvbox.phicomm.phicommn1',
-					label: '斐讯N1盒子',
+					value: 'tvbox.phicomm.phicommn.phicommn1',
+					label: '斐讯',
+					second_label: '斐讯N1盒子',
 				},
 				{
-					value: 'f.tvbox.tencent.tencentjg1s',
-					label: '企鹅极光1S',
+					value: 'tvbox.tencent.tencentjg.tencentjg1s',
+					label: '企鹅极光',
+					second_label: '企鹅极光1S',
 				},
 				{
-					value: 'f.computer.unknown.yunlian',
+					value: 'pc.linux.yunlian.yunlian',
 					label: '云链',
+					second_label: '云链',
 				},
 				{
-					value: 'f.computer.unknown.hk',
+					value: 'pc.linux.hk.hk',
 					label: '香港运维',
+					second_label: '云链',
 				},
 				{
-					value: 'f.computer.unknown.rouji-kernel2-3',
-					label: 'rouji-kernel2-3',
+					value: 'pc.linux.rouji.kernel2-3',
+					label: 'rouji',
+					second_label: 'rouji-kernel2-3',
 				},
 				{
-					value: 'f.computer.unknown.rouji-kernel4-5',
-					label: 'rouji-kernel4-5',
+					value: 'pc.linux.rouji.kernel2-3',
+					label: 'rouji',
+					second_label: 'rouji-kernel4-5',
 				},
 			],
 			scd_chan_prv: '',

@@ -106,7 +106,7 @@
 		<div class="devide_table">
 			<el-row
 				type="flex"
-				class="row_active "
+				class="row_active"
 				style="display: flex; justify-content: space-between"
 			>
 				<el-col :span="6">
@@ -153,7 +153,6 @@
 						></el-table-column>
 						<el-table-column
 							prop="dev_type"
-							:formatter="formatDevType"
 							label="设备类型"
 							width="120"
 						></el-table-column>
@@ -278,6 +277,7 @@
 			width="30%"
 			:before-close="handleClose"
 			@close="handleCloseDefail"
+			title="添加设备"
 		>
 			<div class="addaccout addaccout_add">
 				<el-form
@@ -286,7 +286,6 @@
 					ref="ruleForm2"
 					class="demo-valiForm"
 				>
-					<h3 class="title">新建设备</h3>
 					<el-form-item label="设备SN：" prop="dev_sn">
 						<el-input
 							v-model="ruleForm2.dev_sn"
@@ -309,7 +308,7 @@
 							></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item label="ROM：">
+					<!-- <el-form-item label="ROM：">
 						<el-select
 							v-model="ruleForm2.rom_version"
 							placeholder="请选择"
@@ -323,7 +322,7 @@
 								:value="item.value"
 							></el-option>
 						</el-select>
-					</el-form-item>
+					</el-form-item> -->
 					<el-form-item label="MAC地址:" prop="dev_mac">
 						<el-input
 							v-model="ruleForm2.dev_mac"
@@ -338,7 +337,7 @@
 							style="width: 250px"
 						></el-input>
 					</el-form-item>
-					<el-form-item label="总容量:" prop="total_capss">
+					<!-- <el-form-item label="总容量:" prop="total_capss">
 						<div
 							style="
 								display: flex;
@@ -355,7 +354,7 @@
 								GB
 							</div>
 						</div>
-					</el-form-item>
+					</el-form-item> -->
 					<el-form-item
 						style="
 							width: 100%;
@@ -371,7 +370,7 @@
 						<el-button
 							type="primary"
 							@click.native.prevent="handleSubmit3"
-							>取消</el-button
+							>确定并激活</el-button
 						>
 					</el-form-item>
 				</el-form>
@@ -397,7 +396,7 @@
 							v-model="ruleForm1.new_dev_sn"
 							placeholder="请输入设备SN"
 							style="width: 300px"
-                            @change="set_dev_type"
+							@change="set_dev_type"
 						></el-input>
 					</el-form-item>
 					<el-form-item label="设备型号：">
@@ -490,6 +489,7 @@
 			:visible.sync="dialogVisibleactive"
 			width="20%"
 			:before-close="handleClose"
+			title="绑定"
 		>
 			<el-form ref="form">
 				<el-form-item
@@ -693,31 +693,30 @@ export default {
 					value: 2,
 					label: 'RK33XX',
 				},
-                 {
-                    value: 3,
+				{
+					value: 3,
 					label: 'AMS805W',
-                },
-                {
-                    value: 4,
+				},
+				{
+					value: 4,
 					label: 'AMS905M4C',
-                },
-                {
-                    value: 5,
+				},
+				{
+					value: 5,
 					label: 'AMS905M4',
-                },
-                {
-                    value: 6,
+				},
+				{
+					value: 6,
 					label: 'AMS805QP1',
-                },
-                {
-                    value: 7,
+				},
+				{
+					value: 7,
 					label: 'AMS905N1',
-                },
-                {
-                    value: 8,
+				},
+				{
+					value: 8,
 					label: 'AMS905JG1S',
-                },
-               
+				},
 			],
 			roms: [
 				{
@@ -850,20 +849,20 @@ export default {
 					// },
 					// { validator: nameRule3, trigger: "blur" },
 				],
-				total_capss: [
-					{
-						required: true,
-						message: '请输入总容量',
-						trigger: 'blur',
-					},
-					{
-						// min: 3,
-						// max: 10,
-						message: '长度在 6到 10 个字符',
-						trigger: 'blur',
-					},
-					{ validator: nameRule4, trigger: 'blur' },
-				],
+				// total_capss: [
+				// 	{
+				// 		required: true,
+				// 		message: '请输入总容量',
+				// 		trigger: 'blur',
+				// 	},
+				// 	{
+				// 		// min: 3,
+				// 		// max: 10,
+				// 		message: '长度在 6到 10 个字符',
+				// 		trigger: 'blur',
+				// 	},
+				// 	{ validator: nameRule4, trigger: 'blur' },
+				// ],
 			},
 			old_dev_sn: '',
 			dev_type_active: 1,
@@ -1248,13 +1247,6 @@ export default {
 										tempArr[i].import_ts * 1000
 									);
 							}
-							switch (tempArr[i].dev_type) {
-								case 2:
-									tempArr[i].dev_type = 'AMS805';
-									break;
-								default:
-									tempArr[i].dev_type = 'RRK328';
-							}
 						}
 						if (res.data.cur_page >= res.data.total_page) {
 							this.exportExcel();
@@ -1597,20 +1589,34 @@ export default {
 				: (this.ruleForm1.is_activated = '已激活');
 		},
 		del(rows) {
-			this.$confirm('即将删除该设备，是否继续', '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
-				type: 'warning',
-			})
-				.then(() => {
-					this.confirmDel(rows);
+			if (
+				(rows.bind_flag == 0 || rows.bind_flag == 102) &&
+				rows.is_activated != 99
+			) {
+				this.$confirm('即将删除该设备，是否继续', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning',
 				})
-				.catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消删除',
+					.then(() => {
+						this.confirmDel(rows);
+					})
+					.catch(() => {
+						this.$message({
+							type: 'info',
+							message: '已取消删除',
+						});
 					});
-				});
+			} else {
+				this.$alert(
+					'设备已绑定用户，请先解除绑定，解除绑定后才可以删除信息。',
+					'提示',
+					{
+						confirmButtonText: '确定',
+						callback: (action) => {},
+					}
+				);
+			}
 		},
 		shut(rows) {
 			//关机

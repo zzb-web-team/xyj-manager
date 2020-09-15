@@ -1,8 +1,13 @@
 <template>
 	<section class="myself-container">
-		<div class="all_user_num">
-			总用户<span>{{ all_user_num }}</span>
-		</div>
+		<el-row
+			style="margin-top: 20px; display: flex; justify-content: flex-start"
+		>
+			<el-col :span="6" class="all_user_num">
+				<div class="item_count">{{ all_user_num }}</div>
+				<div class="item_text">总用户</div>
+			</el-col>
+		</el-row>
 		<div style="margin-top: 30px; padding: 0 20px">
 			<div style="margin-bottom: 20px">
 				<!-- <el-date-picker
@@ -529,19 +534,24 @@ export default {
 .myself-container {
 	// padding: 0 20px;
 	.all_user_num {
-		height: 88px;
 		background: url(../../assets/user_unm_bgc.png) no-repeat;
 		background-size: 100% 100%;
-
-		line-height: 88px;
-		color: #ffffff;
-		font-size: 14px;
-		box-sizing: border-box;
-		padding-left: 35px;
-		span {
-			font-size: 36px;
-			margin-left: 10px;
-		}
+		border-radius: 12px;
+		height: 174px;
+		margin-right: 25px;
+        color: #ffffff;
+        box-sizing: border-box;
+        padding-top: 40px;
+        padding-left: 41px;
+        .item_count{
+            height: 50px;
+            font-size: 48px;
+        }
+        .item_text{
+            height: 20px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
 	}
 	.activebutton {
 		border: 1px solid #409eff;

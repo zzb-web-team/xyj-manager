@@ -55,7 +55,7 @@
 		>
 			<div style="width: 800px; height: 800px" id="myEchart"></div>
 			<div class="rank">
-				<el-table border :data="tableData" style="width: 100%">
+				<el-table border :data="tableData" style="width: 800">
 					<el-table-column
 						type="index"
 						label="序号"
@@ -67,6 +67,50 @@
 									scope.row.indexActive
 								}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{
 									scope.row.region
+								}}
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column prop="xiyou" label="西柚机">
+						<template slot-scope="scope">
+							<div>
+								{{
+									scope.row.xiyou == ''
+										? '--'
+										: scope.row.xiyou
+								}}
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column prop="xiaomi" label="小米盒子">
+						<template slot-scope="scope">
+							<div>
+								{{
+									scope.row.xiaomi == ''
+										? '--'
+										: scope.row.xiaomi
+								}}
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column prop="wanke" label="玩客云">
+						<template slot-scope="scope">
+							<div>
+								{{
+									scope.row.wanke == ''
+										? '--'
+										: scope.row.wanke
+								}}
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column prop="other_box" label="其他品牌">
+						<template slot-scope="scope">
+							<div>
+								{{
+									scope.row.other_box == ''
+										? '--'
+										: scope.row.other_box
 								}}
 							</div>
 						</template>
@@ -254,11 +298,15 @@ export default {
 							obj.name = obj.name.replace('市', '');
 							obj.name = obj.name.replace('维吾尔自治区', '');
 							obj.value = tempArr[i].num;
+							tempArr[i].xiyou = '';
+							tempArr[i].xiaomi = '';
+							tempArr[i].wanke = '';
+							tempArr[i].other_box = '';
 							// arr.push(obj);
 							// tempArr[i].indexActive = i + 1;
 							this.echartsX.push(obj);
 						}
-
+						console.log(tempArr);
 						this.tableData = tempArr;
 						this.chinaConfigure(this.echartsX);
 					} else {
@@ -373,7 +421,7 @@ export default {
 	justify-content: space-between;
 
 	.rank {
-		width: 400px;
+		// width: 400px;
 		height: 400px;
 	}
 }
