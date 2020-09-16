@@ -14,75 +14,164 @@
 			</el-radio-group>
 		</div> -->
 		<div class="user-title" style="margin-bottom: 20px">
-			<el-date-picker
-				size="small"
-				placeholder="选择日期时间"
-				v-model="valueActive"
-				type="date"
-				align="left"
-				@change="gettimes"
-			></el-date-picker>
+			<el-row
+				type="flex"
+				justify="start"
+				style="margin-bottom: 24px; flex-wrap: wrap"
+			>
+			</el-row>
+			<el-row
+				type="flex"
+				justify="start"
+				style="margin-bottom: 24px; flex-wrap: wrap"
+			>
+				<!-- <el-col :span="3">
+					<el-date-picker
+						size="small"
+						placeholder="选择日期时间"
+						v-model="valueActive"
+						type="date"
+						align="left"
+						@change="gettimes"
+					></el-date-picker>
+				</el-col> -->
+				<el-col :span="3">
+					<el-date-picker
+						size="small"
+						v-model="valueele"
+						type="dates"
+						placeholder="时间对比"
+						@change="timeChange"
+					>
+					</el-date-picker>
+					<el-select
+						size="small"
+						v-model="versointime1"
+						placeholder="时段对比"
+						@change="changePeriod"
+						v-if="timeArr"
+					>
+						<el-option
+							v-for="item in options1"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value"
+						>
+						</el-option>
+					</el-select>
+				</el-col>
 
-			<el-date-picker
-				size="small"
-				style="margin-left: 10px"
-				v-model="valueele"
-				type="dates"
-				placeholder="时间对比"
-				@change="timeChange"
-			>
-			</el-date-picker>
-			<el-select
-				size="small"
-				v-model="versointime1"
-				placeholder="时段对比"
-				@change="changePeriod"
-				v-if="timeArr"
-			>
-				<el-option
-					v-for="item in options1"
-					:key="item.value"
-					:label="item.label"
-					:value="item.value"
-				>
-				</el-option>
-			</el-select>
-			<el-select
-				size="small"
-				v-model="devicetype"
-				placeholder="请选择"
-				@change="changeType"
-			>
-				<el-option
-					v-for="item in options11"
-					:key="item.value"
-					:label="item.label"
-					:value="item.value"
-				>
-				</el-option>
-			</el-select>
-			<el-select
-				size="small"
-				v-model="versointype"
-				placeholder="请选择"
-				:disabled="disableTab"
-			>
-				<el-option label="全部版本" value="全部版本"> </el-option>
-				<el-option
-					v-for="item in options"
-					:key="item"
-					:label="item"
-					:value="item"
-				>
-				</el-option>
-			</el-select>
-			<el-button
-				size="small"
-				type="primary"
-				style="margin-left: 20px"
-				@click="onsumbit()"
-				>确定</el-button
-			>
+				<el-col :span="3">
+					<el-select
+						size="small"
+						v-model="eqp_brd"
+						placeholder="请选择设备品牌"
+						@change="search_devtype"
+					>
+						<el-option label="全部" value="*"></el-option>
+						<el-option
+							v-for="item in eqp_brds"
+							:key="item.name"
+							:label="item.name"
+							:value="item.name"
+						></el-option>
+					</el-select>
+				</el-col>
+				<el-col :span="3">
+					<el-select
+						size="small"
+						v-model="dev_type"
+						placeholder="请选择设备型号"
+					>
+						<el-option label="全部" value="*"></el-option>
+						<el-option
+							v-for="item in dev_types"
+							:key="item"
+							:label="item"
+							:value="item"
+						></el-option>
+					</el-select>
+				</el-col>
+				<el-col :span="3">
+					<el-select
+						size="small"
+						v-model="pri_chan_prv"
+						placeholder="请选择一级渠道"
+					>
+						<el-option label="全部" value="*"></el-option>
+						<el-option
+							v-for="item in pri_chan_prvs"
+							:key="item"
+							:label="item.label"
+							:value="item.value"
+						></el-option>
+					</el-select>
+				</el-col>
+				<el-col :span="3">
+					<el-select
+						size="small"
+						v-model="scd_chan_prv"
+						placeholder="请选择二级渠道商"
+					>
+						<el-option label="全部" value="*"></el-option>
+						<el-option
+							v-for="item in scd_chan_prvs"
+							:key="item"
+							:label="item.label"
+							:value="item.value"
+						></el-option>
+					</el-select>
+				</el-col>
+				<!-- <el-col :span="3">
+					<el-select
+						size="small"
+						v-model="devicetype"
+						placeholder="请选择"
+						@change="changeType"
+					>
+						<el-option
+							v-for="item in options11"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value"
+						>
+						</el-option>
+					</el-select>
+				</el-col> -->
+				<el-col :span="3">
+					<el-select
+						size="small"
+						v-model="versointype"
+						placeholder="请选择"
+						:disabled="disableTab"
+					>
+						<el-option label="全部版本" value="全部版本">
+						</el-option>
+						<el-option
+							v-for="item in options"
+							:key="item"
+							:label="item"
+							:value="item"
+						>
+						</el-option>
+					</el-select>
+				</el-col>
+				<el-col :span="3">
+					<el-button
+						size="small"
+						type="primary"
+						style="margin-left: 20px"
+						@click="onsumbit()"
+						>确定</el-button
+					>
+					<el-button
+						size="small"
+						style="margin-left: 20px"
+						@click="reset()"
+						>重置</el-button
+					>
+				</el-col>
+			</el-row>
 		</div>
 		<div class="devive_tab">
 			<div class="device_tab_on">
@@ -107,30 +196,61 @@
 						<div class="devide_table">
 							<el-row type="flex" class="row_active">
 								<el-col :span="24">
-									<tableBarActive2
+									<el-table
+										border
+										:data="tableDatanew11"
+										ref="table"
+										style="width: 100%"
+										:cell-style="rowClass"
+										:header-cell-style="headClass"
 										id="rebateSetTable"
-										ref="table1"
-										tooltip-effect="dark"
-										:tableData="tableDatanew11"
-										:clomnSelection="clomnSelection"
-										:rowHeader="rowHeader"
-										:tableOption="tableOption"
-										@handleButton="handleButton"
-										:operatingStatus="operatingStatus"
-										@toOperating="toOperating"
-										@handleSelectionChange="
-											handleSelectionChange
-										"
-										@selectCheckBox="selectCheckBox"
-										@selectAll="selectAll"
-									></tableBarActive2>
+									>
+										<el-table-column
+											prop="timeStamp"
+											label="在线时长(OT)"
+										>
+											<template slot-scope="scope">
+												<div
+													style="
+														display: flex;
+														align-items: center;
+													"
+												>
+													<i
+														style="
+															background: #5da7fd;
+															border-radius: 2px;
+															width: 10px;
+															height: 10px;
+															display: inline-block;
+															margin-right: 15px;
+														"
+														:style="{
+															background:
+																scope.row
+																	.background,
+														}"
+													></i>
+													{{ scope.row.timeStamp }}
+												</div>
+											</template>
+										</el-table-column>
+										<el-table-column
+											prop="deviceCnt"
+											label="设备数"
+										></el-table-column>
+										<el-table-column
+											prop="percent"
+											label="占比(%)"
+										></el-table-column>
+									</el-table>
 								</el-col>
 							</el-row>
 							<el-row
 								type="flex"
 								style="
 									display: flex;
-									justify-content: center;
+									justify-content: end;
 									margin: 20px 0;
 								"
 							>
@@ -221,6 +341,8 @@ import {
 	device_online,
 	device_offline,
 	device_typerom_all,
+	device_online_analyse_curve,
+	device_online_analyse_table,
 } from '../../api/api';
 import pageNation from '../../components/pageNation';
 import common from '../../common/js/util.js';
@@ -314,7 +436,96 @@ export default {
 					label: '占比(%)',
 				},
 			],
-
+			eqp_brd: '',
+			eqp_brds: [
+				{ name: 'linux', childen: ['PCGRAPE'] },
+				{ name: 'grapefruit', childen: ['RK33XX'] },
+				{ name: '迅雷', childen: ['AMS805W'] },
+				{ name: '小米', childen: ['AMS905M4C', 'AMS905M4'] },
+				{ name: '创维', childen: ['AMS805QP1'] },
+				{ name: '斐讯', childen: ['AMS905N1'] },
+				{ name: '腾讯', childen: ['AMS905JG1S'] },
+			],
+			pri_chan_prv: '',
+			pri_chan_prvs: [
+				{
+					value: 'f.computer.unknown.pcgrapefruit',
+					label: 'PC版西柚机',
+				},
+				{
+					value: 'f.harddiskbox.grapefruit.grapefruit',
+					label: '西柚机',
+				},
+				{
+					value: 'f.harddiskbox.xunlei.onethingcloud',
+					label: '玩客云',
+				},
+				{
+					value: 'f.tvbox.xiaomi.xiaomi4c',
+					label: '小米盒子4C',
+				},
+				{
+					value: 'f.tvbox.xiaomi.xiaomi4',
+					label: '小米盒子4',
+				},
+				{
+					value: 'f.tvbox.skyworth.skyworthqplus1',
+					label: '创维Q+一代',
+				},
+				{
+					value: 'f.tvbox.phicomm.phicommn1',
+					label: '斐讯N1盒子',
+				},
+				{
+					value: 'f.tvbox.tencent.tencentjg1s',
+					label: '企鹅极光1S',
+				},
+				{
+					value: 'f.computer.unknown.yunlian',
+					label: '云链',
+				},
+				{
+					value: 'f.computer.unknown.hk',
+					label: '香港运维',
+				},
+				{
+					value: 'f.computer.unknown.rouji-kernel2-3',
+					label: 'rouji-kernel2-3',
+				},
+				{
+					value: 'f.computer.unknown.rouji-kernel4-5',
+					label: 'rouji-kernel4-5',
+				},
+			],
+			scd_chan_prv: '',
+			scd_chan_prvs: [
+				{
+					value: 's.computer.unknown.pcgrapefruit',
+					label: 'PC版西柚机',
+				},
+				{
+					value: 's.harddiskbox.grapefruit.grapefruit',
+					label: '西柚机',
+				},
+				{
+					value: 'f.computer.unknown.yunlian',
+					label: '云链',
+				},
+				{
+					value: 's.computer.unknown.hk',
+					label: '香港运维',
+				},
+				{
+					value: 's.computer.unknown.rouji-kernel2-3',
+					label: 'rouji-kernel2-3',
+				},
+				{
+					value: 's.computer.unknown.rouji-kernel4-5',
+					label: 'rouji-kernel4-5',
+				},
+			],
+			dev_type: '',
+			dev_types: [],
 			tableDatanew11: [],
 			data: ['0次', '1-3次', '4-6次', '6-10次', '>10次'],
 			tableDatanew22: [],
@@ -349,13 +560,13 @@ export default {
 			timeComparedArr: [],
 			bin_show: true,
 			bin_list: [
-				{ value: 0, name: 'OT<=1h' },
-				{ value: 0, name: '1h<OT<=5h' },
-				{ value: 0, name: '5h<OT<=10h' },
-				{ value: 0, name: '10h<OT<=15h' },
-				{ value: 0, name: '15h<OT<=20h' },
-				{ value: 0, name: '20h<OT<24h' },
-				{ value: 0, name: 'OT<=24h' },
+				{ value: 0, name: 'OT<=1h', background: '#5DA7FD' },
+				{ value: 0, name: '1h<OT<=5h', background: '#F86656' },
+				{ value: 0, name: '5h<OT<=10h', background: '#F8B156' },
+				{ value: 0, name: '10h<OT<=15h', background: '#F8E356' },
+				{ value: 0, name: '15h<OT<=20h', background: '#56F89B' },
+				{ value: 0, name: '20h<OT<24h', background: '#56F8F6' },
+				{ value: 0, name: 'OT<=24h', background: '#56BDF8' },
 			],
 		};
 	},
@@ -364,9 +575,10 @@ export default {
 
 		// this.queryOnlineinfo();
 		// this.queryOnlineTable();
-		this.drawLine();
-		this.queryTypeInfo();
-		this.querydeviceOnline();
+		// this.drawLine();
+		// this.queryTypeInfo();
+		// this.querydeviceOnline();
+		this.get_echarts_data();
 	},
 	beforeDestroy() {
 		if (!this.chart) {
@@ -376,6 +588,128 @@ export default {
 		this.chart = null;
 	},
 	methods: {
+		//获取图表数据
+		get_echarts_data() {
+			let params = new Object();
+			params.nodeId = '*';
+			params.region = '*';
+			params.city = '*';
+			params.isp = '*';
+			params.time_unit = '60';
+			params.firstChannel =
+				this.pri_chan_prv == '' ? '*' : this.pri_chan_prv;
+			params.secondChannel =
+				this.scd_chan_prv == '' ? '*' : this.scd_chan_prv;
+			params.deviceName = this.eqp_brd == '' ? '*' : this.eqp_brd;
+			params.deviceType = this.dev_type == '' ? '*' : this.dev_type;
+			params.romVersion = this.versointype == '' ? '*' : this.versointype;
+			params.compareTime = this.compareArr;
+			params.orderBy = 1;
+			params.business_type = 0;
+			params.business_scene = '*';
+			device_online_analyse_curve(params)
+				.then((res) => {
+					if (res.status == 0) {
+						let data_arr = [];
+						for (let k in res.data) {
+							let obj = {};
+							obj.name = this.common.getTimes(k * 1000);
+							obj.data = res.data[k];
+							obj.type = 'bar';
+							data_arr.push(obj);
+							if (params.compareTime.length == 1) {
+								res.data[k].forEach((item, index) => {
+									this.bin_list[index] = item;
+								});
+							}
+						}
+						this.get_table_data();
+						this.$nextTick(() => {
+							this.drawLine(data_arr);
+							if (params.compareTime.length == 0) {
+								this.drawLine_bin();
+							}
+						});
+					} else {
+						this.$message.error(res.err_msg);
+					}
+				})
+				.catch((error) => {});
+		},
+		//获取表格数据
+		get_table_data() {
+			this.tableDatanew11 = [];
+			let params = new Object();
+			params.nodeId = '*';
+			params.region = '*';
+			params.city = '*';
+			params.isp = '*';
+			params.time_unit = '60';
+			params.firstChannel =
+				this.pri_chan_prv == '' ? '*' : this.pri_chan_prv;
+			params.secondChannel =
+				this.scd_chan_prv == '' ? '*' : this.scd_chan_prv;
+			params.deviceName = this.eqp_brd == '' ? '*' : this.eqp_brd;
+			params.deviceType = this.dev_type == '' ? '*' : this.dev_type;
+			params.romVersion = this.versointype == '' ? '*' : this.versointype;
+			params.compareTime = this.compareArr;
+			params.orderBy = 1;
+			params.business_type = 0;
+			params.business_scene = '*';
+			if (params.compareTime.length < 1) {
+				this.bin_show = true;
+			} else {
+				this.bin_show = false;
+			}
+			device_online_analyse_table(params)
+				.then((res) => {
+					if (res.status == 0) {
+						res.list.forEach((item) => {
+							let obj = {};
+							if (item.onlineTime == 'times0') {
+								obj.timeStamp = 'OT<1h';
+								obj.background = '#5DA7FD';
+							} else if (item.onlineTime == 'times1') {
+								obj.timeStamp = '1h＜OT<5h';
+								obj.background = '#F86656';
+							} else if (item.onlineTime == 'times2') {
+								obj.timeStamp = '5h＜OT<10h';
+								obj.background = '#F8B156';
+							} else if (item.onlineTime == 'times3') {
+								obj.timeStamp = '10h＜OT<15h';
+								obj.background = '#F8E356';
+							} else if (item.onlineTime == 'times4') {
+								obj.timeStamp = '15h＜OT<20h';
+								obj.background = '#56F89B';
+							} else if (item.onlineTime == 'times5') {
+								obj.timeStamp = '20h＜OT<24h';
+								obj.background = '#56F8F6';
+							} else if (item.onlineTime == 'times6') {
+								obj.timeStamp = 'OT=24h';
+								obj.background = '#56BDF8';
+							}
+							obj.deviceCnt = item.deviceCnt;
+							obj.percent = item.percent;
+							this.tableDatanew11.push(obj);
+						});
+					} else {
+						this.$message.error(res.err_msg);
+					}
+				})
+				.catch((error) => {});
+		},
+		//品牌筛选型号
+		search_devtype() {
+			this.devtype_value = '';
+			var indexOf_child = (this.eqp_brds || []).findIndex(
+				(item) => item.name == this.eqp_brd
+			);
+			if (indexOf_child == -1) {
+				this.dev_types = [];
+			} else {
+				this.dev_types = this.eqp_brds[indexOf_child].childen;
+			}
+		},
 		//选这类型过滤版本
 		changeType(val) {
 			this.versointype = '全部版本';
@@ -508,11 +842,20 @@ export default {
 
 		//确定查询
 		onsumbit() {
-			if (this.radio1 == '在线时长') {
-				this.querydeviceOnline();
-			} else {
-				this.querydeviceOffline();
-			}
+			this.get_echarts_data();
+		},
+		//重置
+		reset() {
+			this.valueele = '';
+			this.compareArr = [];
+			this.eqp_brd = '';
+			this.dev_type = '';
+			this.pri_chan_prv = '';
+			this.scd_chan_prv = '';
+			this.versointype = '';
+			this.timeChange();
+
+			this.get_echarts_data();
 		},
 		handleSizeChange() {},
 		//分页
@@ -598,13 +941,55 @@ export default {
 						tempArrActive = res.data.dayList;
 						let nowArr = [];
 						var list = {
-							1: { timeStamp: 'OT<=1h', num: 0, percent: 0 },
-							2: { timeStamp: '1h<OT<=5h', num: 0, percent: 0 },
-							3: { timeStamp: '5h<OT<=10h', num: 0, percent: 0 },
-							4: { timeStamp: '10h<OT<=15h', num: 0, percent: 0 },
-							5: { timeStamp: '15h<OT<=20h', num: 0, percent: 0 },
-							6: { timeStamp: '20h<OT<=24h', num: 0, percent: 0 },
-							7: { timeStamp: 'OT=24h', num: 0, percent: 0 },
+							1: {
+								timeStamp: 'OT<=1h',
+								num: 0,
+								percent: 0,
+								label: labelOption,
+								background: '#5DA7FD',
+							},
+							2: {
+								timeStamp: '1h<OT<=5h',
+								num: 0,
+								percent: 0,
+								label: labelOption,
+								background: '#F86656',
+							},
+							3: {
+								timeStamp: '5h<OT<=10h',
+								num: 0,
+								percent: 0,
+								label: labelOption,
+								background: '#F8B156',
+							},
+							4: {
+								timeStamp: '10h<OT<=15h',
+								num: 0,
+								percent: 0,
+								label: labelOption,
+								background: '#F8E356',
+							},
+							5: {
+								timeStamp: '15h<OT<=20h',
+								num: 0,
+								percent: 0,
+								label: labelOption,
+								background: '#56F89B',
+							},
+							6: {
+								timeStamp: '20h<OT<=24h',
+								num: 0,
+								percent: 0,
+								label: labelOption,
+								background: '#56F8F6',
+							},
+							7: {
+								timeStamp: 'OT=24h',
+								num: 0,
+								percent: 0,
+								label: labelOption,
+								background: '#56BDF8',
+							},
 						};
 						for (var i = 0; i < tempArr.length; i++) {
 							list[tempArr[i].type].num = tempArr[i].num;
@@ -739,115 +1124,32 @@ export default {
 				})
 				.catch((error) => {});
 		},
+		// 表头样式设置
+		headClass() {
+			return 'text-align: center;background:#F3F6FB;height:58px;';
+		},
+		// 表格样式设置
+		rowClass() {
+			return 'text-align: center;';
+		},
 
 		drawLine(list) {
+			let time_arr = [];
+			list.forEach((item) => {
+				time_arr.push(item.name);
+			});
 			let myChart = echarts.init(document.getElementById('myEchart')); //这里是为了获得容器所在位置
 			window.onresize = myChart.resize();
-
-			var posList = [
-				'left',
-				'right',
-				'top',
-				'bottom',
-				'inside',
-				'insideTop',
-				'insideLeft',
-				'insideRight',
-				'insideBottom',
-				'insideTopLeft',
-				'insideTopRight',
-				'insideBottomLeft',
-				'insideBottomRight',
-			];
-
-			app.configParameters = {
-				rotate: {
-					min: -90,
-					max: 90,
-				},
-				align: {
-					options: {
-						left: 'left',
-						center: 'center',
-						right: 'right',
-					},
-				},
-				verticalAlign: {
-					options: {
-						top: 'top',
-						middle: 'middle',
-						bottom: 'bottom',
-					},
-				},
-				position: {
-					options: echarts.util.reduce(
-						posList,
-						function (map, pos) {
-							map[pos] = pos;
-							return map;
-						},
-						{}
-					),
-				},
-				distance: {
-					min: 0,
-					max: 100,
-				},
-			};
-
-			app.config = {
-				rotate: 90,
-				align: 'left',
-				verticalAlign: 'middle',
-				position: 'insideBottom',
-				distance: 15,
-				onChange: function () {
-					var labelOption = {
-						normal: {
-							rotate: app.config.rotate,
-							align: app.config.align,
-							verticalAlign: app.config.verticalAlign,
-							position: app.config.position,
-							distance: app.config.distance,
-						},
-					};
-					myChart.setOption({
-						series: [
-							{
-								label: labelOption,
-							},
-							{
-								label: labelOption,
-							},
-							{
-								label: labelOption,
-							},
-							{
-								label: labelOption,
-							},
-						],
-					});
-				},
-			};
-
-			var labelOption = {
-				show: true,
-				position: app.config.position,
-				distance: app.config.distance,
-				align: app.config.align,
-				verticalAlign: app.config.verticalAlign,
-				rotate: app.config.rotate,
-				formatter: '{c}  {name|{a}}',
-				fontSize: 12,
-				rich: {
-					name: {
-						textBorderColor: '#fff',
-					},
-				},
-			};
-
 			let options = {
-				color: ['#003366', '#006699', '#4cabce', '#e5323e'],
+				color: [
+					'#5EA7FD',
+					'#F86656',
+					'#F8B256',
+					'#F8E356',
+					'#56F89C',
+					'#56F8F6',
+					'#57BDF8',
+				],
 				title: {
 					text: '设备数（台）',
 				},
@@ -858,7 +1160,7 @@ export default {
 					},
 				},
 				legend: {
-					data: ['Forest', 'Steppe', 'Desert', 'Wetland'],
+					data: time_arr,
 				},
 				grid: {
 					left: '2%',
@@ -866,13 +1168,6 @@ export default {
 					bottom: '5%',
 					containLabel: true,
 				},
-				1: { timeStamp: 'OT<=1h', num: 0, percent: 0 },
-				2: { timeStamp: '1h<OT<=5h', num: 0, percent: 0 },
-				3: { timeStamp: '5h<OT<=10h', num: 0, percent: 0 },
-				4: { timeStamp: '10h<OT<=15h', num: 0, percent: 0 },
-				5: { timeStamp: '15h<OT<=20h', num: 0, percent: 0 },
-				6: { timeStamp: '20h<OT<24h', num: 0, percent: 0 },
-				7: { timeStamp: 'OT=24h', num: 0, percent: 0 },
 				xAxis: [
 					{
 						type: 'category',
@@ -894,7 +1189,9 @@ export default {
 						type: 'value',
 					},
 				],
+				barMaxWidth: 30,
 				series: list,
+				// color:"#0A7BFF"
 			};
 			myChart.clear();
 			myChart.setOption(options, true);
@@ -916,19 +1213,6 @@ export default {
 				tooltip: {
 					trigger: 'item',
 					formatter: '{a} <br/>{b} : {c} ({d}%)',
-				},
-				legend: {
-					orient: 'vertical',
-					left: 'right',
-					data: [
-						'OT<=1h',
-						'1h<OT<=5h',
-						'5h<OT<=10h',
-						'10h<OT<=15h',
-						'15h<OT<=20h',
-						'20h<OT<24h',
-						'OT=24',
-					],
 				},
 				series: [
 					{

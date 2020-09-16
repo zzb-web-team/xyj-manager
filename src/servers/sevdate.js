@@ -134,3 +134,8 @@ export function delshang(arr) {
         }
     })
 }
+//标准时间转时间戳
+export function dateToMs(date) {
+    let result = new Date(date).getTime() / 1000;
+    return result;
+}

@@ -11,19 +11,19 @@
 				<el-col :span="6">
 					<div class="user-item all_user">
 						<div class="item-count">{{ total_user }}</div>
-						<div class="item-text">注册用户(总)</div>
+						<div class="item-text">总用户</div>
 					</div>
 				</el-col>
 				<el-col :span="6" style="">
 					<div class="user-item band_user">
 						<div class="item-count">{{ total_bind_num }}</div>
-						<div class="item-text">绑定用户(总)</div>
+						<div class="item-text">绑定设备用户</div>
 					</div>
 				</el-col>
 				<el-col :span="6" style="">
 					<div class="user-item new_user">
 						<div class="item-count">{{ range_total_user }}</div>
-						<div class="item-text">新用户</div>
+						<div class="item-text">今日新增用户</div>
 					</div>
 				</el-col>
 

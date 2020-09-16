@@ -14,7 +14,7 @@
 				<el-radio-button label="设备型号"></el-radio-button>
 				<el-radio-button label="设备ROM"></el-radio-button>
 			</el-radio-group>
-			<el-select
+			<!-- <el-select
 				v-model="versointype"
 				size="small"
 				placeholder="请选择"
@@ -28,7 +28,7 @@
 					:value="item.value"
 				>
 				</el-option>
-			</el-select>
+			</el-select> -->
 
 			<el-date-picker
 				v-model="valueTime4"
@@ -82,7 +82,7 @@
 							type="flex"
 							style="
 								display: flex;
-								justify-content: flex-end;
+								justify-content: end;
 								margin: 20px 0;
 							"
 						>
@@ -132,7 +132,7 @@
 							type="flex"
 							style="
 								display: flex;
-								justify-content: flex-end;
+								justify-content: end;
 								margin: 20px 0;
 							"
 						>
@@ -182,7 +182,7 @@
 							type="flex"
 							style="
 								display: flex;
-								justify-content: flex-end;
+								justify-content: end;
 								margin: 20px 0;
 							"
 						>
@@ -211,6 +211,12 @@ import {
 	device_type,
 	device_rom,
 	device_typerom_all,
+	device_name_analyse_curve,
+	device_name_analyse_table,
+	device_type_analyse_curve,
+	device_type_analyse_table,
+	device_rom_analyse_curve,
+	device_rom_analyse_table,
 } from '../../api/api';
 import pageNation from '../../components/pageNation';
 import common from '../../common/js/util.js';
@@ -362,10 +368,10 @@ export default {
 		};
 	},
 	mounted() {
-		//  this.configure()
-		//this.today();
-		this.querydeviceType();
-		this.queryTypeInfo();
+		this.get_dav_brand_data();
+		this.get_dav_brand_table();
+		// this.querydeviceType();
+		// this.queryTypeInfo();
 
 		// this.queryOnlineTable();
 	},
@@ -381,7 +387,6 @@ export default {
 		queryTypeInfo() {
 			this.options = [];
 			let param = {};
-			this.options = [];
 			device_typerom_all(param)
 				.then((res) => {
 					let tempArr = res.data;
@@ -410,31 +415,212 @@ export default {
 		},
 		onchangeTab(val) {
 			if (val == '设备类型') {
-				this.querydeviceType();
-				this.flag = 1;
+				// this.querydeviceType();
+				// this.flag = 1;
 				this.valueTime4 = [
 					new Date(new Date().setHours(0, 0, 0, 0)),
 					new Date(),
 				];
-				// this.queryOnlineTable();
+				this.get_dav_brand_data();
+				this.get_dav_brand_table();
 			} else if (val == '设备型号') {
 				this.valueTime4 = [
 					new Date(new Date().setHours(0, 0, 0, 0)),
 					new Date(),
 				];
-				this.drawLine2();
+				this.get_dav_type_data();
+				this.get_dav_type_table();
 			} else {
-				this.flag = 0;
+				// this.flag = 0;
 				this.valueTime4 = [
 					new Date(new Date().setHours(0, 0, 0, 0)),
 					new Date(),
 				];
 
-				this.querydeviceRom();
-				//this.queryOfflineTable();
+				this.get_dav_rom_data();
+				this.get_dav_rom_table();
 			}
 		},
-
+		//请求数据 设备类型-- 图表
+		get_dav_brand_data() {
+			let params = new Object();
+			let startTime =
+				new Date(new Date().toLocaleDateString()).getTime() / 1000;
+			let endTime = new Date().getTime() / 1000;
+			if (this.valueTime4) {
+				if (this.valueTime4 == '') {
+					startTime = new Date().getTime() / 1000;
+					endTime =
+						(new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
+				} else {
+					endTime = Math.floor(this.valueTime4[1].getTime() / 1000);
+					startTime = Math.floor(this.valueTime4[0].getTime() / 1000);
+				}
+			} else {
+				startTime = startTime;
+				endTime = endTime;
+			}
+			params.startTime = startTime;
+			params.endTime = endTime;
+			device_name_analyse_curve(params)
+				.then((res) => {
+					if (res.status == 0) {
+					} else {
+						this.$message.error(res.err_msg);
+					}
+				})
+				.catch((error) => {});
+		},
+		//请求数据 设备类型-- 表格
+		get_dav_brand_table() {
+			let params = new Object();
+			let startTime =
+				new Date(new Date().toLocaleDateString()).getTime() / 1000;
+			let endTime = new Date().getTime() / 1000;
+			if (this.valueTime4) {
+				if (this.valueTime4 == '') {
+					startTime = new Date().getTime() / 1000;
+					endTime =
+						(new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
+				} else {
+					endTime = Math.floor(this.valueTime4[1].getTime() / 1000);
+					startTime = Math.floor(this.valueTime4[0].getTime() / 1000);
+				}
+			} else {
+				startTime = startTime;
+				endTime = endTime;
+			}
+			params.startTime = startTime;
+			params.endTime = endTime;
+			device_name_analyse_table(params)
+				.then((res) => {
+					if (res.status == 0) {
+					} else {
+						this.$message.error(res.err_msg);
+					}
+				})
+				.catch((error) => {});
+		},
+		//请求数据 设备型号-- 图表
+		get_dav_type_data() {
+			let params = new Object();
+			let startTime =
+				new Date(new Date().toLocaleDateString()).getTime() / 1000;
+			let endTime = new Date().getTime() / 1000;
+			if (this.valueTime4) {
+				if (this.valueTime4 == '') {
+					startTime = new Date().getTime() / 1000;
+					endTime =
+						(new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
+				} else {
+					endTime = Math.floor(this.valueTime4[1].getTime() / 1000);
+					startTime = Math.floor(this.valueTime4[0].getTime() / 1000);
+				}
+			} else {
+				startTime = startTime;
+				endTime = endTime;
+			}
+			params.startTime = startTime;
+			params.endTime = endTime;
+			device_type_analyse_curve(params)
+				.then((res) => {
+					if (res.status == 0) {
+					} else {
+						this.$message.error(res.err_msg);
+					}
+				})
+				.catch((error) => {});
+		},
+		//请求数据 设备型号-- 表格
+		get_dav_type_table() {
+			let params = new Object();
+			let startTime =
+				new Date(new Date().toLocaleDateString()).getTime() / 1000;
+			let endTime = new Date().getTime() / 1000;
+			if (this.valueTime4) {
+				if (this.valueTime4 == '') {
+					startTime = new Date().getTime() / 1000;
+					endTime =
+						(new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
+				} else {
+					endTime = Math.floor(this.valueTime4[1].getTime() / 1000);
+					startTime = Math.floor(this.valueTime4[0].getTime() / 1000);
+				}
+			} else {
+				startTime = startTime;
+				endTime = endTime;
+			}
+			params.startTime = startTime;
+			params.endTime = endTime;
+			device_type_analyse_table(params)
+				.then((res) => {
+					if (res.status == 0) {
+					} else {
+						this.$message.error(res.err_msg);
+					}
+				})
+				.catch((error) => {});
+		},
+		//请求数据 设备ROM-- 图表
+		get_dav_rom_data() {
+			let params = new Object();
+			let startTime =
+				new Date(new Date().toLocaleDateString()).getTime() / 1000;
+			let endTime = new Date().getTime() / 1000;
+			if (this.valueTime4) {
+				if (this.valueTime4 == '') {
+					startTime = new Date().getTime() / 1000;
+					endTime =
+						(new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
+				} else {
+					endTime = Math.floor(this.valueTime4[1].getTime() / 1000);
+					startTime = Math.floor(this.valueTime4[0].getTime() / 1000);
+				}
+			} else {
+				startTime = startTime;
+				endTime = endTime;
+			}
+			params.startTime = startTime;
+			params.endTime = endTime;
+			device_rom_analyse_curve(params)
+				.then((res) => {
+					if (res.status == 0) {
+					} else {
+						this.$message.error(res.err_msg);
+					}
+				})
+				.catch((error) => {});
+		},
+		//请求数据 设备ROM-- 表格
+		get_dav_rom_table() {
+			let params = new Object();
+			let startTime =
+				new Date(new Date().toLocaleDateString()).getTime() / 1000;
+			let endTime = new Date().getTime() / 1000;
+			if (this.valueTime4) {
+				if (this.valueTime4 == '') {
+					startTime = new Date().getTime() / 1000;
+					endTime =
+						(new Date().getTime() - 60 * 60 * 24 * 7 * 1000) / 1000;
+				} else {
+					endTime = Math.floor(this.valueTime4[1].getTime() / 1000);
+					startTime = Math.floor(this.valueTime4[0].getTime() / 1000);
+				}
+			} else {
+				startTime = startTime;
+				endTime = endTime;
+			}
+			params.startTime = startTime;
+			params.endTime = endTime;
+			device_rom_analyse_table(params)
+				.then((res) => {
+					if (res.status == 0) {
+					} else {
+						this.$message.error(res.err_msg);
+					}
+				})
+				.catch((error) => {});
+		},
 		showzdyx() {
 			this.shoudzyx = !this.shoudzyx;
 		},

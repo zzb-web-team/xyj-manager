@@ -1428,9 +1428,9 @@ export const device_type_analyse_curve = (params) => {
         .then((res) => res.data);
 };
 //设备终端--设备型号--表格
-export const device_type_analyse_tabl = (params) => {
+export const device_type_analyse_table = (params) => {
     return axios
-        .post(`${ownbase}/grapefruit_manage/device_type_analyse_tabl`, params)
+        .post(`${ownbase}/grapefruit_manage/device_type_analyse_table`, params)
         .then((res) => res.data);
 };
 //设备终端--设备ROM--图表

@@ -1,33 +1,35 @@
 <template>
 	<section class="myself-container deviceAvtive">
-		<!-- <div class="user_title">
-      <el-row>
-        <el-col :span="4">
-          <div class="user-item">
-            <div class="item-count">{{total_dev_cnt}}</div>
-            <div class="item-text">总设备</div>
-          </div>
-        </el-col>
-        <el-col :span="4" style="margin-left:30px;">
-          <div class="user-item">
-            <div class="item-count">{{activated_dev_cnt}}</div>
-            <div class="item-text">已激活设备</div>
-          </div>
-        </el-col>
-        <el-col :span="4" style="margin-left:30px;">
-          <div class="user-item">
-            <div class="item-count">{{today_import_dev_cnt}}</div>
-            <div class="item-text">今日新建</div>
-          </div>
-        </el-col>
-        <el-col :span="4" style="margin-left:30px;">
-          <div class="user-item">
-            <div class="item-count">{{today_activated_dev_cnt}}</div>
-            <div class="item-text">今日激活</div>
-          </div>
-        </el-col>
-      </el-row>
-    </div> -->
+		<div class="user_title">
+			<el-row>
+				<el-col :span="4">
+					<div class="user-item">
+						<div class="item-count">{{ total_dev_cnt }}</div>
+						<div class="item-text">总设备</div>
+					</div>
+				</el-col>
+				<el-col :span="4" style="margin-left: 30px">
+					<div class="user-item">
+						<div class="item-count">{{ activated_dev_cnt }}</div>
+						<div class="item-text">已激活设备</div>
+					</div>
+				</el-col>
+				<el-col :span="4" style="margin-left: 30px">
+					<div class="user-item">
+						<div class="item-count">{{ today_import_dev_cnt }}</div>
+						<div class="item-text">今日新建</div>
+					</div>
+				</el-col>
+				<el-col :span="4" style="margin-left: 30px">
+					<div class="user-item">
+						<div class="item-count">
+							{{ today_activated_dev_cnt }}
+						</div>
+						<div class="item-text">今日激活</div>
+					</div>
+				</el-col>
+			</el-row>
+		</div>
 		<div class="device_form">
 			<el-form ref="form" :model="form" style="margin-top: 20px">
 				<el-row type="flex">
@@ -1720,7 +1722,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .import {
 	.import-m {
 		margin-top: 20px;
@@ -1732,7 +1734,7 @@ export default {
 	}
 }
 
-.user-title {
+.user_title {
 	margin-top: 30px;
 
 	.user-item {
@@ -1742,11 +1744,19 @@ export default {
 		display: flex;
 		justify-content: center;
 		flex-direction: column;
-
-		.item-count,
+		color: #333333 !important;
+		margin-left: 0 !important;
+		.item-count {
+			font-size: 34px !important;
+			text-align: center !important;
+		}
 		.item-text {
+			width: 100%;
 			display: flex;
 			justify-content: center;
+			color: #333333;
+			font-size: 14px !important;
+			text-align: center !important;
 		}
 	}
 }

@@ -91,13 +91,14 @@
 					size="small"
 					v-model="eqp_brd"
 					placeholder="请选择设备品牌"
+					@change="search_devtype"
 				>
 					<el-option label="全部" value="*"></el-option>
 					<el-option
 						v-for="item in eqp_brds"
-						:key="item"
-						:label="item"
-						:value="item"
+						:key="item.name"
+						:label="item.name"
+						:value="item.name"
 					></el-option>
 				</el-select>
 			</el-col>
@@ -140,13 +141,13 @@
 					<el-option label="全部" value="*"></el-option>
 					<el-option
 						v-for="item in dev_types"
-						:key="item.value"
-						:label="item.label"
-						:value="item.value"
+						:key="item"
+						:label="item"
+						:value="item"
 					></el-option>
 				</el-select>
 			</el-col>
-			<el-col :span="3">
+			<el-col :span="5">
 				<el-button
 					size="small"
 					style="margin-left: 10px"
@@ -212,36 +213,37 @@ export default {
 					}
 				},
 			},
+
 			dev_type: '',
 			dev_types: [
-				{
-					value: 'RK33XX',
-					label: 'RK33XX',
-				},
-				{
-					value: 'AMS805W',
-					label: 'AMS805W',
-				},
-				{
-					value: 'AMS905M4C',
-					label: 'AMS905M4C',
-				},
-				{
-					value: 'AMS905M4',
-					label: 'AMS905M4',
-				},
-				{
-					value: 'AMS805QP1',
-					label: 'AMS805QP1',
-				},
-				{
-					value: 'AMS905N1',
-					label: 'AMS905N1',
-				},
-				{
-					value: 'AMS905JG1S',
-					label: 'AMS905JG1S',
-				},
+				// {
+				// 	value: 'RK33XX',
+				// 	label: 'RK33XX',
+				// },
+				// {
+				// 	value: 'AMS805W',
+				// 	label: 'AMS805W',
+				// },
+				// {
+				// 	value: 'AMS905M4C',
+				// 	label: 'AMS905M4C',
+				// },
+				// {
+				// 	value: 'AMS905M4',
+				// 	label: 'AMS905M4',
+				// },
+				// {
+				// 	value: 'AMS805QP1',
+				// 	label: 'AMS805QP1',
+				// },
+				// {
+				// 	value: 'AMS905N1',
+				// 	label: 'AMS905N1',
+				// },
+				// {
+				// 	value: 'AMS905JG1S',
+				// 	label: 'AMS905JG1S',
+				// },
 			],
 			pri_chan_prv: '',
 			pri_chan_prvs: [
@@ -322,7 +324,16 @@ export default {
 				},
 			],
 			eqp_brd: '',
-			eqp_brds: ['grapefruit', '迅雷', '小米', '创维', '斐讯', '腾讯'],
+			// eqp_brds: ['grapefruit', '迅雷', '小米', '创维', '斐讯', '腾讯'],
+			eqp_brds: [
+				{ name: 'linux', childen: ['PCGRAPE'] },
+				{ name: 'grapefruit', childen: ['RK33XX'] },
+				{ name: '迅雷', childen: ['AMS805W'] },
+				{ name: '小米', childen: ['AMS905M4C', 'AMS905M4'] },
+				{ name: '创维', childen: ['AMS805QP1'] },
+				{ name: '斐讯', childen: ['AMS905N1'] },
+				{ name: '腾讯', childen: ['AMS905JG1S'] },
+			],
 			eqp_type: '',
 			eqp_types: ['PC服务器', '硬盘盒子', '电视盒子', 'PC服务器'],
 			radio1: 'one',
@@ -372,11 +383,6 @@ export default {
 			new Date(new Date().toLocaleDateString()).getTime() / 1000;
 		this.endtime = Date.parse(new Date()) / 1000;
 		this.gettable1();
-		// this.drawLine(
-		// 	[12, 15, 15, 16, 3],
-		// 	[64, 45, 12, 48, 12],
-		// 	['周一', '周二', '周三', '周四', '周五']
-		// );
 	},
 	methods: {
 		//回源统计图表导出
@@ -425,8 +431,20 @@ export default {
 			}
 			this.pageNo = 1;
 		},
+		//品牌筛选型号
+		search_devtype() {
+			this.devtype_value = '';
+			var indexOf_child = (this.eqp_brds || []).findIndex(
+				(item) => item.name == this.eqp_brd
+			);
+			if (indexOf_child == -1) {
+				this.dev_types = [];
+			} else {
+				this.dev_types = this.eqp_brds[indexOf_child].childen;
+			}
+		},
 		/** 请求数据 */
-		gettable1(data) {
+		gettable1() {
 			this.dataFlowArray = [];
 			this.timeArray = [];
 			let params = new Object();
@@ -466,21 +484,33 @@ export default {
 			}
 			device_dataflow_analyse_curve(params)
 				.then((res) => {
+					this.total_today = res.today_dataflow_total;
+					this.up_today = res.today_dataflow_up;
+					this.down_today = res.today_dataflow_down;
+					this.total_yesterday = res.yesterday_dataflow_total;
+					this.up_yesterday = res.yesterday_dataflow_up;
+					this.down_yesterday = res.yesterday_dataflow_down;
+					this.total_month = res.month_dataflow_total;
+					this.up_month = res.month_dataflow_up;
+					this.down_month = res.month_dataflow_down;
+					this.$nextTick(() => {
+						this.drawLine(res.upFlow, res.downFlow, res.timeArray);
+					});
 					if (res.status == 0) {
-						this.total_today = res.data.todayTotal;
-						this.up_today = res.data.todayUp;
-						this.down_today = res.data.todayDown;
-						this.total_yesterday = res.data.yesterdayTotal;
-						this.up_yesterday = res.data.yesterdayUp;
-						this.down_yesterday = res.data.yesterdayDown;
-						this.total_month = res.data.monthTotal;
-						this.up_month = res.data.monthUp;
-						this.down_month = res.data.monthDown;
+						this.total_today = res.today_dataflow_total;
+						this.up_today = res.today_dataflow_up;
+						this.down_today = res.today_dataflow_down;
+						this.total_yesterday = res.yesterday_dataflow_total;
+						this.up_yesterday = res.yesterday_dataflow_up;
+						this.down_yesterday = res.yesterday_dataflow_down;
+						this.total_month = res.month_dataflow_total;
+						this.up_month = res.month_dataflow_up;
+						this.down_month = res.month_dataflow_down;
 						this.$nextTick(() => {
 							this.drawLine(
-								res.data.upFlow,
-								res.data.downFlow,
-								res.data.timeArray
+								res.upFlow,
+								res.downFlow,
+								res.timeArray
 							);
 						});
 					} else {
@@ -501,7 +531,15 @@ export default {
 			this.gettable1();
 		},
 		//重置
-		reset() {},
+		reset() {
+			this.value1Activechanid = '';
+			this.eqp_brd = '';
+			this.pri_chan_prv = '';
+			this.scd_chan_prv = '';
+			this.dev_type = '';
+			this.radio1 = 'one';
+			this.gettable1();
+		},
 		//今天
 		onchangeTab(val) {
 			if (val == 'one') {
@@ -516,6 +554,7 @@ export default {
 		showpickerfs() {
 			this.shoudzyx = !this.shoudzyx;
 			this.radio1 = 'one';
+			this.today();
 		},
 		today(data) {
 			this.plain = 'plain';
@@ -525,7 +564,7 @@ export default {
 			this.endtime = Date.parse(new Date()) / 1000;
 			this.timeUnit = 60;
 			this.gettable1();
-			this.$refs.multipleTable.clearSelection();
+			// this.$refs.multipleTable.clearSelection();
 		},
 		//昨天
 		yesterday(data) {
@@ -536,14 +575,14 @@ export default {
 			this.endtime = times;
 			this.timeUnit = 60;
 			this.gettable1();
-			this.$refs.multipleTable.clearSelection();
+			// this.$refs.multipleTable.clearSelection();
 		},
 		//自定义时间
 		gettimes(cal) {
-			this.shoudzyx = !this.shoudzyx;
-			console.log(this.shoudzyx);
 			this.starttime = dateToMs(this.val2[0]);
 			this.endtime = dateToMs(this.val2[1]);
+			console.log(this.starttime);
+			console.log(this.endtime);
 			if (this.endtime - this.starttime < 21600) {
 				this.timeUnit = 60;
 			} else if (
@@ -554,7 +593,7 @@ export default {
 			} else if (this.endtime - this.starttime >= 86400) {
 				this.timeUnit = 60 * 24;
 			}
-			this.$refs.multipleTable.clearSelection();
+			// this.$refs.multipleTable.clearSelection();
 		},
 		// 表头样式设置
 		headClass() {
@@ -603,8 +642,8 @@ export default {
 				},
 				legend: {
 					data: ['上行流量', '下行流量'],
-                    top: "7.5%",
-                    left:"5%"
+					top: '7.5%',
+					left: '5%',
 				},
 				grid: {
 					left: '3%', // 默认10%，给24就挺合适的。
@@ -616,7 +655,9 @@ export default {
 					{
 						type: 'category',
 						axisTick: { show: false },
-						data: y,
+						data: y.map((item) => {
+							return _this.common.getTimes(item * 1000);
+						}),
 						// data: [
 						// 	'3-18',
 						// 	'3-19',
