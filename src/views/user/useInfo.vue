@@ -377,7 +377,7 @@ export default {
 					label: '设备名称',
 				},
 				{
-					prop: 'dev_name',
+					prop: 'rom_version',
 					label: 'ROM',
 				},
 				{

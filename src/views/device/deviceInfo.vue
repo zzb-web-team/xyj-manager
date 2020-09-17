@@ -88,6 +88,10 @@
 									placeholder="请选择"
 								>
 									<el-option
+										label="全部"
+										value=""
+									></el-option>
+									<el-option
 										v-for="item in eqp_brds"
 										:key="item"
 										:label="item"

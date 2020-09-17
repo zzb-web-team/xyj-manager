@@ -196,16 +196,11 @@
 						<el-table-column
 							prop="is_activated"
 							label="设备激活状态"
-							:formatter="formatterType"
 							width="120"
 						>
 							<template slot-scope="scope">
-								<span v-if="scope.row.is_activated != 99"
-									>已激活</span
-								>
-								<span v-else style="color: #f59a23"
-									>未激活</span
-								>
+								<span v-if="scope.row.is_activated ==1">已激活</span>
+								<span v-else style="color: #f59a23">未激活</span>
 							</template>
 						</el-table-column>
 						<el-table-column label="操作" width="200">
@@ -228,7 +223,7 @@
 										v-show="
 											(scope.row.bind_flag == 0 ||
 												scope.row.bind_flag == 102) &&
-											scope.row.is_activated != 99
+											scope.row.is_activated != 0
 										"
 										type="text"
 										@click="tieactive(scope.row)"
@@ -236,7 +231,7 @@
 										>绑定</el-button
 									>
 									<el-button
-										v-if="scope.row.is_activated == 99"
+										v-if="scope.row.is_activated == 0"
 										@click="activationactive(scope.row)"
 										size="small"
 										style="
@@ -668,11 +663,13 @@ export default {
 					label: '全部',
 				},
 				{
-					value: '99',
+                    // value: '99',
+                    value: '0',
 					label: '未激活',
 				},
 				{
-					value: '101',
+                    // value: '101',
+                    value: '1',
 					label: '已激活',
 				},
 			],
@@ -1200,7 +1197,7 @@ export default {
 						tempArr = res.data.dev_list;
 						for (var i = 0; i < tempArr.length; i++) {
 							switch (tempArr[i].is_activated) {
-								case 0:
+								case 1:
 									tempArr[i].is_activated = '已激活';
 									break;
 
@@ -1526,13 +1523,13 @@ export default {
 				return 'AMS805';
 			}
 		},
-		formatterType(row) {
-			if (row.is_activated === 99) {
-				return '未激活';
-			} else {
-				return '已激活';
-			}
-		},
+		// formatterType(row) {
+		// 	if (row.is_activated === 99) {
+		// 		return '未激活';
+		// 	} else {
+		// 		return '已激活';
+		// 	}
+		// },
 		formatterActive(row) {
 			if (row.activate_ts == 0) {
 				return '--';

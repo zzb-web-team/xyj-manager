@@ -104,9 +104,7 @@
 				<el-button @click="search_data" size="small" type="primary"
 					>确定</el-button
 				>
-				<el-button @click="reset" size="small"
-					>重置</el-button
-				>
+				<el-button @click="reset" size="small">重置</el-button>
 			</el-row>
 		</div>
 		<!--  -->
@@ -406,6 +404,7 @@ export default {
 			let params = new Object();
 			params.dev_type = 0;
 			if (this.brand_value == '' || this.brand_value == '-1') {
+				this.roms = [];
 				return false;
 			} else if (this.brand_value == 'linux') {
 				params.dev_type = 88;
@@ -418,8 +417,10 @@ export default {
 			} else if (this.brand_value == '创维') {
 				return false;
 			} else if (this.brand_value == '斐讯') {
+				this.roms = [];
 				return false;
 			} else {
+				this.roms = [];
 				return false;
 			}
 			params.page = this.page;

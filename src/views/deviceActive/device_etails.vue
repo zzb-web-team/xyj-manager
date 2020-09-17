@@ -68,7 +68,7 @@
 					<div style="text-align: right; margin: 10px 0">
 						<el-button
 							type="primary"
-                            size="small"
+							size="small"
 							@click="geydata2()"
 							:disabled="showdisabled"
 							>导出</el-button
@@ -111,7 +111,7 @@
 							label="节点ID"
 						></el-table-column>
 
-						<el-table-column
+						<!-- <el-table-column
 							prop="cpu_temperature"
 							label="当前使用空间/总空间"
 						>
@@ -122,8 +122,34 @@
 								<span v-if="!scope.row.total_cap">--</span>
 								<span v-else>{{ scope.row.total_cap }}</span>
 							</template>
+						</el-table-column> -->
+						<el-table-column label="存储空间" align="center">
+							<el-table-column
+								prop="user_cap"
+								label="使用空间"
+								width="120"
+								align="center"
+							>
+								<template slot-scope="scope">
+									<span v-if="!scope.row.user_cap">--</span>
+									<span v-else>{{ scope.row.user_cap }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column
+								prop="total_cap"
+								label="总空间"
+								width="120"
+								align="center"
+							>
+								<template slot-scope="scope">
+									<span v-if="!scope.row.total_cap">--</span>
+									<span v-else>{{
+										scope.row.total_cap
+									}}</span>
+								</template>
+							</el-table-column>
 						</el-table-column>
-						<el-table-column
+						<!-- <el-table-column
 							prop="upstream_bandwidth"
 							label="当前上行/下行宽带"
 						>
@@ -132,6 +158,28 @@
 								>/
 								<span>{{ scope.row.up_bandwidth }}</span>
 							</template>
+						</el-table-column> -->
+                        <el-table-column label="当前带宽" align="center">
+							<el-table-column
+								prop="up_bandwidth"
+								label="上行宽带"
+								width="120"
+								align="center"
+							>
+								<template slot-scope="scope">
+									<span>{{ scope.row.up_bandwidth }}</span>
+								</template>
+							</el-table-column>
+							<el-table-column
+								prop="down_bandwidth"
+								label="下行宽带"
+								width="120"
+								align="center"
+							>
+								<template slot-scope="scope">
+									<span>{{scope.row.down_bandwidth}}</span>
+								</template>
+							</el-table-column>
 						</el-table-column>
 						<el-table-column label="CPU温度">
 							<template slot-scope="scope">
@@ -227,7 +275,6 @@
 							start-placeholder="开始日期"
 							end-placeholder="结束日期"
 							align="right"
-                            
 						></el-date-picker>
 						<el-button
 							size="small"
@@ -251,7 +298,7 @@
 					<div style="text-align: right; margin: 10px 0">
 						<el-button
 							type="primary"
-                            size="small"
+							size="small"
 							@click="toExport"
 							:disabled="showdisabled"
 							>导出</el-button
@@ -327,11 +374,11 @@ import common from '../../common/js/util.js';
 
 export default {
 	data() {
-        let that = this;
+		let that = this;
 		let _minTime = null;
 		let _maxTime = null;
 		return {
-             pickerOptions: {
+			pickerOptions: {
 				onPick(time) {
 					if (!time.maxDate) {
 						let timeRange = 89 * 24 * 3600 * 1000;
