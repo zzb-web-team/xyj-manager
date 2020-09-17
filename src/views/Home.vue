@@ -200,7 +200,6 @@ export default {
 	mounted: function () {
 		this.con_height = this.$refs.con_body.offsetHeight - 130 + 'px';
 		var user = JSON.parse(this.get('userInfo'));
-		console.log(user);
 		this.sysUserName = user.username || '';
 	},
 	methods: {
@@ -214,7 +213,7 @@ export default {
 		},
 		get: function (name) {
 			var v = window.document.cookie.match(
-				'(^|;) ?' + name + '=([^;]*)(;|$)'
+				'(^|;) ?' + name + '=([^;]*)(;|$)'      
 			);
 
 			return v ? v[2] : null;

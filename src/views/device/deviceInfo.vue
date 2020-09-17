@@ -1589,7 +1589,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .user-title {
 	margin-top: 30px;
 
@@ -1673,7 +1673,10 @@ export default {
 		}
 
 		.row_active {
-			margin-top: 10px;
+            margin-top: 10px;
+            .el-button{
+                padding: 0 15px !important;
+            }
 		}
 	}
 
