@@ -145,8 +145,7 @@
 						placeholder="请选择"
 						:disabled="disableTab"
 					>
-						<el-option label="全部版本" value="*">
-						</el-option>
+						<el-option label="全部版本" value="*"> </el-option>
 						<el-option
 							v-for="item in options"
 							:key="item"
@@ -1182,6 +1181,14 @@ export default {
 							'20h<OT<24h',
 							'OT=24h',
 						],
+						axisLabel: {
+							show: true,
+							interval: 0,
+							rotate: 0,
+							textStyle: {
+								color: '#333',
+							},
+						},
 					},
 				],
 				yAxis: [
