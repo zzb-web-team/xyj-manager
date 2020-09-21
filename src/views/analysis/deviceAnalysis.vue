@@ -145,7 +145,7 @@
 						placeholder="请选择"
 						:disabled="disableTab"
 					>
-						<el-option label="全部版本" value="全部版本">
+						<el-option label="全部版本" value="*">
 						</el-option>
 						<el-option
 							v-for="item in options"
@@ -156,7 +156,7 @@
 						</el-option>
 					</el-select>
 				</el-col>
-				<el-col :span="3">
+				<el-col :span="5">
 					<el-button
 						size="small"
 						type="primary"
@@ -356,7 +356,7 @@ export default {
 				24 * 60 * 60 * 1000,
 			timeArr: false,
 			valueele: '',
-			versointype: '全部版本',
+			versointype: '*',
 			devicetype: '-1',
 			versointime1: '0',
 			options: [
@@ -712,7 +712,7 @@ export default {
 		},
 		//选这类型过滤版本
 		changeType(val) {
-			this.versointype = '全部版本';
+			this.versointype = '*';
 			this.options = [];
 
 			if (val == -1) {
@@ -808,7 +808,7 @@ export default {
 				this.timeArr = false;
 				this.valueele = '';
 
-				this.versointype = '全部版本';
+				this.versointype = '*';
 				this.devicetype = '-1';
 				this.timeComparedArr = [];
 				this.compareArr = [];
@@ -822,7 +822,7 @@ export default {
 			} else {
 				//this.flag = 0;
 				this.showType = false;
-				this.versointype = '全部版本';
+				this.versointype = '*';
 				this.devicetype = '-1';
 				this.timeArr = true;
 				this.valueele = '';
