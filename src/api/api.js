@@ -16,7 +16,7 @@ if (href.indexOf('xyj.grapefruitcloud.com') >= 0) {
 } else if (href.indexOf('service.kclgames.com') >= 0) {
     ownbase = 'http://service.kclgames.com'; //PHP服务URL
 } else {
-    ownbase = 'http://zzb.onezen.net';
+    ownbase = 'http://zzb.stguarantee.com';
 }
 
 var ownssh = 'http://106.15.189.182:9999'
